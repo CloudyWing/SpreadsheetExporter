@@ -84,19 +84,21 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         private IEnumerable<Cell> GetItemCells() {
             Point p = new Point(0, Columns.RowSpan);
 
+            int i = 0;
             foreach (T valueObj in DataSource) {
                 foreach (DataColumn<T> col in Columns.DataSourceColumns) {
-                    yield return new Cell() {
+                    yield return new Cell {
                         Value = col.GetContentValue(valueObj),
                         CellStyle = col.GetDataCellStyle(valueObj),
                         Point = p,
                         Size = new Size(col.ColumnSpan, 1),
-                        Formula = col.ItemFormula
+                        Formula = col.ItemFormulaFunctor is null ? null : col.ItemFormulaFunctor(i)
                     };
                     p += new Size(col.ColumnSpan, 0);
                 }
 
                 p = new Point(0, p.Y + 1);
+                i++;
             }
         }
 

@@ -7,7 +7,7 @@ namespace CloudyWing.SpreadsheetExporter {
         public CellStyle(
             HorizontalAlignment halign = HorizontalAlignment.Center, VerticalAlignment valign = VerticalAlignment.Middle,
             bool hasBorder = false, bool wrapText = false, Color? backgroundColor = null,
-            CellFont? font = null, string dataFormat = null
+            CellFont? font = null, string dataFormat = null, bool isLocked = false
         ) : this() {
             backgroundColor ??= Color.Empty;
             font ??= new CellFont();
@@ -18,6 +18,7 @@ namespace CloudyWing.SpreadsheetExporter {
             BackgroundColor = (Color)backgroundColor;
             Font = (CellFont)font;
             DataFormat = dataFormat;
+            IsLocked = isLocked;
         }
 
         /// <summary>
@@ -54,6 +55,11 @@ namespace CloudyWing.SpreadsheetExporter {
         /// 資料格式字串
         /// </summary>
         public string DataFormat { get; private set; }
+
+        /// <summary>
+        /// 是否鎖定儲存格
+        /// </summary>
+        public bool IsLocked { get; private set; }
 
         /// <summary>
         /// 建立一個副本，並設定副本的的水平對齊
@@ -125,15 +131,27 @@ namespace CloudyWing.SpreadsheetExporter {
             return style;
         }
 
+        /// <summary>
+        /// 建立一個副本，並設定副本的是否鎖定
+        /// </summary>
+        /// <param name="font">字體</param>
+        public CellStyle CloneAndSetLocked(bool isLocked) {
+            CellStyle style = this;
+            style.IsLocked = isLocked;
+            return style;
+        }
+
         public override bool Equals(object obj) => obj is CellStyle style && Equals(style);
 
         public bool Equals(CellStyle other)
             => HorizontalAlignment == other.HorizontalAlignment
                 && VerticalAlignment == other.VerticalAlignment
                 && HasBorder == other.HasBorder
-                && WrapText == other.WrapText && EqualityComparer<Color>.Default.Equals(BackgroundColor, other.BackgroundColor)
+                && WrapText == other.WrapText
+                && EqualityComparer<Color>.Default.Equals(BackgroundColor, other.BackgroundColor)
                 && EqualityComparer<CellFont>.Default.Equals(Font, other.Font)
-                && DataFormat == other.DataFormat;
+                && DataFormat == other.DataFormat
+                && IsLocked == other.IsLocked;
 
         public override int GetHashCode() {
             int hashCode = 253911835;
@@ -144,6 +162,7 @@ namespace CloudyWing.SpreadsheetExporter {
             hashCode = hashCode * -1521134295 + BackgroundColor.GetHashCode();
             hashCode = hashCode * -1521134295 + Font.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(DataFormat);
+            hashCode = hashCode * -1521134295 + IsLocked.GetHashCode();
             return hashCode;
         }
 

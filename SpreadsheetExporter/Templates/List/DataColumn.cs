@@ -55,9 +55,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         }
 
         /// <summary>
-        /// Excel公式
+        /// 產生Excel公式，委派參數為從0開始計算的資料列索引
         /// </summary>
-        public string ItemFormula { get; set; }
+        public Func<int, string> ItemFormulaFunctor { get; set; }
 
         /// <summary>
         /// 欄跨度

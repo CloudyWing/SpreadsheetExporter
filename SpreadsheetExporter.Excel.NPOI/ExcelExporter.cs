@@ -70,22 +70,29 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             ISheet sheet = workbook.CreateSheet(context.SheetName);
             // 不知道為什麼預設給很小，所以設定default
             sheet.DefaultRowHeight = 330;
-            SetSheetCell(sheet, context.Cells);
+            SetSheetCells(sheet, context.Cells);
             SetSheetColumnWidths(sheet, context.ColumnWidths);
             SetSheetRowHeights(sheet, context.RowHeights);
 
             if (context.IsProtected) {
                 sheet.ProtectSheet(context.Password);
             }
+
+            sheet.ForceFormulaRecalculation = true;
         }
 
-        private void SetSheetCell(ISheet sheet, IReadOnlyList<Cell> cells) {
+        private void SetSheetCells(ISheet sheet, IReadOnlyList<Cell> cells) {
             foreach (Cell cell in cells) {
                 IRow excelRow = sheet.GetRow(cell.Point.Y) ?? sheet.CreateRow(cell.Point.Y);
                 ICell excelCell = excelRow.GetCell(cell.Point.X) ?? excelRow.CreateCell(cell.Point.X);
-                SetValueToCell(excelCell, cell.Value);
+
+                if (string.IsNullOrWhiteSpace(cell.Formula)) {
+                    SetValueToCell(excelCell, cell.Value);
+                } else {
+                    excelCell.CellFormula = cell.Formula;
+                }
+
                 excelCell.CellStyle = ParseCellStyle(cell.CellStyle);
-                excelCell.CellFormula = cell.Formula;
 
                 if (cell.Size.Width > 1 || cell.Size.Height > 1) {
                     MergedRegion(
@@ -133,6 +140,8 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             if (!string.IsNullOrWhiteSpace(cellStyle.DataFormat)) {
                 excelCellStyle.DataFormat = ParseDataFormat(cellStyle.DataFormat);
             }
+
+            excelCellStyle.IsLocked = cellStyle.IsLocked;
 
             cellStyles.Add(cellStyle, excelCellStyle);
 

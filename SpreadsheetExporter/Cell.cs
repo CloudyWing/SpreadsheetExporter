@@ -30,5 +30,9 @@ namespace CloudyWing.SpreadsheetExporter {
         /// </summary>
         /// <value>
         public string Formula { get; set; }
+
+        public Cell ShallowCopy() {
+            return (Cell)MemberwiseClone();
+        }
     }
 }

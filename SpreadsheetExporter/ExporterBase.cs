@@ -64,13 +64,7 @@ namespace CloudyWing.SpreadsheetExporter {
             Validate();
             SheeterContext[] contexts = new SheeterContext[sheeters.Count];
             for (int i = 0; i < sheeters.Count; i++) {
-                Sheeter sheeter = sheeters[i];
-
-                contexts[i] = new SheeterContext(
-                    sheeter.SheetName,
-                    sheeter.Templates.Select(x => x.GetContext()),
-                    sheeter.ColumnWidths.ToDictionary(x => x.Key, x => x.Value)
-                );
+                contexts[i] = new SheeterContext(sheeters[i]);
             }
             return ExecuteExport(contexts);
         }
