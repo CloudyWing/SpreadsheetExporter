@@ -10,6 +10,8 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
     /// </summary>
     /// <typeparam name="T">每筆資料的型別</typeparam>
     public class ListTemplate<T> : ITemplate {
+        public ListTemplate(IEnumerable<T> dataSource) => DataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
+
         /// <summary>
         /// Gets or sets the data source.
         /// </summary>
