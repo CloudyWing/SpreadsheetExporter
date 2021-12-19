@@ -16,13 +16,14 @@ namespace CloudyWing.SpreadsheetExporter.Util {
             void AddPropertyToDictionary(Type _type, string _name, object _value) {
                 Type underlyingType = Nullable.GetUnderlyingType(_type) ?? _type;
 
-                if (underlyingType.IsPrimitive
-                    || typeof(IConvertible).IsAssignableFrom(underlyingType)
-                    || typeof(IEnumerable).IsAssignableFrom(underlyingType) && underlyingType != typeof(string)
-                ) {
+                if (underlyingType.IsPrimitive || typeof(IEnumerable).IsAssignableFrom(underlyingType)) {
                     dic.Add(_name, _value);
                 } else {
-                    PropertyInfo[] props = underlyingType.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
+                    if (typeof(IConvertible).IsAssignableFrom(underlyingType)) {
+                        dic.Add(_name, _value);
+                    }
+
+                    PropertyInfo[] props = underlyingType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
                     foreach (PropertyInfo prop in props.Where(x => x.CanRead)) {
                         string _prefix = _name.Length == 0 ? prop.Name : $"{_name}.{prop.Name}";
                         AddPropertyToDictionary(prop.PropertyType, _prefix, _value is null ? null : prop.GetValue(_value));

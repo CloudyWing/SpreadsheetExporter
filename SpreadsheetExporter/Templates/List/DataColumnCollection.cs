@@ -111,19 +111,40 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         }
 
         private string GetDataKeyByExpression(Expression<Func<T, object>> expression) {
+            List<string> keys = new List<string>();
+            if ((expression is LambdaExpression lambda) && lambda.Body is ConstantExpression constant) {
+                keys.Add(constant.Value as string);
+            } else {
+                MemberExpression memberExpression = GetMemberExpression(expression);
+                if (memberExpression == null) {
+                    throw new ArgumentException($"Expression格式錯誤。", nameof(expression));
+                }
+
+                do {
+                    keys.Add(memberExpression.Member.Name);
+                    memberExpression = GetMemberExpression(memberExpression.Expression);
+                } while (memberExpression != null);
+            }
+
+            keys.Reverse();
+            return string.Join(".", keys);
+        }
+
+        private MemberExpression GetMemberExpression(Expression expression) {
             if (expression is null) {
                 throw new ArgumentNullException(nameof(expression));
             }
 
-            // 如果是Value Type的話Body會是UnaryExpression
-            // Reference Type才會是直接取得到MemberExpression
-            MemberExpression member = expression.Body as MemberExpression
-                ?? (expression.Body is UnaryExpression unary ? unary.Operand as MemberExpression : null);
-
-            if (member is null) {
-                throw new ArgumentException($"Expression格式錯誤。", nameof(expression));
+            if (expression is MemberExpression member) {
+                return member;
+            } else if (expression is LambdaExpression lambda) {
+                // 如果是Value Type的話Body會是UnaryExpression
+                // Reference Type才會是直接取得到MemberExpression
+                return lambda.Body as MemberExpression
+                    ?? (lambda.Body is UnaryExpression unary ? unary.Operand as MemberExpression : null);
             }
-            return member.Member.Name;
+
+            return null;
         }
 
         /// <summary>
