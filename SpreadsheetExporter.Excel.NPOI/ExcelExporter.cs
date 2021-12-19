@@ -50,13 +50,28 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
         protected override byte[] ExecuteExport(SheeterContext[] contexts) {
             lock (thisLock) {
                 // 因為ParseCellStyle和ParseFont會用到，所以用field處理
-                workbook = IsOfficeOpenXmlDocument ? new XSSFWorkbook() : (IWorkbook)new HSSFWorkbook();
+                workbook = IsOfficeOpenXmlDocument ? new XSSFWorkbook() : new HSSFWorkbook();
                 foreach (SheeterContext context in contexts) {
                     CreateSheet(context);
                 }
 
                 using MemoryStream ms = new MemoryStream();
-                workbook.Write(ms);
+
+                if (HasPassword) {
+                    if (IsOfficeOpenXmlDocument) {
+                        throw new NotImplementedException("未安裝其他套件的情況下，目前NPOI不支援會出帶有密碼的xlsx");
+                    } else {
+                        HSSFWorkbook wb = (HSSFWorkbook)workbook;
+                        // 因為NPOI的Bug，在2.5.5版以前要先call InternalWorkbook.WriteAccess才可以正常
+                        // 官方預計2.5.7版修正
+                        _ = wb.InternalWorkbook.WriteAccess;
+                        wb.WriteProtectWorkbook(Password, "");
+                        workbook.Write(ms);
+                    }
+                } else {
+                    workbook.Write(ms);
+                }
+
                 // Dispose()和Close()疑似有問題，所以設為null
                 workbook = null;
                 cellStyles.Clear();

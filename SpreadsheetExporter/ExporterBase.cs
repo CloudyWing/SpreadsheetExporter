@@ -19,6 +19,10 @@ namespace CloudyWing.SpreadsheetExporter {
 
         public abstract string FileNameExtension { get; }
 
+        public string Password { get; set; }
+
+        public bool HasPassword => !string.IsNullOrEmpty(Password);
+
         public Sheeter CreateSheeter(string sheetName = "") {
             if (string.IsNullOrWhiteSpace(sheetName)) {
                 sheetName = GetDefaultSheetName();
