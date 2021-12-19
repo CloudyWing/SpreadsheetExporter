@@ -7,9 +7,9 @@
     <RootNamespace>CloudyWing.SpreadsheetExporter</RootNamespace>
     <Authors>周尚緯</Authors>
     <Product>SpreadsheetExporter</Product>
-    <Version>0.1.1</Version>
-    <AssemblyVersion>0.1.1.0</AssemblyVersion>
-    <FileVersion>0.1.8016.0</FileVersion>
+    <Version>0.2.0</Version>
+    <AssemblyVersion>0.2.0.0</AssemblyVersion>
+    <FileVersion>0.2.8023.0</FileVersion>
     <Description>用來提供封裝匯出Excel套件的基底專案。</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>

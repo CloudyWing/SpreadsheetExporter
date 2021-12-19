@@ -6,9 +6,9 @@
     <RootNamespace>CloudyWing.SpreadsheetExporter.Excel.NPOI</RootNamespace>
     <Product>SpreadsheetExporter.Excel.NPOI</Product>
     <Authors>周尚緯</Authors>
-    <Version>0.1.0</Version>
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
-    <FileVersion>0.1.7908.0</FileVersion>
+    <Version>0.2.0</Version>
+    <AssemblyVersion>0.2.0.0</AssemblyVersion>
+    <FileVersion>0.2.8023.0</FileVersion>
     <Description>封裝NPOI套件來進行Excel匯出</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
