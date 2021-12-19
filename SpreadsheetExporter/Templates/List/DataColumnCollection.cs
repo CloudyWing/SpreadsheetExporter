@@ -62,20 +62,44 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void Add(
             string headerText, string dataKey = "",
             Func<object, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle = null, CellStyle? itemStyle = null
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
             itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
 
-            Add(new DataColumn<T>() {
+            Add(new DataColumn<T> {
                 HeaderText = headerText,
                 DataKey = dataKey,
                 ContentRender = render,
+                HeaderStyle = (CellStyle)headerStyle,
+                ItemStyle = (CellStyle)itemStyle,
+                ItemFormulaFunctor = null
+            });
+        }
+
+        /// <summary>
+        /// 增加一筆DataColumn
+        /// </summary>
+        /// <param name="headerText">標題要顯示的文字</param>
+        /// <param name="dataKey">對應資料的Property</param>
+        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
+        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
+        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
+        public void Add(
+            string headerText, string dataKey,
+            Func<int, string> itemFormulaFunctor,
+            CellStyle? headerStyle = null, CellStyle? itemStyle = null
+        ) {
+            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
+            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
+
+            Add(new DataColumn<T> {
+                HeaderText = headerText,
+                DataKey = dataKey,
+                ContentRender = null,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyle = (CellStyle)itemStyle,
                 ItemFormulaFunctor = itemFormulaFunctor
@@ -90,23 +114,21 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void Add(
             string headerText, Expression<Func<T, object>> expression,
             Func<object, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle = null, CellStyle? itemStyle = null
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
             itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
 
-            Add(new DataColumn<T>() {
+            Add(new DataColumn<T> {
                 HeaderText = headerText,
                 DataKey = GetDataKeyByExpression(expression),
                 ContentRender = render,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = itemFormulaFunctor
+                ItemFormulaFunctor = null
             });
         }
 
@@ -151,23 +173,72 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// 增加一筆DataColumn
         /// </summary>
         /// <param name="headerText">標題要顯示的文字</param>
+        /// <param name="expression">用Expression設定DataKey</param>
+        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
+        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
+        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
+        public void Add(
+            string headerText, Expression<Func<T, object>> expression,
+            Func<int, string> itemFormulaFunctor,
+            CellStyle? headerStyle = null, CellStyle? itemStyle = null
+        ) {
+            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
+            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
+
+            Add(new DataColumn<T> {
+                HeaderText = headerText,
+                DataKey = GetDataKeyByExpression(expression),
+                ContentRender = null,
+                HeaderStyle = (CellStyle)headerStyle,
+                ItemStyle = (CellStyle)itemStyle,
+                ItemFormulaFunctor = itemFormulaFunctor
+            });
+        }
+
+        /// <summary>
+        /// 增加一筆DataColumn
+        /// </summary>
+        /// <param name="headerText">標題要顯示的文字</param>
         /// <param name="dataKey">對應資料的Property</param>
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyleFunc">資料的儲存格式，依資料決定顯示內容的委派</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void Add(
             string headerText, string dataKey,
             Func<object, T, object> render,
-            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleFunc,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleFunc
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
 
-            Add(new DataColumn<T>() {
+            Add(new DataColumn<T> {
                 HeaderText = headerText,
                 DataKey = dataKey,
                 ContentRender = render,
+                HeaderStyle = (CellStyle)headerStyle,
+                ItemStyleFunctor = itemStyleFunc,
+                ItemFormulaFunctor = null
+            });
+        }
+
+        /// <summary>
+        /// 增加一筆DataColumn
+        /// </summary>
+        /// <param name="headerText">標題要顯示的文字</param>
+        /// <param name="dataKey">對應資料的Property</param>
+        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
+        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
+        /// <param name="itemStyleFunc">資料的儲存格式，依資料決定顯示內容的委派</param>
+        public void Add(
+            string headerText, string dataKey,
+            Func<int, string> itemFormulaFunctor,
+            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleFunc
+        ) {
+            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
+
+            Add(new DataColumn<T> {
+                HeaderText = headerText,
+                DataKey = dataKey,
+                ContentRender = null,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyleFunctor = itemStyleFunc,
                 ItemFormulaFunctor = itemFormulaFunctor
@@ -182,19 +253,42 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyleFunc">資料的儲存格式，依資料決定顯示內容的委派</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void Add(
             string headerText, Expression<Func<T, object>> expression,
             Func<object, T, object> render,
-            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleFunc,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleFunc
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
 
-            Add(new DataColumn<T>() {
+            Add(new DataColumn<T> {
                 HeaderText = headerText,
                 DataKey = GetDataKeyByExpression(expression),
                 ContentRender = render,
+                HeaderStyle = (CellStyle)headerStyle,
+                ItemStyleFunctor = itemStyleFunc,
+                ItemFormulaFunctor = null
+            });
+        }
+
+        /// <summary>
+        /// 增加一筆DataColumn
+        /// </summary>
+        /// <param name="headerText">標題要顯示的文字</param>
+        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
+        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
+        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
+        /// <param name="itemStyleFunc">資料的儲存格式，依資料決定顯示內容的委派</param>
+        public void Add(
+            string headerText, Expression<Func<T, object>> expression,
+            Func<int, string> itemFormulaFunctor,
+            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleFunc
+        ) {
+            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
+
+            Add(new DataColumn<T> {
+                HeaderText = headerText,
+                DataKey = GetDataKeyByExpression(expression),
+                ContentRender = null,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyleFunctor = itemStyleFunc,
                 ItemFormulaFunctor = itemFormulaFunctor
@@ -209,12 +303,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void Add<TProperty>(
             string headerText, string dataKey = "",
             Func<TProperty, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle = null, CellStyle? itemStyle = null
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
             itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
@@ -225,7 +317,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
                 ContentRender = render,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = itemFormulaFunctor
+                ItemFormulaFunctor = null
             });
         }
 
@@ -237,12 +329,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void Add<TProperty>(
             string headerText, Expression<Func<T, object>> expression,
             Func<TProperty, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle = null, CellStyle? itemStyle = null
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
             itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
@@ -253,7 +343,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
                 ContentRender = render,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = itemFormulaFunctor
+                ItemFormulaFunctor = null
             });
         }
 
@@ -265,12 +355,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void Add<TProperty>(
             string headerText, string dataKey,
             Func<TProperty, T, object> render,
-            CellStyle? headerStyle, Func<TProperty, T, CellStyle> itemStyleExpression,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle, Func<TProperty, T, CellStyle> itemStyleExpression
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
 
@@ -280,7 +368,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
                 ContentRender = render,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyleFunctor = itemStyleExpression,
-                ItemFormulaFunctor = itemFormulaFunctor
+                ItemFormulaFunctor = null
             });
         }
 
@@ -292,12 +380,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void Add<TProperty>(
             string headerText, Expression<Func<T, object>> expression,
             Func<TProperty, T, object> render,
-            CellStyle? headerStyle, Func<TProperty, T, CellStyle> itemStyleExpression,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle, Func<TProperty, T, CellStyle> itemStyleExpression
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
 
@@ -307,7 +393,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
                 ContentRender = render,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyleFunctor = itemStyleExpression,
-                ItemFormulaFunctor = itemFormulaFunctor
+                ItemFormulaFunctor = null
             });
         }
 
@@ -329,20 +415,44 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void AddChildToLast(
             string headerText, string dataKey = "",
             Func<object, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle = null, CellStyle? itemStyle = null
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
             itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
 
-            AddChildToLast(new DataColumn<T>() {
+            AddChildToLast(new DataColumn<T> {
                 HeaderText = headerText,
                 DataKey = dataKey,
                 ContentRender = render,
+                HeaderStyle = (CellStyle)headerStyle,
+                ItemStyle = (CellStyle)itemStyle,
+                ItemFormulaFunctor = null
+            });
+        }
+
+        /// <summary>
+        /// 增加一筆子DataHeader至目前最後一個DataColumn底下
+        /// </summary>
+        /// <param name="headerText">標題要顯示的文字</param>
+        /// <param name="dataKey">對應資料的Property</param>
+        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
+        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
+        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
+        public void AddChildToLast(
+            string headerText, string dataKey,
+            Func<int, string> itemFormulaFunctor,
+            CellStyle? headerStyle = null, CellStyle? itemStyle = null
+        ) {
+            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
+            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
+
+            AddChildToLast(new DataColumn<T> {
+                HeaderText = headerText,
+                DataKey = dataKey,
+                ContentRender = null,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyle = (CellStyle)itemStyle,
                 ItemFormulaFunctor = itemFormulaFunctor
@@ -357,20 +467,44 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void AddChildToLast(
             string headerText, Expression<Func<T, object>> expression,
             Func<object, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle = null, CellStyle? itemStyle = null
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
             itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
 
-            AddChildToLast(new DataColumn<T>() {
+            AddChildToLast(new DataColumn<T> {
                 HeaderText = headerText,
                 DataKey = GetDataKeyByExpression(expression),
                 ContentRender = render,
+                HeaderStyle = (CellStyle)headerStyle,
+                ItemStyle = (CellStyle)itemStyle,
+                ItemFormulaFunctor = null
+            });
+        }
+
+        /// <summary>
+        /// 增加一筆子DataHeader至目前最後一個DataColumn底下
+        /// </summary>
+        /// <param name="headerText">標題要顯示的文字</param>
+        /// <param name="expression">用Expression設定DataKey</param>
+        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
+        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
+        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
+        public void AddChildToLast(
+            string headerText, Expression<Func<T, object>> expression,
+            Func<int, string> itemFormulaFunctor,
+            CellStyle? headerStyle = null, CellStyle? itemStyle = null
+        ) {
+            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
+            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
+
+            AddChildToLast(new DataColumn<T> {
+                HeaderText = headerText,
+                DataKey = GetDataKeyByExpression(expression),
+                ContentRender = null,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyle = (CellStyle)itemStyle,
                 ItemFormulaFunctor = itemFormulaFunctor
@@ -385,19 +519,42 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void AddChildToLast(
             string headerText, string dataKey,
             Func<object, T, object> render,
-            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleExpression,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleExpression
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
 
-            AddChildToLast(new DataColumn<T>() {
+            AddChildToLast(new DataColumn<T> {
                 HeaderText = headerText,
                 DataKey = dataKey,
                 ContentRender = render,
+                HeaderStyle = (CellStyle)headerStyle,
+                ItemStyleFunctor = itemStyleExpression,
+                ItemFormulaFunctor = null
+            });
+        }
+
+        /// <summary>
+        /// 增加一筆子DataColumn至目前最後一個DataColumn底下
+        /// </summary>
+        /// <param name="headerText">標題要顯示的文字</param>
+        /// <param name="dataKey">對應資料的Property</param>
+        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
+        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
+        /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
+        public void AddChildToLast(
+            string headerText, string dataKey,
+            Func<int, string> itemFormulaFunctor,
+            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleExpression
+        ) {
+            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
+
+            AddChildToLast(new DataColumn<T> {
+                HeaderText = headerText,
+                DataKey = dataKey,
+                ContentRender = null,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyleFunctor = itemStyleExpression,
                 ItemFormulaFunctor = itemFormulaFunctor
@@ -412,19 +569,42 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void AddChildToLast(
             string headerText, Expression<Func<T, object>> expression,
             Func<object, T, object> render,
-            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleExpression,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleExpression
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
 
-            AddChildToLast(new DataColumn<T>() {
+            AddChildToLast(new DataColumn<T> {
                 HeaderText = headerText,
                 DataKey = GetDataKeyByExpression(expression),
                 ContentRender = render,
+                HeaderStyle = (CellStyle)headerStyle,
+                ItemStyleFunctor = itemStyleExpression,
+                ItemFormulaFunctor = null
+            });
+        }
+
+        /// <summary>
+        /// 增加一筆子DataColumn至目前最後一個DataColumn底下
+        /// </summary>
+        /// <param name="headerText">標題要顯示的文字</param>
+        /// <param name="expression">用Expression設定DataKey</param>
+        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
+        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
+        /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
+        public void AddChildToLast(
+            string headerText, Expression<Func<T, object>> expression,
+            Func<int, string> itemFormulaFunctor,
+            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleExpression
+        ) {
+            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
+
+            AddChildToLast(new DataColumn<T> {
+                HeaderText = headerText,
+                DataKey = GetDataKeyByExpression(expression),
+                ContentRender = null,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyleFunctor = itemStyleExpression,
                 ItemFormulaFunctor = itemFormulaFunctor
@@ -439,12 +619,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void AddChildToLast<TProperty>(
             string headerText, string dataKey = "",
             Func<TProperty, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle = null, CellStyle? itemStyle = null
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
             itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
@@ -455,7 +633,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
                 ContentRender = render,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = itemFormulaFunctor
+                ItemFormulaFunctor = null
             });
         }
 
@@ -467,12 +645,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void AddChildToLast<TProperty>(
             string headerText, Expression<Func<T, object>> expression,
             Func<TProperty, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle = null, CellStyle? itemStyle = null
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
             itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
@@ -483,7 +659,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
                 ContentRender = render,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = itemFormulaFunctor
+                ItemFormulaFunctor = null
             });
         }
 
@@ -495,12 +671,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void AddChildToLast<TProperty>(
             string headerText, string dataKey,
             Func<TProperty, T, object> render,
-            CellStyle? headerStyle, Func<TProperty, T, CellStyle> itemStyleExpression,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle, Func<TProperty, T, CellStyle> itemStyleExpression
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
 
@@ -510,7 +684,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
                 ContentRender = render,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyleFunctor = itemStyleExpression,
-                ItemFormulaFunctor = itemFormulaFunctor
+                ItemFormulaFunctor = null
             });
         }
 
@@ -522,12 +696,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
         /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
         /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
         public void AddChildToLast<TProperty>(
             string headerText, Expression<Func<T, object>> expression,
             Func<TProperty, T, object> render,
-            CellStyle? headerStyle, Func<TProperty, T, CellStyle> itemStyleExpression,
-            Func<int, string> itemFormulaFunctor = null
+            CellStyle? headerStyle, Func<TProperty, T, CellStyle> itemStyleExpression
         ) {
             headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
 
@@ -537,7 +709,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
                 ContentRender = render,
                 HeaderStyle = (CellStyle)headerStyle,
                 ItemStyleFunctor = itemStyleExpression,
-                ItemFormulaFunctor = itemFormulaFunctor
+                ItemFormulaFunctor = null
             });
         }
 
