@@ -7,5 +7,7 @@ SpreadsheetExporter：`主專案，用於定義介面，與抽象類別、通用
 
 SpreadsheetExporter.Excel.NPOI：`封裝NPOI進行Excel匯出。`
 
+SpreadsheetExporter.EPPlus.NPOI：`封裝EPPlus 4進行Excel匯出。`
+
 ## License
 This project is MIT [licensed](https://github.com/CloudyWing/SpreadsheetExporter/blob/master/LICENSE.md).
