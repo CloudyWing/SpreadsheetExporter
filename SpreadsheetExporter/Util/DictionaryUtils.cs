@@ -19,6 +19,7 @@ namespace CloudyWing.SpreadsheetExporter.Util {
         private static void AddPropertyToDictionary(
             IDictionary<string, object> dictionary, Type type, string fulllName, string name, object value, int level
         ) {
+            level++;
             Type underlyingType = Nullable.GetUnderlyingType(type) ?? type;
 
             if (underlyingType.IsPrimitive || typeof(IEnumerable).IsAssignableFrom(underlyingType)) {
@@ -36,9 +37,9 @@ namespace CloudyWing.SpreadsheetExporter.Util {
                     }
 
                     // 避免類似DateTime情況的class，所以限制層級
-                    if (level < MaxNestedPropertyLevel) {
+                    if (level <= MaxNestedPropertyLevel) {
                         string _prefix = fulllName.Length == 0 ? prop.Name : $"{fulllName}.{prop.Name}";
-                        AddPropertyToDictionary(dictionary, prop.PropertyType, _prefix, prop.Name, value is null ? null : prop.GetValue(value), level++);
+                        AddPropertyToDictionary(dictionary, prop.PropertyType, _prefix, prop.Name, value is null ? null : prop.GetValue(value), level);
                     }
                 }
             }
