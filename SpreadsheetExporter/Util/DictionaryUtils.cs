@@ -6,27 +6,39 @@ using System.Reflection;
 
 namespace CloudyWing.SpreadsheetExporter.Util {
     internal static class DictionaryUtils {
+        internal const int MaxNestedPropertyLevel = 5;
+
         internal static IDictionary<string, object> ConvertFrom<T>(T valueObj) {
             IDictionary<string, object> dic = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
-            AddPropertyToDictionary(typeof(T), "", valueObj);
+            AddPropertyToDictionary(dic, typeof(T), "", "", valueObj, 0);
 
             return dic;
+        }
 
-            void AddPropertyToDictionary(Type _type, string _name, object _value) {
-                Type underlyingType = Nullable.GetUnderlyingType(_type) ?? _type;
+        private static void AddPropertyToDictionary(
+            IDictionary<string, object> dictionary, Type type, string fulllName, string name, object value, int level
+        ) {
+            Type underlyingType = Nullable.GetUnderlyingType(type) ?? type;
 
-                if (underlyingType.IsPrimitive || typeof(IEnumerable).IsAssignableFrom(underlyingType)) {
-                    dic.Add(_name, _value);
-                } else {
-                    if (typeof(IConvertible).IsAssignableFrom(underlyingType)) {
-                        dic.Add(_name, _value);
+            if (underlyingType.IsPrimitive || typeof(IEnumerable).IsAssignableFrom(underlyingType)) {
+                dictionary.Add(fulllName, value);
+            } else {
+                if (typeof(IConvertible).IsAssignableFrom(underlyingType)) {
+                    dictionary.Add(fulllName, value);
+                }
+
+                PropertyInfo[] props = underlyingType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                foreach (PropertyInfo prop in props.Where(x => x.CanRead)) {
+                    // DateTime的很多Property還是DateTime，避免無限循環，所以額外判斷
+                    if (type == prop.PropertyType && type == typeof(DateTime) && name == prop.Name) {
+                        continue;
                     }
 
-                    PropertyInfo[] props = underlyingType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                    foreach (PropertyInfo prop in props.Where(x => x.CanRead)) {
-                        string _prefix = _name.Length == 0 ? prop.Name : $"{_name}.{prop.Name}";
-                        AddPropertyToDictionary(prop.PropertyType, _prefix, _value is null ? null : prop.GetValue(_value));
+                    // 避免類似DateTime情況的class，所以限制層級
+                    if (level < MaxNestedPropertyLevel) {
+                        string _prefix = fulllName.Length == 0 ? prop.Name : $"{fulllName}.{prop.Name}";
+                        AddPropertyToDictionary(dictionary, prop.PropertyType, _prefix, prop.Name, value is null ? null : prop.GetValue(value), level++);
                     }
                 }
             }

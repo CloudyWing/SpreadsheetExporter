@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
+using CloudyWing.SpreadsheetExporter.Util;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.List {
     public class DataColumnCollection<T> : Collection<DataColumn<T>> {
@@ -139,13 +140,17 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
             } else {
                 MemberExpression memberExpression = GetMemberExpression(expression);
                 if (memberExpression == null) {
-                    throw new ArgumentException($"Expression格式錯誤。", nameof(expression));
+                    throw new ArgumentException("Expression格式錯誤。", nameof(expression));
                 }
 
                 do {
                     keys.Add(memberExpression.Member.Name);
                     memberExpression = GetMemberExpression(memberExpression.Expression);
                 } while (memberExpression != null);
+            }
+
+            if (keys.Count > DictionaryUtils.MaxNestedPropertyLevel) {
+                throw new ArgumentException($"最大巢狀屬性層級為{DictionaryUtils.MaxNestedPropertyLevel}。", nameof(expression));
             }
 
             keys.Reverse();
