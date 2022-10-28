@@ -6,9 +6,6 @@
     <RootNamespace>CloudyWing.SpreadsheetExporter.Excel.EPPlus</RootNamespace>
     <Product>SpreadsheetExporter.Excel.EPPlus</Product>
     <Authors>周尚緯</Authors>
-    <Version>0.2.0</Version>
-    <AssemblyVersion>0.2.0.0</AssemblyVersion>
-    <FileVersion>0.2.8023.0</FileVersion>
     <Description>封裝EPPlus 4套件來進行Excel匯出</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
@@ -30,6 +27,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="4.5.3.3" />
+    <PackageReference Include="GitVersion.MsBuild" Version="5.10.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpreadsheetExporter\SpreadsheetExporter.csproj" />
