@@ -44,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SpreadsheetExporter\SpreadsheetExporter.csproj" />
+    <ProjectReference Include="..\..\src\SpreadsheetExporter\SpreadsheetExporter.csproj" />
   </ItemGroup>
 
 </Project>

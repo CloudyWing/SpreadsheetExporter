@@ -19,34 +19,26 @@
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Spreadsheet.json" />
-    <None Remove="Tools\Install.ps1" />
-  </ItemGroup>
-  <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>$(AssemblyName).Tests</_Parameter1>
     </AssemblyAttribute>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Spreadsheet.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\LICENSE.md">
+    <None Include="..\..\LICENSE.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Tools\Install.ps1">
+    <Content Include="..\..\build\NuGet\Content\Spreadsheet.json">
+      <CopyToOutputDirectory>always</CopyToOutputDirectory>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <None Include="..\..\build\NuGet\Tools\Install.ps1">
       <Pack>True</Pack>
-      <PackagePath>Tools</PackagePath>
+      <PackagePath>tools</PackagePath>
     </None>
   </ItemGroup>
 </Project>

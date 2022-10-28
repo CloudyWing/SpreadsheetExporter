@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
-	<langversion>preview</langversion>
+    <langversion>preview</langversion>
     <AssemblyName>CloudyWing.SpreadsheetExporter.Excel.EPPlus</AssemblyName>
     <RootNamespace>CloudyWing.SpreadsheetExporter.Excel.EPPlus</RootNamespace>
     <Product>SpreadsheetExporter.Excel.EPPlus</Product>
@@ -23,7 +23,7 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\LICENSE.md">
+    <None Include="..\..\LICENSE.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

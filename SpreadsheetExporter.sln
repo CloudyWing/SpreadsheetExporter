@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetExporter", "SpreadsheetExporter\SpreadsheetExporter.csproj", "{C0236E94-F32D-4B2D-ACD5-ED226F6D6955}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetExporter", "src\SpreadsheetExporter\SpreadsheetExporter.csproj", "{C0236E94-F32D-4B2D-ACD5-ED226F6D6955}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetExporter.Tests", "SpreadsheetExporter.Tests\SpreadsheetExporter.Tests.csproj", "{FEDB994C-E952-4924-8F01-AA5EB5DC734F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetExporter.Excel.NPOI", "src\SpreadsheetExporter.Excel.NPOI\SpreadsheetExporter.Excel.NPOI.csproj", "{DB2CC5B9-DB3B-47D8-A420-FA5EFDA90686}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetExporter.Excel.NPOI", "SpreadsheetExporter.Excel.NPOI\SpreadsheetExporter.Excel.NPOI.csproj", "{DB2CC5B9-DB3B-47D8-A420-FA5EFDA90686}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetExporter.Excel.EPPlus", "src\SpreadsheetExporter.Excel.EPPlus\SpreadsheetExporter.Excel.EPPlus.csproj", "{D3144EAF-E5CD-456F-975F-1F0263E9B68F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetExporter.Excel.EPPlus", "SpreadsheetExporter.Excel.EPPlus\SpreadsheetExporter.Excel.EPPlus.csproj", "{D3144EAF-E5CD-456F-975F-1F0263E9B68F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetExporter.Tests", "tests\SpreadsheetExporter.Tests\SpreadsheetExporter.Tests.csproj", "{FEDB994C-E952-4924-8F01-AA5EB5DC734F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B74E8D08-C6BF-451A-985E-B27118030778}"
 	ProjectSection(SolutionItems) = preProject
@@ -29,10 +29,6 @@ Global
 		{C0236E94-F32D-4B2D-ACD5-ED226F6D6955}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0236E94-F32D-4B2D-ACD5-ED226F6D6955}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0236E94-F32D-4B2D-ACD5-ED226F6D6955}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FEDB994C-E952-4924-8F01-AA5EB5DC734F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FEDB994C-E952-4924-8F01-AA5EB5DC734F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FEDB994C-E952-4924-8F01-AA5EB5DC734F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FEDB994C-E952-4924-8F01-AA5EB5DC734F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DB2CC5B9-DB3B-47D8-A420-FA5EFDA90686}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DB2CC5B9-DB3B-47D8-A420-FA5EFDA90686}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB2CC5B9-DB3B-47D8-A420-FA5EFDA90686}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,6 +37,10 @@ Global
 		{D3144EAF-E5CD-456F-975F-1F0263E9B68F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3144EAF-E5CD-456F-975F-1F0263E9B68F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3144EAF-E5CD-456F-975F-1F0263E9B68F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEDB994C-E952-4924-8F01-AA5EB5DC734F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEDB994C-E952-4924-8F01-AA5EB5DC734F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEDB994C-E952-4924-8F01-AA5EB5DC734F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEDB994C-E952-4924-8F01-AA5EB5DC734F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
