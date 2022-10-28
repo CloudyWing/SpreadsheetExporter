@@ -1,0 +1,36 @@
+assembly-versioning-scheme: MajorMinor
+assembly-file-versioning-scheme: MajorMinorPatchTag
+assembly-informational-format: '{NuGetVersion}'
+mode: ContinuousDelivery
+
+branches:
+  main:
+    regex: ^master$|^main$
+    tag: ''
+    increment: None
+    is-release-branch: false
+    is-mainline: true
+  feature:
+    regex: ^features?[/-]
+    tag: alpha
+    increment: None
+    prevent-increment-of-merged-branch-version: false
+    track-merge-target: true
+    source-branches: [ 'release', 'feature' ]
+    tracks-release-branches: true
+    is-release-branch: false
+    is-mainline: false
+  release:
+    regex: ^releases?[/-]
+    mode: ContinuousDeployment
+    tag: beta
+    increment: None
+    is-release-branch: true
+    is-mainline: false
+  hotfix:
+    regex: ^hotfix(es)?[/-]
+    mode: ContinuousDeployment
+    tag: beta
+    increment: None
+    is-release-branch: true
+    is-mainline: false

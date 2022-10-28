@@ -1,15 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
-	<langversion>preview</langversion>
-    <AssemblyName>CloudyWing.SpreadsheetExporter.Excel.EPPlus</AssemblyName>
-    <RootNamespace>CloudyWing.SpreadsheetExporter.Excel.EPPlus</RootNamespace>
-    <Product>SpreadsheetExporter.Excel.EPPlus</Product>
+    <langversion>preview</langversion>
+    <AssemblyName>CloudyWing.SpreadsheetExporter.Excel.NPOI</AssemblyName>
+    <RootNamespace>CloudyWing.SpreadsheetExporter.Excel.NPOI</RootNamespace>
+    <Product>SpreadsheetExporter.Excel.NPOI</Product>
     <Authors>周尚緯</Authors>
-    <Version>0.2.0</Version>
-    <AssemblyVersion>0.2.0.0</AssemblyVersion>
-    <FileVersion>0.2.8023.0</FileVersion>
-    <Description>封裝EPPlus 4套件來進行Excel匯出</Description>
+    <Description>封裝NPOI套件來進行Excel匯出</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/CloudyWing/SpreadsheetExporter</RepositoryUrl>
@@ -23,15 +20,19 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\LICENSE.md">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="EPPlus" Version="4.5.3.3" />
+    <PackageReference Include="GitVersion.MsBuild" Version="5.10.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NPOI" Version="2.5.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpreadsheetExporter\SpreadsheetExporter.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 </Project>
