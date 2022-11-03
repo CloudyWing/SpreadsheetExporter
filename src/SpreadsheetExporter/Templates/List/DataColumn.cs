@@ -1,169 +1,145 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Linq.Expressions;
 using CloudyWing.SpreadsheetExporter.Util;
 
-namespace CloudyWing.SpreadsheetExporter.Templates.List {
-    /// <summary>
-    /// Excel匯出資料各標題欄位設定
-    /// </summary>
-    public class DataColumn<T> {
-        private DataColumnCollection<T> childColumns;
-        private Point point;
+namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
+    /// <summary>The data column.</summary>
+    /// <typeparam name="TField">The type of the record field.</typeparam>
+    /// <typeparam name="TRecord">The type of the record.</typeparam>
+    internal class DataColumn<TField, TRecord> : DataColumnBase<TRecord> {
+        private readonly Dictionary<RecordContext<TRecord>, FieldContext<TField, TRecord>> contextMaps = new();
 
-        /// <summary>
-        /// 顯示文字
-        /// </summary>
-        public string HeaderText { get; set; }
-
-        /// <summary>
-        /// 對應DataSource的Property Name
-        /// </summary>
-        public string DataKey { get; set; }
-
-        /// <summary>
-        /// 標題的儲存格樣式
-        /// </summary>
-        public CellStyle HeaderStyle { get; set; }
-
-        /// <summary>
-        /// 資料儲存格樣式，若有設定ItemStyleFunctor，則無效果
-        /// </summary>
-        public CellStyle ItemStyle { get; set; }
-
-        /// <summary>
-        /// 資料儲存格樣式，優先權高於ItemStyle
-        /// </summary>
-        public Func<object, T, CellStyle> ItemStyleFunctor { get; set; }
-
-        /// <summary>
-        /// 修正顯示值的委派
-        /// </summary>
-        public Func<object, T, object> ContentRender { get; set; }
-
-        /// <summary>
-        /// 座標
-        /// </summary>
-        public Point Point {
-            get {
-                return point;
-            }
-            internal set {
-                point = value;
-                ChildColumns.ResetColumnsPoint(value + new Size(0, RowSpan));
-            }
+        /// <summary>Initializes a new instance of the <see cref="DataColumn{TField, TRecord}" /> class.</summary>
+        /// <param name="fieldKey">The field key.</param>
+        public DataColumn(string fieldKey) {
+            FieldKey = fieldKey;
         }
 
-        /// <summary>
-        /// 產生Excel公式，委派參數為從0開始計算的資料列索引
-        /// </summary>
-        public Func<int, string> ItemFormulaFunctor { get; set; }
 
-        /// <summary>
-        /// 欄跨度
-        /// </summary>
-        public int ColumnSpan => ChildColumns.Count == 0 ? 1 : ChildColumns.ColumnSpan;
+        /// <summary>Initializes a new instance of the <see cref="DataColumn{TField, TRecord}" /> class.</summary>
+        /// <param name="fieldKeyExpression">The field key expression.</param>
+        public DataColumn(Expression<Func<TRecord, TField>> fieldKeyExpression) {
+            FieldKey = GetFieldKeyByExpression(fieldKeyExpression);
+        }
 
-        /// <summary>
-        /// 列跨度
-        /// </summary>
-        public int RowSpan => ParentColumns.RowSpan - ChildColumns.RowSpan;
+        /// <summary>Gets the field key.</summary>
+        /// <value>The field key.</value>
+        public string FieldKey { get; }
 
-        /// <remarks>
-        /// 自己和子層共幾層Column，用來計算RowSpan
-        /// </remarks>
-        internal int ColumnLayers => ChildColumns.Count == 0 ? 1 : ChildColumns.RowSpan + 1;
+        /// <summary>Gets the field value generator.</summary>
+        /// <value>The field value generator.</value>
+        public Func<FieldContext<TField, TRecord>, object> FieldValueGenerator { get; set; }
 
-        /// <summary>
-        /// 子標題欄位設定的集合
-        /// </summary>
-        public DataColumnCollection<T> ChildColumns {
-            get {
-                if (childColumns is null) {
-                    childColumns = new DataColumnCollection<T>(this);
+        /// <summary>Gets or sets the field formula generator.</summary>
+        /// <value>The field formula generator.</value>
+        public Func<FieldContext<TField, TRecord>, string> FieldFormulaGenerator { get; set; }
+
+        /// <summary>Gets or sets the field style generator.</summary>
+        /// <value>The field style generator.</value>
+        public Func<FieldContext<TField, TRecord>, CellStyle> FieldStyleGenerator { get; set; }
+
+        private string GetFieldKeyByExpression(Expression<Func<TRecord, TField>> expression) {
+            List<string> keys = new();
+            if (expression is LambdaExpression lambda && lambda.Body is ConstantExpression constant) {
+                keys.Add(constant.Value as string);
+            } else {
+                MemberExpression memberExpression = GetMemberExpression(expression);
+                if (memberExpression == null) {
+                    throw new ArgumentException("Wrong expression.", nameof(expression));
                 }
-                return childColumns;
+
+                do {
+                    keys.Add(memberExpression.Member.Name);
+                    memberExpression = GetMemberExpression(memberExpression.Expression);
+                } while (memberExpression != null);
             }
+
+            keys.Reverse();
+            return string.Join(".", keys);
         }
 
-        /// <summary>
-        /// 自身標題欄位所屬的父集合
-        /// </summary>
-        public DataColumnCollection<T> ParentColumns { get; internal set; }
-
-        internal virtual object GetContentValue(T valueObject) {
-            IDictionary<string, object> data = DictionaryUtils.ConvertFrom(valueObject);
-
-            if (string.IsNullOrWhiteSpace(DataKey)) {
-                return ContentRender is null ? "" : ContentRender(null, valueObject);
+        private MemberExpression GetMemberExpression(Expression expression) {
+            if (expression is null) {
+                throw new ArgumentNullException(nameof(expression));
             }
-            object value = data[DataKey];
 
-            return ContentRender is null ? value : ContentRender(value, valueObject);
+            if (expression is MemberExpression member) {
+                return member;
+            } else if (expression is LambdaExpression lambda) {
+                // 如果是 Value Type 的話 Body 會是 UnaryExpression
+                // Reference Type 才會是直接取得到 MemberExpression
+                return lambda.Body as MemberExpression
+                    ?? (lambda.Body is UnaryExpression unary ? unary.Operand as MemberExpression : null);
+            }
+
+            return null;
         }
 
-        internal virtual CellStyle GetDataCellStyle(T valueObject) {
-            IDictionary<string, object> data = DictionaryUtils.ConvertFrom(valueObject);
-            object value = string.IsNullOrWhiteSpace(DataKey) ? null : data[DataKey];
-
-            return ItemStyleFunctor is null ? ItemStyle : ItemStyleFunctor(value, valueObject);
-        }
-    }
-
-    public class DataColumn<TProperty, TObject> : DataColumn<TObject> {
-        /// <summary>
-        /// 資料儲存格樣式
-        /// </summary>
-        public new Func<TProperty, TObject, CellStyle> ItemStyleFunctor { get; set; }
-
-        /// <summary>
-        /// 修正顯示值的委派
-        /// </summary>
-        public new Func<TProperty, TObject, object> ContentRender { get; set; }
-
-        internal override object GetContentValue(TObject valueObject) {
-            IDictionary<string, object> data = DictionaryUtils.ConvertFrom(valueObject);
-
-            if (string.IsNullOrWhiteSpace(DataKey)) {
-                return ContentRender is null ? "" : ContentRender(default, valueObject);
-            }
-            object value = data[DataKey];
-
-            if (ContentRender is null) {
-                return value;
+        public override object GetFieldValue(RecordContext<TRecord> recordContext) {
+            if (string.IsNullOrWhiteSpace(FieldKey)) {
+                return FieldValueGenerator is null ? "" : FieldValueGenerator(default);
             }
 
-            return ChangeValueTypeForFunc(ContentRender, value, valueObject);
+            FieldContext<TField, TRecord> fieldContext = GetFieldContextFromRecordContext(recordContext);
+
+            return FieldValueGenerator is null ? fieldContext.Value : FieldValueGenerator(fieldContext);
         }
 
-        internal override CellStyle GetDataCellStyle(TObject valueObject) {
-            if (ItemStyleFunctor is null) {
-                return ItemStyle;
+        private TResult GetFromGenerator<TResult>(
+            Func<FieldContext<TField, TRecord>, TResult> generator, TResult defaultResult, RecordContext<TRecord> recordContext
+        ) {
+            if (generator is null) {
+                return defaultResult;
             }
 
-            if (string.IsNullOrWhiteSpace(DataKey)) {
-                return ItemStyleFunctor(default, valueObject);
+            if (string.IsNullOrWhiteSpace(FieldKey)) {
+                return generator(default);
             }
 
-            IDictionary<string, object> data = DictionaryUtils.ConvertFrom(valueObject);
-            object value = data[DataKey];
+            FieldContext<TField, TRecord> fieldContext = GetFieldContextFromRecordContext(recordContext);
 
-            return ChangeValueTypeForFunc(ItemStyleFunctor, value, valueObject);
+            return generator(fieldContext);
         }
 
-        private TResult ChangeValueTypeForFunc<TResult>(Func<TProperty, TObject, TResult> func, object value, TObject valueObject) {
+        private FieldContext<TField, TRecord> GetFieldContextFromRecordContext(RecordContext<TRecord> recordContext) {
+            if (contextMaps.ContainsKey(recordContext)) {
+                return contextMaps[recordContext];
+            }
+
+            int maxNestedLevel = FieldKey.Split('.').Length;
+
+            IDictionary<string, object> maps = DictionaryUtils.ConvertFrom(recordContext.Record, maxNestedLevel);
+
+            if (!maps.ContainsKey(FieldKey)) {
+                throw new ArgumentException($"Data source does not contain property '{FieldKey}'.");
+            }
+
+            TField value = ChangeFieldValueType(maps[FieldKey]);
+
+
+            return new FieldContext<TField, TRecord>(recordContext, FieldKey, value);
+        }
+
+        private TField ChangeFieldValueType(object value) {
             if (value is null) {
-                return func(default, valueObject);
+                return default;
             }
 
             Type fromType = Nullable.GetUnderlyingType(value.GetType()) ?? value.GetType();
-            Type toType = Nullable.GetUnderlyingType(typeof(TProperty)) ?? typeof(TProperty);
+            Type toType = Nullable.GetUnderlyingType(typeof(TField)) ?? typeof(TField);
 
-            if (toType.IsPrimitive && typeof(IConvertible).IsAssignableFrom(fromType)) {
-                return func((TProperty)Convert.ChangeType(value, toType), valueObject);
-            }
+            return toType.IsPrimitive && typeof(IConvertible).IsAssignableFrom(fromType)
+                ? (TField)Convert.ChangeType(value, toType)
+                : (TField)value;
+        }
 
-            return func((TProperty)value, valueObject);
+        public override string GetFieldFormula(RecordContext<TRecord> recordContext) {
+            return GetFromGenerator(FieldFormulaGenerator, null, recordContext);
+        }
+
+        public override CellStyle GetFieldStyle(RecordContext<TRecord> recordContext) {
+            return GetFromGenerator(FieldStyleGenerator, SpreadsheetManager.Configuration.ListTextStyle, recordContext);
         }
     }
 }

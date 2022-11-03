@@ -4,29 +4,27 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
-using CloudyWing.SpreadsheetExporter.Util;
 
-namespace CloudyWing.SpreadsheetExporter.Templates.List {
-    public class DataColumnCollection<T> : Collection<DataColumn<T>> {
-        private readonly DataColumn<T> parentItem;
+namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
+    /// <summary>The data column collection.</summary>
+    /// <typeparam name="T">The type of the record.</typeparam>
+    public class DataColumnCollection<T> : Collection<DataColumnBase<T>> {
+        private readonly DataColumnBase<T> parentItem;
 
-        internal DataColumnCollection(DataColumn<T> cell) {
+        internal DataColumnCollection(DataColumnBase<T> cell) {
             parentItem = cell;
         }
 
-        /// <summary>
-        /// 行跨度
-        /// </summary>
+        /// <summary>Gets the column span.</summary>
+        /// <value>The column span.</value>
         public int ColumnSpan => Count == 0 ? 0 : this.Sum(x => x.ColumnSpan);
 
-        /// <summary>
-        /// 列跨度
-        /// </summary>
+        /// <summary>Gets the row span.</summary>
+        /// <value>The row span.</value>
         public int RowSpan => Count == 0 ? 0 : this.Max(x => x.ColumnLayers);
 
-        /// <summary>
-        /// 根資料列的集合
-        /// </summary>
+        /// <summary>Gets the root columns.</summary>
+        /// <value>The root columns.</value>
         public DataColumnCollection<T> RootColumns {
             get {
                 DataColumnCollection<T> items = this;
@@ -40,687 +38,254 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         /// <summary>
         /// 從根節點往下重設座標
         /// </summary>
-        internal void ResetRootPoint() => RootColumns.ResetColumnsPoint(Point.Empty);
+        internal void ResetRootPoint() {
+            RootColumns.ResetColumnsPoint(Point.Empty);
+        }
 
         /// <summary>
         /// 重設底下所有DataColumn的座標
         /// </summary>
         /// <param name="point"></param>
         internal void ResetColumnsPoint(Point point) {
-            Size offset = new Size();
+            Size offset = new();
 
-            foreach (DataColumn<T> item in this) {
+            foreach (DataColumnBase<T> item in this) {
                 item.Point = point + offset;
                 offset.Width += item.ColumnSpan;
             }
         }
 
-        /// <summary>
-        /// 增加一筆DataColumn
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="dataKey">對應資料的Property</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
+        /// <summary>Adds the data column to the end of the DataColumnCollection&lt;T&gt;.</summary>
+        /// <param name="headerText">The header text.</param>
+        /// <param name="providerSetter">The provider setter.</param>
+        /// <param name="headerStyle">The header style. The dafault is SpreadsheetManager.Configuration.ListHeaderStyle.</param>
+        /// <param name="fieldStyleGenerator">The field style generator. The dafault is <c>(context) => SpreadsheetManager.Configuration.ListHeaderStyle</c>.</param>
         public void Add(
-            string headerText, string dataKey = "",
-            Func<object, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null
+            string headerText, Action<GeneratorProvider<RecordContext<T>, T>> providerSetter,
+            CellStyle? headerStyle = null, Func<RecordContext<T>, CellStyle> fieldStyleGenerator = null
         ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
+            GeneratorProvider<RecordContext<T>, T> provider = new();
+            providerSetter?.Invoke(provider);
 
-            Add(new DataColumn<T> {
+            RecordDataColumn<T> dataColumn = new() {
                 HeaderText = headerText,
-                DataKey = dataKey,
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = null
+                HeaderStyle = headerStyle ?? SpreadsheetManager.Configuration.ListHeaderStyle,
+                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.Configuration.ListTextStyle)
+            };
+
+            provider.SetGeneratorForColumn(dataColumn);
+
+            Add(dataColumn);
+        }
+
+        /// <summary>Adds the data column to the end of the DataColumnCollection&lt;T&gt;.</summary>
+        /// <typeparam name="TField">The type of the field.</typeparam>
+        /// <param name="headerText">The header text.</param>
+        /// <param name="fieldKey">The field key.</param>
+        /// <param name="headerStyle">The header style. The dafault is SpreadsheetManager.Configuration.ListHeaderStyle.</param>
+        /// <param name="fieldStyleGenerator">The field style generator. The dafault is <c>(context) => SpreadsheetManager.Configuration.ListHeaderStyle</c>.</param>
+        public void Add<TField>(
+            string headerText, string fieldKey,
+            CellStyle? headerStyle = null, Func<FieldContext<TField, T>, CellStyle> fieldStyleGenerator = null
+        ) {
+            Add(new DataColumn<TField, T>(fieldKey) {
+                HeaderText = headerText,
+                HeaderStyle = headerStyle ?? SpreadsheetManager.Configuration.ListHeaderStyle,
+                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.Configuration.ListTextStyle)
             });
         }
 
-        /// <summary>
-        /// 增加一筆DataColumn
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="dataKey">對應資料的Property</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        public void Add(
-            string headerText, string dataKey,
-            Func<int, string> itemFormulaFunctor,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null
+        /// <summary>Adds the data column to the end of the DataColumnCollection&lt;T&gt;.</summary>
+        /// <typeparam name="TField">The type of the field.</typeparam>
+        /// <param name="headerText">The header text.</param>
+        /// <param name="fieldKeyExpression">The field key expression.</param>
+        /// <param name="headerStyle">The header style. The dafault is SpreadsheetManager.Configuration.ListHeaderStyle.</param>
+        /// <param name="fieldStyleGenerator">The field style generator. The dafault is <c>(context) => SpreadsheetManager.Configuration.ListHeaderStyle</c>.</param>
+        public void Add<TField>(
+            string headerText, Expression<Func<T, TField>> fieldKeyExpression,
+            CellStyle? headerStyle = null, Func<FieldContext<TField, T>, CellStyle> fieldStyleGenerator = null
         ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
-
-            Add(new DataColumn<T> {
+            Add(new DataColumn<TField, T>(fieldKeyExpression) {
                 HeaderText = headerText,
-                DataKey = dataKey,
-                ContentRender = null,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = itemFormulaFunctor
+                HeaderStyle = headerStyle ?? SpreadsheetManager.Configuration.ListHeaderStyle,
+                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.Configuration.ListTextStyle)
             });
         }
 
-        /// <summary>
-        /// 增加一筆DataColumn
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="expression">用Expression設定DataKey</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        public void Add(
-            string headerText, Expression<Func<T, object>> expression,
-            Func<object, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null
+        /// <summary>Adds the data column to the end of the DataColumnCollection&lt;T&gt;.</summary>
+        /// <typeparam name="TField">The type of the field.</typeparam>
+        /// <param name="headerText">The header text.</param>
+        /// <param name="fieldKey">The field key.</param>
+        /// <param name="providerSetter">The provider setter.</param>
+        /// <param name="headerStyle">The header style. The dafault is SpreadsheetManager.Configuration.ListHeaderStyle.</param>
+        /// <param name="fieldStyleGenerator">The field style generator. The dafault is <c>(context) =&gt; SpreadsheetManager.Configuration.ListTextStyle</c>.</param>
+        public void Add<TField>(
+            string headerText, string fieldKey, Action<GeneratorProvider<FieldContext<TField, T>, T>> providerSetter,
+            CellStyle? headerStyle = null, Func<FieldContext<TField, T>, CellStyle> fieldStyleGenerator = null
         ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
+            GeneratorProvider<FieldContext<TField, T>, T> provider = new();
+            providerSetter?.Invoke(provider);
 
-            Add(new DataColumn<T> {
+            DataColumn<TField, T> dataColumn = new(fieldKey) {
                 HeaderText = headerText,
-                DataKey = GetDataKeyByExpression(expression),
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = null
-            });
+                HeaderStyle = headerStyle ?? SpreadsheetManager.Configuration.ListHeaderStyle,
+                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.Configuration.ListTextStyle)
+            };
+
+            provider.SetGeneratorForColumn(dataColumn);
+
+            Add(dataColumn);
         }
 
-        private string GetDataKeyByExpression(Expression<Func<T, object>> expression) {
-            List<string> keys = new List<string>();
-            if ((expression is LambdaExpression lambda) && lambda.Body is ConstantExpression constant) {
-                keys.Add(constant.Value as string);
-            } else {
-                MemberExpression memberExpression = GetMemberExpression(expression);
-                if (memberExpression == null) {
-                    throw new ArgumentException("Expression格式錯誤。", nameof(expression));
-                }
+        /// <summary>Adds the data column to the end of the DataColumnCollection&lt;T&gt;.</summary>
+        /// <typeparam name="TField">The type of the field.</typeparam>
+        /// <param name="headerText">The header text.</param>
+        /// <param name="fieldKeyExpression">The field key expression.</param>
+        /// <param name="providerSetter">The provider setter.</param>
+        /// <param name="headerStyle">The header style. The dafault is SpreadsheetManager.Configuration.ListHeaderStyle.</param>
+        /// <param name="fieldStyleGenerator">The field style generator. The dafault is <c>(context) =&gt; SpreadsheetManager.Configuration.ListTextStyle</c>.</param>
+        public void Add<TField>(
+            string headerText, Expression<Func<T, TField>> fieldKeyExpression,
+            Action<GeneratorProvider<FieldContext<TField, T>, T>> providerSetter,
+            CellStyle? headerStyle = null, Func<FieldContext<TField, T>, CellStyle> fieldStyleGenerator = null
+        ) {
+            GeneratorProvider<FieldContext<TField, T>, T> provider = new();
+            providerSetter?.Invoke(provider);
 
-                do {
-                    keys.Add(memberExpression.Member.Name);
-                    memberExpression = GetMemberExpression(memberExpression.Expression);
-                } while (memberExpression != null);
+            DataColumn<TField, T> dataColumn = new(fieldKeyExpression) {
+                HeaderText = headerText,
+                HeaderStyle = headerStyle ?? SpreadsheetManager.Configuration.ListHeaderStyle,
+                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.Configuration.ListTextStyle)
+            };
+
+            provider.SetGeneratorForColumn(dataColumn);
+
+            Add(dataColumn);
+        }
+
+        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <param name="childColumn">The child data column.</param>
+        /// <exception cref="NullReferenceException"></exception>
+        public void AddChildToLast(DataColumnBase<T> childColumn) {
+            DataColumnBase<T> column = this.LastOrDefault();
+            if (column is null) {
+                throw new NullReferenceException($"No {nameof(DataColumnBase<T>)} have been created.");
             }
 
-            if (keys.Count > DictionaryUtils.MaxNestedPropertyLevel) {
-                throw new ArgumentException($"最大巢狀屬性層級為{DictionaryUtils.MaxNestedPropertyLevel}。", nameof(expression));
-            }
-
-            keys.Reverse();
-            return string.Join(".", keys);
+            column.ChildColumns.Add(childColumn);
         }
 
-        private MemberExpression GetMemberExpression(Expression expression) {
-            if (expression is null) {
-                throw new ArgumentNullException(nameof(expression));
-            }
-
-            if (expression is MemberExpression member) {
-                return member;
-            } else if (expression is LambdaExpression lambda) {
-                // 如果是Value Type的話Body會是UnaryExpression
-                // Reference Type才會是直接取得到MemberExpression
-                return lambda.Body as MemberExpression
-                    ?? (lambda.Body is UnaryExpression unary ? unary.Operand as MemberExpression : null);
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// 增加一筆DataColumn
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="expression">用Expression設定DataKey</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        public void Add(
-            string headerText, Expression<Func<T, object>> expression,
-            Func<int, string> itemFormulaFunctor,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
-
-            Add(new DataColumn<T> {
-                HeaderText = headerText,
-                DataKey = GetDataKeyByExpression(expression),
-                ContentRender = null,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = itemFormulaFunctor
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆DataColumn
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="dataKey">對應資料的Property</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyleFunc">資料的儲存格式，依資料決定顯示內容的委派</param>
-        public void Add(
-            string headerText, string dataKey,
-            Func<object, T, object> render,
-            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleFunc
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-
-            Add(new DataColumn<T> {
-                HeaderText = headerText,
-                DataKey = dataKey,
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyleFunctor = itemStyleFunc,
-                ItemFormulaFunctor = null
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆DataColumn
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="dataKey">對應資料的Property</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyleFunc">資料的儲存格式，依資料決定顯示內容的委派</param>
-        public void Add(
-            string headerText, string dataKey,
-            Func<int, string> itemFormulaFunctor,
-            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleFunc
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-
-            Add(new DataColumn<T> {
-                HeaderText = headerText,
-                DataKey = dataKey,
-                ContentRender = null,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyleFunctor = itemStyleFunc,
-                ItemFormulaFunctor = itemFormulaFunctor
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆DataColumn
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="expression">用Expression設定DataKey</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyleFunc">資料的儲存格式，依資料決定顯示內容的委派</param>
-        public void Add(
-            string headerText, Expression<Func<T, object>> expression,
-            Func<object, T, object> render,
-            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleFunc
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-
-            Add(new DataColumn<T> {
-                HeaderText = headerText,
-                DataKey = GetDataKeyByExpression(expression),
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyleFunctor = itemStyleFunc,
-                ItemFormulaFunctor = null
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆DataColumn
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyleFunc">資料的儲存格式，依資料決定顯示內容的委派</param>
-        public void Add(
-            string headerText, Expression<Func<T, object>> expression,
-            Func<int, string> itemFormulaFunctor,
-            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleFunc
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-
-            Add(new DataColumn<T> {
-                HeaderText = headerText,
-                DataKey = GetDataKeyByExpression(expression),
-                ContentRender = null,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyleFunctor = itemStyleFunc,
-                ItemFormulaFunctor = itemFormulaFunctor
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆DataColumn
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="dataKey">對應資料的Property</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        public void Add<TProperty>(
-            string headerText, string dataKey = "",
-            Func<TProperty, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
-
-            Add(new DataColumn<TProperty, T>() {
-                HeaderText = headerText,
-                DataKey = dataKey,
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = null
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆DataColumn
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="expression">用Expression設定DataKey</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        public void Add<TProperty>(
-            string headerText, Expression<Func<T, object>> expression,
-            Func<TProperty, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
-
-            Add(new DataColumn<TProperty, T>() {
-                HeaderText = headerText,
-                DataKey = GetDataKeyByExpression(expression),
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = null
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆DataColumn
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="dataKey">對應資料的Property</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        public void Add<TProperty>(
-            string headerText, string dataKey,
-            Func<TProperty, T, object> render,
-            CellStyle? headerStyle, Func<TProperty, T, CellStyle> itemStyleExpression
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-
-            Add(new DataColumn<TProperty, T>() {
-                HeaderText = headerText,
-                DataKey = dataKey,
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyleFunctor = itemStyleExpression,
-                ItemFormulaFunctor = null
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆DataColumn
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="expression">用Expression設定DataKey</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        public void Add<TProperty>(
-            string headerText, Expression<Func<T, object>> expression,
-            Func<TProperty, T, object> render,
-            CellStyle? headerStyle, Func<TProperty, T, CellStyle> itemStyleExpression
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-
-            Add(new DataColumn<TProperty, T>() {
-                HeaderText = headerText,
-                DataKey = GetDataKeyByExpression(expression),
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyleFunctor = itemStyleExpression,
-                ItemFormulaFunctor = null
-            });
-        }
-
-        /// <exception cref="NullReferenceException">尚未建立任何DataColumn<T>。</exception>
-        public void AddChildToLast(DataColumn<T> childHeader) {
-            DataColumn<T> header = this.LastOrDefault();
-            if (header is null) {
-                throw new NullReferenceException($"尚未建立任何{nameof(DataColumn<T>)}。");
-            }
-
-            header.ChildColumns.Add(childHeader);
-        }
-
-        /// <summary>
-        /// 增加一筆子DataHeader至目前最後一個DataColumn底下
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="dataKey">對應資料的Property</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
+        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <param name="headerText">The header text.</param>
+        /// <param name="providerSetter">The provider setter.</param>
+        /// <param name="headerStyle">The header style. The dafault is SpreadsheetManager.Configuration.ListHeaderStyle.</param>
+        /// <param name="fieldStyleGenerator">The field style generator. The dafault is <c>(context) =&gt; SpreadsheetManager.Configuration.ListTextStyle</c>.</param>
         public void AddChildToLast(
-            string headerText, string dataKey = "",
-            Func<object, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null
+            string headerText, Action<GeneratorProvider<RecordContext<T>, T>> providerSetter,
+            CellStyle? headerStyle = null, Func<RecordContext<T>, CellStyle> fieldStyleGenerator = null
         ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
+            GeneratorProvider<RecordContext<T>, T> provider = new();
+            providerSetter?.Invoke(provider);
 
-            AddChildToLast(new DataColumn<T> {
+            RecordDataColumn<T> dataColumn = new() {
                 HeaderText = headerText,
-                DataKey = dataKey,
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = null
+                HeaderStyle = headerStyle ?? SpreadsheetManager.Configuration.ListHeaderStyle,
+                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.Configuration.ListTextStyle)
+            };
+
+            provider.SetGeneratorForColumn(dataColumn);
+
+            AddChildToLast(dataColumn);
+        }
+
+        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <typeparam name="TField">The type of the field.</typeparam>
+        /// <param name="headerText">The header text.</param>
+        /// <param name="fieldKey">The field key.</param>
+        /// <param name="headerStyle">The header style. The dafault is SpreadsheetManager.Configuration.ListHeaderStyle.</param>
+        /// <param name="fieldStyleGenerator">The field style generator. The dafault is <c>(context) => SpreadsheetManager.Configuration.ListHeaderStyle</c>.</param>
+        public void AddChildToLast<TField>(
+            string headerText, string fieldKey,
+            CellStyle? headerStyle = null, Func<FieldContext<TField, T>, CellStyle> fieldStyleGenerator = null
+        ) {
+            AddChildToLast(new DataColumn<TField, T>(fieldKey) {
+                HeaderText = headerText,
+                HeaderStyle = headerStyle ?? SpreadsheetManager.Configuration.ListHeaderStyle,
+                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.Configuration.ListTextStyle)
             });
         }
 
-        /// <summary>
-        /// 增加一筆子DataHeader至目前最後一個DataColumn底下
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="dataKey">對應資料的Property</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        public void AddChildToLast(
-            string headerText, string dataKey,
-            Func<int, string> itemFormulaFunctor,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null
+        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <typeparam name="TField">The type of the field.</typeparam>
+        /// <param name="headerText">The header text.</param>
+        /// <param name="fieldKeyExpression">The field key expression.</param>
+        /// <param name="headerStyle">The header style. The dafault is SpreadsheetManager.Configuration.ListHeaderStyle.</param>
+        /// <param name="fieldStyleGenerator">The field style generator. The dafault is <c>(context) => SpreadsheetManager.Configuration.ListHeaderStyle</c>.</param>
+        public void AddChildToLast<TField>(
+            string headerText, Expression<Func<T, TField>> fieldKeyExpression,
+            CellStyle? headerStyle = null, Func<FieldContext<TField, T>, CellStyle> fieldStyleGenerator = null
         ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
-
-            AddChildToLast(new DataColumn<T> {
+            AddChildToLast(new DataColumn<TField, T>(fieldKeyExpression) {
                 HeaderText = headerText,
-                DataKey = dataKey,
-                ContentRender = null,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = itemFormulaFunctor
+                HeaderStyle = headerStyle ?? SpreadsheetManager.Configuration.ListHeaderStyle,
+                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.Configuration.ListTextStyle)
             });
         }
 
-        /// <summary>
-        /// 增加一筆子DataHeader至目前最後一個DataColumn底下
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="expression">用Expression設定DataKey</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        public void AddChildToLast(
-            string headerText, Expression<Func<T, object>> expression,
-            Func<object, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null
+        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <typeparam name="TField">The type of the field.</typeparam>
+        /// <param name="headerText">The header text.</param>
+        /// <param name="fieldKey">The field key.</param>
+        /// <param name="providerSetter">The provider setter.</param>
+        /// <param name="headerStyle">The header style. The dafault is SpreadsheetManager.Configuration.ListHeaderStyle.</param>
+        /// <param name="fieldStyleGenerator">The field style generator. The dafault is <c>(context) =&gt; SpreadsheetManager.Configuration.ListTextStyle</c>.</param>
+        public void AddChildToLast<TField>(
+            string headerText, string fieldKey, Action<GeneratorProvider<FieldContext<TField, T>, T>> providerSetter,
+            CellStyle? headerStyle = null, Func<FieldContext<TField, T>, CellStyle> fieldStyleGenerator = null
         ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
+            GeneratorProvider<FieldContext<TField, T>, T> provider = new();
+            providerSetter?.Invoke(provider);
 
-            AddChildToLast(new DataColumn<T> {
+            DataColumn<TField, T> dataColumn = new(fieldKey) {
                 HeaderText = headerText,
-                DataKey = GetDataKeyByExpression(expression),
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = null
-            });
+                HeaderStyle = headerStyle ?? SpreadsheetManager.Configuration.ListHeaderStyle,
+                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.Configuration.ListTextStyle)
+            };
+
+            provider.SetGeneratorForColumn(dataColumn);
+
+            AddChildToLast(dataColumn);
         }
 
-        /// <summary>
-        /// 增加一筆子DataHeader至目前最後一個DataColumn底下
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="expression">用Expression設定DataKey</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        public void AddChildToLast(
-            string headerText, Expression<Func<T, object>> expression,
-            Func<int, string> itemFormulaFunctor,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null
+        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <typeparam name="TField">The type of the field.</typeparam>
+        /// <param name="headerText">The header text.</param>
+        /// <param name="fieldKeyExpression">The field key expression.</param>
+        /// <param name="providerSetter">The provider setter.</param>
+        /// <param name="headerStyle">The header style. The dafault is SpreadsheetManager.Configuration.ListHeaderStyle.</param>
+        /// <param name="fieldStyleGenerator">The field style generator. The dafault is <c>(context) =&gt; SpreadsheetManager.Configuration.ListTextStyle</c>.</param>
+        public void AddChildToLast<TField>(
+            string headerText, Expression<Func<T, TField>> fieldKeyExpression,
+            Action<GeneratorProvider<FieldContext<TField, T>, T>> providerSetter,
+            CellStyle? headerStyle = null, Func<FieldContext<TField, T>, CellStyle> fieldStyleGenerator = null
         ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
+            GeneratorProvider<FieldContext<TField, T>, T> provider = new();
+            providerSetter?.Invoke(provider);
 
-            AddChildToLast(new DataColumn<T> {
+            DataColumn<TField, T> dataColumn = new(fieldKeyExpression) {
                 HeaderText = headerText,
-                DataKey = GetDataKeyByExpression(expression),
-                ContentRender = null,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = itemFormulaFunctor
-            });
+                HeaderStyle = headerStyle ?? SpreadsheetManager.Configuration.ListHeaderStyle,
+                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.Configuration.ListTextStyle)
+            };
+
+            provider.SetGeneratorForColumn(dataColumn);
+
+            AddChildToLast(dataColumn);
         }
 
-        /// <summary>
-        /// 增加一筆子DataColumn至目前最後一個DataColumn底下
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="dataKey">對應資料的Property</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        public void AddChildToLast(
-            string headerText, string dataKey,
-            Func<object, T, object> render,
-            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleExpression
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-
-            AddChildToLast(new DataColumn<T> {
-                HeaderText = headerText,
-                DataKey = dataKey,
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyleFunctor = itemStyleExpression,
-                ItemFormulaFunctor = null
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆子DataColumn至目前最後一個DataColumn底下
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="dataKey">對應資料的Property</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        public void AddChildToLast(
-            string headerText, string dataKey,
-            Func<int, string> itemFormulaFunctor,
-            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleExpression
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-
-            AddChildToLast(new DataColumn<T> {
-                HeaderText = headerText,
-                DataKey = dataKey,
-                ContentRender = null,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyleFunctor = itemStyleExpression,
-                ItemFormulaFunctor = itemFormulaFunctor
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆子DataColumn至目前最後一個DataColumn底下
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="expression">用Expression設定DataKey</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        public void AddChildToLast(
-            string headerText, Expression<Func<T, object>> expression,
-            Func<object, T, object> render,
-            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleExpression
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-
-            AddChildToLast(new DataColumn<T> {
-                HeaderText = headerText,
-                DataKey = GetDataKeyByExpression(expression),
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyleFunctor = itemStyleExpression,
-                ItemFormulaFunctor = null
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆子DataColumn至目前最後一個DataColumn底下
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="expression">用Expression設定DataKey</param>
-        /// <param name="itemFormulaFunctor">產生資料的Excel公式的委派，參數為從0開始計算的資料列索引</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        public void AddChildToLast(
-            string headerText, Expression<Func<T, object>> expression,
-            Func<int, string> itemFormulaFunctor,
-            CellStyle? headerStyle, Func<object, T, CellStyle> itemStyleExpression
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-
-            AddChildToLast(new DataColumn<T> {
-                HeaderText = headerText,
-                DataKey = GetDataKeyByExpression(expression),
-                ContentRender = null,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyleFunctor = itemStyleExpression,
-                ItemFormulaFunctor = itemFormulaFunctor
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆子DataHeader至目前最後一個DataColumn底下
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="dataKey">對應資料的Property</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        public void AddChildToLast<TProperty>(
-            string headerText, string dataKey = "",
-            Func<TProperty, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
-
-            AddChildToLast(new DataColumn<TProperty, T>() {
-                HeaderText = headerText,
-                DataKey = dataKey,
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = null
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆子DataHeader至目前最後一個DataColumn底下
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="expression">用Expression設定DataKey</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyle">資料的儲存格式，預設ListTextStyle</param>
-        public void AddChildToLast<TProperty>(
-            string headerText, Expression<Func<T, object>> expression,
-            Func<TProperty, T, object> render = null,
-            CellStyle? headerStyle = null, CellStyle? itemStyle = null
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-            itemStyle ??= SpreadsheetManager.Configuration.ListTextStyle;
-
-            AddChildToLast(new DataColumn<TProperty, T>() {
-                HeaderText = headerText,
-                DataKey = GetDataKeyByExpression(expression),
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyle = (CellStyle)itemStyle,
-                ItemFormulaFunctor = null
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆子DataColumn至目前最後一個DataColumn底下
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="dataKey">對應資料的Property</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        public void AddChildToLast<TProperty>(
-            string headerText, string dataKey,
-            Func<TProperty, T, object> render,
-            CellStyle? headerStyle, Func<TProperty, T, CellStyle> itemStyleExpression
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-
-            AddChildToLast(new DataColumn<TProperty, T>() {
-                HeaderText = headerText,
-                DataKey = dataKey,
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyleFunctor = itemStyleExpression,
-                ItemFormulaFunctor = null
-            });
-        }
-
-        /// <summary>
-        /// 增加一筆子DataColumn至目前最後一個DataColumn底下
-        /// </summary>
-        /// <param name="headerText">標題要顯示的文字</param>
-        /// <param name="expression">用Expression設定DataKey</param>
-        /// <param name="render">修正顯示資料內容的委派，委派第一個參數為DatayKey對應的資料值，第二個參數為整筆資料物件</param>
-        /// <param name="headerStyle">標題的儲存格格式，預設ListHeaderStyle</param>
-        /// <param name="itemStyleExpression">資料的儲存格式，依資料決定顯示內容的委派</param>
-        public void AddChildToLast<TProperty>(
-            string headerText, Expression<Func<T, object>> expression,
-            Func<TProperty, T, object> render,
-            CellStyle? headerStyle, Func<TProperty, T, CellStyle> itemStyleExpression
-        ) {
-            headerStyle ??= SpreadsheetManager.Configuration.ListHeaderStyle;
-
-            AddChildToLast(new DataColumn<TProperty, T>() {
-                HeaderText = headerText,
-                DataKey = GetDataKeyByExpression(expression),
-                ContentRender = render,
-                HeaderStyle = (CellStyle)headerStyle,
-                ItemStyleFunctor = itemStyleExpression,
-                ItemFormulaFunctor = null
-            });
-        }
-
-        protected override void InsertItem(int index, DataColumn<T> item) {
+        protected override void InsertItem(int index, DataColumnBase<T> item) {
             if (item.ParentColumns != null) {
-                throw new ArgumentException($"{nameof(DataColumn<T>)}重複加入。", nameof(item));
+                throw new ArgumentException($"{nameof(DataColumnBase<T>)} is already contained by another {nameof(DataColumnCollection<T>)}.", nameof(item));
             }
 
             base.InsertItem(index, item);
@@ -734,9 +299,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
             ResetRootPoint();
         }
 
-        protected override void SetItem(int index, DataColumn<T> item) {
+        protected override void SetItem(int index, DataColumnBase<T> item) {
             if (item.ParentColumns != null) {
-                throw new ArgumentException($"{nameof(DataColumn<T>)}重複加入。", nameof(item));
+                throw new ArgumentException($"{nameof(DataColumnBase<T>)} is already contained by another {nameof(DataColumnCollection<T>)}.", nameof(item));
             }
 
             Items[index].ParentColumns = null;
@@ -746,27 +311,78 @@ namespace CloudyWing.SpreadsheetExporter.Templates.List {
         }
 
         protected override void ClearItems() {
-            foreach (DataColumn<T> item in Items) {
+            foreach (DataColumnBase<T> item in Items) {
                 item.ParentColumns = null;
             }
             base.ClearItems();
             ResetRootPoint();
         }
 
-        /// <summary>
-        /// 和DataSource關聯的的DataColumns集合
-        /// </summary>
-        public IEnumerable<DataColumn<T>> DataSourceColumns {
+        /// <summary>Get the column containing the properties of the data source.</summary>
+        /// <value>The data columns.</value>
+        public IEnumerable<DataColumnBase<T>> DataSourceColumns {
             get {
-                foreach (DataColumn<T> item in this) {
+                foreach (DataColumnBase<T> item in this) {
                     if (item.ChildColumns.Count == 0) {
                         yield return item;
                     } else {
-                        foreach (DataColumn<T> dataHeader in item.ChildColumns.DataSourceColumns) {
+                        foreach (DataColumnBase<T> dataHeader in item.ChildColumns.DataSourceColumns) {
                             yield return dataHeader;
                         }
                     }
                 }
+            }
+        }
+
+        public sealed class GeneratorProvider<TContext, TRecord> where TContext : RecordContext<TRecord> {
+            private ProviderType type = ProviderType.None;
+            private Func<TContext, object> valueGenerator;
+            private Func<TContext, string> formulaGenerator;
+
+            /// <summary>Uses the value.</summary>
+            /// <param name="generator">The generator.</param>
+            public void UseValue(Func<TContext, object> generator) {
+                type = ProviderType.Value;
+                valueGenerator = generator;
+            }
+
+            /// <summary>Uses the formula.</summary>
+            /// <param name="generator">The generator.</param>
+            public void UseFormula(Func<TContext, string> generator) {
+                type = ProviderType.Formula;
+                formulaGenerator = generator;
+            }
+
+            internal void SetGeneratorForColumn(RecordDataColumn<TRecord> dataColumn) {
+                switch (type) {
+                    case ProviderType.Value:
+                        dataColumn.FieldValueGenerator = valueGenerator as Func<RecordContext<TRecord>, object>;
+                        break;
+                    case ProviderType.Formula:
+                        dataColumn.FieldFormulaGenerator = formulaGenerator as Func<RecordContext<TRecord>, string>;
+                        break;
+                    default:
+                        throw new ArgumentException();
+                }
+            }
+
+            internal void SetGeneratorForColumn<TField>(DataColumn<TField, TRecord> dataColumn) {
+                switch (type) {
+                    case ProviderType.Value:
+                        dataColumn.FieldValueGenerator = valueGenerator as Func<FieldContext<TField, TRecord>, object>;
+                        break;
+                    case ProviderType.Formula:
+                        dataColumn.FieldFormulaGenerator = formulaGenerator as Func<FieldContext<TField, TRecord>, string>;
+                        break;
+                    default:
+                        throw new ArgumentException();
+                }
+            }
+
+            private enum ProviderType {
+                None,
+                Value,
+                Formula
             }
         }
     }
