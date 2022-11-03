@@ -97,7 +97,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
 
 
         public TemplateContext GetContext() {
-            return new TemplateContext(Cells, ColumnSpan, RowSpan, RowHeights);
+            return new TemplateContext(Cells, RowSpan, RowHeights);
         }
     }
 }

@@ -115,7 +115,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
 
         public TemplateContext GetContext() {
             return new TemplateContext(
-                Cells, ColumnSpan, RowSpan, RowHeights.ToDictionary(pair => pair.Key, pair => pair.Value)
+                Cells, RowSpan, RowHeights.ToDictionary(pair => pair.Key, pair => pair.Value)
             );
         }
 

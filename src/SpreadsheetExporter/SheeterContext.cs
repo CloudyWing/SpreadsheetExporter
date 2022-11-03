@@ -1,56 +1,45 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using CloudyWing.SpreadsheetExporter.Extensions;
+using CloudyWing.SpreadsheetExporter.Templates;
 
 namespace CloudyWing.SpreadsheetExporter {
+    /// <summary>The sheeter context.</summary>
     public class SheeterContext {
+        /// <summary>Initializes a new instance of the <see cref="SheeterContext" /> class.</summary>
+        /// <param name="sheeter">The sheeter.</param>
         public SheeterContext(Sheeter sheeter) {
             SheetName = sheeter.SheetName;
-            InitializeCellsAndRowHeights();
+            TemplateContext templateContext = TemplateContext.Create(sheeter.Templates);
+            Cells = templateContext.Cells;
+            RowHeights = templateContext.RowHeights.AsReadOnly();
             ColumnWidths = sheeter.ColumnWidths.ToDictionary(x => x.Key, x => x.Value).AsReadOnly();
             Password = sheeter.Password;
-
-            void InitializeCellsAndRowHeights() {
-                List<Cell> cells = new List<Cell>();
-                Dictionary<int, double> rowHeights = new Dictionary<int, double>();
-                int rowIndex = 0;
-
-                foreach (TemplateContext context in sheeter.Templates.Select(x => x.GetContext())) {
-                    foreach (KeyValuePair<int, double> pair in context.RowHeights) {
-                        rowHeights.Add(rowIndex + pair.Key, pair.Value);
-                    }
-
-                    foreach (Cell cell in context.Cells) {
-                        Cell fixedCell = cell.ShallowCopy();
-                        fixedCell.Point = new System.Drawing.Point() {
-                            X = cell.Point.X,
-                            Y = cell.Point.Y + rowIndex
-                        };
-
-                        Debug.Assert(fixedCell.Point.Y == cell.Point.Y + rowIndex);
-
-                        cells.Add(fixedCell);
-                    }
-
-                    rowIndex += context.RowSpan;
-                }
-
-                Cells = cells.AsReadOnly();
-                RowHeights = rowHeights.AsReadOnly();
-            }
         }
 
+        /// <summary>Gets the name of the sheet.</summary>
+        /// <value>The name of the sheet.</value>
         public string SheetName { get; }
 
+        /// <summary>Gets the cells.</summary>
+        /// <value>The cells.</value>
         public IReadOnlyList<Cell> Cells { get; private set; }
 
+        /// <summary>Gets the width of columns.</summary>
+        /// <value>The width of columns.</value>
         public IReadOnlyDictionary<int, double> ColumnWidths { get; }
 
+        /// <summary>Gets the height of rows.</summary>
+        /// <value>The height of rows.</value>
         public IReadOnlyDictionary<int, double> RowHeights { get; private set; }
 
+        /// <summary>Gets the password.</summary>
+        /// <value>The password.</value>
         public string Password { get; }
 
+        /// <summary>Gets a value indicating whether this instance is protected.</summary>
+        /// <value>
+        ///   <c>true</c> if this instance is protected; otherwise, <c>false</c>.</value>
         public bool IsProtected => !string.IsNullOrEmpty(Password);
     }
 }
