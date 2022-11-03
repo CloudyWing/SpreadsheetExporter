@@ -8,16 +8,16 @@ namespace CloudyWing.SpreadsheetExporter.Util {
     internal static class DictionaryUtils {
         internal const int MaxNestedPropertyLevel = 5;
 
-        internal static IDictionary<string, object> ConvertFrom<T>(T valueObj) {
+        internal static IDictionary<string, object> ConvertFrom<T>(T record, int maxNestedLevel) {
             IDictionary<string, object> dic = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
-            AddPropertyToDictionary(dic, typeof(T), "", "", valueObj, 0);
+            AddPropertyToDictionary(dic, typeof(T), "", "", record, 0, maxNestedLevel);
 
             return dic;
         }
 
         private static void AddPropertyToDictionary(
-            IDictionary<string, object> dictionary, Type type, string fulllName, string name, object value, int level
+            IDictionary<string, object> dictionary, Type type, string fulllName, string name, object value, int level, int maxNestedLevel
         ) {
             level++;
             Type underlyingType = Nullable.GetUnderlyingType(type) ?? type;
@@ -37,9 +37,9 @@ namespace CloudyWing.SpreadsheetExporter.Util {
                     }
 
                     // 避免類似DateTime情況的class，所以限制層級
-                    if (level <= MaxNestedPropertyLevel) {
+                    if (level <= maxNestedLevel) {
                         string _prefix = fulllName.Length == 0 ? prop.Name : $"{fulllName}.{prop.Name}";
-                        AddPropertyToDictionary(dictionary, prop.PropertyType, _prefix, prop.Name, value is null ? null : prop.GetValue(value), level);
+                        AddPropertyToDictionary(dictionary, prop.PropertyType, _prefix, prop.Name, value is null ? null : prop.GetValue(value), level, maxNestedLevel);
                     }
                 }
             }
