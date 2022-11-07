@@ -5,15 +5,15 @@ using OfficeOpenXml.Style;
 
 namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
     public class ExcelExporter : ExporterBase {
-        private readonly Dictionary<HorizontalAlignment, ExcelHorizontalAlignment> horizontalAlignmentMap = new Dictionary<HorizontalAlignment, ExcelHorizontalAlignment>() {
-            [HorizontalAlignment.None] = ExcelHorizontalAlignment.General,
+        private readonly Dictionary<HorizontalAlignment, ExcelHorizontalAlignment> horizontalAlignmentMap = new() {
+            [HorizontalAlignment.General] = ExcelHorizontalAlignment.General,
             [HorizontalAlignment.Left] = ExcelHorizontalAlignment.Left,
             [HorizontalAlignment.Center] = ExcelHorizontalAlignment.Center,
             [HorizontalAlignment.Right] = ExcelHorizontalAlignment.Right,
             [HorizontalAlignment.Justify] = ExcelHorizontalAlignment.Justify
         };
 
-        private readonly Dictionary<VerticalAlignment, ExcelVerticalAlignment> verticalAlignmentMap = new Dictionary<VerticalAlignment, ExcelVerticalAlignment>() {
+        private readonly Dictionary<VerticalAlignment, ExcelVerticalAlignment> verticalAlignmentMap = new() {
             [VerticalAlignment.Top] = ExcelVerticalAlignment.Top,
             [VerticalAlignment.Middle] = ExcelVerticalAlignment.Center,
             [VerticalAlignment.Bottom] = ExcelVerticalAlignment.Bottom
@@ -23,8 +23,8 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
 
         public override string FileNameExtension => ".xlsx";
 
-        protected override byte[] ExecuteExport(SheeterContext[] contexts) {
-            using ExcelPackage package = new ExcelPackage();
+        protected override byte[] ExecuteExport(IEnumerable<SheeterContext> contexts) {
+            using ExcelPackage package = new();
             foreach (SheeterContext context in contexts) {
                 CreateSheetToWorkbook(package.Workbook, context);
             }
@@ -120,9 +120,9 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
             foreach (KeyValuePair<int, double> pair in columnWidths) {
                 // EPPlus從1開始算
                 ExcelColumn column = sheet.Column(pair.Key + 1);
-                if (pair.Value <= Constant.AutoSizeRow) {
+                if (pair.Value <= Constants.AutoFitColumnWidth) {
                     column.AutoFit();
-                } else if (pair.Value == Constant.HiddenRow) {
+                } else if (pair.Value == Constants.HiddenColumn) {
                     column.Hidden = true;
                 } else {
                     column.Width = pair.Value;
@@ -134,9 +134,9 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
             foreach (KeyValuePair<int, double> pair in rowHeights) {
                 // EPPlus從1開始算
                 ExcelRow row = sheet.Row(pair.Key + 1);
-                if (pair.Value <= Constant.AutoSizeRow) {
+                if (pair.Value <= Constants.AutoFiteRowHeight) {
                     row.CustomHeight = false;
-                } else if (pair.Value == Constant.HiddenRow) {
+                } else if (pair.Value == Constants.HiddenRow) {
                     row.Hidden = true;
                 } else {
                     row.Height = pair.Value;

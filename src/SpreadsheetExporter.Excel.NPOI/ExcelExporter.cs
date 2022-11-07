@@ -19,21 +19,21 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             [ExcelFormat.OfficeOpenXmlDocument] = ".xlsx"
         };
 
-        private readonly Dictionary<HorizontalAlignment, global::NPOI.SS.UserModel.HorizontalAlignment> horizontalAlignmentMap = new Dictionary<HorizontalAlignment, global::NPOI.SS.UserModel.HorizontalAlignment>() {
-            [HorizontalAlignment.None] = global::NPOI.SS.UserModel.HorizontalAlignment.General,
+        private readonly Dictionary<HorizontalAlignment, global::NPOI.SS.UserModel.HorizontalAlignment> horizontalAlignmentMap = new() {
+            [HorizontalAlignment.General] = global::NPOI.SS.UserModel.HorizontalAlignment.General,
             [HorizontalAlignment.Left] = global::NPOI.SS.UserModel.HorizontalAlignment.Left,
             [HorizontalAlignment.Center] = global::NPOI.SS.UserModel.HorizontalAlignment.Center,
             [HorizontalAlignment.Right] = global::NPOI.SS.UserModel.HorizontalAlignment.Right,
             [HorizontalAlignment.Justify] = global::NPOI.SS.UserModel.HorizontalAlignment.Justify
         };
 
-        private readonly Dictionary<VerticalAlignment, global::NPOI.SS.UserModel.VerticalAlignment> verticalAlignmentMap = new Dictionary<VerticalAlignment, global::NPOI.SS.UserModel.VerticalAlignment>() {
+        private readonly Dictionary<VerticalAlignment, global::NPOI.SS.UserModel.VerticalAlignment> verticalAlignmentMap = new() {
             [VerticalAlignment.Top] = global::NPOI.SS.UserModel.VerticalAlignment.Top,
             [VerticalAlignment.Middle] = global::NPOI.SS.UserModel.VerticalAlignment.Center,
             [VerticalAlignment.Bottom] = global::NPOI.SS.UserModel.VerticalAlignment.Bottom
         };
 
-        private readonly object thisLock = new object();
+        private readonly object thisLock = new();
 
         public ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOpenXmlDocument) {
             ExcelFormat = excelFormat;
@@ -47,7 +47,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
 
         public override string FileNameExtension => filenameExtensionMap[ExcelFormat];
 
-        protected override byte[] ExecuteExport(SheeterContext[] contexts) {
+        protected override byte[] ExecuteExport(IEnumerable<SheeterContext> contexts) {
             lock (thisLock) {
                 // 因為ParseCellStyle和ParseFont會用到，所以用field處理
                 workbook = IsOfficeOpenXmlDocument ? new XSSFWorkbook() : new HSSFWorkbook();
@@ -55,7 +55,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
                     CreateSheet(context);
                 }
 
-                using MemoryStream ms = new MemoryStream();
+                using MemoryStream ms = new();
 
                 if (HasPassword) {
                     if (IsOfficeOpenXmlDocument) {
@@ -237,7 +237,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
                 }
             }
 
-            sheet.AddMergedRegion(
+            _ = sheet.AddMergedRegion(
                 new CellRangeAddress(firstRow, lastRow, firstColnum, lastColumn)
             );
         }
@@ -252,7 +252,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             } else if (value is double _double) {
                 cell.SetCellValue(_double);
             } else {
-                if (!(value is string) && value is IConvertible) {
+                if (value is not string and IConvertible) {
                     try {
                         cell.SetCellValue(Convert.ToDouble(value));
                     } catch {
@@ -266,9 +266,9 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
 
         private void SetSheetColumnWidths(ISheet sheet, IReadOnlyDictionary<int, double> columnWidths) {
             foreach (KeyValuePair<int, double> pair in columnWidths) {
-                if (pair.Value <= Constant.AutoSizeColumn) {
+                if (pair.Value <= Constants.AutoFitColumnWidth) {
                     sheet.AutoSizeColumn(pair.Key);
-                } else if (pair.Value == Constant.HiddenColumn) {
+                } else if (pair.Value == Constants.HiddenColumn) {
                     sheet.SetColumnHidden(pair.Key, true);
                 } else {
                     sheet.SetColumnWidth(pair.Key, (short)(pair.Value * 256));
@@ -279,9 +279,9 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
         private void SetSheetRowHeights(ISheet sheet, IReadOnlyDictionary<int, double> rowHeights) {
             foreach (KeyValuePair<int, double> pair in rowHeights) {
                 IRow row = sheet.GetRow(pair.Key) ?? sheet.CreateRow(pair.Key);
-                if (pair.Value <= Constant.AutoSizeRow) {
+                if (pair.Value <= Constants.AutoFiteRowHeight) {
                     row.Height = -1;
-                } else if (pair.Value == Constant.HiddenRow) {
+                } else if (pair.Value == Constants.HiddenRow) {
                     row.ZeroHeight = true;
                 } else {
                     row.Height = (short)(pair.Value * 20);

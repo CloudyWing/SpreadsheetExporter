@@ -1,9 +1,9 @@
-﻿using System.Text.Json.Serialization;
-
-namespace CloudyWing.SpreadsheetExporter {
-    [JsonConverter(typeof(JsonStringEnumConverter))]
+﻿namespace CloudyWing.SpreadsheetExporter {
+    /// <summary>
+    /// The horizontal text alignment.
+    /// </summary>
     public enum HorizontalAlignment {
-        None = 0,
+        General = 0,
         Left = 1,
         Center = 2,
         Right = 3,
