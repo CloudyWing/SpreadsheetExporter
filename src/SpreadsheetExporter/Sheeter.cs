@@ -5,18 +5,6 @@ using CloudyWing.SpreadsheetExporter.Templates;
 namespace CloudyWing.SpreadsheetExporter {
     /// <summary>The sheeter.</summary>
     public class Sheeter {
-        /// <summary>The constant for automatic column width.</summary>
-        public const double AutoColumnWidth = -1d;
-
-        /// <summary>The constant for hidden column width.</summary>
-        public const double HiddenColumnWidth = 0d;
-
-        /// <summary>The constant for automatic row height</summary>
-        public const double AutoRowHeight = -1d;
-
-        /// <summary>The constant for hidden row height.</summary>
-        public const double HiddenRowHeight = 0d;
-
         private readonly IDictionary<int, double> columnWidths = new Dictionary<int, double>();
         private readonly List<ITemplate> templates = new();
 

@@ -1,7 +1,5 @@
-﻿using System.Text.Json.Serialization;
-
-namespace CloudyWing.SpreadsheetExporter {
-    [JsonConverter(typeof(JsonStringEnumConverter))]
+﻿namespace CloudyWing.SpreadsheetExporter {
+    /// <summary>The vertical text alignment.</summary>
     public enum VerticalAlignment {
         Top = 0,
         Middle = 1,

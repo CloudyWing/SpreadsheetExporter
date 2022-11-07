@@ -1,11 +1,15 @@
 ﻿namespace CloudyWing.SpreadsheetExporter {
-    public static class Constant {
-        public const int AutoSizeColumn = -1;
+    public static class Constants {
+        /// <summary>The automatic fit column width</summary>
+        public const int AutoFitColumnWidth = -1;
 
+        /// <summary>The hidden column.</summary>
         public const int HiddenColumn = 0;
 
-        public const int AutoSizeRow = AutoSizeColumn;
+        /// <summary>The automatic fite row height</summary>
+        public const int AutoFiteRowHeight = AutoFitColumnWidth;
 
+        /// <summary>The hidden row</summary>
         public const int HiddenRow = HiddenColumn;
     }
 }

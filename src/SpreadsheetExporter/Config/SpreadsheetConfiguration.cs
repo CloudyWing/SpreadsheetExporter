@@ -1,117 +1,92 @@
 ﻿using System;
-using System.Drawing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Primitives;
 
 namespace CloudyWing.SpreadsheetExporter.Config {
-    public sealed class SpreadsheetConfiguration {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SpreadsheetConfiguration"/> class.
-        /// <para> CellFont: 來自Config的預設字型樣式</para>
-        /// <para> CellStyle: 來自Config的預設樣式</para>
-        /// <para> ListHeaderFont: 預設格式、粗體</para>
-        /// <para> ListHeaderStyle: 預設格式、粗體、置中</para>
-        /// <para> ListTextStyle: 預設格式、置左</para>
-        /// <para> ListNumberStyle: 預設格式、置右</para>
-        /// <para> ListDateTimeStyle: 預設格式、置右</para>
-        /// </summary>
-        public SpreadsheetConfiguration(string basicPath, string jsonFile = "Spreadsheet.json") {
-            IConfigurationRoot config = new ConfigurationBuilder()
-                .SetBasePath(basicPath)
-                .AddJsonFile(jsonFile, optional: false, reloadOnChange: true)
-                .Build();
-
-            ChangeToken.OnChange(() => config.GetReloadToken(), () => {
-                Initialize();
-            });
-
-            Initialize();
-
-            void Initialize() {
-                ConfigSettings configSettings = config.GetSection("Spreadsheet").Get<ConfigSettings>();
-
-                CellSettings cellSettings = configSettings.Cell;
-
-                FontStyles style = FontStyles.None;
-                if (cellSettings.Font.IsBold) {
-                    style |= FontStyles.IsBold;
-                }
-
-                if (cellSettings.Font.IsItalic) {
-                    style |= FontStyles.IsItalic;
-                }
-
-                if (cellSettings.Font.HasUnderline) {
-                    style |= FontStyles.HasUnderline;
-                }
-
-                if (cellSettings.Font.IsStrikeout) {
-                    style |= FontStyles.IsStrikeout;
-                }
-
-                CellStyle = new CellStyle(
-                    cellSettings.HorizontalAlignment,
-                    cellSettings.VerticalAlignment,
-                    cellSettings.HasBorder,
-                    cellSettings.WrapText,
-                    Color.Empty,
-                    new CellFont(
-                        cellSettings.Font.FontName,
-                        cellSettings.Font.FontSize,
-                        Color.Black,
-                        style
-                    )
-                );
-
-                CellFont listHeaderFont = CellStyle.Font
-                    .CloneAndSetStyle(CellStyle.Font.Style | FontStyles.IsBold);
-
-                ListHeaderStyle = CellStyle
-                    .CloneAndSetFont(listHeaderFont)
-                    .CloneAndSetHorizontalAlignment(HorizontalAlignment.Center)
-                    .CloneAndSetBorder(true)
-                    .CloneAndSetFont(listHeaderFont);
-
-                ListTextStyle = CellStyle
-                    .CloneAndSetBorder(true)
-                    .CloneAndSetHorizontalAlignment(HorizontalAlignment.Left);
-
-                ListNumberStyle = CellStyle
-                    .CloneAndSetBorder(true)
-                    .CloneAndSetHorizontalAlignment(HorizontalAlignment.Right);
-
-                ListDateTimeStyle = CellStyle
-                    .CloneAndSetBorder(true)
-                    .CloneAndSetHorizontalAlignment(HorizontalAlignment.Right);
-            }
+    /// <summary>The spreadsheet default style.</summary>
+    public class CellStyleConfiguration {
+        /// <summary>Initializes a new instance of the <see cref="CellStyleConfiguration" /> class.</summary>
+        /// <param name="loader">The loader.</param>
+        public CellStyleConfiguration(Action<CellStyleSetuper> loader) {
+            CellStyleSetuper setuper = new(this);
+            loader(setuper);
         }
 
-        public SpreadsheetConfiguration(Action<SetupBuilder> setuper) {
-            SetupBuilder setupBuilder = new SetupBuilder(this);
-            setuper(setupBuilder);
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CellStyleConfiguration"/> class.
+        /// <code>
+        /// CellStyle: {
+        ///     HorizontalAlignment: None,
+        ///     VerticalAlignment: Middle,
+        ///     HasBorder: false,
+        ///     WrapText: false,
+        ///     Font: {
+        ///         Name: "新細明體",
+        ///         Size: 10,
+        ///         IsBold: false,
+        ///         IsItalic: false,
+        ///         HasUnderline: false,
+        ///         IsStrikeout: false
+        ///     }
+        /// }
+        /// 
+        /// GridCellStyle: {
+        ///     StyleBase: CellStyle
+        /// }
+        /// 
+        /// HeaderStyle: {
+        ///     StyleBase: CellStyle
+        ///     HorizontalAlignment: Center,
+        ///     HasBorder: true,
+        ///     Font: {
+        ///         IsBold: true,
+        ///     }
+        /// }
+        /// 
+        /// FieldStyle: {
+        ///     StyleBase: CellStyle
+        ///     HasBorder: true
+        /// }
+        /// </code>
+        /// </summary>
+        public CellStyleConfiguration() {
+            CellStyle cellStyle = new(
+                HorizontalAlignment.Center,
+                VerticalAlignment.Middle,
+                false, false,
+                null,
+                new CellFont("新細明體", 10, null, FontStyles.None),
+                null,
+                false
+            );
+
+            CellFont headerFont = cellStyle.Font
+                .CloneAndSetStyle(cellStyle.Font.Style | FontStyles.IsBold);
+
+            CellStyle = cellStyle;
+            GridCellStyle = cellStyle;
+            HeaderStyle = cellStyle
+                .CloneAndSetFont(headerFont)
+                .CloneAndSetHorizontalAlignment(HorizontalAlignment.Center)
+                .CloneAndSetBorder(true);
+            FieldStyle = cellStyle
+                .CloneAndSetHorizontalAlignment(HorizontalAlignment.Center)
+                .CloneAndSetBorder(true);
         }
 
-        public CellStyle CellStyle { get; internal set; }
+        /// <summary>Gets the cell style.</summary>
+        /// <value>The cell style.</value>
+        public virtual CellStyle CellStyle { get; internal set; }
+
+        /// <summary>Gets the grid cell style.</summary>
+        /// <value>The grid cell style.</value>
+        public virtual CellStyle GridCellStyle { get; internal set; }
 
 
-        /// <summary>
-        /// ListTemplate的預設標題樣式
-        /// </summary>
-        public CellStyle ListHeaderStyle { get; internal set; }
+        /// <summary>Gets the header style.</summary>
+        /// <value>The header style.</value>
+        public virtual CellStyle HeaderStyle { get; internal set; }
 
-        /// <summary>
-        /// 預設格式、置左
-        /// </summary>
-        public CellStyle ListTextStyle { get; internal set; }
-
-        /// <summary>
-        /// 預設格式、置右
-        /// </summary>
-        public CellStyle ListNumberStyle { get; internal set; }
-
-        /// <summary>
-        /// 預設格式、置右
-        /// </summary>
-        public CellStyle ListDateTimeStyle { get; internal set; }
+        /// <summary>Gets the field style.</summary>
+        /// <value>The field style.</value>
+        public virtual CellStyle FieldStyle { get; internal set; }
     }
 }

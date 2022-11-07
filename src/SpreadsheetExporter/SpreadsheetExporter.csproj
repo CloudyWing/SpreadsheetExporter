@@ -25,21 +25,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
-    </None>
-    <Content Include="..\..\build\NuGet\Content\Spreadsheet.json">
-      <CopyToOutputDirectory>always</CopyToOutputDirectory>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-    <None Include="..\..\build\NuGet\Tools\Install.ps1">
-      <Pack>True</Pack>
-      <PackagePath>tools</PackagePath>
     </None>
   </ItemGroup>
 </Project>

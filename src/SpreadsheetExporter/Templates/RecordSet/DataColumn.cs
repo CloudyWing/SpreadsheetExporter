@@ -139,7 +139,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         }
 
         public override CellStyle GetFieldStyle(RecordContext<TRecord> recordContext) {
-            return GetFromGenerator(FieldStyleGenerator, SpreadsheetManager.Configuration.ListTextStyle, recordContext);
+            return GetFromGenerator(FieldStyleGenerator, SpreadsheetManager.DefaultCellStyles.FieldStyle, recordContext);
         }
     }
 }

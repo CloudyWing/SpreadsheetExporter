@@ -2,27 +2,47 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CloudyWing.SpreadsheetExporter.Exceptions;
 
 namespace CloudyWing.SpreadsheetExporter {
-    /// <summary>
-    /// 電子表格，用來設定電子表格內容將之輸出至Exporter
-    /// </summary>
+    /// <summary>The exporter base.</summary>
     public abstract class ExporterBase {
         private readonly IList<Sheeter> sheeters = new List<Sheeter>();
 
-        /// <summary>
-        /// 取得最新的工作表，若無則建立一個工作表
-        /// </summary>
-        public Sheeter LastSheeter => sheeters.LastOrDefault() ?? CreateSheeter(null);
+        /// <summary>Occurs when [spreadsheet exporting event].</summary>
+        public event EventHandler<SpreadsheetExportingEventArgs> SpreadsheetExportingEvent;
 
+        /// <summary>Occurs when [spreadsheet exported event].</summary>
+        public event EventHandler<SpreadsheetExportedEventArgs> SpreadsheetExportedEvent;
+
+        /// <summary>Gets the content-type.</summary>
+        /// <value>The content-type.</value>
         public abstract string ContentType { get; }
 
+        /// <summary>Gets the file name extension.</summary>
+        /// <value>The file name extension.</value>
         public abstract string FileNameExtension { get; }
 
+        /// <summary>Gets or sets the workbook protection password.</summary>
+        /// <value>The password.</value>
         public string Password { get; set; }
 
+        /// <summary>Gets a value indicating whether this instance has password.</summary>
+        /// <value>
+        ///   <c>true</c> if this instance has password; otherwise, <c>false</c>.</value>
         public bool HasPassword => !string.IsNullOrEmpty(Password);
 
+        /// <summary>Gets or sets the default basic name of the sheet.</summary>
+        /// <value>The default basic name of the sheet.</value>
+        public string DefaultBasicSheetName { get; set; } = "工作表";
+
+        /// <summary>Gets the last sheeter. When there is no sheeter, create a sheeter.</summary>
+        /// <value>The last sheeter.</value>
+        public Sheeter LastSheeter => sheeters.LastOrDefault() ?? CreateSheeter(null);
+
+        /// <summary>Creates the sheeter.</summary>
+        /// <param name="sheetName">Name of the sheet.</param>
+        /// <returns>The sheeter.</returns>
         public Sheeter CreateSheeter(string sheetName = "") {
             if (string.IsNullOrWhiteSpace(sheetName)) {
                 sheetName = GetDefaultSheetName();
@@ -30,17 +50,25 @@ namespace CloudyWing.SpreadsheetExporter {
                 sheetName = FixSheetName(sheetName);
             }
 
-            Sheeter sheeter = new Sheeter(sheetName);
+            Sheeter sheeter = new(sheetName);
             sheeters.Add(sheeter);
 
             return sheeter;
         }
 
-        private bool IsSheetNameExists(string sheetName)
-            => sheeters.Select(x => x.SheetName).Contains(sheetName);
+        /// <summary>Gets the sheeter.</summary>
+        /// <param name="index">The index.</param>
+        /// <returns>The sheeter.</returns>
+        public Sheeter GetSheeter(int index) {
+            return sheeters[index];
+        }
+
+        private bool IsSheetNameExists(string sheetName) {
+            return sheeters.Select(x => x.SheetName).Contains(sheetName);
+        }
 
         private string GetDefaultSheetName() {
-            string basicSheetName = "工作表";
+            string basicSheetName = DefaultBasicSheetName;
             string defaultSheetName;
             int i = 1;
             do {
@@ -60,36 +88,43 @@ namespace CloudyWing.SpreadsheetExporter {
             return fixedSheetName;
         }
 
-        /// <summary>
-        /// 電子表格匯出
-        /// </summary>
-        /// <exception cref="ArgumentNullException">未建立任何工作表。</exception>
+        /// <summary>Exports bytes of spreadsheet.</summary>
+        /// <returns>The bytes of spreadsheet.</returns>
+        /// <exception cref="SheeterNotFoundException">Sheeter[0] is null.</exception>
         public byte[] Export() {
-            Validate();
-            SheeterContext[] contexts = new SheeterContext[sheeters.Count];
-            for (int i = 0; i < sheeters.Count; i++) {
-                contexts[i] = new SheeterContext(sheeters[i]);
-            }
-            return ExecuteExport(contexts);
-        }
-
-        protected abstract byte[] ExecuteExport(SheeterContext[] contexts);
-
-        /// <exception cref="NullReferenceException">未建立任何工作表。</exception>
-        private void Validate() {
             if (sheeters.Count == 0) {
-                throw new NullReferenceException("未建立任何工作表。");
+                throw new SheeterNotFoundException();
             }
+
+            IEnumerable<SheeterContext> contexts = sheeters.Select(x => new SheeterContext(x));
+
+            OnSpreadsheetExporting(new SpreadsheetExportingEventArgs(contexts));
+            byte[] bytes = ExecuteExport(contexts);
+            OnSpreadsheetExported(new SpreadsheetExportedEventArgs(contexts));
+
+            return bytes;
         }
 
-        /// <summary>
-        /// 匯出至檔案，若檔案已存在則覆寫
-        /// </summary>
-        /// <param name="path">欲儲存檔案路徑</param>
-        /// <exception cref="NullReferenceException">未建立任何工作表。</exception>
-        public void ExportFile(string path) {
-            using FileStream fileStream = new FileStream(path, FileMode.Create, FileAccess.Write);
+        protected virtual void OnSpreadsheetExporting(SpreadsheetExportingEventArgs args) {
+            SpreadsheetExportingEvent?.Invoke(this, args);
+        }
+
+        protected abstract byte[] ExecuteExport(IEnumerable<SheeterContext> contexts);
+
+        protected virtual void OnSpreadsheetExported(SpreadsheetExportedEventArgs args) {
+            SpreadsheetExportedEvent?.Invoke(this, args);
+        }
+
+        /// <summary>Exports the spreadsheet file.</summary>
+        /// <param name="path">The path.</param>
+        /// <param name="fileMode">The file mode.</param>
+        public void ExportFile(string path, SpreadsheetFileMode fileMode = SpreadsheetFileMode.Create) {
             byte[] bytes = Export();
+            FileMode mode = fileMode == SpreadsheetFileMode.Create
+                ? FileMode.Create
+                : FileMode.CreateNew;
+
+            using FileStream fileStream = new(path, mode, FileAccess.Write);
             fileStream.Write(bytes, 0, bytes.Length);
         }
     }

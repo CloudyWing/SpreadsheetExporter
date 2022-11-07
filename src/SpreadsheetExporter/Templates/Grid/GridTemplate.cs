@@ -47,7 +47,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         /// <param name="value">The value.</param>
         /// <param name="columnSpan">The column span.</param>
         /// <param name="rowSpan">The row span.</param>
-        /// <param name="cellStyle">The cell style.</param>
+        /// <param name="cellStyle">The cell style. The default is <c>SpreadsheetManager.DefaultCellStyles.GridCellStyle</c>.</param>
         /// <returns>The cell.</returns>
         /// <exception cref="ArgumentOutOfRangeException">columnSpan - Must be greater than 0.
         /// or
@@ -61,7 +61,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
             if (rowSpan <= 0) {
                 throw new ArgumentOutOfRangeException(nameof(rowSpan), "Must be greater than 0.");
             }
-            cellStyle ??= SpreadsheetManager.Configuration.CellStyle;
+            cellStyle ??= SpreadsheetManager.DefaultCellStyles.GridCellStyle;
 
             if (rows.Count == 0) {
                 CreateRow();
@@ -82,7 +82,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         /// <param name="formulaGenerator">The formula generator. Pass the row index and cell index to the generator. The  index start at 0.</param>
         /// <param name="columnSpan">The column span.</param>
         /// <param name="rowSpan">The row span.</param>
-        /// <param name="cellStyle">The cell style.</param>
+        /// <param name="cellStyle">The cell style. The default is <c>SpreadsheetManager.DefaultCellStyles.GridCellStyle</c>.</param>
         /// <returns>The cell.</returns>
         /// <exception cref="ArgumentOutOfRangeException">columnSpan - Must be greater than 0.
         /// or
@@ -96,7 +96,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
             if (rowSpan <= 0) {
                 throw new ArgumentOutOfRangeException(nameof(rowSpan), "Must be greater than 0.");
             }
-            cellStyle ??= SpreadsheetManager.Configuration.CellStyle;
+            cellStyle ??= SpreadsheetManager.DefaultCellStyles.GridCellStyle;
 
             if (rows.Count == 0) {
                 CreateRow();
