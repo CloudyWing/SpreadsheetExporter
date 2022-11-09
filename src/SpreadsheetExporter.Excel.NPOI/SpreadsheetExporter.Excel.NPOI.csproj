@@ -13,6 +13,9 @@
     <PackageProjectUrl>https://github.com/CloudyWing/SpreadsheetExporter</PackageProjectUrl>
     <Company />
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DefaultDocumentationGeneratedPages>Namespaces,Types</DefaultDocumentationGeneratedPages>
+    <DefaultDocumentationFolder>../../docs/API/Excel/NPOI</DefaultDocumentationFolder>
   </PropertyGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
@@ -20,6 +23,10 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="DefaultDocumentation" Version="0.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="GitVersion.MsBuild" Version="5.10.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
