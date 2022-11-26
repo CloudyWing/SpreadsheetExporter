@@ -1,0 +1,92 @@
+#### [CloudyWing.SpreadsheetExporter](index.md 'index')
+### [CloudyWing.SpreadsheetExporter.Templates](CloudyWing.SpreadsheetExporter.Templates.md 'CloudyWing.SpreadsheetExporter.Templates')
+
+## MergedTemplate Class
+
+The merged template. Merge templates into new template.
+
+```csharp
+public class MergedTemplate :
+CloudyWing.SpreadsheetExporter.Templates.ITemplate
+```
+
+Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; MergedTemplate
+
+Implements [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')
+
+### See Also
+- [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')
+### Constructors
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.MergedTemplate(CloudyWing.SpreadsheetExporter.Templates.ITemplate[])'></a>
+
+## MergedTemplate(ITemplate[]) Constructor
+
+Initializes a new instance of the [MergedTemplate](CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.md 'CloudyWing.SpreadsheetExporter.Templates.MergedTemplate') class.
+
+```csharp
+public MergedTemplate(params CloudyWing.SpreadsheetExporter.Templates.ITemplate[] templates);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.MergedTemplate(CloudyWing.SpreadsheetExporter.Templates.ITemplate[]).templates'></a>
+
+`templates` [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')
+
+The templates.
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.MergedTemplate(System.Collections.Generic.IEnumerable_CloudyWing.SpreadsheetExporter.Templates.ITemplate_)'></a>
+
+## MergedTemplate(IEnumerable<ITemplate>) Constructor
+
+Initializes a new instance of the [MergedTemplate](CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.md 'CloudyWing.SpreadsheetExporter.Templates.MergedTemplate') class.
+
+```csharp
+public MergedTemplate(System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.Templates.ITemplate> templates);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.MergedTemplate(System.Collections.Generic.IEnumerable_CloudyWing.SpreadsheetExporter.Templates.ITemplate_).templates'></a>
+
+`templates` [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')
+
+The templates.
+
+#### Exceptions
+
+[System.ArgumentNullException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentNullException 'System.ArgumentNullException')  
+templates
+### Properties
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.RowHeights'></a>
+
+## MergedTemplate.RowHeights Property
+
+Gets the height of rows.
+
+```csharp
+public System.Collections.Generic.IReadOnlyDictionary<int,double> RowHeights { get; }
+```
+
+Implements [RowHeights](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md#CloudyWing.SpreadsheetExporter.Templates.ITemplate.RowHeights 'CloudyWing.SpreadsheetExporter.Templates.ITemplate.RowHeights')
+
+#### Property Value
+[System.Collections.Generic.IReadOnlyDictionary&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')  
+The height of rows.
+### Methods
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.GetContext()'></a>
+
+## MergedTemplate.GetContext() Method
+
+Gets the context.
+
+```csharp
+public CloudyWing.SpreadsheetExporter.Templates.TemplateContext GetContext();
+```
+
+Implements [GetContext()](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md#CloudyWing.SpreadsheetExporter.Templates.ITemplate.GetContext() 'CloudyWing.SpreadsheetExporter.Templates.ITemplate.GetContext()')
+
+#### Returns
+[TemplateContext](CloudyWing.SpreadsheetExporter.Templates.TemplateContext.md 'CloudyWing.SpreadsheetExporter.Templates.TemplateContext')  
+The template context.
