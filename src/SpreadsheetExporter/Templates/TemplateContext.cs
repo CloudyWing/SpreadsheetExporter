@@ -6,6 +6,10 @@ using CloudyWing.SpreadsheetExporter.Extensions;
 namespace CloudyWing.SpreadsheetExporter.Templates {
     /// <summary>The template context.</summary>
     public class TemplateContext {
+        /// <summary>Initializes a new instance of the <see cref="TemplateContext" /> class.</summary>
+        /// <param name="cells">The cells.</param>
+        /// <param name="rowSpan">The row span.</param>
+        /// <param name="rowHeights">The row heights.</param>
         public TemplateContext(
             IEnumerable<Cell> cells, int rowSpan, IReadOnlyDictionary<int, double> rowHeights
         ) {

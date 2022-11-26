@@ -4,6 +4,8 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
 namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
+    /// <summary>The excel exporter, using epplus.</summary>
+    /// <seealso cref="ExporterBase" />
     public class ExcelExporter : ExporterBase {
         private readonly Dictionary<HorizontalAlignment, ExcelHorizontalAlignment> horizontalAlignmentMap = new() {
             [HorizontalAlignment.General] = ExcelHorizontalAlignment.General,
@@ -19,10 +21,13 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
             [VerticalAlignment.Bottom] = ExcelVerticalAlignment.Bottom
         };
 
+        /// <inheritdoc/>
         public override string ContentType => "application/ms-excel";
 
+        /// <inheritdoc/>
         public override string FileNameExtension => ".xlsx";
 
+        /// <inheritdoc/>
         protected override byte[] ExecuteExport(IEnumerable<SheeterContext> contexts) {
             using ExcelPackage package = new();
             foreach (SheeterContext context in contexts) {

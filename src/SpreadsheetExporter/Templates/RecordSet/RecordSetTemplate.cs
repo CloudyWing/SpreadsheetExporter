@@ -8,6 +8,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
     /// <typeparam name="T">The type of the record.</typeparam>
     /// <seealso cref="ITemplate" />
     public class RecordSetTemplate<T> : ITemplate {
+        /// <summary>Initializes a new instance of the <see cref="RecordSetTemplate{T}" /> class.</summary>
+        /// <param name="dataSource">The data source.</param>
+        /// <exception cref="System.ArgumentNullException">dataSource</exception>
         public RecordSetTemplate(IEnumerable<T> dataSource) {
             DataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
         }
@@ -78,6 +81,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             }
         }
 
+        /// <inheritdoc/>
         public IReadOnlyDictionary<int, double> RowHeights {
             get {
                 Dictionary<int, double> dic = new();
@@ -95,7 +99,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             }
         }
 
-
+        /// <inheritdoc/>
         public TemplateContext GetContext() {
             return new TemplateContext(Cells, RowSpan, RowHeights);
         }

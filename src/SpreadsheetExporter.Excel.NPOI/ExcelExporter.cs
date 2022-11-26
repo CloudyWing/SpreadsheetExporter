@@ -10,6 +10,8 @@ using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 
 namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
+    /// <summary>The excel exporter, using npoi.</summary>
+    /// <seealso cref="ExporterBase" />
     public sealed class ExcelExporter : ExporterBase {
         private IWorkbook workbook;
         private readonly IDictionary<CellStyle, ICellStyle> cellStyles = new Dictionary<CellStyle, ICellStyle>();
@@ -35,18 +37,30 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
 
         private readonly object thisLock = new();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExcelExporter"/> class.
+        /// </summary>
+        /// <param name="excelFormat">The excel format.</param>
         public ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOpenXmlDocument) {
             ExcelFormat = excelFormat;
         }
 
+        /// <summary>Gets or sets the excel format.</summary>
+        /// <value>The excel format.</value>
         public ExcelFormat ExcelFormat { get; set; }
 
+        /// <summary>Gets a value indicating whether this instance is office open XML document.</summary>
+        /// <value>
+        ///   <c>true</c> if this instance is office open XML document; otherwise, <c>false</c>.</value>
         public bool IsOfficeOpenXmlDocument => ExcelFormat == ExcelFormat.OfficeOpenXmlDocument;
 
+        /// <inheritdoc/>
         public override string ContentType => "application/ms-excel";
 
+        /// <inheritdoc/>
         public override string FileNameExtension => filenameExtensionMap[ExcelFormat];
 
+        /// <inheritdoc/>
         protected override byte[] ExecuteExport(IEnumerable<SheeterContext> contexts) {
             lock (thisLock) {
                 // 因為ParseCellStyle和ParseFont會用到，所以用field處理
@@ -59,7 +73,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
 
                 if (HasPassword) {
                     if (IsOfficeOpenXmlDocument) {
-                        throw new NotImplementedException("未安裝其他套件的情況下，目前NPOI不支援會出帶有密碼的xlsx");
+                        throw new NotImplementedException("If no other packages are installed, NPOI currently does not support xlsx with a password.");
                     } else {
                         HSSFWorkbook wb = (HSSFWorkbook)workbook;
                         // 因為NPOI的Bug，在2.5.5版以前要先call InternalWorkbook.WriteAccess才可以正常

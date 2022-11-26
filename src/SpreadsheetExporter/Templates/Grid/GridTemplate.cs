@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
-    /// <summary>The grid template. Create cell information using <c>CreateRow()</c> and <c>CreateCell</c>.</summary>
+    /// <summary>The grid template. Create cell information using <c>CreateRow()</c> and <c>CreateCell()</c>.</summary>
     public class GridTemplate : ITemplate {
         private readonly IList<CellCollection> rows = new List<CellCollection>();
         private readonly IList<Point> points = new List<Point>();
@@ -32,6 +32,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
             }
         }
 
+        /// <inheritdoc/>
         public IReadOnlyDictionary<int, double> RowHeights => new ReadOnlyDictionary<int, double>(rowHeights);
 
         /// <summary>Creates the row.</summary>
@@ -113,6 +114,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
             return cell;
         }
 
+        /// <inheritdoc/>
         public TemplateContext GetContext() {
             return new TemplateContext(
                 Cells, RowSpan, RowHeights.ToDictionary(pair => pair.Key, pair => pair.Value)

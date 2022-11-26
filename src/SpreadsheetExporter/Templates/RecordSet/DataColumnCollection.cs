@@ -283,6 +283,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             AddChildToLast(dataColumn);
         }
 
+        /// <inheritdoc/>
         protected override void InsertItem(int index, DataColumnBase<T> item) {
             if (item.ParentColumns != null) {
                 throw new ArgumentException($"{nameof(DataColumnBase<T>)} is already contained by another {nameof(DataColumnCollection<T>)}.", nameof(item));
@@ -293,12 +294,14 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             ResetRootPoint();
         }
 
+        /// <inheritdoc/>
         protected override void RemoveItem(int index) {
             Items[index].ParentColumns = null;
             base.RemoveItem(index);
             ResetRootPoint();
         }
 
+        /// <inheritdoc/>
         protected override void SetItem(int index, DataColumnBase<T> item) {
             if (item.ParentColumns != null) {
                 throw new ArgumentException($"{nameof(DataColumnBase<T>)} is already contained by another {nameof(DataColumnCollection<T>)}.", nameof(item));
@@ -310,6 +313,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             ResetRootPoint();
         }
 
+        /// <inheritdoc/>
         protected override void ClearItems() {
             foreach (DataColumnBase<T> item in Items) {
                 item.ParentColumns = null;
@@ -334,6 +338,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             }
         }
 
+        /// <summary>The generator provider.</summary>
+        /// <typeparam name="TContext">The type of the context.</typeparam>
+        /// <typeparam name="TRecord">The type of the record.</typeparam>
+        /// <seealso cref="Collection{DataColumnBase}">Collection{DataColumnBase}</seealso>
         public sealed class GeneratorProvider<TContext, TRecord> where TContext : RecordContext<TRecord> {
             private ProviderType type = ProviderType.None;
             private Func<TContext, object> valueGenerator;
