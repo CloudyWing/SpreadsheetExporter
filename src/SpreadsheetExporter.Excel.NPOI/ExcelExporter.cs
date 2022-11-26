@@ -77,7 +77,6 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
                     } else {
                         HSSFWorkbook wb = (HSSFWorkbook)workbook;
                         // 因為NPOI的Bug，在2.5.5版以前要先call InternalWorkbook.WriteAccess才可以正常
-                        // 官方預計2.5.7版修正
                         _ = wb.InternalWorkbook.WriteAccess;
                         wb.WriteProtectWorkbook(Password, "");
                         workbook.Write(ms);
@@ -114,14 +113,15 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             foreach (Cell cell in cells) {
                 IRow excelRow = sheet.GetRow(cell.Point.Y) ?? sheet.CreateRow(cell.Point.Y);
                 ICell excelCell = excelRow.GetCell(cell.Point.X) ?? excelRow.CreateCell(cell.Point.X);
+                string formula = cell.GetFormula();
 
-                if (string.IsNullOrWhiteSpace(cell.Formula)) {
-                    SetValueToCell(excelCell, cell.Value);
+                if (string.IsNullOrWhiteSpace(formula)) {
+                    SetValueToCell(excelCell, cell.GetValue());
                 } else {
-                    excelCell.CellFormula = cell.Formula;
+                    excelCell.CellFormula = formula;
                 }
 
-                excelCell.CellStyle = ParseCellStyle(cell.CellStyle);
+                excelCell.CellStyle = ParseCellStyle(cell.GetCellStyle());
 
                 if (cell.Size.Width > 1 || cell.Size.Height > 1) {
                     MergedRegion(

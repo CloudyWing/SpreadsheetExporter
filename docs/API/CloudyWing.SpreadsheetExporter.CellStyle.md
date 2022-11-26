@@ -74,6 +74,20 @@ The data format.
 `isLocked` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
 
 if set to `true` [is locked].
+### Fields
+
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.Empty'></a>
+
+## CellStyle.Empty Field
+
+The cell style equals to `new CellStyle()`.
+
+```csharp
+public static CellStyle Empty;
+```
+
+#### Field Value
+[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')
 ### Properties
 
 <a name='CloudyWing.SpreadsheetExporter.CellStyle.BackgroundColor'></a>

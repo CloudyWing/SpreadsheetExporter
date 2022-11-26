@@ -12,33 +12,33 @@ public class Cell
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; Cell
 ### Properties
 
-<a name='CloudyWing.SpreadsheetExporter.Cell.CellStyle'></a>
+<a name='CloudyWing.SpreadsheetExporter.Cell.CellStyleGenerator'></a>
 
-## Cell.CellStyle Property
+## Cell.CellStyleGenerator Property
 
-Gets or sets the cell style.
+Gets or sets the cell style generator. Pass the cell index and row index to the generator. The  index start at 0.
 
 ```csharp
-public CloudyWing.SpreadsheetExporter.CellStyle CellStyle { get; set; }
+public System.Func<int,int,CloudyWing.SpreadsheetExporter.CellStyle> CellStyleGenerator { get; set; }
 ```
 
 #### Property Value
-[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')  
+[System.Func&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')  
 The cell style.
 
-<a name='CloudyWing.SpreadsheetExporter.Cell.Formula'></a>
+<a name='CloudyWing.SpreadsheetExporter.Cell.FormulaGenerator'></a>
 
-## Cell.Formula Property
+## Cell.FormulaGenerator Property
 
-Gets or sets the formula.
+Gets or sets the formula generator. Pass the cell index and row index to the generator. The  index start at 0.
 
 ```csharp
-public string Formula { get; set; }
+public System.Func<int,int,string> FormulaGenerator { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
-The formula.
+[System.Func&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')  
+The formula generator.
 
 <a name='CloudyWing.SpreadsheetExporter.Cell.Point'></a>
 
@@ -68,20 +68,62 @@ public System.Drawing.Size Size { get; set; }
 [System.Drawing.Size](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Size 'System.Drawing.Size')  
 The cell size.
 
-<a name='CloudyWing.SpreadsheetExporter.Cell.Value'></a>
+<a name='CloudyWing.SpreadsheetExporter.Cell.ValueGenerator'></a>
 
-## Cell.Value Property
+## Cell.ValueGenerator Property
 
-Gets or sets the cell content value.
+Gets or sets the cell content value generator. Pass the cell index and row index to the generator. The  index start at 0.
 
 ```csharp
-public object Value { get; set; }
+public System.Func<int,int,object> ValueGenerator { get; set; }
 ```
 
 #### Property Value
-[System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object')  
+[System.Func&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')[System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')  
 The cell content value.
 ### Methods
+
+<a name='CloudyWing.SpreadsheetExporter.Cell.GetCellStyle()'></a>
+
+## Cell.GetCellStyle() Method
+
+Gets the cell style.
+
+```csharp
+public CloudyWing.SpreadsheetExporter.CellStyle GetCellStyle();
+```
+
+#### Returns
+[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')  
+The cell style.
+
+<a name='CloudyWing.SpreadsheetExporter.Cell.GetFormula()'></a>
+
+## Cell.GetFormula() Method
+
+Gets the formula. if formula starts with `=`, automatically removed.
+
+```csharp
+public string GetFormula();
+```
+
+#### Returns
+[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
+The the formula.
+
+<a name='CloudyWing.SpreadsheetExporter.Cell.GetValue()'></a>
+
+## Cell.GetValue() Method
+
+Gets the content value.
+
+```csharp
+public object GetValue();
+```
+
+#### Returns
+[System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object')  
+The content value.
 
 <a name='CloudyWing.SpreadsheetExporter.Cell.ShallowCopy()'></a>
 

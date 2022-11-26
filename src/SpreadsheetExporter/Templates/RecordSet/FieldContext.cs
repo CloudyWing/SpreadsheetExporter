@@ -11,7 +11,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentNullException">key</exception>
         public FieldContext(RecordContext<TRecoed> recordContext, string key, TField value)
-            : base(recordContext.HeaderRowSpan, recordContext.RecordIndex, recordContext.Record) {
+            : base(recordContext.CellIndex, recordContext.RowIndex, recordContext.Record) {
             Key = key ?? throw new ArgumentNullException(nameof(key));
             Value = value;
         }

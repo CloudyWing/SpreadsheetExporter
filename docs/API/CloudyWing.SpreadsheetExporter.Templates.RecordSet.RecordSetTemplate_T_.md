@@ -48,20 +48,6 @@ The data source.
 dataSource
 ### Properties
 
-<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.Cells'></a>
-
-## RecordSetTemplate<T>.Cells Property
-
-Gets the cells.
-
-```csharp
-public System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.Cell> Cells { get; }
-```
-
-#### Property Value
-[System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[Cell](CloudyWing.SpreadsheetExporter.Cell.md 'CloudyWing.SpreadsheetExporter.Cell')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')  
-The cells.
-
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.Columns'></a>
 
 ## RecordSetTemplate<T>.Columns Property
@@ -118,35 +104,19 @@ public double HeaderHeight { get; set; }
 [System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')  
 The height of the header.
 
-<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.ItemHeight'></a>
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.RecordHeight'></a>
 
-## RecordSetTemplate<T>.ItemHeight Property
+## RecordSetTemplate<T>.RecordHeight Property
 
-Gets or sets the height of the item.
+Gets or sets the height of the record.
 
 ```csharp
-public double ItemHeight { get; set; }
+public double RecordHeight { get; set; }
 ```
 
 #### Property Value
 [System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')  
-The height of the item.
-
-<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.RowHeights'></a>
-
-## RecordSetTemplate<T>.RowHeights Property
-
-Gets the height of rows.
-
-```csharp
-public System.Collections.Generic.IReadOnlyDictionary<int,double> RowHeights { get; }
-```
-
-Implements [RowHeights](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md#CloudyWing.SpreadsheetExporter.Templates.ITemplate.RowHeights 'CloudyWing.SpreadsheetExporter.Templates.ITemplate.RowHeights')
-
-#### Property Value
-[System.Collections.Generic.IReadOnlyDictionary&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')  
-The height of rows.
+The height of the record.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.RowSpan'></a>
 

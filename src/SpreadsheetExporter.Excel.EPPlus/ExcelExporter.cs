@@ -64,13 +64,15 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
                 ExcelRange range = sheet.Cells[startRow, startColumn, endRow, endColumn];
                 range.Merge = startRow != endRow || startColumn != endColumn;
 
-                if (string.IsNullOrWhiteSpace(cell.Formula)) {
-                    range.Value = cell.Value;
+                string formula = cell.GetFormula();
+
+                if (string.IsNullOrWhiteSpace(formula)) {
+                    range.Value = cell.GetValue();
                 } else {
-                    range.Formula = cell.Formula;
+                    range.Formula = formula;
                 }
 
-                SetCellStyleToExcel(range.Style, cell.CellStyle);
+                SetCellStyleToExcel(range.Style, cell.GetCellStyle());
             }
         }
 

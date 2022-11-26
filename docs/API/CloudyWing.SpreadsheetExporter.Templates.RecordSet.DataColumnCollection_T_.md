@@ -111,6 +111,35 @@ The header style. The dafault is `SpreadsheetManager.DefaultCellStyles.HeaderSty
 
 The field style generator. The dafault is `(context) => SpreadsheetManager.DefaultCellStyles.FieldStyle`.
 
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.Add(string,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
+
+## DataColumnCollection<T>.Add(string, Nullable<CellStyle>, Func<RecordContext<T>,CellStyle>) Method
+
+Adds the specified header text.
+
+```csharp
+public void Add(string headerText, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.Add(string,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_,CloudyWing.SpreadsheetExporter.CellStyle_).headerText'></a>
+
+`headerText` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+The header text.
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.Add(string,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_,CloudyWing.SpreadsheetExporter.CellStyle_).headerStyle'></a>
+
+`headerStyle` [System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')
+
+The header style.
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.Add(string,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_,CloudyWing.SpreadsheetExporter.CellStyle_).fieldStyleGenerator'></a>
+
+`fieldStyleGenerator` [System.Func&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')[CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')
+
+The field style generator.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.Add_TField_(string,string,System.Action_CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.GeneratorProvider_T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField___,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
 ## DataColumnCollection<T>.Add<TField>(string, string, Action<GeneratorProvider<T,FieldContext<T,TField>>>, Nullable<CellStyle>, Func<FieldContext<T,TField>,CellStyle>) Method
@@ -346,6 +375,35 @@ The header style. The dafault is `SpreadsheetManager.DefaultCellStyles.HeaderSty
 `fieldStyleGenerator` [System.Func&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')[CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')
 
 The field style generator. The dafault is `(context) => SpreadsheetManager.DefaultCellStyles.FieldStyle`.
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.AddChildToLast(string,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
+
+## DataColumnCollection<T>.AddChildToLast(string, Nullable<CellStyle>, Func<RecordContext<T>,CellStyle>) Method
+
+Adds the child data column at the end of the last data column.
+
+```csharp
+public void AddChildToLast(string headerText, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.AddChildToLast(string,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_,CloudyWing.SpreadsheetExporter.CellStyle_).headerText'></a>
+
+`headerText` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+The header text.
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.AddChildToLast(string,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_,CloudyWing.SpreadsheetExporter.CellStyle_).headerStyle'></a>
+
+`headerStyle` [System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')
+
+The header style.
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.AddChildToLast(string,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_,CloudyWing.SpreadsheetExporter.CellStyle_).fieldStyleGenerator'></a>
+
+`fieldStyleGenerator` [System.Func&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')[CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')
+
+The field style generator.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.AddChildToLast_TField_(string,string,System.Action_CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.GeneratorProvider_T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField___,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 

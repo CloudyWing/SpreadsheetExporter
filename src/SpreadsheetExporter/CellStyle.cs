@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 
 namespace CloudyWing.SpreadsheetExporter {
-    /// <summary>
-    /// The cell style.
-    /// </summary>
+    /// <summary>The cell style.</summary>
     /// <seealso cref="IEquatable{CellStyle}" />
     public struct CellStyle : IEquatable<CellStyle> {
+        /// <summary>The cell style equals to <c>new CellStyle()</c>.</summary>
+        public static CellStyle Empty = new();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CellStyle"/> struct.
         /// </summary>

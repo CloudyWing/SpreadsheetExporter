@@ -15,20 +15,6 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 Implements [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')
 ### Properties
 
-<a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.Cells'></a>
-
-## GridTemplate.Cells Property
-
-Gets the cells.
-
-```csharp
-public System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.Cell> Cells { get; }
-```
-
-#### Property Value
-[System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[Cell](CloudyWing.SpreadsheetExporter.Cell.md 'CloudyWing.SpreadsheetExporter.Cell')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')  
-The cells.
-
 <a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.ColumnSpan'></a>
 
 ## GridTemplate.ColumnSpan Property
@@ -42,22 +28,6 @@ public int ColumnSpan { get; }
 #### Property Value
 [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')  
 The column span.
-
-<a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.RowHeights'></a>
-
-## GridTemplate.RowHeights Property
-
-Gets the height of rows.
-
-```csharp
-public System.Collections.Generic.IReadOnlyDictionary<int,double> RowHeights { get; }
-```
-
-Implements [RowHeights](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md#CloudyWing.SpreadsheetExporter.Templates.ITemplate.RowHeights 'CloudyWing.SpreadsheetExporter.Templates.ITemplate.RowHeights')
-
-#### Property Value
-[System.Collections.Generic.IReadOnlyDictionary&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')  
-The height of rows.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.RowSpan'></a>
 
@@ -135,7 +105,7 @@ public CloudyWing.SpreadsheetExporter.Cell CreateCell(System.Func<int,int,string
 
 `formulaGenerator` [System.Func&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-3 'System.Func`3')
 
-The formula generator. Pass the row index and cell index to the generator. The  index start at 0.
+The formula generator. Pass the cell index and row index to the generator. The  index start at 0.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(System.Func_int,int,string_,int,int,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_).columnSpan'></a>
 

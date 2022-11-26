@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.NetworkInformation;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
     /// <summary>The data column collection.</summary>
@@ -53,6 +54,21 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
                 item.Point = point + offset;
                 offset.Width += item.ColumnSpan;
             }
+        }
+
+        /// <summary>Adds the specified header text.</summary>
+        /// <param name="headerText">The header text.</param>
+        /// <param name="headerStyle">The header style.</param>
+        /// <param name="fieldStyleGenerator">The field style generator.</param>
+        public void Add(
+            string headerText, CellStyle? headerStyle = null,
+            Func<RecordContext<T>, CellStyle> fieldStyleGenerator = null
+        ) {
+            Add(new RecordDataColumn<T>() {
+                HeaderText = headerText,
+                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
+                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
+            });
         }
 
         /// <summary>Adds the data column to the end of the DataColumnCollection&lt;T&gt;.</summary>
@@ -161,6 +177,21 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             provider.SetGeneratorForColumn(dataColumn);
 
             Add(dataColumn);
+        }
+
+        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <param name="headerText">The header text.</param>
+        /// <param name="headerStyle">The header style.</param>
+        /// <param name="fieldStyleGenerator">The field style generator.</param>
+        public void AddChildToLast(
+            string headerText, CellStyle? headerStyle = null,
+            Func<RecordContext<T>, CellStyle> fieldStyleGenerator = null
+        ) {
+            AddChildToLast(new RecordDataColumn<T>() {
+                HeaderText = headerText,
+                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
+                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
+            });
         }
 
         /// <summary>Adds the child data column at the end of the last data column.</summary>

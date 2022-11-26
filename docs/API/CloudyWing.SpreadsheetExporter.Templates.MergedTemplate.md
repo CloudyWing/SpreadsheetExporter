@@ -56,23 +56,6 @@ The templates.
 
 [System.ArgumentNullException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentNullException 'System.ArgumentNullException')  
 templates
-### Properties
-
-<a name='CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.RowHeights'></a>
-
-## MergedTemplate.RowHeights Property
-
-Gets the height of rows.
-
-```csharp
-public System.Collections.Generic.IReadOnlyDictionary<int,double> RowHeights { get; }
-```
-
-Implements [RowHeights](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md#CloudyWing.SpreadsheetExporter.Templates.ITemplate.RowHeights 'CloudyWing.SpreadsheetExporter.Templates.ITemplate.RowHeights')
-
-#### Property Value
-[System.Collections.Generic.IReadOnlyDictionary&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')  
-The height of rows.
 ### Methods
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.GetContext()'></a>
