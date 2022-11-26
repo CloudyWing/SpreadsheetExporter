@@ -1,36 +1,50 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Reflection;
 
 namespace CloudyWing.SpreadsheetExporter {
-    /// <summary>
-    /// Excel匯出資料各標題欄位設定
-    /// </summary>
+    /// <summary>The spreadsheet cell.</summary>
     public class Cell {
-        /// <summary>
-        /// 儲存格內容
-        /// </summary>
-        public object Value { get; set; }
+        /// <summary>Gets or sets the cell content value generator. Pass the cell index and row index to the generator. The  index start at 0.</summary>
+        /// <value>The cell content value.</value>
+        public Func<int, int, object> ValueGenerator { get; set; }
 
-        /// <summary>
-        /// 座標
-        /// </summary>
+        /// <summary>Gets or sets the cell style generator. Pass the cell index and row index to the generator. The  index start at 0.</summary>
+        /// <value>The cell style.</value>
+        public Func<int, int, CellStyle> CellStyleGenerator { get; set; }
+
+        /// <summary>Gets or sets the formula generator. Pass the cell index and row index to the generator. The  index start at 0.</summary>
+        /// <value>The formula generator.</value>
+        public Func<int, int, string> FormulaGenerator { get; set; }
+
+        /// <summary>Gets or sets the point.</summary>
+        /// <value>The point.</value>
         public Point Point { get; set; }
 
-        /// <summary>
-        /// 欄、列跨度
-        /// </summary>
+        /// <summary>Gets or sets the cell size.</summary>
+        /// <value>The cell size.</value>
         public Size Size { get; set; } = new Size(1, 1);
 
-        /// <summary>
-        /// 儲存格樣式
-        /// </summary>
-        public CellStyle CellStyle { get; set; }
+        /// <summary>Gets the content value.</summary>
+        /// <returns>The content value.</returns>
+        public object GetValue() {
+            return ValueGenerator?.Invoke(Point.X, Point.Y);
+        }
 
-        /// <summary>
-        /// Excel公式
-        /// </summary>
-        /// <value>
-        public string Formula { get; set; }
+        /// <summary>Gets the cell style.</summary>
+        /// <returns>The cell style.</returns>
+        public CellStyle GetCellStyle() {
+            return CellStyleGenerator?.Invoke(Point.X, Point.Y) ?? CellStyle.Empty;
+        }
 
+        /// <summary>Gets the formula. if formula starts with <c>=</c>, automatically removed.</summary>
+        /// <returns>The the formula.</returns>
+        public string GetFormula() {
+            return FormulaGenerator?.Invoke(Point.X, Point.Y)?.TrimStart(' ').TrimStart('=');
+        }
+
+        /// <summary>Shallows the copy.</summary>
+        /// <returns>The spreadsheet cell.</returns>
         public Cell ShallowCopy() {
             return (Cell)MemberwiseClone();
         }

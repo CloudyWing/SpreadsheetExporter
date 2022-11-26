@@ -3,7 +3,23 @@ using System.Collections.Generic;
 using System.Drawing;
 
 namespace CloudyWing.SpreadsheetExporter {
+    /// <summary>The cell style.</summary>
+    /// <seealso cref="IEquatable{CellStyle}" />
     public struct CellStyle : IEquatable<CellStyle> {
+        /// <summary>The cell style equals to <c>new CellStyle()</c>.</summary>
+        public static CellStyle Empty = new();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CellStyle"/> struct.
+        /// </summary>
+        /// <param name="halign">The halign.</param>
+        /// <param name="valign">The valign.</param>
+        /// <param name="hasBorder">if set to <c>true</c> [has border].</param>
+        /// <param name="wrapText">if set to <c>true</c> [wrap text].</param>
+        /// <param name="backgroundColor">Color of the background. The default is <c>Color.Empty</c>.</param>
+        /// <param name="font">The font. The default is <c>CellFont.Empty</c>.</param>
+        /// <param name="dataFormat">The data format.</param>
+        /// <param name="isLocked">if set to <c>true</c> [is locked].</param>
         public CellStyle(
             HorizontalAlignment halign = HorizontalAlignment.Center, VerticalAlignment valign = VerticalAlignment.Middle,
             bool hasBorder = false, bool wrapText = false, Color? backgroundColor = null,
@@ -21,130 +37,105 @@ namespace CloudyWing.SpreadsheetExporter {
             IsLocked = isLocked;
         }
 
-        /// <summary>
-        /// 水平對齊
-        /// </summary>
+        /// <summary>Gets the horizontal alignment.</summary>
+        /// <value>The horizontal alignment.</value>
         public HorizontalAlignment HorizontalAlignment { get; private set; }
 
-        /// <summary>
-        /// 垂直對齊
-        /// </summary>
+        /// <summary>Gets the vertical alignment.</summary>
+        /// <value>The vertical alignment.</value>
         public VerticalAlignment VerticalAlignment { get; private set; }
 
-        /// <summary>
-        /// 是否有格線
-        /// </summary>
+        /// <summary>Gets a value indicating whether this instance has border.</summary>
+        /// <value>
+        ///   <c>true</c> if this instance has border; otherwise, <c>false</c>.</value>
         public bool HasBorder { get; private set; }
 
-        /// <summary>
-        /// 是否自動換行
-        /// </summary>
+        /// <summary>Gets a value indicating whether [wrap text].</summary>
+        /// <value>
+        ///   <c>true</c> if [wrap text]; otherwise, <c>false</c>.</value>
         public bool WrapText { get; private set; }
 
-        /// <summary>
-        /// 背景顏色
-        /// </summary>
+        /// <summary>Gets the color of the background.</summary>
+        /// <value>The color of the background.</value>
         public Color BackgroundColor { get; private set; }
 
-        /// <summary>
-        /// 字體格式
-        /// </summary>
+        /// <summary>Gets the font.</summary>
+        /// <value>The font.</value>
         public CellFont Font { get; private set; }
 
-        /// <summary>
-        /// 資料格式字串
-        /// </summary>
+        /// <summary>Gets the data format.</summary>
+        /// <value>The data format.</value>
         public string DataFormat { get; private set; }
 
-        /// <summary>
-        /// 是否鎖定儲存格
-        /// </summary>
+        /// <summary>Gets a value indicating whether this instance is locked.</summary>
+        /// <value>
+        ///   <c>true</c> if this instance is locked; otherwise, <c>false</c>.</value>
         public bool IsLocked { get; private set; }
 
-        /// <summary>
-        /// 建立一個副本，並設定副本的的水平對齊
-        /// </summary>
-        /// <param name="align">水平對齊</param>
+        /// <summary>Clones and set horizontal alignment of new instance.</summary>
+        /// <param name="align">The align.</param>
+        /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetHorizontalAlignment(HorizontalAlignment align) {
-            CellStyle style = this;
-            style.HorizontalAlignment = align;
-            return style;
+            return this with { HorizontalAlignment = align };
         }
 
-        /// <summary>
-        /// 建立一個副本，並設定副本的的垂直對齊
-        /// </summary>
-        /// <param name="valign">垂直對齊</param>
+        /// <summary>Clones and set vertical alignment of new instance.</summary>
+        /// <param name="valign">The valign.</param>
+        /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetVerticalAlignment(VerticalAlignment valign) {
-            CellStyle style = this;
-            style.VerticalAlignment = valign;
-            return style;
+            return this with { VerticalAlignment = valign };
         }
 
-        /// <summary>
-        /// 建立一個副本，並設定副本是否顯示框線
-        /// </summary>
-        /// <param name="hasBolder">是否有框線</param>
+        /// <summary>Clones and set border of new instance.</summary>
+        /// <param name="hasBolder">if set to <c>true</c> [has bolder].</param>
+        /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetBorder(bool hasBolder) {
-            CellStyle style = this;
-            style.HasBorder = hasBolder;
-            return style;
+            return this with { HasBorder = hasBolder };
         }
 
-        /// <summary>
-        /// 建立一個副本，並設定副本是否自動換行
-        /// </summary>
-        /// <param name="wrapText">是否自動換行</param>
+        /// <summary>Clones and set wrap text of new instance.</summary>
+        /// <param name="wrapText">if set to <c>true</c> [wrap text].</param>
+        /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetWrapText(bool wrapText) {
-            CellStyle style = this;
-            style.WrapText = wrapText;
-            return style;
+            return this with { WrapText = wrapText };
         }
 
-        /// <summary>
-        /// 建立一個副本，並設定副本背景顏色
-        /// </summary>
-        /// <param name="backgroundColor">背景顏色</param>
+        /// <summary>Clones and set background color of new instance.</summary>
+        /// <param name="backgroundColor">Color of the background.</param>
+        /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetBackgroundColor(Color backgroundColor) {
-            CellStyle style = this;
-            style.BackgroundColor = backgroundColor;
-            return style;
+            return this with { BackgroundColor = backgroundColor };
         }
 
-        /// <summary>
-        /// 建立一個副本，並設定副本字體
-        /// </summary>
-        /// <param name="font">字體</param>
+        /// <summary>Clones and set font of new instance.</summary>
+        /// <param name="font">The font.</param>
+        /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetFont(CellFont font) {
-            CellStyle style = this;
-            style.Font = font;
-            return style;
+            return this with { Font = font };
         }
 
-        /// <summary>
-        /// 建立一個副本，並設定副本的資料格式字串
-        /// </summary>
-        /// <param name="font">字體</param>
+        /// <summary>Clones and set data format of new instance.</summary>
+        /// <param name="dataForamt">The data foramt.</param>
+        /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetDataFormat(string dataForamt) {
-            CellStyle style = this;
-            style.DataFormat = dataForamt;
-            return style;
+            return this with { DataFormat = dataForamt };
         }
 
-        /// <summary>
-        /// 建立一個副本，並設定副本的是否鎖定
-        /// </summary>
-        /// <param name="font">字體</param>
+        /// <summary>Clones and set lockedof of new instance.</summary>
+        /// <param name="isLocked">if set to <c>true</c> [is locked].</param>
+        /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetLocked(bool isLocked) {
-            CellStyle style = this;
-            style.IsLocked = isLocked;
-            return style;
+            return this with { IsLocked = isLocked };
         }
 
-        public override bool Equals(object obj) => obj is CellStyle style && Equals(style);
+        /// <inheritdoc/>
+        public override bool Equals(object obj) {
+            return obj is CellStyle style && Equals(style);
+        }
 
-        public bool Equals(CellStyle other)
-            => HorizontalAlignment == other.HorizontalAlignment
+        /// <inheritdoc/>
+        public bool Equals(CellStyle other) {
+            return HorizontalAlignment == other.HorizontalAlignment
                 && VerticalAlignment == other.VerticalAlignment
                 && HasBorder == other.HasBorder
                 && WrapText == other.WrapText
@@ -152,22 +143,44 @@ namespace CloudyWing.SpreadsheetExporter {
                 && EqualityComparer<CellFont>.Default.Equals(Font, other.Font)
                 && DataFormat == other.DataFormat
                 && IsLocked == other.IsLocked;
+        }
 
+        /// <inheritdoc/>
         public override int GetHashCode() {
             int hashCode = 253911835;
-            hashCode = hashCode * -1521134295 + HorizontalAlignment.GetHashCode();
-            hashCode = hashCode * -1521134295 + VerticalAlignment.GetHashCode();
-            hashCode = hashCode * -1521134295 + HasBorder.GetHashCode();
-            hashCode = hashCode * -1521134295 + WrapText.GetHashCode();
-            hashCode = hashCode * -1521134295 + BackgroundColor.GetHashCode();
-            hashCode = hashCode * -1521134295 + Font.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(DataFormat);
-            hashCode = hashCode * -1521134295 + IsLocked.GetHashCode();
+            hashCode = (hashCode * -1521134295) + HorizontalAlignment.GetHashCode();
+            hashCode = (hashCode * -1521134295) + VerticalAlignment.GetHashCode();
+            hashCode = (hashCode * -1521134295) + HasBorder.GetHashCode();
+            hashCode = (hashCode * -1521134295) + WrapText.GetHashCode();
+            hashCode = (hashCode * -1521134295) + BackgroundColor.GetHashCode();
+            hashCode = (hashCode * -1521134295) + Font.GetHashCode();
+            hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(DataFormat);
+            hashCode = (hashCode * -1521134295) + IsLocked.GetHashCode();
             return hashCode;
         }
 
-        public static bool operator ==(CellStyle left, CellStyle right) => left.Equals(right);
+        /// <summary>
+        /// Implements the operator op_Equality.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        public static bool operator ==(CellStyle left, CellStyle right) {
+            return left.Equals(right);
+        }
 
-        public static bool operator !=(CellStyle left, CellStyle right) => !(left == right);
+        /// <summary>
+        /// Implements the operator op_Inequality.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        public static bool operator !=(CellStyle left, CellStyle right) {
+            return !(left == right);
+        }
     }
 }

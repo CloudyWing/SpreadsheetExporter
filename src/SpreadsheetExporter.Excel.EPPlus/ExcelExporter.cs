@@ -4,6 +4,8 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
 namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
+    /// <summary>The excel exporter, using epplus.</summary>
+    /// <seealso cref="ExporterBase" />
     public class ExcelExporter : ExporterBase {
         private readonly Dictionary<HorizontalAlignment, ExcelHorizontalAlignment> horizontalAlignmentMap = new() {
             [HorizontalAlignment.General] = ExcelHorizontalAlignment.General,
@@ -19,10 +21,13 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
             [VerticalAlignment.Bottom] = ExcelVerticalAlignment.Bottom
         };
 
+        /// <inheritdoc/>
         public override string ContentType => "application/ms-excel";
 
+        /// <inheritdoc/>
         public override string FileNameExtension => ".xlsx";
 
+        /// <inheritdoc/>
         protected override byte[] ExecuteExport(IEnumerable<SheeterContext> contexts) {
             using ExcelPackage package = new();
             foreach (SheeterContext context in contexts) {
@@ -59,13 +64,15 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
                 ExcelRange range = sheet.Cells[startRow, startColumn, endRow, endColumn];
                 range.Merge = startRow != endRow || startColumn != endColumn;
 
-                if (string.IsNullOrWhiteSpace(cell.Formula)) {
-                    range.Value = cell.Value;
+                string formula = cell.GetFormula();
+
+                if (string.IsNullOrWhiteSpace(formula)) {
+                    range.Value = cell.GetValue();
                 } else {
-                    range.Formula = cell.Formula;
+                    range.Formula = formula;
                 }
 
-                SetCellStyleToExcel(range.Style, cell.CellStyle);
+                SetCellStyleToExcel(range.Style, cell.GetCellStyle());
             }
         }
 

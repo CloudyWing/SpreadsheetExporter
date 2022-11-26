@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
-    /// <summary>The grid template. Create cell information using <c>CreateRow()</c> and <c>CreateCell</c>.</summary>
+    /// <summary>The grid template. Create cell information using <c>CreateRow()</c> and <c>CreateCell()</c>.</summary>
     public class GridTemplate : ITemplate {
         private readonly IList<CellCollection> rows = new List<CellCollection>();
         private readonly IList<Point> points = new List<Point>();
@@ -19,20 +19,6 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         /// <summary>Gets the row span.</summary>
         /// <value>The row span.</value>
         public int RowSpan => points.Count == 0 ? 0 : points.Max(x => x.Y) + 1;
-
-        /// <summary>Gets the cells.</summary>
-        /// <value>The cells.</value>
-        public IEnumerable<Cell> Cells {
-            get {
-                foreach (CellCollection cells in rows) {
-                    foreach (Cell cell in cells) {
-                        yield return cell;
-                    }
-                }
-            }
-        }
-
-        public IReadOnlyDictionary<int, double> RowHeights => new ReadOnlyDictionary<int, double>(rowHeights);
 
         /// <summary>Creates the row.</summary>
         /// <param name="height">The height.</param>
@@ -69,9 +55,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
 
             CellCollection lastRow = rows.Last();
             Cell cell = new() {
-                Value = value,
+                ValueGenerator = (cellIndex, rowIndex) => value,
                 Size = new Size(columnSpan, rowSpan),
-                CellStyle = (CellStyle)cellStyle
+                CellStyleGenerator = (cellIndex, rowIndex) => (CellStyle)cellStyle
             };
             lastRow.Add(cell);
 
@@ -79,7 +65,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         }
 
         /// <summary>Create cell that contain formula.</summary>
-        /// <param name="formulaGenerator">The formula generator. Pass the row index and cell index to the generator. The  index start at 0.</param>
+        /// <param name="formulaGenerator">The formula generator. Pass the cell index and row index to the generator. The  index start at 0.</param>
         /// <param name="columnSpan">The column span.</param>
         /// <param name="rowSpan">The row span.</param>
         /// <param name="cellStyle">The cell style. The default is <c>SpreadsheetManager.DefaultCellStyles.GridCellStyle</c>.</param>
@@ -105,18 +91,27 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
             CellCollection lastRow = rows.Last();
             Cell cell = new() {
                 Size = new Size(columnSpan, rowSpan),
-                CellStyle = (CellStyle)cellStyle,
-                Formula = formulaGenerator(rows.Count - 1, lastRow.Count())
+                CellStyleGenerator = (cellIndex, rowIndex) => (CellStyle)cellStyle,
+                FormulaGenerator = formulaGenerator
             };
             lastRow.Add(cell);
 
             return cell;
         }
 
+        /// <inheritdoc/>
         public TemplateContext GetContext() {
             return new TemplateContext(
-                Cells, RowSpan, RowHeights.ToDictionary(pair => pair.Key, pair => pair.Value)
+                GetCells(), RowSpan, new ReadOnlyDictionary<int, double>(rowHeights)
             );
+        }
+
+        private IEnumerable<Cell> GetCells() {
+            foreach (CellCollection cells in rows) {
+                foreach (Cell cell in cells) {
+                    yield return cell;
+                }
+            }
         }
 
         private class CellCollection : IEnumerable<Cell>, IEnumerable {

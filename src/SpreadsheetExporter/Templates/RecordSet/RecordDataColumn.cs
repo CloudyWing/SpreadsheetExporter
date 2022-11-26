@@ -8,12 +8,8 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         /// <value>The field value generator.</value>
         public Func<RecordContext<T>, object> FieldValueGenerator { get; set; }
 
-        /// <summary>
-        /// Gets the field formula generator.
-        /// </summary>
-        /// <value>
-        /// The field formula generator.
-        /// </value>
+        /// <summary>Gets the field formula generator.</summary>
+        /// <value>The field formula generator.</value>
         public Func<RecordContext<T>, string> FieldFormulaGenerator { get; set; }
 
         /// <summary>Gets or sets the field style.</summary>

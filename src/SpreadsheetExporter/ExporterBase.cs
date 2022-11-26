@@ -43,7 +43,7 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <summary>Creates the sheeter.</summary>
         /// <param name="sheetName">Name of the sheet.</param>
         /// <returns>The sheeter.</returns>
-        public Sheeter CreateSheeter(string sheetName = "") {
+        public Sheeter CreateSheeter(string sheetName = null) {
             if (string.IsNullOrWhiteSpace(sheetName)) {
                 sheetName = GetDefaultSheetName();
             } else if (IsSheetNameExists(sheetName)) {
@@ -105,12 +105,19 @@ namespace CloudyWing.SpreadsheetExporter {
             return bytes;
         }
 
+        /// <summary>Raises the <see cref="E:SpreadsheetExporting" /> event.</summary>
+        /// <param name="args">The <see cref="SpreadsheetExportingEventArgs" /> instance containing the event data.</param>
         protected virtual void OnSpreadsheetExporting(SpreadsheetExportingEventArgs args) {
             SpreadsheetExportingEvent?.Invoke(this, args);
         }
 
+        /// <summary>Executes the export.</summary>
+        /// <param name="contexts">The contexts.</param>
+        /// <returns>The exported bytes of the file.</returns>
         protected abstract byte[] ExecuteExport(IEnumerable<SheeterContext> contexts);
 
+        /// <summary>Raises the <see cref="E:SpreadsheetExported" /> event.</summary>
+        /// <param name="args">The <see cref="SpreadsheetExportedEventArgs" /> instance containing the event data.</param>
         protected virtual void OnSpreadsheetExported(SpreadsheetExportedEventArgs args) {
             SpreadsheetExportedEvent?.Invoke(this, args);
         }
