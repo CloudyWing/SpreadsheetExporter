@@ -43,7 +43,7 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <summary>Creates the sheeter.</summary>
         /// <param name="sheetName">Name of the sheet.</param>
         /// <returns>The sheeter.</returns>
-        public Sheeter CreateSheeter(string sheetName = "") {
+        public Sheeter CreateSheeter(string sheetName = null) {
             if (string.IsNullOrWhiteSpace(sheetName)) {
                 sheetName = GetDefaultSheetName();
             } else if (IsSheetNameExists(sheetName)) {

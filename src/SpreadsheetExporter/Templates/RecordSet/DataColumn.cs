@@ -5,19 +5,19 @@ using CloudyWing.SpreadsheetExporter.Util;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
     /// <summary>The data column.</summary>
-    /// <typeparam name="TField">The type of the record field.</typeparam>
     /// <typeparam name="TRecord">The type of the record.</typeparam>
-    internal class DataColumn<TField, TRecord> : DataColumnBase<TRecord> {
-        private readonly Dictionary<RecordContext<TRecord>, FieldContext<TField, TRecord>> contextMaps = new();
+    /// <typeparam name="TField">The type of the record field.</typeparam>
+    internal class DataColumn<TRecord, TField> : DataColumnBase<TRecord> {
+        private readonly Dictionary<RecordContext<TRecord>, FieldContext<TRecord, TField>> contextMaps = new();
 
-        /// <summary>Initializes a new instance of the <see cref="DataColumn{TField, TRecord}" /> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="DataColumn{TRecord, TField}" /> class.</summary>
         /// <param name="fieldKey">The field key.</param>
         public DataColumn(string fieldKey) {
             FieldKey = fieldKey;
         }
 
 
-        /// <summary>Initializes a new instance of the <see cref="DataColumn{TField, TRecord}" /> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="DataColumn{TRecord, TField}" /> class.</summary>
         /// <param name="fieldKeyExpression">The field key expression.</param>
         public DataColumn(Expression<Func<TRecord, TField>> fieldKeyExpression) {
             FieldKey = GetFieldKeyByExpression(fieldKeyExpression);
@@ -29,15 +29,15 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
 
         /// <summary>Gets the field value generator.</summary>
         /// <value>The field value generator.</value>
-        public Func<FieldContext<TField, TRecord>, object> FieldValueGenerator { get; set; }
+        public Func<FieldContext<TRecord, TField>, object> FieldValueGenerator { get; set; }
 
         /// <summary>Gets or sets the field formula generator.</summary>
         /// <value>The field formula generator.</value>
-        public Func<FieldContext<TField, TRecord>, string> FieldFormulaGenerator { get; set; }
+        public Func<FieldContext<TRecord, TField>, string> FieldFormulaGenerator { get; set; }
 
         /// <summary>Gets or sets the field style generator.</summary>
         /// <value>The field style generator.</value>
-        public Func<FieldContext<TField, TRecord>, CellStyle> FieldStyleGenerator { get; set; }
+        public Func<FieldContext<TRecord, TField>, CellStyle> FieldStyleGenerator { get; set; }
 
         private string GetFieldKeyByExpression(Expression<Func<TRecord, TField>> expression) {
             List<string> keys = new();
@@ -76,18 +76,20 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return null;
         }
 
+        
+        /// <inheritdoc/>
         public override object GetFieldValue(RecordContext<TRecord> recordContext) {
             if (string.IsNullOrWhiteSpace(FieldKey)) {
                 return FieldValueGenerator is null ? "" : FieldValueGenerator(default);
             }
 
-            FieldContext<TField, TRecord> fieldContext = GetFieldContextFromRecordContext(recordContext);
+            FieldContext<TRecord, TField> fieldContext = GetFieldContextFromRecordContext(recordContext);
 
             return FieldValueGenerator is null ? fieldContext.Value : FieldValueGenerator(fieldContext);
         }
 
         private TResult GetFromGenerator<TResult>(
-            Func<FieldContext<TField, TRecord>, TResult> generator, TResult defaultResult, RecordContext<TRecord> recordContext
+            Func<FieldContext<TRecord, TField>, TResult> generator, TResult defaultResult, RecordContext<TRecord> recordContext
         ) {
             if (generator is null) {
                 return defaultResult;
@@ -97,12 +99,12 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
                 return generator(default);
             }
 
-            FieldContext<TField, TRecord> fieldContext = GetFieldContextFromRecordContext(recordContext);
+            FieldContext<TRecord, TField> fieldContext = GetFieldContextFromRecordContext(recordContext);
 
             return generator(fieldContext);
         }
 
-        private FieldContext<TField, TRecord> GetFieldContextFromRecordContext(RecordContext<TRecord> recordContext) {
+        private FieldContext<TRecord, TField> GetFieldContextFromRecordContext(RecordContext<TRecord> recordContext) {
             if (contextMaps.ContainsKey(recordContext)) {
                 return contextMaps[recordContext];
             }
@@ -118,7 +120,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             TField value = ChangeFieldValueType(maps[FieldKey]);
 
 
-            return new FieldContext<TField, TRecord>(recordContext, FieldKey, value);
+            return new FieldContext<TRecord, TField>(recordContext, FieldKey, value);
         }
 
         private TField ChangeFieldValueType(object value) {
@@ -134,10 +136,12 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
                 : (TField)value;
         }
 
+        /// <inheritdoc/>
         public override string GetFieldFormula(RecordContext<TRecord> recordContext) {
             return GetFromGenerator(FieldFormulaGenerator, null, recordContext);
         }
 
+        /// <inheritdoc/>
         public override CellStyle GetFieldStyle(RecordContext<TRecord> recordContext) {
             return GetFromGenerator(FieldStyleGenerator, SpreadsheetManager.DefaultCellStyles.FieldStyle, recordContext);
         }

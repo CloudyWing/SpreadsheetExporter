@@ -19,7 +19,7 @@ The type of the record.
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; RecordContext<T>
 
 Derived  
-&#8627; [FieldContext&lt;TField,TRecoed&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TField,TRecoed_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TField,TRecoed>')
+&#8627; [FieldContext&lt;TRecoed,TField&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecoed,TField_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TRecoed,TField>')
 ### Constructors
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.RecordContext(int,int,T)'></a>

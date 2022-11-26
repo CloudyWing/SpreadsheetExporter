@@ -19,7 +19,7 @@ The type of the record.
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; DataColumnBase<T>
 
 Derived  
-&#8627; [DataColumn&lt;TField,TRecord&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TField,TRecord_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn<TField,TRecord>')  
+&#8627; [DataColumn&lt;TRecord,TField&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn<TRecord,TField>')  
 &#8627; [RecordDataColumn&lt;T&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn<T>')
 ### Properties
 
