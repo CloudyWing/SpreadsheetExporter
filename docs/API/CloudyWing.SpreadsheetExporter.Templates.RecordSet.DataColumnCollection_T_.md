@@ -83,7 +83,7 @@ The row span.
 Adds the data column to the end of the DataColumnCollection<T>.
 
 ```csharp
-public void Add(string headerText, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.GeneratorProvider<T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>>> providerSetter, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> Add(string headerText, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.GeneratorProvider<T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>>> providerSetter, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
 ```
 #### Parameters
 
@@ -111,6 +111,10 @@ The header style. The dafault is `SpreadsheetManager.DefaultCellStyles.HeaderSty
 
 The field style generator. The dafault is `(context) => SpreadsheetManager.DefaultCellStyles.FieldStyle`.
 
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.Add(string,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
 ## DataColumnCollection<T>.Add(string, Nullable<CellStyle>, Func<RecordContext<T>,CellStyle>) Method
@@ -118,7 +122,7 @@ The field style generator. The dafault is `(context) => SpreadsheetManager.Defau
 Adds the specified header text.
 
 ```csharp
-public void Add(string headerText, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> Add(string headerText, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
 ```
 #### Parameters
 
@@ -140,6 +144,10 @@ The header style.
 
 The field style generator.
 
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.Add_TField_(string,string,System.Action_CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.GeneratorProvider_T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField___,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
 ## DataColumnCollection<T>.Add<TField>(string, string, Action<GeneratorProvider<T,FieldContext<T,TField>>>, Nullable<CellStyle>, Func<FieldContext<T,TField>,CellStyle>) Method
@@ -147,7 +155,7 @@ The field style generator.
 Adds the data column to the end of the DataColumnCollection<T>.
 
 ```csharp
-public void Add<TField>(string headerText, string fieldKey, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.GeneratorProvider<T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>>> providerSetter, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> Add<TField>(string headerText, string fieldKey, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.GeneratorProvider<T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>>> providerSetter, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
 ```
 #### Type parameters
 
@@ -188,6 +196,10 @@ The header style. The dafault is `SpreadsheetManager.DefaultCellStyles.HeaderSty
 
 The field style generator. The dafault is `(context) => SpreadsheetManager.DefaultCellStyles.FieldStyle`.
 
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.Add_TField_(string,string,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
 ## DataColumnCollection<T>.Add<TField>(string, string, Nullable<CellStyle>, Func<FieldContext<T,TField>,CellStyle>) Method
@@ -195,7 +207,7 @@ The field style generator. The dafault is `(context) => SpreadsheetManager.Defau
 Adds the data column to the end of the DataColumnCollection<T>.
 
 ```csharp
-public void Add<TField>(string headerText, string fieldKey, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> Add<TField>(string headerText, string fieldKey, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
 ```
 #### Type parameters
 
@@ -230,6 +242,10 @@ The header style. The dafault is `SpreadsheetManager.DefaultCellStyles.HeaderSty
 
 The field style generator. The dafault is `(context) => SpreadsheetManager.DefaultCellStyles.FieldStyle`.
 
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.Add_TField_(string,System.Linq.Expressions.Expression_System.Func_T,TField__,System.Action_CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.GeneratorProvider_T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField___,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
 ## DataColumnCollection<T>.Add<TField>(string, Expression<Func<T,TField>>, Action<GeneratorProvider<T,FieldContext<T,TField>>>, Nullable<CellStyle>, Func<FieldContext<T,TField>,CellStyle>) Method
@@ -237,7 +253,7 @@ The field style generator. The dafault is `(context) => SpreadsheetManager.Defau
 Adds the data column to the end of the DataColumnCollection<T>.
 
 ```csharp
-public void Add<TField>(string headerText, System.Linq.Expressions.Expression<System.Func<T,TField>> fieldKeyExpression, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.GeneratorProvider<T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>>> providerSetter, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> Add<TField>(string headerText, System.Linq.Expressions.Expression<System.Func<T,TField>> fieldKeyExpression, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.GeneratorProvider<T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>>> providerSetter, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
 ```
 #### Type parameters
 
@@ -278,6 +294,10 @@ The header style. The dafault is `SpreadsheetManager.DefaultCellStyles.HeaderSty
 
 The field style generator. The dafault is `(context) => SpreadsheetManager.DefaultCellStyles.FieldStyle`.
 
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.Add_TField_(string,System.Linq.Expressions.Expression_System.Func_T,TField__,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
 ## DataColumnCollection<T>.Add<TField>(string, Expression<Func<T,TField>>, Nullable<CellStyle>, Func<FieldContext<T,TField>,CellStyle>) Method
@@ -285,7 +305,7 @@ The field style generator. The dafault is `(context) => SpreadsheetManager.Defau
 Adds the data column to the end of the DataColumnCollection<T>.
 
 ```csharp
-public void Add<TField>(string headerText, System.Linq.Expressions.Expression<System.Func<T,TField>> fieldKeyExpression, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> Add<TField>(string headerText, System.Linq.Expressions.Expression<System.Func<T,TField>> fieldKeyExpression, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
 ```
 #### Type parameters
 
@@ -320,6 +340,10 @@ The header style. The dafault is `SpreadsheetManager.DefaultCellStyles.HeaderSty
 
 The field style generator. The dafault is `(context) => SpreadsheetManager.DefaultCellStyles.FieldStyle`.
 
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.AddChildToLast(CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_)'></a>
 
 ## DataColumnCollection<T>.AddChildToLast(DataColumnBase<T>) Method
@@ -327,7 +351,7 @@ The field style generator. The dafault is `(context) => SpreadsheetManager.Defau
 Adds the child data column at the end of the last data column.
 
 ```csharp
-public void AddChildToLast(CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase<T> childColumn);
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> AddChildToLast(CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase<T> childColumn);
 ```
 #### Parameters
 
@@ -336,6 +360,10 @@ public void AddChildToLast(CloudyWing.SpreadsheetExporter.Templates.RecordSet.Da
 `childColumn` [CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase<T>')
 
 The child data column.
+
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
 
 #### Exceptions
 
@@ -348,7 +376,7 @@ The child data column.
 Adds the child data column at the end of the last data column.
 
 ```csharp
-public void AddChildToLast(string headerText, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.GeneratorProvider<T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>>> providerSetter, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> AddChildToLast(string headerText, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.GeneratorProvider<T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>>> providerSetter, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
 ```
 #### Parameters
 
@@ -376,6 +404,10 @@ The header style. The dafault is `SpreadsheetManager.DefaultCellStyles.HeaderSty
 
 The field style generator. The dafault is `(context) => SpreadsheetManager.DefaultCellStyles.FieldStyle`.
 
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.AddChildToLast(string,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
 ## DataColumnCollection<T>.AddChildToLast(string, Nullable<CellStyle>, Func<RecordContext<T>,CellStyle>) Method
@@ -383,7 +415,7 @@ The field style generator. The dafault is `(context) => SpreadsheetManager.Defau
 Adds the child data column at the end of the last data column.
 
 ```csharp
-public void AddChildToLast(string headerText, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> AddChildToLast(string headerText, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
 ```
 #### Parameters
 
@@ -405,6 +437,10 @@ The header style.
 
 The field style generator.
 
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.AddChildToLast_TField_(string,string,System.Action_CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.GeneratorProvider_T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField___,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
 ## DataColumnCollection<T>.AddChildToLast<TField>(string, string, Action<GeneratorProvider<T,FieldContext<T,TField>>>, Nullable<CellStyle>, Func<FieldContext<T,TField>,CellStyle>) Method
@@ -412,7 +448,7 @@ The field style generator.
 Adds the child data column at the end of the last data column.
 
 ```csharp
-public void AddChildToLast<TField>(string headerText, string fieldKey, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.GeneratorProvider<T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>>> providerSetter, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> AddChildToLast<TField>(string headerText, string fieldKey, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.GeneratorProvider<T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>>> providerSetter, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
 ```
 #### Type parameters
 
@@ -453,6 +489,10 @@ The header style. The dafault is `SpreadsheetManager.DefaultCellStyles.HeaderSty
 
 The field style generator. The dafault is `(context) => SpreadsheetManager.DefaultCellStyles.FieldStyle`.
 
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.AddChildToLast_TField_(string,string,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
 ## DataColumnCollection<T>.AddChildToLast<TField>(string, string, Nullable<CellStyle>, Func<FieldContext<T,TField>,CellStyle>) Method
@@ -460,7 +500,7 @@ The field style generator. The dafault is `(context) => SpreadsheetManager.Defau
 Adds the child data column at the end of the last data column.
 
 ```csharp
-public void AddChildToLast<TField>(string headerText, string fieldKey, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> AddChildToLast<TField>(string headerText, string fieldKey, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
 ```
 #### Type parameters
 
@@ -495,6 +535,10 @@ The header style. The dafault is `SpreadsheetManager.DefaultCellStyles.HeaderSty
 
 The field style generator. The dafault is `(context) => SpreadsheetManager.DefaultCellStyles.FieldStyle`.
 
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.AddChildToLast_TField_(string,System.Linq.Expressions.Expression_System.Func_T,TField__,System.Action_CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.GeneratorProvider_T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField___,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
 ## DataColumnCollection<T>.AddChildToLast<TField>(string, Expression<Func<T,TField>>, Action<GeneratorProvider<T,FieldContext<T,TField>>>, Nullable<CellStyle>, Func<FieldContext<T,TField>,CellStyle>) Method
@@ -502,7 +546,7 @@ The field style generator. The dafault is `(context) => SpreadsheetManager.Defau
 Adds the child data column at the end of the last data column.
 
 ```csharp
-public void AddChildToLast<TField>(string headerText, System.Linq.Expressions.Expression<System.Func<T,TField>> fieldKeyExpression, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.GeneratorProvider<T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>>> providerSetter, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> AddChildToLast<TField>(string headerText, System.Linq.Expressions.Expression<System.Func<T,TField>> fieldKeyExpression, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.GeneratorProvider<T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>>> providerSetter, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
 ```
 #### Type parameters
 
@@ -543,6 +587,10 @@ The header style. The dafault is `SpreadsheetManager.DefaultCellStyles.HeaderSty
 
 The field style generator. The dafault is `(context) => SpreadsheetManager.DefaultCellStyles.FieldStyle`.
 
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.AddChildToLast_TField_(string,System.Linq.Expressions.Expression_System.Func_T,TField__,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
 ## DataColumnCollection<T>.AddChildToLast<TField>(string, Expression<Func<T,TField>>, Nullable<CellStyle>, Func<FieldContext<T,TField>,CellStyle>) Method
@@ -550,7 +598,7 @@ The field style generator. The dafault is `(context) => SpreadsheetManager.Defau
 Adds the child data column at the end of the last data column.
 
 ```csharp
-public void AddChildToLast<TField>(string headerText, System.Linq.Expressions.Expression<System.Func<T,TField>> fieldKeyExpression, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> AddChildToLast<TField>(string headerText, System.Linq.Expressions.Expression<System.Func<T,TField>> fieldKeyExpression, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> headerStyle=null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle> fieldStyleGenerator=null);
 ```
 #### Type parameters
 
@@ -584,6 +632,10 @@ The header style. The dafault is `SpreadsheetManager.DefaultCellStyles.HeaderSty
 `fieldStyleGenerator` [System.Func&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')[CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecoed,TField_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TRecoed,TField>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[,](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecoed,TField_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TRecoed,TField>')[TField](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.AddChildToLast_TField_(string,System.Linq.Expressions.Expression_System.Func_T,TField__,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_T,TField_,CloudyWing.SpreadsheetExporter.CellStyle_).TField 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.AddChildToLast<TField>(string, System.Linq.Expressions.Expression<System.Func<T,TField>>, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle>, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T,TField>,CloudyWing.SpreadsheetExporter.CellStyle>).TField')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecoed,TField_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TRecoed,TField>')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')
 
 The field style generator. The dafault is `(context) => SpreadsheetManager.DefaultCellStyles.FieldStyle`.
+
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.ResetColumnsPoint(System.Drawing.Point)'></a>
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Reflection;
 
 namespace CloudyWing.SpreadsheetExporter {
     /// <summary>The spreadsheet cell.</summary>
@@ -19,7 +18,7 @@ namespace CloudyWing.SpreadsheetExporter {
 
         /// <summary>Gets or sets the point.</summary>
         /// <value>The point.</value>
-        public Point Point { get; set; }
+        public Point Point { get; set; } // 本來考慮把 setter 改成 internal，但考量有開放自訂 Template，所以還是維持 public
 
         /// <summary>Gets or sets the cell size.</summary>
         /// <value>The cell size.</value>

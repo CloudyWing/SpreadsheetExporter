@@ -76,7 +76,6 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return null;
         }
 
-        
         /// <inheritdoc/>
         public override object GetFieldValue(RecordContext<TRecord> recordContext) {
             if (string.IsNullOrWhiteSpace(FieldKey)) {

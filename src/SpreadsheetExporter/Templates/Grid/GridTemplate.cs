@@ -20,13 +20,18 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         /// <value>The row span.</value>
         public int RowSpan => points.Count == 0 ? 0 : points.Max(x => x.Y) + 1;
 
-        /// <summary>Creates the row.</summary>
+        /// <summary>
+        /// Creates the row.
+        /// </summary>
         /// <param name="height">The height.</param>
-        public void CreateRow(double height = 16.5d) {
+        /// <returns>The self.</returns>
+        public GridTemplate CreateRow(double height = 16.5d) {
             // 避免建立最後一筆 Row，卻沒加入 Cell 導致用作標算列數會不正確，所以加一個 -x 座標
             points.Add(new Point(-1, rows.Count));
             rowHeights.Add(rows.Count, height);
             rows.Add(new CellCollection(this));
+
+            return this;
         }
 
         /// <summary>Creates the cell.</summary>
@@ -34,11 +39,11 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         /// <param name="columnSpan">The column span.</param>
         /// <param name="rowSpan">The row span.</param>
         /// <param name="cellStyle">The cell style. The default is <c>SpreadsheetManager.DefaultCellStyles.GridCellStyle</c>.</param>
-        /// <returns>The cell.</returns>
+        /// <returns>The self.</returns>
         /// <exception cref="ArgumentOutOfRangeException">columnSpan - Must be greater than 0.
         /// or
         /// rowSpan - Must be greater than 0.</exception>
-        public Cell CreateCell(
+        public GridTemplate CreateCell(
             object value, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
         ) {
             if (columnSpan <= 0) {
@@ -61,7 +66,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
             };
             lastRow.Add(cell);
 
-            return cell;
+            return this;
         }
 
         /// <summary>Create cell that contain formula.</summary>
@@ -69,11 +74,11 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         /// <param name="columnSpan">The column span.</param>
         /// <param name="rowSpan">The row span.</param>
         /// <param name="cellStyle">The cell style. The default is <c>SpreadsheetManager.DefaultCellStyles.GridCellStyle</c>.</param>
-        /// <returns>The cell.</returns>
+        /// <returns>The self.</returns>
         /// <exception cref="ArgumentOutOfRangeException">columnSpan - Must be greater than 0.
         /// or
         /// rowSpan - Must be greater than 0.</exception>
-        public Cell CreateCell(
+        public GridTemplate CreateCell(
             Func<int, int, string> formulaGenerator, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
         ) {
             if (columnSpan <= 0) {
@@ -96,7 +101,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
             };
             lastRow.Add(cell);
 
-            return cell;
+            return this;
         }
 
         /// <inheritdoc/>

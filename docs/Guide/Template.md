@@ -3,7 +3,7 @@
 用來建立儲存格內容資訊的範本。
 
 ## GridTemplate
-使用 `CreateRow()` 和 `CreateCell()` 來建立儲存格資訊，可以用 HTML 的 `tr` 和 `td` 來理解會比較懂此 Template 的概念。
+使用 `CreateRow()` 和 `CreateCell()` 來建立儲存格資訊，可以用 HTML 的 `tr` 和 `td` 來理解會比較懂此 Template 的概念，可使用 Method Chaining 來簡化操作。
 
 使用 `CreateRow()` 建立新列，並指定列高。
 ```csharp
@@ -30,11 +30,11 @@ template.CreateCell("Value1_1");
 template.CreateCell("Value1_2", 3, 2);
 // 可傳入型別為 CellStyle 的參數來設定儲存格樣式
 template.CreateCell("Value1_3", 1, 1, new CellStyle());
-template.CreateRow();
-// 如果 ColumnSpan 傳入 2，會造成座標重疊而發生 Exception
-template.CreateCell("Value2_1");
-// 可設定公式，cell 和 row，從 0 開始計算
-template.CreateCell((cell, row) => $"{cell} + {row}");
+
+// Method Chaining
+template.CreateRow()
+    .CreateCell("Value2_1") // 如果 ColumnSpan 傳入 2，會造成座標重疊而發生 Exception
+    .CreateCell((cell, row) => $"{cell} + {row}"); // 可設定公式，cell 和 row，從 0 開始計算
 
 /*
 產出
@@ -47,7 +47,7 @@ template.CreateCell((cell, row) => $"{cell} + {row}");
 ```
 
 ## RecordSetTemplate
-使用設定 Data Source 和 Data Columns 來建立儲存格資訊。
+使用設定 Data Source 和 Data Columns 來建立儲存格資訊，可使用 Method Chaining 來簡化操作。
 
 ```csharp
 public class Record {
@@ -111,18 +111,19 @@ template.Columns.Add(
 
 ### 產生子標題列
 ```csharp
-template.Columns.Add("Group1");
-template.Columns.AddChildToLast("Index", x => x.Id);
-template.Columns.AddChildToLast("Name", x => x.Name);
-template.Columns.Add("Group2");
-template.Columns.AddChildToLast("Child Group1");
-DataColumnCollection<Record> lastChildColumns = template.Columns.Las().ChildColumns;
-lastChildColumns.AddChildToLast("Index", x => x.Id);
-lastChildColumns.AddChildToLast("Name", x => x.Name);
+// Method Chaining
+template.Columns.Add("Group1")
+    .AddChildToLast("Index", x => x.Id)
+    .AddChildToLast("Name", x => x.Name)
+    .Add("Group2")
+    .AddChildToLast("Child Group1");
+DataColumnCollection<Record> lastChildColumns = template.Columns.Last().ChildColumns;
+lastChildColumns.AddChildToLast("Index", x => x.Id)
+    .AddChildToLast("Name", x => x.Name);
 template.Columns.AddChildToLast("Child Group2");
-lastChildColumns = template.Columns.Last().ChildColumns;
-lastChildColumns.AddChildToLast("Index", x => x.Id);
-lastChildColumns.AddChildToLast("Name", x => x.Name);
+lastChildColumns = template.Columns.Last().ChildColumns
+    .AddChildToLast("Index", x => x.Id)
+    .AddChildToLast("Name", x => x.Name);
 
 /*
 產出

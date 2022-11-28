@@ -51,7 +51,7 @@ The row span.
 Creates the cell.
 
 ```csharp
-public CloudyWing.SpreadsheetExporter.Cell CreateCell(object value, int columnSpan=1, int rowSpan=1, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> cellStyle=null);
+public CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate CreateCell(object value, int columnSpan=1, int rowSpan=1, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> cellStyle=null);
 ```
 #### Parameters
 
@@ -80,8 +80,8 @@ The row span.
 The cell style. The default is `SpreadsheetManager.DefaultCellStyles.GridCellStyle`.
 
 #### Returns
-[Cell](CloudyWing.SpreadsheetExporter.Cell.md 'CloudyWing.SpreadsheetExporter.Cell')  
-The cell.
+[GridTemplate](CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.md 'CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate')  
+The self.
 
 #### Exceptions
 
@@ -97,7 +97,7 @@ columnSpan - Must be greater than 0.
 Create cell that contain formula.
 
 ```csharp
-public CloudyWing.SpreadsheetExporter.Cell CreateCell(System.Func<int,int,string> formulaGenerator, int columnSpan=1, int rowSpan=1, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> cellStyle=null);
+public CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate CreateCell(System.Func<int,int,string> formulaGenerator, int columnSpan=1, int rowSpan=1, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> cellStyle=null);
 ```
 #### Parameters
 
@@ -126,8 +126,8 @@ The row span.
 The cell style. The default is `SpreadsheetManager.DefaultCellStyles.GridCellStyle`.
 
 #### Returns
-[Cell](CloudyWing.SpreadsheetExporter.Cell.md 'CloudyWing.SpreadsheetExporter.Cell')  
-The cell.
+[GridTemplate](CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.md 'CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate')  
+The self.
 
 #### Exceptions
 
@@ -143,7 +143,7 @@ columnSpan - Must be greater than 0.
 Creates the row.
 
 ```csharp
-public void CreateRow(double height=16.5);
+public CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate CreateRow(double height=16.5);
 ```
 #### Parameters
 
@@ -152,6 +152,10 @@ public void CreateRow(double height=16.5);
 `height` [System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')
 
 The height.
+
+#### Returns
+[GridTemplate](CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.md 'CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate')  
+The self.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.GetContext()'></a>
 
