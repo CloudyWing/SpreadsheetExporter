@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Xml;
+using NPOI;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
+using NPOI.OpenXml4Net.OPC;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
@@ -54,6 +58,11 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
         ///   <c>true</c> if this instance is office open XML document; otherwise, <c>false</c>.</value>
         public bool IsOfficeOpenXmlDocument => ExcelFormat == ExcelFormat.OfficeOpenXmlDocument;
 
+        /// <summary>Gets or sets a value indicating whether this instance is closed not implemented exception.</summary>
+        /// <value>
+        ///   <c>true</c> if this instance is closed not implemented exception; otherwise, <c>false</c>.</value>
+        public bool IsClosedNotImplementedException { get; set; }
+
         /// <inheritdoc/>
         public override string ContentType => "application/ms-excel";
 
@@ -63,7 +72,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
         /// <inheritdoc/>
         protected override byte[] ExecuteExport(IEnumerable<SheeterContext> contexts) {
             lock (thisLock) {
-                // 因為ParseCellStyle和ParseFont會用到，所以用field處理
+                // 因為 ParseCellStyle 和 ParseFont 會用到，所以用 field 處理
                 workbook = IsOfficeOpenXmlDocument ? new XSSFWorkbook() : new HSSFWorkbook();
                 foreach (SheeterContext context in contexts) {
                     CreateSheet(context);
@@ -72,20 +81,22 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
                 using MemoryStream ms = new();
 
                 if (HasPassword) {
+                    // NPOI 目前不支援在 xlsx 格式使用密碼保護 Workbook
                     if (IsOfficeOpenXmlDocument) {
-                        throw new NotImplementedException("If no other packages are installed, NPOI currently does not support xlsx with a password.");
+                        if (!IsClosedNotImplementedException) {
+                            throw new NotImplementedException("If no other packages are installed, NPOI currently does not support the output of xlsx file with passwords.");
+                        }
                     } else {
                         HSSFWorkbook wb = (HSSFWorkbook)workbook;
-                        // 因為NPOI的Bug，在2.5.5版以前要先call InternalWorkbook.WriteAccess才可以正常
+                        // 因為 NPOI 的 Bug，在 2.5.5 版以前要先 call InternalWorkbook.WriteAccess 才可以正常，後續不知是否有修正
                         _ = wb.InternalWorkbook.WriteAccess;
                         wb.WriteProtectWorkbook(Password, "");
-                        workbook.Write(ms);
                     }
-                } else {
-                    workbook.Write(ms);
                 }
 
-                // Dispose()和Close()疑似有問題，所以設為null
+                workbook.Write(ms);
+
+                // Dispose() 和 Close() 疑似有問題，所以設為 null
                 workbook = null;
                 cellStyles.Clear();
                 fonts.Clear();
@@ -96,7 +107,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
 
         private void CreateSheet(SheeterContext context) {
             ISheet sheet = workbook.CreateSheet(context.SheetName);
-            // 不知道為什麼預設給很小，所以設定default
+            // 不知道為什麼預設給很小，所以設定 default
             sheet.DefaultRowHeight = 330;
             SetSheetCells(sheet, context.Cells);
             SetSheetColumnWidths(sheet, context.ColumnWidths);
@@ -104,6 +115,17 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
 
             if (context.IsProtected) {
                 sheet.ProtectSheet(context.Password);
+            }
+
+            sheet.PrintSetup.Landscape = context.PageSettings.PageOrientation == PageOrientation.Landscape;
+            sheet.PrintSetup.PaperSize = (short)context.PageSettings.PaperSize;
+
+            if (context.HasWatermark) {
+                if (IsOfficeOpenXmlDocument) {
+                    SetSheetWatermark(sheet as XSSFSheet, context.Watermark);
+                } else if (!IsClosedNotImplementedException) {
+                    throw new NotImplementedException("NPOI currently does not support the output of xls file with watermarks.");
+                }
             }
 
             sheet.ForceFormulaRecalculation = true;
@@ -136,7 +158,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
         private ICellStyle ParseCellStyle(CellStyle cellStyle) {
             ICellStyle excelCellStyle;
 
-            // 聽說CellStyle建立太多，可能會出現問題，所以如果有已存在的，就直接使用
+            // 聽說 CellStyle 建立太多，可能會出現問題，所以如果有已存在的，就直接使用
             if (cellStyles.ContainsKey(cellStyle)) {
                 return cellStyles[cellStyle];
             }
@@ -178,7 +200,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
         }
 
         private IFont ParseFont(CellFont font) {
-            // 聽說CellStyle建立太多，可能會出現問題，所以如果有已存在的，就直接使用
+            // 聽說 CellStyle 建立太多，可能會出現問題，所以如果有已存在的，就直接使用
             if (fonts.ContainsKey(font)) {
                 return fonts[font];
             }
@@ -212,16 +234,14 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             return excelFont;
         }
 
-        /// <summary>
-        /// HSSFColor無法用Color設定顏色，所以如果xls版本就使用Reflection找出對應顏色Index
-        /// </summary>
         private short ParseColor(Color color) {
-            //找出此Type下公用的class
+            // HSSFColor 無法用 Color 設定顏色，所以如果 xls 版本就使用 Reflection 找出對應顏色 Index
+            // 找出此 Type 下公用的 class
             Type[] colorTypes = typeof(HSSFColor).GetNestedTypes(BindingFlags.Public);
 
             foreach (Type type in colorTypes) {
                 FieldInfo field = type.GetField("Triplet", BindingFlags.Public | BindingFlags.Static);
-                // Automatic這個顏色沒有Triplet
+                // Automatic 這個顏色沒有 Triplet
                 if (field != null) {
                     byte[] rgb = field.GetValue(null) as byte[];
                     if (rgb[0] == color.R && rgb[1] == color.G && rgb[2] == color.B) {
@@ -237,10 +257,8 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             return dataFormat.GetFormat(formatStr);
         }
 
-        /// <summary>
-        /// 合併儲存格，並把第一個儲存格的樣式複製到其他儲存格
-        /// </summary>
         private void MergedRegion(ISheet sheet, int firstColnum, int lastColumn, int firstRow, int lastRow) {
+            // 合併儲存格，並把第一個儲存格的樣式複製到其他儲存格
             ICellStyle cellStyle = sheet.GetRow(firstRow).GetCell(firstColnum).CellStyle;
             for (int column = firstColnum; column <= lastColumn; column++) {
                 for (int row = firstRow; row <= lastRow; row++) {
@@ -251,7 +269,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
                 }
             }
 
-            _ = sheet.AddMergedRegion(
+            sheet.AddMergedRegion(
                 new CellRangeAddress(firstRow, lastRow, firstColnum, lastColumn)
             );
         }
@@ -300,6 +318,89 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
                 } else {
                     row.Height = (short)(pair.Value * 20);
                 }
+            }
+        }
+
+        private void SetSheetWatermark(XSSFSheet sheet, Image watermark) {
+            MemoryStream imageMs = new();
+            watermark.Save(imageMs, System.Drawing.Imaging.ImageFormat.Png);
+
+            int pictureIdx = workbook.AddPicture(imageMs.ToArray(), PictureType.PNG);
+            POIXMLDocumentPart docPart = workbook.GetAllPictures()[pictureIdx] as POIXMLDocumentPart;
+
+            POIXMLDocumentPart.RelationPart backgroundRelPart = sheet.AddRelation(null, XSSFRelation.IMAGES, docPart);
+
+            sheet.GetCTWorksheet().picture = new CT_SheetBackgroundPicture() {
+                id = backgroundRelPart.Relationship.Id
+            };
+
+            int drawingNumber = (sheet.Workbook as XSSFWorkbook)
+                .GetPackagePart()
+                .Package
+                .GetPartsByContentType(XSSFRelation.VML_DRAWINGS.ContentType).Count + 1;
+            VmlDrawing drawing = (VmlDrawing)sheet.CreateRelationship(VmlRelation.Instance, XSSFFactory.GetInstance(), drawingNumber);
+
+            POIXMLDocumentPart.RelationPart headerRelPart = drawing.AddRelation(null, XSSFRelation.IMAGES, docPart);
+
+            drawing.Image = watermark;
+            drawing.PictureRelId = headerRelPart.Relationship.Id;
+
+            sheet.Header.Center = HeaderFooter.PICTURE_FIELD.sequence;
+            sheet.GetCTWorksheet().legacyDrawingHF = new CT_LegacyDrawing() {
+                id = sheet.GetRelationId(drawing)
+            };
+        }
+
+        private class VmlRelation : POIXMLRelation {
+            private static readonly Lazy<VmlRelation> instance = new(() => {
+                return new VmlRelation(
+                        "application/vnd.openxmlformats-officedocument.vmlDrawing",
+                        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing",
+                        "/xl/drawings/vmlDrawing#.vml",
+                        typeof(VmlDrawing)
+                );
+            });
+
+            private VmlRelation(string type, string rel, string defaultName, Type cls) : base(type, rel, defaultName, cls) { }
+
+            public static VmlRelation Instance => instance.Value;
+        }
+
+        private class VmlDrawing : POIXMLDocumentPart {
+            public string PictureRelId { get; set; }
+
+            public Image Image { get; set; }
+
+            protected override void Commit() {
+                PackagePart part = GetPackagePart();
+                Stream @out = part.GetOutputStream();
+                Write(@out);
+                @out.Close();
+            }
+
+            private void Write(Stream stream) {
+                // Pixel => Points
+                float width = Image.Width * 72 / Image.HorizontalResolution;
+                float height = Image.Height * 72 / Image.VerticalResolution;
+
+                using StreamWriter sw = new(stream);
+                XmlDocument doc = new();
+                doc.LoadXml($@"
+<xml xmlns:v=""urn:schemas-microsoft-com:vml"" xmlns:o=""urn:schemas-microsoft-com:office:office"" xmlns:x=""urn:schemas-microsoft-com:office:excel"">
+  <o:shapelayout v:ext=""edit"">
+    <o:idmap v:ext=""edit"" data=""1"" />
+  </o:shapelayout>
+  <v:shapetype id=""_x0000_t202"" coordsize=""21600,21600"" o:spt=""202"" path=""m,l,21600r21600,l21600,xe"">
+    <v:stroke joinstyle=""miter"" />
+    <v:path gradientshapeok=""t"" o:connecttype=""rect"" />
+  </v:shapetype>
+  <v:shape id=""CH"" type=""#_x0000_t75"" style=""position:absolute;margin-left:0;margin-top:0;width:{width}pt;height:{height}pt;z-index:1"">
+    <v:imagedata o:relid=""{PictureRelId}"" o:title="""" />
+    <o:lock v:ext=""edit"" rotation=""t"" />
+  </v:shape>
+</xml>");
+
+                doc.Save(stream);
             }
         }
     }

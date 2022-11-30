@@ -26,6 +26,20 @@ public System.Collections.Generic.IReadOnlyDictionary<int,double> ColumnWidths {
 [System.Collections.Generic.IReadOnlyDictionary&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')  
 The width of columns.
 
+<a name='CloudyWing.SpreadsheetExporter.Sheeter.PageSettings'></a>
+
+## Sheeter.PageSettings Property
+
+Gets the page settings.
+
+```csharp
+public CloudyWing.SpreadsheetExporter.PageSettings PageSettings { get; }
+```
+
+#### Property Value
+[PageSettings](CloudyWing.SpreadsheetExporter.PageSettings.md 'CloudyWing.SpreadsheetExporter.PageSettings')  
+The page settings.
+
 <a name='CloudyWing.SpreadsheetExporter.Sheeter.Password'></a>
 
 ## Sheeter.Password Property
@@ -67,6 +81,20 @@ public System.Collections.Generic.IReadOnlyList<CloudyWing.SpreadsheetExporter.T
 #### Property Value
 [System.Collections.Generic.IReadOnlyList&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyList-1 'System.Collections.Generic.IReadOnlyList`1')[ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyList-1 'System.Collections.Generic.IReadOnlyList`1')  
 The templates.
+
+<a name='CloudyWing.SpreadsheetExporter.Sheeter.Watermark'></a>
+
+## Sheeter.Watermark Property
+
+Gets or sets the watermark.
+
+```csharp
+public System.Drawing.Image Watermark { get; set; }
+```
+
+#### Property Value
+[System.Drawing.Image](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Image 'System.Drawing.Image')  
+The watermark.
 ### Methods
 
 <a name='CloudyWing.SpreadsheetExporter.Sheeter.AddTemplate(CloudyWing.SpreadsheetExporter.Templates.ITemplate)'></a>

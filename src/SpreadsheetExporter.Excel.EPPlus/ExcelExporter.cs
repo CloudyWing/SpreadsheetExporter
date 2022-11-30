@@ -51,6 +51,14 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
                 sheet.Protection.SetPassword(context.Password);
             }
 
+            sheet.PrinterSettings.Orientation = context.PageSettings.PageOrientation == PageOrientation.Portrait
+                ? eOrientation.Portrait : eOrientation.Landscape;
+            sheet.PrinterSettings.PaperSize = (ePaperSize)context.PageSettings.PaperSize.Value;
+
+            if (context.HasWatermark) {
+                SetSheetWatermark(sheet, context.Watermark);
+            }
+
             sheet.Calculate();
         }
 
@@ -149,6 +157,11 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
                     row.Height = pair.Value;
                 }
             }
+        }
+
+        private void SetSheetWatermark(ExcelWorksheet sheet, Image watermark) {
+            sheet.HeaderFooter.OddHeader.InsertPicture(watermark, PictureAlignment.Centered);
+            sheet.BackgroundImage.Image = watermark;
         }
     }
 }

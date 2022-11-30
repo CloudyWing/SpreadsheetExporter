@@ -74,6 +74,20 @@ public override string FileNameExtension { get; }
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
 The file name extension.
 
+<a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.IsClosedNotImplementedException'></a>
+
+## ExcelExporter.IsClosedNotImplementedException Property
+
+Gets or sets a value indicating whether this instance is closed not implemented exception.
+
+```csharp
+public bool IsClosedNotImplementedException { get; set; }
+```
+
+#### Property Value
+[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
+`true` if this instance is closed not implemented exception; otherwise, `false`.
+
 <a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.IsOfficeOpenXmlDocument'></a>
 
 ## ExcelExporter.IsOfficeOpenXmlDocument Property
@@ -109,52 +123,3 @@ The contexts.
 #### Returns
 [System.Byte](https://docs.microsoft.com/en-us/dotnet/api/System.Byte 'System.Byte')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')  
 The exported bytes of the file.
-
-<a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.MergedRegion(ISheet,int,int,int,int)'></a>
-
-## ExcelExporter.MergedRegion(ISheet, int, int, int, int) Method
-
-合併儲存格，並把第一個儲存格的樣式複製到其他儲存格
-
-```csharp
-private void MergedRegion(ISheet sheet, int firstColnum, int lastColumn, int firstRow, int lastRow);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.MergedRegion(ISheet,int,int,int,int).sheet'></a>
-
-`sheet` [NPOI.SS.UserModel.ISheet](https://docs.microsoft.com/en-us/dotnet/api/NPOI.SS.UserModel.ISheet 'NPOI.SS.UserModel.ISheet')
-
-<a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.MergedRegion(ISheet,int,int,int,int).firstColnum'></a>
-
-`firstColnum` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
-
-<a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.MergedRegion(ISheet,int,int,int,int).lastColumn'></a>
-
-`lastColumn` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
-
-<a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.MergedRegion(ISheet,int,int,int,int).firstRow'></a>
-
-`firstRow` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
-
-<a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.MergedRegion(ISheet,int,int,int,int).lastRow'></a>
-
-`lastRow` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
-
-<a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.ParseColor(System.Drawing.Color)'></a>
-
-## ExcelExporter.ParseColor(Color) Method
-
-HSSFColor無法用Color設定顏色，所以如果xls版本就使用Reflection找出對應顏色Index
-
-```csharp
-private short ParseColor(System.Drawing.Color color);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.ParseColor(System.Drawing.Color).color'></a>
-
-`color` [System.Drawing.Color](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Color 'System.Drawing.Color')
-
-#### Returns
-[System.Int16](https://docs.microsoft.com/en-us/dotnet/api/System.Int16 'System.Int16')

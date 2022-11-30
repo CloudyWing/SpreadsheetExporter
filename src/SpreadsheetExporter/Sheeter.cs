@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using CloudyWing.SpreadsheetExporter.Templates;
 
 namespace CloudyWing.SpreadsheetExporter {
@@ -20,6 +21,13 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <value>The password.</value>
         public string Password { get; set; }
 
+        /// <summary>Gets the page settings.</summary>
+        /// <value>The page settings.</value>
+        public PageSettings PageSettings { get; } = new PageSettings();
+
+        /// <summary>Gets or sets the watermark.</summary>
+        /// <value>The watermark.</value>
+        public Image Watermark { get; set; }
 
         /// <summary>Gets the width of the columns.</summary>
         /// <value>The width of columns.</value>
