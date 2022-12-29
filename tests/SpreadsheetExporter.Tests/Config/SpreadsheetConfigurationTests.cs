@@ -1,7 +1,5 @@
 ﻿using System.Drawing;
 using CloudyWing.SpreadsheetExporter.Config;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudyWing.SpreadsheetExporter.Tests.Config {
     [TestFixture]
@@ -33,9 +31,9 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Config {
                 x.FieldStyle = fieldStyle;
             });
 
-            _ = actual.CellStyle.Should().Be(cellStyle);
-            _ = actual.HeaderStyle.Should().Be(headerStyle);
-            _ = actual.FieldStyle.Should().Be(fieldStyle);
+            actual.CellStyle.Should().Be(cellStyle);
+            actual.HeaderStyle.Should().Be(headerStyle);
+            actual.FieldStyle.Should().Be(fieldStyle);
         }
     }
 }
