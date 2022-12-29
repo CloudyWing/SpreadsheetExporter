@@ -76,6 +76,27 @@ public int RowSpan { get; }
 The row span.
 ### Methods
 
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.Add(CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_)'></a>
+
+## DataColumnCollection<T>.Add(DataColumnBase<T>) Method
+
+Adds the specified header text.
+
+```csharp
+public CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T> Add(CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase<T> dataColumn);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.Add(CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_).dataColumn'></a>
+
+`dataColumn` [CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase<T>')
+
+The data column.
+
+#### Returns
+[CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
+The self.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.Add(string,System.Action_CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.GeneratorProvider_T,CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T___,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_,System.Func_CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_,CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
 ## DataColumnCollection<T>.Add(string, Action<GeneratorProvider<T,RecordContext<T>>>, Nullable<CellStyle>, Func<RecordContext<T>,CellStyle>) Method

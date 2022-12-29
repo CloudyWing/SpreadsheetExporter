@@ -12,10 +12,6 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         /// <value>The field formula generator.</value>
         public Func<RecordContext<T>, string> FieldFormulaGenerator { get; set; }
 
-        /// <summary>Gets or sets the field style.</summary>
-        /// <value>The field style.</value>
-        public CellStyle FieldStyle { get; set; }
-
         /// <summary>Gets or sets the field style generator.</summary>
         /// <value>The field style generator.</value>
         public Func<RecordContext<T>, CellStyle> FieldStyleGenerator { get; set; }
@@ -29,7 +25,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         }
 
         public override CellStyle GetFieldStyle(RecordContext<T> context) {
-            return GetInternal(FieldStyleGenerator, FieldStyle, context);
+            return GetInternal(FieldStyleGenerator, SpreadsheetManager.DefaultCellStyles.FieldStyle, context);
         }
 
         private TResult GetInternal<TResult>(
