@@ -73,7 +73,7 @@ public static CloudyWing.SpreadsheetExporter.PaperSize A3ExtraTransverse { get; 
 
 #### Property Value
 [PaperSize](CloudyWing.SpreadsheetExporter.PaperSize.md 'CloudyWing.SpreadsheetExporter.PaperSize')  
-38
+68
 
 <a name='CloudyWing.SpreadsheetExporter.PaperSize.A3Transverse'></a>
 
