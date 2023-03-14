@@ -402,7 +402,7 @@ namespace CloudyWing.SpreadsheetExporter {
         public static PaperSize A3Transverse => a3Transverse.Value;
 
         /// <summary>Gets the A3 extra transverse paper (322 mm by 445 mm).</summary>
-        /// <value>38</value>
+        /// <value>68</value>
         public static PaperSize A3ExtraTransverse => a3ExtraTransverse.Value;
 
         /// <summary>Gets the value.</summary>

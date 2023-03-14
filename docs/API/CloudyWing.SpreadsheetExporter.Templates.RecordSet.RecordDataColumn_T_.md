@@ -33,20 +33,6 @@ public System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordCont
 [System.Func&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')[CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-2 'System.Func`2')  
 The field formula generator.
 
-<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.FieldStyle'></a>
-
-## RecordDataColumn<T>.FieldStyle Property
-
-Gets or sets the field style.
-
-```csharp
-public CloudyWing.SpreadsheetExporter.CellStyle FieldStyle { get; set; }
-```
-
-#### Property Value
-[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')  
-The field style.
-
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.FieldStyleGenerator'></a>
 
 ## RecordDataColumn<T>.FieldStyleGenerator Property
