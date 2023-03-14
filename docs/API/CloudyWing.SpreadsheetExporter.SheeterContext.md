@@ -58,20 +58,6 @@ public System.Collections.Generic.IReadOnlyDictionary<int,double> ColumnWidths {
 [System.Collections.Generic.IReadOnlyDictionary&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')  
 The width of columns.
 
-<a name='CloudyWing.SpreadsheetExporter.SheeterContext.HasWatermark'></a>
-
-## SheeterContext.HasWatermark Property
-
-Gets a value indicating whether this instance has watermark.
-
-```csharp
-public bool HasWatermark { get; }
-```
-
-#### Property Value
-[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
-`true` if this instance has watermark; otherwise, `false`.
-
 <a name='CloudyWing.SpreadsheetExporter.SheeterContext.IsProtected'></a>
 
 ## SheeterContext.IsProtected Property
@@ -141,17 +127,3 @@ public string SheetName { get; }
 #### Property Value
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
 The name of the sheet.
-
-<a name='CloudyWing.SpreadsheetExporter.SheeterContext.Watermark'></a>
-
-## SheeterContext.Watermark Property
-
-Gets or sets the watermark.
-
-```csharp
-public System.Drawing.Image Watermark { get; }
-```
-
-#### Property Value
-[System.Drawing.Image](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Image 'System.Drawing.Image')  
-The watermark.

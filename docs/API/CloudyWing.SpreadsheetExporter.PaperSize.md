@@ -1000,31 +1000,6 @@ public static System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExpor
 [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[PaperSize](CloudyWing.SpreadsheetExporter.PaperSize.md 'CloudyWing.SpreadsheetExporter.PaperSize')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')  
 The all paper sizes.
 
-<a name='CloudyWing.SpreadsheetExporter.PaperSize.GetPaperSizeFromPrinter(int)'></a>
-
-## PaperSize.GetPaperSizeFromPrinter(int) Method
-
-Gets the paper size from printer.
-
-```csharp
-public static CloudyWing.SpreadsheetExporter.PaperSize GetPaperSizeFromPrinter(int value);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.PaperSize.GetPaperSizeFromPrinter(int).value'></a>
-
-`value` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
-
-The value.
-
-#### Returns
-[PaperSize](CloudyWing.SpreadsheetExporter.PaperSize.md 'CloudyWing.SpreadsheetExporter.PaperSize')  
-The paper.
-
-#### Exceptions
-
-[System.Collections.Generic.KeyNotFoundException](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.KeyNotFoundException 'System.Collections.Generic.KeyNotFoundException')
-
 <a name='CloudyWing.SpreadsheetExporter.PaperSize.ToString()'></a>
 
 ## PaperSize.ToString() Method

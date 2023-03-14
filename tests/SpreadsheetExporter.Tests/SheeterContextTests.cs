@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using CloudyWing.SpreadsheetExporter.Templates;
+﻿using CloudyWing.SpreadsheetExporter.Templates;
 
 namespace CloudyWing.SpreadsheetExporter.Tests {
     [TestFixture]
@@ -17,8 +16,6 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             template.GetContext().Returns(new TemplateContext(Enumerable.Empty<Cell>(), 0, new Dictionary<int, double>()));
             sheeter.AddTemplate(template);
 
-            sheeter.Watermark = new Bitmap(100, 100);
-
             SheeterContext sut = new SheeterContext(sheeter);
 
             sut.SheetName.Should().Be(sheeter.SheetName);
@@ -27,22 +24,6 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             sut.Password.Should().Be(sheeter.Password);
             sut.IsProtected.Should().BeTrue();
             sut.PageSettings.Should().Be(sheeter.PageSettings);
-            sut.HasWatermark.Should().BeTrue();
-            sut.Watermark.Should().NotBeNull();
-        }
-
-        [Test]
-        public void Watermark_ShouldReturnCorrectImage() {
-            Sheeter sheeter = new Sheeter("Sheet1");
-            sheeter.PageSettings.PaperSize = PaperSize.A4;
-            sheeter.Watermark = new Bitmap(50, 50);
-
-            SheeterContext context = new SheeterContext(sheeter);
-            Image watermark = context.Watermark;
-
-            watermark.Should().NotBeNull();
-            watermark.Width.Should().Be(PaperSize.A4.Width);
-            watermark.Height.Should().Be(PaperSize.A4.Height);
         }
     }
 }

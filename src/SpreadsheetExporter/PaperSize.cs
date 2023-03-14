@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.Linq;
 
 namespace CloudyWing.SpreadsheetExporter {
@@ -489,42 +488,6 @@ namespace CloudyWing.SpreadsheetExporter {
             yield return A2;
             yield return A3Transverse;
             yield return A3ExtraTransverse;
-        }
-
-        /// <summary>Gets the paper size from printer.</summary>
-        /// <param name="value">The value.</param>
-        /// <returns>The paper.</returns>
-        /// <exception cref="KeyNotFoundException"></exception>
-        public static PaperSize GetPaperSizeFromPrinter(int value) {
-            PaperSize paperSize = GetAll().SingleOrDefault(x => x.Value == value)
-                ?? otherItems.SingleOrDefault(x => x.Value == value);
-
-            if (paperSize is not null) {
-                return paperSize;
-            }
-
-            // 不知道藏了什麼實作，讓它設定 PrinterName 就可以查到不同清單，預防萬一就不將它 Cache 了
-            // 「Microsoft XPS Document Writer」是目前我已知，較完整的清單
-            PrinterSettings settings = new() {
-                PrinterName = "Microsoft XPS Document Writer"
-            };
-
-            foreach (System.Drawing.Printing.PaperSize printerPaperSize in settings.PaperSizes) {
-                if (printerPaperSize.RawKind == value) {
-                    paperSize = new PaperSize(
-                        printerPaperSize.RawKind, printerPaperSize.PaperName, printerPaperSize.Width, printerPaperSize.Height
-                    );
-
-                    // 預防萬一，再檢查一次
-                    if (!otherItems.Any(x => x.Value == value)) {
-                        otherItems.Add(paperSize);
-                    }
-
-                    return paperSize;
-                }
-            }
-
-            throw new KeyNotFoundException();
         }
 
         /// <inheritdoc/>

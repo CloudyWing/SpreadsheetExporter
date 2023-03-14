@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using System.Xml;
-using NPOI;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
-using NPOI.OpenXml4Net.OPC;
-using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
@@ -119,14 +115,6 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
 
             sheet.PrintSetup.Landscape = context.PageSettings.PageOrientation == PageOrientation.Landscape;
             sheet.PrintSetup.PaperSize = (short)context.PageSettings.PaperSize;
-
-            if (context.HasWatermark) {
-                if (IsOfficeOpenXmlDocument) {
-                    SetSheetWatermark(sheet as XSSFSheet, context.Watermark);
-                } else if (!IsClosedNotImplementedException) {
-                    throw new NotImplementedException("NPOI currently does not support the output of xls file with watermarks.");
-                }
-            }
 
             sheet.ForceFormulaRecalculation = true;
         }
@@ -318,89 +306,6 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
                 } else {
                     row.Height = (short)(pair.Value * 20);
                 }
-            }
-        }
-
-        private void SetSheetWatermark(XSSFSheet sheet, Image watermark) {
-            MemoryStream imageMs = new();
-            watermark.Save(imageMs, System.Drawing.Imaging.ImageFormat.Png);
-
-            int pictureIdx = workbook.AddPicture(imageMs.ToArray(), PictureType.PNG);
-            POIXMLDocumentPart docPart = workbook.GetAllPictures()[pictureIdx] as POIXMLDocumentPart;
-
-            POIXMLDocumentPart.RelationPart backgroundRelPart = sheet.AddRelation(null, XSSFRelation.IMAGES, docPart);
-
-            sheet.GetCTWorksheet().picture = new CT_SheetBackgroundPicture() {
-                id = backgroundRelPart.Relationship.Id
-            };
-
-            int drawingNumber = (sheet.Workbook as XSSFWorkbook)
-                .GetPackagePart()
-                .Package
-                .GetPartsByContentType(XSSFRelation.VML_DRAWINGS.ContentType).Count + 1;
-            VmlDrawing drawing = (VmlDrawing)sheet.CreateRelationship(VmlRelation.Instance, XSSFFactory.GetInstance(), drawingNumber);
-
-            POIXMLDocumentPart.RelationPart headerRelPart = drawing.AddRelation(null, XSSFRelation.IMAGES, docPart);
-
-            drawing.Image = watermark;
-            drawing.PictureRelId = headerRelPart.Relationship.Id;
-
-            sheet.Header.Center = HeaderFooter.PICTURE_FIELD.sequence;
-            sheet.GetCTWorksheet().legacyDrawingHF = new CT_LegacyDrawing() {
-                id = sheet.GetRelationId(drawing)
-            };
-        }
-
-        private class VmlRelation : POIXMLRelation {
-            private static readonly Lazy<VmlRelation> instance = new(() => {
-                return new VmlRelation(
-                        "application/vnd.openxmlformats-officedocument.vmlDrawing",
-                        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing",
-                        "/xl/drawings/vmlDrawing#.vml",
-                        typeof(VmlDrawing)
-                );
-            });
-
-            private VmlRelation(string type, string rel, string defaultName, Type cls) : base(type, rel, defaultName, cls) { }
-
-            public static VmlRelation Instance => instance.Value;
-        }
-
-        private class VmlDrawing : POIXMLDocumentPart {
-            public string PictureRelId { get; set; }
-
-            public Image Image { get; set; }
-
-            protected override void Commit() {
-                PackagePart part = GetPackagePart();
-                Stream @out = part.GetOutputStream();
-                Write(@out);
-                @out.Close();
-            }
-
-            private void Write(Stream stream) {
-                // Pixel => Points
-                float width = Image.Width * 72 / Image.HorizontalResolution;
-                float height = Image.Height * 72 / Image.VerticalResolution;
-
-                using StreamWriter sw = new(stream);
-                XmlDocument doc = new();
-                doc.LoadXml($@"
-<xml xmlns:v=""urn:schemas-microsoft-com:vml"" xmlns:o=""urn:schemas-microsoft-com:office:office"" xmlns:x=""urn:schemas-microsoft-com:office:excel"">
-  <o:shapelayout v:ext=""edit"">
-    <o:idmap v:ext=""edit"" data=""1"" />
-  </o:shapelayout>
-  <v:shapetype id=""_x0000_t202"" coordsize=""21600,21600"" o:spt=""202"" path=""m,l,21600r21600,l21600,xe"">
-    <v:stroke joinstyle=""miter"" />
-    <v:path gradientshapeok=""t"" o:connecttype=""rect"" />
-  </v:shapetype>
-  <v:shape id=""CH"" type=""#_x0000_t75"" style=""position:absolute;margin-left:0;margin-top:0;width:{width}pt;height:{height}pt;z-index:1"">
-    <v:imagedata o:relid=""{PictureRelId}"" o:title="""" />
-    <o:lock v:ext=""edit"" rotation=""t"" />
-  </v:shape>
-</xml>");
-
-                doc.Save(stream);
             }
         }
     }

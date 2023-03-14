@@ -50,46 +50,6 @@ sheeter.AddTemplate(template2);
 sheeter.AddTemplates(template3, template4);
 ```
 
-## 設定浮水印
-由於Excel 沒有浮水印功能，所以是在以下兩個地方加入圖片，模擬浮水印：
-* Sheet Header Center：在列印模擬浮水印。
-* Sheet Background：在標準檢視模擬浮水印。
-
-加入的圖片會配合設定的頁面大小和頁面方向，將圖片置於中央，如果產出 Excel 後才去變更頁面大小和頁面方向，會導致浮水印位置偏移，頁面大小預設為 A4。
-
-```csharp
-sheeter.PageSettings.PaperSize = PaperSize.A4;
-sheeter.PageSettings.PageOrientation = PageOrientation.Portrait;
-sheeter.Watermark = image;
-```
-產生有旋轉文字且置中的浮水印圖片，有關圖片中心旋轉的內容可參閱「[C# 使用 GDI+ 實現新增中心旋轉(任意角度)的文字](https://www.itread01.com/article/1523253671.html)」。
-```csharp
-Image DrawTextImage(string text, Font font, Color textColor, Color backColor, int width, int height) {
-    Image img = new Bitmap(width, height);
-    using Graphics graphics = Graphics.FromImage(img);
-    
-    // 設定文字內容與樣式
-    SizeF textSize = drawing.MeasureString(text, font, 0, StringFormat.GenericTypographic);
-    float x = (width - textSize.Width) / 2;
-    float y = (height - textSize.Height) / 2;
-
-    // 旋轉圖片
-    graphics.TranslateTransform(x + textSize.Width / 2, y + textSize.Height / 2);
-    graphics.RotateTransform(-45);
-    graphics.TranslateTransform(-(x + textSize.Width / 2), -(y + textSize.Height / 2));
-
-    // 繪製背景
-    graphics.Clear(backColor);
-
-    // 建立文字筆刷
-    Brush textBrush = new SolidBrush(textColor);
-    graphics.DrawString(text, font, textBrush, x, y);
-    
-    graphics.Save();
-    return img;
-}
-```
-
 ## 其他教學
 * [入門教學](./%E5%85%A5%E9%96%80%E6%95%99%E5%AD%B8.md)
 * [Exporter](./Exporter.md)

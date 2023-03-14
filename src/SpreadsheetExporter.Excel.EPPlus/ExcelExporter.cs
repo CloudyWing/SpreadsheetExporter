@@ -55,10 +55,6 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
                 ? eOrientation.Portrait : eOrientation.Landscape;
             sheet.PrinterSettings.PaperSize = (ePaperSize)context.PageSettings.PaperSize.Value;
 
-            if (context.HasWatermark) {
-                SetSheetWatermark(sheet, context.Watermark);
-            }
-
             sheet.Calculate();
         }
 
@@ -157,11 +153,6 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
                     row.Height = pair.Value;
                 }
             }
-        }
-
-        private void SetSheetWatermark(ExcelWorksheet sheet, Image watermark) {
-            sheet.HeaderFooter.OddHeader.InsertPicture(watermark, PictureAlignment.Centered);
-            sheet.BackgroundImage.Image = watermark;
         }
     }
 }

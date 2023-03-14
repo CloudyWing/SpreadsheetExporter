@@ -11,7 +11,6 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             sheeter.SheetName.Should().Be(sheetName);
             sheeter.Password.Should().BeNull();
             sheeter.PageSettings.Should().BeEquivalentTo(new PageSettings());
-            sheeter.Watermark.Should().BeNull();
         }
 
         [Test]

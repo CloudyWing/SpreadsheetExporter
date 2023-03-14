@@ -145,19 +145,6 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
         }
 
         [Test]
-        [TestCase(1)]
-        [TestCase(69)]
-        public void GetPaperSizeFromPrinter_SetValidValue_ShouldReturnMatchingPaperSize(int value) {
-            PaperSize.GetPaperSizeFromPrinter(value).Should().NotBeNull();
-        }
-
-        [Test]
-        public void GetPaperSizeFromPrinter_SetInvalidValue_ShouldThrowKeyNotFoundException() {
-            Action act = () => PaperSize.GetPaperSizeFromPrinter(int.MaxValue);
-            act.Should().Throw<KeyNotFoundException>();
-        }
-
-        [Test]
         public void Equals_SamePaperSizes_ShouldReturnTrue() {
             PaperSize size1 = PaperSize.Letter;
             PaperSize size2 = PaperSize.Letter;

@@ -81,20 +81,6 @@ public System.Collections.Generic.IReadOnlyList<CloudyWing.SpreadsheetExporter.T
 #### Property Value
 [System.Collections.Generic.IReadOnlyList&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyList-1 'System.Collections.Generic.IReadOnlyList`1')[ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyList-1 'System.Collections.Generic.IReadOnlyList`1')  
 The templates.
-
-<a name='CloudyWing.SpreadsheetExporter.Sheeter.Watermark'></a>
-
-## Sheeter.Watermark Property
-
-Gets or sets the watermark.
-
-```csharp
-public System.Drawing.Image Watermark { get; set; }
-```
-
-#### Property Value
-[System.Drawing.Image](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Image 'System.Drawing.Image')  
-The watermark.
 ### Methods
 
 <a name='CloudyWing.SpreadsheetExporter.Sheeter.AddTemplate(CloudyWing.SpreadsheetExporter.Templates.ITemplate)'></a>
