@@ -117,6 +117,8 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             sheet.PrintSetup.PaperSize = (short)context.PageSettings.PaperSize;
 
             sheet.ForceFormulaRecalculation = true;
+
+            OnSheetCreated(new SheetCreatedEventArgs(sheet, context));
         }
 
         private void SetSheetCells(ISheet sheet, IReadOnlyList<Cell> cells) {

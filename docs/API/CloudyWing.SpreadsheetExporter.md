@@ -9,6 +9,7 @@
 | [ExporterBase](CloudyWing.SpreadsheetExporter.ExporterBase.md 'CloudyWing.SpreadsheetExporter.ExporterBase') | The exporter base. |
 | [PageSettings](CloudyWing.SpreadsheetExporter.PageSettings.md 'CloudyWing.SpreadsheetExporter.PageSettings') | The page settings. |
 | [PaperSize](CloudyWing.SpreadsheetExporter.PaperSize.md 'CloudyWing.SpreadsheetExporter.PaperSize') | The paper size. |
+| [SheetCreatedEventArgs](CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs.md 'CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs') | Event arguments after sheet create. |
 | [Sheeter](CloudyWing.SpreadsheetExporter.Sheeter.md 'CloudyWing.SpreadsheetExporter.Sheeter') | The sheeter. |
 | [SheeterContext](CloudyWing.SpreadsheetExporter.SheeterContext.md 'CloudyWing.SpreadsheetExporter.SheeterContext') | The sheeter context. |
 | [SpreadsheetExportedEventArgs](CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs.md 'CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs') | Event arguments after spreadsheet export. |

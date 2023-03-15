@@ -202,6 +202,23 @@ The index.
 [Sheeter](CloudyWing.SpreadsheetExporter.Sheeter.md 'CloudyWing.SpreadsheetExporter.Sheeter')  
 The sheeter.
 
+<a name='CloudyWing.SpreadsheetExporter.ExporterBase.OnSheetCreated(CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs)'></a>
+
+## ExporterBase.OnSheetCreated(SheetCreatedEventArgs) Method
+
+Raises the [SheetCreated](https://docs.microsoft.com/en-us/dotnet/api/SheetCreated 'SheetCreated') event.
+
+```csharp
+protected virtual void OnSheetCreated(CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs args);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.ExporterBase.OnSheetCreated(CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs).args'></a>
+
+`args` [SheetCreatedEventArgs](CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs.md 'CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs')
+
+The [SheetCreatedEventArgs](CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs.md 'CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs') instance containing the event data.
+
 <a name='CloudyWing.SpreadsheetExporter.ExporterBase.OnSpreadsheetExported(CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs)'></a>
 
 ## ExporterBase.OnSpreadsheetExported(SpreadsheetExportedEventArgs) Method
@@ -236,6 +253,19 @@ protected virtual void OnSpreadsheetExporting(CloudyWing.SpreadsheetExporter.Spr
 
 The [SpreadsheetExportingEventArgs](CloudyWing.SpreadsheetExporter.SpreadsheetExportingEventArgs.md 'CloudyWing.SpreadsheetExporter.SpreadsheetExportingEventArgs') instance containing the event data.
 ### Events
+
+<a name='CloudyWing.SpreadsheetExporter.ExporterBase.SheetCreatedEvent'></a>
+
+## ExporterBase.SheetCreatedEvent Event
+
+Occurs when [sheet created event].
+
+```csharp
+public event EventHandler<SheetCreatedEventArgs> SheetCreatedEvent;
+```
+
+#### Event Type
+[System.EventHandler&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.EventHandler-1 'System.EventHandler`1')[SheetCreatedEventArgs](CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs.md 'CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.EventHandler-1 'System.EventHandler`1')
 
 <a name='CloudyWing.SpreadsheetExporter.ExporterBase.SpreadsheetExportedEvent'></a>
 

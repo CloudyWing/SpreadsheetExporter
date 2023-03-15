@@ -7,6 +7,9 @@
 * DefaultBasicSheetName：設定新 Sheet 的預設基本名稱，建立 Sheeter 時，若未指定 Sheet 名稱，產生的預設名稱為 `DefaultBasicSheetName{Index}`，`{Index}` 為從 1 開始的流水號，預設值為 `工作表`。
 * SpreadsheetExportingEvent：設定產出 Spreadsheet 前觸發的事件，Debug 寫 Log 用。
 * SpreadsheetExportedEvent：設定產出 Spreadsheet 後觸發的事件，Debug 寫 Log 用。
+* SheetCreatedEvent：設定當 Exporter 建立 Sheet 完成時會觸發的事件，SheetCreatedEventArgs 包含以下參數：  
+  * SheetObject：Exporter 將其設定為所建立 Sheet 的類別，例如 NPOI 的 `ISheet` 或 EPPlus 的 `ExcelSheet`，以便使用該類別支援的功能。
+  * SheeterContext：用於建立 Sheet 的相關資訊。
 
 可以搭配 `SpreadsheetManager.SetExporter()` 設定 Exporter 的初始值。
 ```csharp

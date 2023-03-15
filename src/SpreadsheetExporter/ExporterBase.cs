@@ -15,6 +15,9 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <summary>Occurs when [spreadsheet exported event].</summary>
         public event EventHandler<SpreadsheetExportedEventArgs> SpreadsheetExportedEvent;
 
+        /// <summary>Occurs when [sheet created event].</summary>
+        public event EventHandler<SheetCreatedEventArgs> SheetCreatedEvent;
+
         /// <summary>Gets the content-type.</summary>
         /// <value>The content-type.</value>
         public abstract string ContentType { get; }
@@ -120,6 +123,12 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <param name="args">The <see cref="SpreadsheetExportedEventArgs" /> instance containing the event data.</param>
         protected virtual void OnSpreadsheetExported(SpreadsheetExportedEventArgs args) {
             SpreadsheetExportedEvent?.Invoke(this, args);
+        }
+
+        /// <summary>Raises the <see cref="E:SheetCreated" /> event.</summary>
+        /// <param name="args">The <see cref="SheetCreatedEventArgs" /> instance containing the event data.</param>
+        protected virtual void OnSheetCreated(SheetCreatedEventArgs args) {
+            SheetCreatedEvent?.Invoke(this, args);
         }
 
         /// <summary>Exports the spreadsheet file.</summary>

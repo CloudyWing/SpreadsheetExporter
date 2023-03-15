@@ -56,6 +56,8 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
             sheet.PrinterSettings.PaperSize = (ePaperSize)context.PageSettings.PaperSize.Value;
 
             sheet.Calculate();
+
+            OnSheetCreated(new SheetCreatedEventArgs(sheet, context));
         }
 
         private void SetSheetCells(ExcelWorksheet sheet, IReadOnlyList<Cell> cells) {
