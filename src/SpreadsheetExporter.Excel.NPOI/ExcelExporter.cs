@@ -16,12 +16,17 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
         private IWorkbook workbook;
         private readonly IDictionary<CellStyle, ICellStyle> cellStyles = new Dictionary<CellStyle, ICellStyle>();
         private readonly IDictionary<CellFont, IFont> fonts = new Dictionary<CellFont, IFont>();
-        private static readonly IDictionary<ExcelFormat, string> filenameExtensionMap = new Dictionary<ExcelFormat, string> {
+        private static readonly IDictionary<ExcelFormat, string> filenameExtensionMaps = new Dictionary<ExcelFormat, string> {
             [ExcelFormat.ExcelBinaryFileFormat] = ".xls",
             [ExcelFormat.OfficeOpenXmlDocument] = ".xlsx"
         };
 
-        private readonly Dictionary<HorizontalAlignment, global::NPOI.SS.UserModel.HorizontalAlignment> horizontalAlignmentMap = new() {
+        private static readonly IDictionary<ExcelFormat, string> contentTypeMaps = new Dictionary<ExcelFormat, string> {
+            [ExcelFormat.ExcelBinaryFileFormat] = "application/vnd.ms-excel",
+            [ExcelFormat.OfficeOpenXmlDocument] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        };
+
+        private readonly Dictionary<HorizontalAlignment, global::NPOI.SS.UserModel.HorizontalAlignment> horizontalAlignmentMaps = new() {
             [HorizontalAlignment.General] = global::NPOI.SS.UserModel.HorizontalAlignment.General,
             [HorizontalAlignment.Left] = global::NPOI.SS.UserModel.HorizontalAlignment.Left,
             [HorizontalAlignment.Center] = global::NPOI.SS.UserModel.HorizontalAlignment.Center,
@@ -29,7 +34,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             [HorizontalAlignment.Justify] = global::NPOI.SS.UserModel.HorizontalAlignment.Justify
         };
 
-        private readonly Dictionary<VerticalAlignment, global::NPOI.SS.UserModel.VerticalAlignment> verticalAlignmentMap = new() {
+        private readonly Dictionary<VerticalAlignment, global::NPOI.SS.UserModel.VerticalAlignment> verticalAlignmentMaps = new() {
             [VerticalAlignment.Top] = global::NPOI.SS.UserModel.VerticalAlignment.Top,
             [VerticalAlignment.Middle] = global::NPOI.SS.UserModel.VerticalAlignment.Center,
             [VerticalAlignment.Bottom] = global::NPOI.SS.UserModel.VerticalAlignment.Bottom
@@ -60,10 +65,10 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
         public bool IsClosedNotImplementedException { get; set; }
 
         /// <inheritdoc/>
-        public override string ContentType => "application/ms-excel";
+        public override string ContentType => contentTypeMaps[ExcelFormat];
 
         /// <inheritdoc/>
-        public override string FileNameExtension => filenameExtensionMap[ExcelFormat];
+        public override string FileNameExtension => filenameExtensionMaps[ExcelFormat];
 
         /// <inheritdoc/>
         protected override byte[] ExecuteExport(IEnumerable<SheeterContext> contexts) {
@@ -154,8 +159,8 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             }
             excelCellStyle = workbook.CreateCellStyle();
 
-            excelCellStyle.Alignment = horizontalAlignmentMap[cellStyle.HorizontalAlignment];
-            excelCellStyle.VerticalAlignment = verticalAlignmentMap[cellStyle.VerticalAlignment];
+            excelCellStyle.Alignment = horizontalAlignmentMaps[cellStyle.HorizontalAlignment];
+            excelCellStyle.VerticalAlignment = verticalAlignmentMaps[cellStyle.VerticalAlignment];
 
             if (cellStyle.HasBorder) {
                 excelCellStyle.BorderBottom = BorderStyle.Thin;

@@ -7,7 +7,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus.Tests {
         public void ContentType_ShouldReturnExpectedContentType() {
             var exporter = new ExcelExporter();
 
-            exporter.ContentType.Should().Be("application/ms-excel");
+            exporter.ContentType.Should().Be("application/vnd.ms-excel");
         }
 
         [Test]

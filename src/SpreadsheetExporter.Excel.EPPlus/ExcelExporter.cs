@@ -22,7 +22,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
         };
 
         /// <inheritdoc/>
-        public override string ContentType => "application/ms-excel";
+        public override string ContentType => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
         /// <inheritdoc/>
         public override string FileNameExtension => ".xlsx";

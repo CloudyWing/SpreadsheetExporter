@@ -4,8 +4,8 @@ using NPOI.SS.UserModel;
 namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
     internal class ExcelExporterTests {
         [Test]
-        [TestCase(ExcelFormat.ExcelBinaryFileFormat, "application/ms-excel")]
-        [TestCase(ExcelFormat.OfficeOpenXmlDocument, "application/ms-excel")]
+        [TestCase(ExcelFormat.ExcelBinaryFileFormat, "application/vnd.ms-excel")]
+        [TestCase(ExcelFormat.OfficeOpenXmlDocument, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")]
         public void ContentType_ShouldReturnExpectedValue(ExcelFormat format, string contentType) {
             var exporter = new ExcelExporter(format);
 
