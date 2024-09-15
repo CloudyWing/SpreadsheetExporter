@@ -10,7 +10,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
     public class GridTemplate : ITemplate {
         private readonly IList<CellCollection> rows = new List<CellCollection>();
         private readonly IList<Point> points = new List<Point>();
-        private readonly IDictionary<int, double> rowHeights = new Dictionary<int, double>();
+        private readonly IDictionary<int, double?> rowHeights = new Dictionary<int, double?>();
 
         /// <summary>Gets the column span.</summary>
         /// <value>The column span.</value>
@@ -25,7 +25,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         /// </summary>
         /// <param name="height">The height.</param>
         /// <returns>The self.</returns>
-        public GridTemplate CreateRow(double height = 16.5d) {
+        public GridTemplate CreateRow(double? height = null) {
             // 避免建立最後一筆 Row，卻沒加入 Cell 導致用作標算列數會不正確，所以加一個 -x 座標
             points.Add(new Point(-1, rows.Count));
             rowHeights.Add(rows.Count, height);
@@ -107,7 +107,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         /// <inheritdoc/>
         public TemplateContext GetContext() {
             return new TemplateContext(
-                GetCells(), RowSpan, new ReadOnlyDictionary<int, double>(rowHeights)
+                GetCells(), RowSpan, new ReadOnlyDictionary<int, double?>(rowHeights)
             );
         }
 

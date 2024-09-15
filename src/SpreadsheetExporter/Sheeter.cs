@@ -16,6 +16,10 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <value>The name of the sheet.</value>
         public string SheetName { get; set; }
 
+        /// <summary>Gets or sets the default height of the row.</summary>
+        /// <value>The default height of the row.</value>
+        public double? DefaultRowHeight { get; set; }
+
         /// <summary>Gets or sets the password.</summary>
         /// <value>The password.</value>
         public string Password { get; set; }

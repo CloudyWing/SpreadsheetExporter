@@ -35,25 +35,33 @@ namespace CloudyWing.SpreadsheetExporter {
         ///   <c>true</c> if this instance has password; otherwise, <c>false</c>.</value>
         public bool HasPassword => !string.IsNullOrEmpty(Password);
 
+        /// <summary>
+        /// Gets or sets the default font.</summary>
+        /// <value>The default font.</value>
+        public CellFont? DefaultFont { get; set; }
+
         /// <summary>Gets or sets the default basic name of the sheet.</summary>
         /// <value>The default basic name of the sheet.</value>
         public string DefaultBasicSheetName { get; set; } = "工作表";
 
         /// <summary>Gets the last sheeter. When there is no sheeter, create a sheeter.</summary>
         /// <value>The last sheeter.</value>
-        public Sheeter LastSheeter => sheeters.LastOrDefault() ?? CreateSheeter(null);
+        public Sheeter LastSheeter => sheeters.LastOrDefault() ?? CreateSheeter();
 
         /// <summary>Creates the sheeter.</summary>
         /// <param name="sheetName">Name of the sheet.</param>
+        /// <param name="defaultRowHeight">Default height of the row.</param>
         /// <returns>The sheeter.</returns>
-        public Sheeter CreateSheeter(string sheetName = null) {
+        public Sheeter CreateSheeter(string sheetName = null, double? defaultRowHeight = null) {
             if (string.IsNullOrWhiteSpace(sheetName)) {
                 sheetName = GetDefaultSheetName();
             } else if (IsSheetNameExists(sheetName)) {
                 sheetName = FixSheetName(sheetName);
             }
 
-            Sheeter sheeter = new(sheetName);
+            Sheeter sheeter = new(sheetName) {
+                DefaultRowHeight = defaultRowHeight
+            };
             sheeters.Add(sheeter);
 
             return sheeter;

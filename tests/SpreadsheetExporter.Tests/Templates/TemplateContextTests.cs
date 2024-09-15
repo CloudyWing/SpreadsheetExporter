@@ -18,7 +18,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates {
             };
             int template1RowSpan = 2;
             ITemplate template1 = Substitute.For<ITemplate>();
-            template1.GetContext().Returns(new TemplateContext(new[] { cell11, cell12 }, template1RowSpan, new Dictionary<int, double> { { 0, 10 } }));
+            template1.GetContext().Returns(new TemplateContext(new[] { cell11, cell12 }, template1RowSpan, new Dictionary<int, double?> { { 0, 10 } }));
 
             Cell cell21 = new Cell {
                 Point = new Point(0, 0),
@@ -31,7 +31,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates {
                 ValueGenerator = (x, y) => "D3"
             };
             ITemplate template2 = Substitute.For<ITemplate>();
-            template2.GetContext().Returns(new TemplateContext(new[] { cell21, cell22 }, 3, new Dictionary<int, double> { { 0, 20 } }));
+            template2.GetContext().Returns(new TemplateContext(new[] { cell21, cell22 }, 3, new Dictionary<int, double?> { { 0, 20 } }));
 
             TemplateContext context = TemplateContext.Create(new[] { template1, template2 });
 

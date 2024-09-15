@@ -25,11 +25,11 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
 
         /// <summary>Gets or sets the height of the header.</summary>
         /// <value>The height of the header.</value>
-        public double HeaderHeight { get; set; } = 16.5d;
+        public double? HeaderHeight { get; set; }
 
         /// <summary>Gets or sets the height of the record.</summary>
         /// <value>The height of the record.</value>
-        public double RecordHeight { get; set; } = 16.5d;
+        public double? RecordHeight { get; set; }
 
         /// <summary>Gets the column span.</summary>
         /// <value>The column span.</value>
@@ -85,8 +85,8 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return GetHearderCells(Columns).Union(GetRecordCells());
         }
 
-        private Dictionary<int, double> GetRowHeights() {
-            Dictionary<int, double> dic = new();
+        private Dictionary<int, double?> GetRowHeights() {
+            Dictionary<int, double?> dic = new();
             int i;
 
             for (i = 0; i < Columns.RowSpan; i++) {

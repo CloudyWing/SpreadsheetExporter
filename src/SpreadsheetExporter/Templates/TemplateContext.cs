@@ -11,7 +11,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates {
         /// <param name="rowSpan">The row span.</param>
         /// <param name="rowHeights">The row heights.</param>
         public TemplateContext(
-            IEnumerable<Cell> cells, int rowSpan, IReadOnlyDictionary<int, double> rowHeights
+            IEnumerable<Cell> cells, int rowSpan, IReadOnlyDictionary<int, double?> rowHeights
         ) {
             Cells = cells.ToList().AsReadOnly();
             RowSpan = rowSpan;
@@ -28,7 +28,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates {
 
         /// <summary>Gets the height of rows.</summary>
         /// <value>The height of rows.</value>
-        public IReadOnlyDictionary<int, double> RowHeights { get; }
+        public IReadOnlyDictionary<int, double?> RowHeights { get; }
 
         internal static TemplateContext Create(IEnumerable<ITemplate> templates) {
             if (templates.Count() == 1) {
@@ -36,12 +36,12 @@ namespace CloudyWing.SpreadsheetExporter.Templates {
             }
 
             List<Cell> cells = new();
-            Dictionary<int, double> rowHeights = new();
+            Dictionary<int, double?> rowHeights = new();
             int rowSpan = 0;
             int rowIndex = 0;
 
             foreach (TemplateContext context in templates.Select(x => x.GetContext())) {
-                foreach (KeyValuePair<int, double> pair in context.RowHeights) {
+                foreach (KeyValuePair<int, double?> pair in context.RowHeights) {
                     rowHeights.Add(rowIndex + pair.Key, pair.Value);
                 }
 

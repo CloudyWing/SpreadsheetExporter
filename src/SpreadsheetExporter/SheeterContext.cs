@@ -10,6 +10,7 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <param name="sheeter">The sheeter.</param>
         public SheeterContext(Sheeter sheeter) {
             SheetName = sheeter.SheetName;
+            DefaultRowHeight = sheeter.DefaultRowHeight;
             TemplateContext templateContext = TemplateContext.Create(sheeter.Templates);
             Cells = templateContext.Cells;
             RowHeights = templateContext.RowHeights.AsReadOnly();
@@ -22,6 +23,10 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <value>The name of the sheet.</value>
         public string SheetName { get; }
 
+        /// <summary>Gets or sets the default height of the row.</summary>
+        /// <value>The default height of the row.</value>
+        public double? DefaultRowHeight { get; set; }
+
         /// <summary>Gets the cells.</summary>
         /// <value>The cells.</value>
         public IReadOnlyList<Cell> Cells { get; }
@@ -32,7 +37,7 @@ namespace CloudyWing.SpreadsheetExporter {
 
         /// <summary>Gets the height of rows.</summary>
         /// <value>The height of rows.</value>
-        public IReadOnlyDictionary<int, double> RowHeights { get; private set; }
+        public IReadOnlyDictionary<int, double?> RowHeights { get; private set; }
 
         /// <summary>Gets the password.</summary>
         /// <value>The password.</value>

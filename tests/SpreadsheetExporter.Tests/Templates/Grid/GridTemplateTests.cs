@@ -101,7 +101,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             context.RowSpan.Should().Be(3);
             context.RowHeights.Count.Should().Be(2);
             context.RowHeights[0].Should().Be(20);
-            context.RowHeights[1].Should().Be(16.5);
+            context.RowHeights[1].Should().Be(null);
         }
     }
 }
