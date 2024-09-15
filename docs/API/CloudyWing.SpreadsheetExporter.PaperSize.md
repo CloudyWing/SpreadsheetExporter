@@ -986,6 +986,55 @@ public int Width { get; }
 The width.
 ### Methods
 
+<a name='CloudyWing.SpreadsheetExporter.PaperSize.CompareTo(object)'></a>
+
+## PaperSize.CompareTo(object) Method
+
+Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
+
+```csharp
+public int CompareTo(object obj);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.PaperSize.CompareTo(object).obj'></a>
+
+`obj` [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object')
+
+An object to compare with this instance.
+
+Implements [CompareTo(object)](https://docs.microsoft.com/en-us/dotnet/api/System.IComparable.CompareTo#System_IComparable_CompareTo_System_Object_ 'System.IComparable.CompareTo(System.Object)')
+
+#### Returns
+[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')  
+A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes [obj](CloudyWing.SpreadsheetExporter.PaperSize.md#CloudyWing.SpreadsheetExporter.PaperSize.CompareTo(object).obj 'CloudyWing.SpreadsheetExporter.PaperSize.CompareTo(object).obj') in the sort order. Zero This instance occurs in the same position in the sort order as [obj](CloudyWing.SpreadsheetExporter.PaperSize.md#CloudyWing.SpreadsheetExporter.PaperSize.CompareTo(object).obj 'CloudyWing.SpreadsheetExporter.PaperSize.CompareTo(object).obj'). Greater than zero This instance follows [obj](CloudyWing.SpreadsheetExporter.PaperSize.md#CloudyWing.SpreadsheetExporter.PaperSize.CompareTo(object).obj 'CloudyWing.SpreadsheetExporter.PaperSize.CompareTo(object).obj') in the sort order.
+
+#### Exceptions
+
+[System.ArgumentException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentException 'System.ArgumentException')  
+[obj](CloudyWing.SpreadsheetExporter.PaperSize.md#CloudyWing.SpreadsheetExporter.PaperSize.CompareTo(object).obj 'CloudyWing.SpreadsheetExporter.PaperSize.CompareTo(object).obj') is not the same type as this instance.
+
+<a name='CloudyWing.SpreadsheetExporter.PaperSize.Equals(object)'></a>
+
+## PaperSize.Equals(object) Method
+
+Determines whether the specified [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') is equal to the current [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object').
+
+```csharp
+public override bool Equals(object obj);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.PaperSize.Equals(object).obj'></a>
+
+`obj` [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object')
+
+The [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') to compare with the current [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object').
+
+#### Returns
+[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
+true if the specified [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') is equal to the current [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object'); otherwise, false.
+
 <a name='CloudyWing.SpreadsheetExporter.PaperSize.GetAll()'></a>
 
 ## PaperSize.GetAll() Method
@@ -999,6 +1048,20 @@ public static System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExpor
 #### Returns
 [System.Collections.Generic.IEnumerable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')[PaperSize](CloudyWing.SpreadsheetExporter.PaperSize.md 'CloudyWing.SpreadsheetExporter.PaperSize')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IEnumerable-1 'System.Collections.Generic.IEnumerable`1')  
 The all paper sizes.
+
+<a name='CloudyWing.SpreadsheetExporter.PaperSize.GetHashCode()'></a>
+
+## PaperSize.GetHashCode() Method
+
+Serves as a hash function for a particular type.
+
+```csharp
+public override int GetHashCode();
+```
+
+#### Returns
+[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')  
+A hash code for the current [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object').
 
 <a name='CloudyWing.SpreadsheetExporter.PaperSize.ToString()'></a>
 

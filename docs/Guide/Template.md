@@ -130,7 +130,7 @@ lastChildColumns = template.Columns.Last().ChildColumns
 | ----- | ---- | ----- | ---- | ----- | ---- |
 |              |           Group2            |
 |    Group1    | ------------ | ------------ |
-| 		       | Child Group1 | Child Group2 |
+|              | Child Group1 | Child Group2 |
 | ----- | ---- | ----- | ---- | ----- | ---- |
 | Index | Name | Index | Name | Index | Name |
 | ----- | ---- | ----- | ---- | ----- | ---- |

@@ -658,6 +658,38 @@ The field style generator. The dafault is `(context) => SpreadsheetManager.Defau
 [CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
 The self.
 
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.ClearItems()'></a>
+
+## DataColumnCollection<T>.ClearItems() Method
+
+Removes all elements from the [System.Collections.ObjectModel.Collection&lt;&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.ObjectModel.Collection-1 'System.Collections.ObjectModel.Collection`1').
+
+```csharp
+protected override void ClearItems();
+```
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.RemoveItem(int)'></a>
+
+## DataColumnCollection<T>.RemoveItem(int) Method
+
+Removes the element at the specified index of the [System.Collections.ObjectModel.Collection&lt;&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.ObjectModel.Collection-1 'System.Collections.ObjectModel.Collection`1').
+
+```csharp
+protected override void RemoveItem(int index);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.RemoveItem(int).index'></a>
+
+`index` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+
+The zero-based index of the element to remove.
+
+#### Exceptions
+
+[System.ArgumentOutOfRangeException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentOutOfRangeException 'System.ArgumentOutOfRangeException')  
+[index](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.RemoveItem(int).index 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.RemoveItem(int).index') is less than zero.-or-[index](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.RemoveItem(int).index 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.RemoveItem(int).index') is equal to or greater than [System.Collections.ObjectModel.Collection&lt;&gt;.Count](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.ObjectModel.Collection-1.Count 'System.Collections.ObjectModel.Collection`1.Count').
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.ResetColumnsPoint(System.Drawing.Point)'></a>
 
 ## DataColumnCollection<T>.ResetColumnsPoint(Point) Method

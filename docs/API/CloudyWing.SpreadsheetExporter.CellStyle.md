@@ -370,6 +370,41 @@ if set to `true` [wrap text].
 #### Returns
 [CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')  
 The cloned new cell style.
+
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.Equals(object)'></a>
+
+## CellStyle.Equals(object) Method
+
+Indicates whether this instance and a specified object are equal.
+
+```csharp
+public override bool Equals(object obj);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.Equals(object).obj'></a>
+
+`obj` [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object')
+
+Another object to compare to.
+
+#### Returns
+[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
+true if [obj](CloudyWing.SpreadsheetExporter.CellStyle.md#CloudyWing.SpreadsheetExporter.CellStyle.Equals(object).obj 'CloudyWing.SpreadsheetExporter.CellStyle.Equals(object).obj') and this instance are the same type and represent the same value; otherwise, false.
+
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.GetHashCode()'></a>
+
+## CellStyle.GetHashCode() Method
+
+Returns the hash code for this instance.
+
+```csharp
+public override int GetHashCode();
+```
+
+#### Returns
+[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')  
+A 32-bit signed integer that is the hash code for this instance.
 ### Operators
 
 <a name='CloudyWing.SpreadsheetExporter.CellStyle.op_Equality(CloudyWing.SpreadsheetExporter.CellStyle,CloudyWing.SpreadsheetExporter.CellStyle)'></a>
