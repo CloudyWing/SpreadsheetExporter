@@ -18,7 +18,7 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 
 ## ExcelExporter(ExcelFormat) Constructor
 
-Initializes a new instance of the [ExcelExporter](CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.md 'CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter') class.
+The excel exporter, using npoi.
 
 ```csharp
 public ExcelExporter(CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelFormat excelFormat=CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelFormat.OfficeOpenXmlDocument);
@@ -30,6 +30,9 @@ public ExcelExporter(CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelFormat excel
 `excelFormat` [ExcelFormat](CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelFormat.md 'CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelFormat')
 
 The excel format.
+
+### See Also
+- [CloudyWing.SpreadsheetExporter.ExporterBase](https://docs.microsoft.com/en-us/dotnet/api/CloudyWing.SpreadsheetExporter.ExporterBase 'CloudyWing.SpreadsheetExporter.ExporterBase')
 ### Properties
 
 <a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.ContentType'></a>

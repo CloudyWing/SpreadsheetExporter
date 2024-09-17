@@ -10,9 +10,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
     /// The grid template. Create cell information using <c>CreateRow()</c> and <c>CreateCell()</c>.
     /// </summary>
     public class GridTemplate : ITemplate {
-        private readonly IList<CellCollection> rows = new List<CellCollection>();
-        private readonly IList<Point> points = new List<Point>();
-        private readonly IDictionary<int, double?> rowHeights = new Dictionary<int, double?>();
+        private readonly List<CellCollection> rows = [];
+        private readonly HashSet<Point> points = [];
+        private readonly Dictionary<int, double?> rowHeights = [];
 
         /// <summary>
         /// Gets the column span.
@@ -60,25 +60,18 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         public GridTemplate CreateCell(
             object value, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
         ) {
-            if (columnSpan <= 0) {
-                throw new ArgumentOutOfRangeException(nameof(columnSpan), "Must be greater than 0.");
-            }
-            if (rowSpan <= 0) {
-                throw new ArgumentOutOfRangeException(nameof(rowSpan), "Must be greater than 0.");
-            }
+            ValidateCellParameters(columnSpan, rowSpan);
             cellStyle ??= SpreadsheetManager.DefaultCellStyles.GridCellStyle;
 
             if (rows.Count == 0) {
                 CreateRow();
             }
 
-            CellCollection lastRow = rows.Last();
-            Cell cell = new() {
+            AddCell(new Cell {
                 ValueGenerator = (cellIndex, rowIndex) => value,
                 Size = new Size(columnSpan, rowSpan),
                 CellStyleGenerator = (cellIndex, rowIndex) => (CellStyle)cellStyle
-            };
-            lastRow.Add(cell);
+            });
 
             return this;
         }
@@ -97,27 +90,34 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         public GridTemplate CreateCell(
             Func<int, int, string> formulaGenerator, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
         ) {
-            if (columnSpan <= 0) {
-                throw new ArgumentOutOfRangeException(nameof(columnSpan), "Must be greater than 0.");
-            }
-            if (rowSpan <= 0) {
-                throw new ArgumentOutOfRangeException(nameof(rowSpan), "Must be greater than 0.");
-            }
+            ValidateCellParameters(columnSpan, rowSpan);
             cellStyle ??= SpreadsheetManager.DefaultCellStyles.GridCellStyle;
 
             if (rows.Count == 0) {
                 CreateRow();
             }
 
-            CellCollection lastRow = rows.Last();
-            Cell cell = new() {
+            AddCell(new Cell {
                 Size = new Size(columnSpan, rowSpan),
                 CellStyleGenerator = (cellIndex, rowIndex) => (CellStyle)cellStyle,
                 FormulaGenerator = formulaGenerator
-            };
-            lastRow.Add(cell);
+            });
 
             return this;
+        }
+
+        private static void ValidateCellParameters(int columnSpan, int rowSpan) {
+            if (columnSpan <= 0) {
+                throw new ArgumentOutOfRangeException(nameof(columnSpan), "Must be greater than 0.");
+            }
+            if (rowSpan <= 0) {
+                throw new ArgumentOutOfRangeException(nameof(rowSpan), "Must be greater than 0.");
+            }
+        }
+
+        private void AddCell(Cell cell) {
+            CellCollection lastRow = rows.Last();
+            lastRow.Add(cell);
         }
 
         /// <inheritdoc/>
@@ -137,7 +137,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
 
         private class CellCollection : IEnumerable<Cell>, IEnumerable {
             private readonly GridTemplate grid;
-            private readonly IList<Cell> items = new List<Cell>();
+            private readonly List<Cell> items = [];
 
             internal CellCollection(GridTemplate grid) {
                 this.grid = grid;
@@ -148,7 +148,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
 
                 item.Point = new Point(0, grid.rows.Count - 1);
 
-                while (IsPointExists(item.Point)) {
+                while (grid.points.Contains(item.Point)) {
                     item.Point += new Size(1, 0);
                 }
                 grid.points.Add(item.Point);
@@ -160,16 +160,11 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
                             continue;
                         }
                         Point point = item.Point + new Size(colOffset, rowOffset);
-                        if (IsPointExists(point)) {
-                            throw new ArgumentException($"The point ({colOffset}, {rowOffset}) already exist.");
+                        if (!grid.points.Add(point)) {
+                            throw new ArgumentException($"The point ({colOffset}, {rowOffset}) already exists.");
                         }
-                        grid.points.Add(point);
                     }
                 }
-            }
-
-            private bool IsPointExists(Point point) {
-                return grid.points.Contains(point);
             }
 
             IEnumerator<Cell> IEnumerable<Cell>.GetEnumerator() {

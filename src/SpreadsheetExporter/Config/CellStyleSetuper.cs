@@ -4,21 +4,15 @@ namespace CloudyWing.SpreadsheetExporter.Config {
     /// <summary>
     /// The cell style setuper.
     /// </summary>
-    public sealed class CellStyleSetuper {
-        private readonly CellStyleConfiguration configuration;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CellStyleSetuper" /> class.
-        /// </summary>
-        /// <param name="configuration">
-        /// The configuration.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// configuration
-        /// </exception>
-        public CellStyleSetuper(CellStyleConfiguration configuration) {
-            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-        }
+    /// <param name="configuration">
+    /// The configuration.
+    /// </param>
+    /// <exception cref="ArgumentNullException">
+    /// configuration
+    /// </exception>
+    public sealed class CellStyleSetuper(CellStyleConfiguration configuration) {
+        private readonly CellStyleConfiguration configuration = configuration
+            ?? throw new ArgumentNullException(nameof(configuration));
 
         /// <summary>
         /// Gets or sets the cell style.

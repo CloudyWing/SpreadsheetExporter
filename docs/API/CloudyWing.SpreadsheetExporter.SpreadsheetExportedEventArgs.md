@@ -10,13 +10,18 @@ public class SpreadsheetExportedEventArgs
 ```
 
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; SpreadsheetExportedEventArgs
+
+#### Exceptions
+
+[System.ArgumentNullException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentNullException 'System.ArgumentNullException')  
+sheeterContexts
 ### Constructors
 
 <a name='CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs.SpreadsheetExportedEventArgs(System.Collections.Generic.IEnumerable_CloudyWing.SpreadsheetExporter.SheeterContext_)'></a>
 
 ## SpreadsheetExportedEventArgs(IEnumerable<SheeterContext>) Constructor
 
-Initializes a new instance of the [SpreadsheetExportedEventArgs](CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs.md 'CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs') class.
+Event arguments after spreadsheet export.
 
 ```csharp
 public SpreadsheetExportedEventArgs(System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.SheeterContext> sheeterContexts);

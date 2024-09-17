@@ -19,14 +19,14 @@ The type of the record.
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; RecordContext<T>
 
 Derived  
-&#8627; [FieldContext&lt;TRecoed,TField&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecoed,TField_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TRecoed,TField>')
+&#8627; [FieldContext&lt;TRecord,TField&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecord,TField_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TRecord,TField>')
 ### Constructors
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.RecordContext(int,int,T)'></a>
 
 ## RecordContext(int, int, T) Constructor
 
-Initializes a new instance of the [RecordContext&lt;T&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>') class.
+The record context.
 
 ```csharp
 public RecordContext(int cellIndex, int rowIndex, T record);

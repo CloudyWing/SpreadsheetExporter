@@ -10,13 +10,20 @@ public class SheetCreatedEventArgs
 ```
 
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; SheetCreatedEventArgs
+
+#### Exceptions
+
+[System.ArgumentNullException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentNullException 'System.ArgumentNullException')  
+sheetObject  
+            or  
+            sheeterContext
 ### Constructors
 
 <a name='CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs.SheetCreatedEventArgs(object,CloudyWing.SpreadsheetExporter.SheeterContext)'></a>
 
 ## SheetCreatedEventArgs(object, SheeterContext) Constructor
 
-Initializes a new instance of the [SpreadsheetExportedEventArgs](CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs.md 'CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs') class.
+Event arguments after sheet create.
 
 ```csharp
 public SheetCreatedEventArgs(object sheetObject, CloudyWing.SpreadsheetExporter.SheeterContext sheeterContext);

@@ -79,10 +79,12 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
         [Test]
         public void CreateSheeter_WhenSheetNameIsProvided_ShouldCreateNewSheeter() {
             string sheetName = "Sheet1";
+            double rowHeight = 20D;
 
-            Sheeter newSheeter = exporter!.CreateSheeter(sheetName);
+            Sheeter newSheeter = exporter!.CreateSheeter(sheetName, rowHeight);
 
             newSheeter.SheetName.Should().Be(sheetName);
+            newSheeter.DefaultRowHeight.Should().Be(rowHeight);
         }
 
         [Test]
@@ -167,7 +169,6 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
             fileStream.Read(fileBytes, 0, fileBytes.Length);
             fileBytes.Should().BeEquivalentTo(fakeExportResult);
         }
-
 
         [TearDown]
         public void TearDown() {

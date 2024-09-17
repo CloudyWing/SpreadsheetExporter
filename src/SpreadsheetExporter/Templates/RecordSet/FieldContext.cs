@@ -4,29 +4,21 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
     /// <summary>
     /// The field context.
     /// </summary>
-    /// <typeparam name="TRecoed">The type of the recoed.</typeparam>
+    /// <typeparam name="TRecord">The type of the record.</typeparam>
     /// <typeparam name="TField">The type of the field.</typeparam>
-    public class FieldContext<TRecoed, TField> : RecordContext<TRecoed> {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FieldContext{TRecoed, TField}" /> class.
-        /// </summary>
-        /// <param name="recordContext">The record context.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        /// <exception cref="ArgumentNullException">key</exception>
-        public FieldContext(RecordContext<TRecoed> recordContext, string key, TField value)
-            : base(recordContext.CellIndex, recordContext.RowIndex, recordContext.Record) {
-            Key = key ?? throw new ArgumentNullException(nameof(key));
-            Value = value;
-        }
-
+    /// <param name="recordContext">The record context.</param>
+    /// <param name="key">The key.</param>
+    /// <param name="value">The value.</param>
+    /// <exception cref="ArgumentNullException">key</exception>
+    public class FieldContext<TRecord, TField>(RecordContext<TRecord> recordContext, string key, TField value)
+        : RecordContext<TRecord>(recordContext.CellIndex, recordContext.RowIndex, recordContext.Record) {
         /// <summary>
         /// Gets the key.
         /// </summary>
         /// <value>
         /// The key.
         /// </value>
-        public string Key { get; }
+        public string Key { get; } = key ?? throw new ArgumentNullException(nameof(key));
 
         /// <summary>
         /// Gets the value.
@@ -34,6 +26,6 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         /// <value>
         /// The value.
         /// </value>
-        public TField Value { get; }
+        public TField Value { get; } = value;
     }
 }

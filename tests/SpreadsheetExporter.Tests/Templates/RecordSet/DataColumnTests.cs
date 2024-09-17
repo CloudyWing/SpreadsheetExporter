@@ -6,8 +6,8 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
         private DataColumn<Record, int>? columnWithEmptyKey;
         private DataColumn<Record, int>? columnWithCorrectKey;
         private DataColumn<Record, int>? columnWithIncorrectKey;
-        private readonly RecordContext<Record> context = new RecordContext<Record>(0, 0, new Record { Id = 0 });
-        private readonly CellStyle cellStyle = new CellStyle();
+        private readonly RecordContext<Record> context = new(0, 0, new Record { Id = 0 });
+        private readonly CellStyle cellStyle = new();
 
         [SetUp]
         public void SetUp() {
@@ -40,7 +40,6 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
         [Test]
         public void GetFieldValue_FieldKeyIsIncorrectAndFieldValueGeneratorIsNotNull_ThrowArgumentException() {
             string expected = "ExpectedResult";
-            Func<FieldContext<Record, int>, string> generator = (x) => expected;
             Func<object> act = () => columnWithIncorrectKey!.GetFieldValue(context).Should().Be(expected);
 
             act.Should().Throw<ArgumentException>();
@@ -49,9 +48,9 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
         [Test]
         public void GetFieldValue_FieldValueGeneratorIsNotNull_ShouldReturnGeneratedValue() {
             string expected = "ExpectedResult";
-            Func<FieldContext<Record, int>, string> generator = (x) => expected;
-            columnWithEmptyKey!.FieldValueGenerator = generator;
-            columnWithCorrectKey!.FieldValueGenerator = generator;
+            string generator(FieldContext<Record, int> x) => expected;
+            columnWithEmptyKey!.FieldValueGenerator = (Func<FieldContext<Record, int>, string>)generator;
+            columnWithCorrectKey!.FieldValueGenerator = (Func<FieldContext<Record, int>, string>)generator;
 
             columnWithEmptyKey!.GetFieldValue(context).Should().Be(expected);
             columnWithCorrectKey!.GetFieldValue(context).Should().Be(expected);
@@ -93,7 +92,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
         [Test]
         public void GetGetFieldStyle_FieldKeyIsIncorrectAndFieldStyleGeneratorIsNotNull_ThrowArgumentException() {
             CellStyle expected = cellStyle;
-            Func<FieldContext<Record, int>, CellStyle> generator = (x) => cellStyle;
+            CellStyle generator(FieldContext<Record, int> x) => cellStyle;
             columnWithIncorrectKey!.FieldStyleGenerator = generator;
             Func<object> act = () => columnWithIncorrectKey!.GetFieldStyle(context).Should().Be(expected);
 
@@ -103,7 +102,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
         [Test]
         public void GetGetFieldStyle_FieldStyleGeneratorIsNotNull_ShouldReturnGeneratedStyle() {
             CellStyle expected = cellStyle;
-            Func<FieldContext<Record, int>, CellStyle> generator = (x) => cellStyle;
+            CellStyle generator(FieldContext<Record, int> x) => cellStyle;
             columnWithEmptyKey!.FieldStyleGenerator = generator;
             columnWithCorrectKey!.FieldStyleGenerator = generator;
 

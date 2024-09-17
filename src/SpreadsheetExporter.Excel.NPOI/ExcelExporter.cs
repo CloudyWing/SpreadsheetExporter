@@ -14,7 +14,8 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
     /// The excel exporter, using npoi.
     /// </summary>
     /// <seealso cref="ExporterBase" />
-    public sealed class ExcelExporter : ExporterBase {
+    /// <param name="excelFormat">The excel format.</param>
+    public sealed class ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOpenXmlDocument) : ExporterBase {
         private IWorkbook workbook;
         private readonly IDictionary<CellStyle, ICellStyle> cellStyles = new Dictionary<CellStyle, ICellStyle>();
         private readonly IDictionary<CellFont, IFont> fonts = new Dictionary<CellFont, IFont>();
@@ -45,20 +46,12 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
         private readonly object thisLock = new();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExcelExporter"/> class.
-        /// </summary>
-        /// <param name="excelFormat">The excel format.</param>
-        public ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOpenXmlDocument) {
-            ExcelFormat = excelFormat;
-        }
-
-        /// <summary>
         /// Gets or sets the excel format.
         /// </summary>
         /// <value>
         /// The excel format.
         /// </value>
-        public ExcelFormat ExcelFormat { get; set; }
+        public ExcelFormat ExcelFormat { get; set; } = excelFormat;
 
         /// <summary>
         /// Gets a value indicating whether this instance is office open XML document.

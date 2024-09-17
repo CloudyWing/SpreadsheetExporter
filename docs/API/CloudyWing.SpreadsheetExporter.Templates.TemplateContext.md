@@ -16,7 +16,7 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 
 ## TemplateContext(IEnumerable<Cell>, int, IReadOnlyDictionary<int,Nullable<double>>) Constructor
 
-Initializes a new instance of the [TemplateContext](CloudyWing.SpreadsheetExporter.Templates.TemplateContext.md 'CloudyWing.SpreadsheetExporter.Templates.TemplateContext') class.
+The template context.
 
 ```csharp
 public TemplateContext(System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.Cell> cells, int rowSpan, System.Collections.Generic.IReadOnlyDictionary<int,System.Nullable<double>> rowHeights);

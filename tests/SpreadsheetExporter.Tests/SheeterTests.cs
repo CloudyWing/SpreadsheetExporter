@@ -6,7 +6,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
         [Test]
         public void Constructor_ShouldInitializeProperties() {
             string sheetName = "Sheet1";
-            Sheeter sheeter = new Sheeter(sheetName);
+            Sheeter sheeter = new(sheetName);
 
             sheeter.SheetName.Should().Be(sheetName);
             sheeter.Password.Should().BeNull();
@@ -15,7 +15,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
         [Test]
         public void SetColumnWidth_ShouldSetColumnWidthToColumnWidths() {
-            Sheeter sheeter = new Sheeter("Sheet1");
+            Sheeter sheeter = new("Sheet1");
             int columnIndex = 1;
             double columnWidth = 100;
 
@@ -26,7 +26,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
         [Test]
         public void AddTemplate_ShouldAddTemplateToList() {
-            Sheeter sheeter = new Sheeter("Sheet1");
+            Sheeter sheeter = new("Sheet1");
             ITemplate template = Substitute.For<ITemplate>();
 
             sheeter.AddTemplate(template);

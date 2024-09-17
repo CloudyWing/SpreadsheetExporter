@@ -7,8 +7,8 @@ namespace CloudyWing.SpreadsheetExporter {
     /// The sheeter.
     /// </summary>
     public class Sheeter {
-        private readonly IDictionary<int, double> columnWidths = new Dictionary<int, double>();
-        private readonly List<ITemplate> templates = new();
+        private readonly Dictionary<int, double> columnWidths = [];
+        private readonly List<ITemplate> templates = [];
 
         internal Sheeter(string sheetName) {
             SheetName = sheetName;

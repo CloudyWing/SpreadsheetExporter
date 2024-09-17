@@ -65,7 +65,7 @@ The width of columns.
 Gets or sets the default height of the row.
 
 ```csharp
-public System.Nullable<double> DefaultRowHeight { get; set; }
+public System.Nullable<double> DefaultRowHeight { get; }
 ```
 
 #### Property Value
@@ -121,7 +121,7 @@ The password.
 Gets the height of rows.
 
 ```csharp
-public System.Collections.Generic.IReadOnlyDictionary<int,System.Nullable<double>> RowHeights { get; set; }
+public System.Collections.Generic.IReadOnlyDictionary<int,System.Nullable<double>> RowHeights { get; }
 ```
 
 #### Property Value

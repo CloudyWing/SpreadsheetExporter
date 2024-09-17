@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using CloudyWing.SpreadsheetExporter.Extensions;
 using CloudyWing.SpreadsheetExporter.Templates;
 
@@ -18,7 +17,7 @@ namespace CloudyWing.SpreadsheetExporter {
             TemplateContext templateContext = TemplateContext.Create(sheeter.Templates);
             Cells = templateContext.Cells;
             RowHeights = templateContext.RowHeights.AsReadOnly();
-            ColumnWidths = sheeter.ColumnWidths.ToDictionary(x => x.Key, x => x.Value).AsReadOnly();
+            ColumnWidths = sheeter.ColumnWidths.AsReadOnly();
             Password = sheeter.Password;
             PageSettings = sheeter.PageSettings;
         }
@@ -37,7 +36,7 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <value>
         /// The default height of the row.
         /// </value>
-        public double? DefaultRowHeight { get; set; }
+        public double? DefaultRowHeight { get; }
 
         /// <summary>
         /// Gets the cells.
@@ -61,7 +60,7 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <value>
         /// The height of rows.
         /// </value>
-        public IReadOnlyDictionary<int, double?> RowHeights { get; private set; }
+        public IReadOnlyDictionary<int, double?> RowHeights { get; }
 
         /// <summary>
         /// Gets the password.
@@ -84,6 +83,6 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <value>
         /// The page settings.
         /// </value>
-        public PageSettings PageSettings { get; } = new PageSettings();
+        public PageSettings PageSettings { get; }
     }
 }

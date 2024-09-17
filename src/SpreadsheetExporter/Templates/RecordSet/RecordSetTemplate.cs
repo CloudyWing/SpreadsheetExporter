@@ -7,25 +7,18 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
     /// <summary>
     /// The recordset template. Create cell information using set data source and data column.
     /// </summary>
-    /// <typeparam name="T">The type of the record.</typeparam>
     /// <seealso cref="ITemplate" />
-    public class RecordSetTemplate<T> : ITemplate {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RecordSetTemplate{T}" /> class.
-        /// </summary>
-        /// <param name="dataSource">The data source.</param>
-        /// <exception cref="ArgumentNullException">dataSource</exception>
-        public RecordSetTemplate(IEnumerable<T> dataSource) {
-            DataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
-        }
-
+    /// <typeparam name="T">The type of the record.</typeparam>
+    /// <param name="dataSource">The data source.</param>
+    /// <exception cref="ArgumentNullException">dataSource</exception>
+    public class RecordSetTemplate<T>(IEnumerable<T> dataSource) : ITemplate {
         /// <summary>
         /// Gets or sets the data source.
         /// </summary>
         /// <value>
         /// The data source.
         /// </value>
-        public IEnumerable<T> DataSource { get; set; }
+        public IEnumerable<T> DataSource { get; set; } = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
 
         /// <summary>
         /// Gets the columns.
@@ -68,38 +61,33 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         public int RowSpan => DataSource.Count() + Columns.RowSpan;
 
         private IEnumerable<Cell> GetHearderCells(DataColumnCollection<T> cols) {
-            List<Cell> cells = new();
             foreach (DataColumnBase<T> col in cols) {
-                cells.Add(new Cell() {
+                yield return new Cell {
                     ValueGenerator = (cellIndex, rowIndex) => col.HeaderText,
                     CellStyleGenerator = (cellIndex, rowIndex) => col.HeaderStyle,
                     Point = col.Point,
                     Size = new Size(col.ColumnSpan, col.RowSpan)
-                });
-
-                cells.AddRange(GetHearderCells(col.ChildColumns));
+                };
+                foreach (Cell childCell in GetHearderCells(col.ChildColumns)) {
+                    yield return childCell;
+                }
             }
-            return cells;
         }
 
         private IEnumerable<Cell> GetRecordCells() {
             Point p = new(0, Columns.RowSpan);
-
-            int i = 0;
             foreach (T record in DataSource) {
                 foreach (DataColumnBase<T> col in Columns.DataSourceColumns) {
                     yield return new Cell {
-                        ValueGenerator = (cellIndex, rowIndex) => col.GetFieldValue(new(cellIndex, rowIndex, record)),
-                        CellStyleGenerator = (cellIndex, rowIndex) => col.GetFieldStyle(new(cellIndex, rowIndex, record)),
+                        ValueGenerator = (cellIndex, rowIndex) => col.GetFieldValue(new RecordContext<T>(cellIndex, rowIndex, record)),
+                        CellStyleGenerator = (cellIndex, rowIndex) => col.GetFieldStyle(new RecordContext<T>(cellIndex, rowIndex, record)),
                         Point = p,
                         Size = new Size(col.ColumnSpan, 1),
-                        FormulaGenerator = (cellIndex, rowIndex) => col.GetFieldFormula(new(cellIndex, rowIndex, record))
+                        FormulaGenerator = (cellIndex, rowIndex) => col.GetFieldFormula(new RecordContext<T>(cellIndex, rowIndex, record))
                     };
-                    p += new Size(col.ColumnSpan, 0);
+                    p.X += col.ColumnSpan;
                 }
-
                 p = new Point(0, p.Y + 1);
-                i++;
             }
         }
 
@@ -113,17 +101,14 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         }
 
         private Dictionary<int, double?> GetRowHeights() {
-            Dictionary<int, double?> dic = new();
+            Dictionary<int, double?> dic = [];
             int i;
-
             for (i = 0; i < Columns.RowSpan; i++) {
-                dic.Add(i, HeaderHeight);
+                dic[i] = HeaderHeight;
             }
-
-            foreach (T item in DataSource) {
-                dic.Add(i++, RecordHeight);
+            foreach (T _ in DataSource) {
+                dic[i++] = RecordHeight;
             }
-
             return dic;
         }
     }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -73,7 +72,6 @@ namespace CloudyWing.SpreadsheetExporter {
         private static readonly Lazy<PaperSize> a2 = new(() => new PaperSize(66, "A2", 1654, 2339));
         private static readonly Lazy<PaperSize> a3Transverse = new(() => new PaperSize(67, "A3 Transverse", 1169, 1654));
         private static readonly Lazy<PaperSize> a3ExtraTransverse = new(() => new PaperSize(68, "A3 Extra Transverse", 1268, 1752));
-        private static readonly ConcurrentBag<PaperSize> otherItems = new();
 
         private PaperSize(int value, string name, int width, int height) {
             Value = value;

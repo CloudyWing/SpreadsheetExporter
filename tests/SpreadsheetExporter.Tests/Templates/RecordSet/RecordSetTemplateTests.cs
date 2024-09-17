@@ -5,9 +5,9 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
     [TestFixture]
     internal class RecordSetTemplateTests {
         private static readonly IEnumerable<Record> records = new Record[] {
-            new Record { Id = 0 },
-            new Record { Id = 1 },
-            new Record { Id = 2 },
+            new() { Id = 0 },
+            new() { Id = 1 },
+            new() { Id = 2 },
         };
         private RecordSetTemplate<Record>? template;
 
@@ -28,7 +28,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             template!.Columns.Add("Column 1");
             template!.Columns.AddChildToLast("Child Column 1");
 
-            var context = template.GetContext();
+            TemplateContext context = template.GetContext();
 
             context.Cells.Should().HaveCount(records.Count() + template.Columns.RowSpan);
             context.Cells.Should().OnlyContain(x => x.ValueGenerator != null);
@@ -40,7 +40,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
                 .AddChildToLast("Column 2")
                 .AddChildToLast("Column 3");
 
-            var context = template.GetContext();
+            TemplateContext context = template.GetContext();
 
             context.Cells.Should().HaveCount((template.ColumnSpan * (records.Count() + 1)) + 1);
             context.Cells.Should().OnlyContain(x => x.ValueGenerator != null);
@@ -69,7 +69,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
         [Test]
         public void Add_SetHeaderTextAndHeaderStyle_ShouldCreateRecordDataColumnWithHeaderTextAndHeaderStyle() {
             string headerText = "Column 1";
-            CellStyle headerStyle = new CellStyle();
+            CellStyle headerStyle = new();
 
             template!.Columns.Add(headerText, headerStyle);
 

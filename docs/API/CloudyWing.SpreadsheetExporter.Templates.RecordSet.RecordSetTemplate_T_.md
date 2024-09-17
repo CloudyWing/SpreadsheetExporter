@@ -21,6 +21,11 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 
 Implements [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')
 
+#### Exceptions
+
+[System.ArgumentNullException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentNullException 'System.ArgumentNullException')  
+dataSource
+
 ### See Also
 - [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')
 ### Constructors
@@ -29,7 +34,7 @@ Implements [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'Cl
 
 ## RecordSetTemplate(IEnumerable<T>) Constructor
 
-Initializes a new instance of the [RecordSetTemplate&lt;T&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>') class.
+The recordset template. Create cell information using set data source and data column.
 
 ```csharp
 public RecordSetTemplate(System.Collections.Generic.IEnumerable<T> dataSource);
@@ -46,6 +51,9 @@ The data source.
 
 [System.ArgumentNullException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentNullException 'System.ArgumentNullException')  
 dataSource
+
+### See Also
+- [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')
 ### Properties
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.Columns'></a>

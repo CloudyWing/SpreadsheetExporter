@@ -4,149 +4,36 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
     [TestFixture]
     internal class CellFontTests {
         [Test]
-        public void CloneAndSetName_SetName_ShouldCloneAndSetName() {
-            CellFont cellFont = new CellFont("Arial");
+        public void DefaultConstructor_ShouldInitializeToEmpty() {
+            CellFont defaultFont = new();
+            CellFont emptyFont = CellFont.Empty;
 
-            CellFont newCellFont = cellFont.CloneAndSetName("Times New Roman");
-
-            newCellFont.Name.Should().Be("Times New Roman");
-            newCellFont.Should().NotBeSameAs(cellFont);
-            cellFont.Name.Should().Be("Arial");
+            defaultFont.Should().Be(emptyFont);
         }
 
         [Test]
-        public void CloneAndSetSize_SetSize_ShouldCloneAndSetSize() {
-            CellFont cellFont = new CellFont("Arial", 12);
+        public void Constructor_WithParameters_ShouldInitializeProperties() {
+            string name = "Arial";
+            short size = 12;
+            Color color = Color.Red;
+            FontStyles style = FontStyles.IsBold;
 
-            CellFont newCellFont = cellFont.CloneAndSetSize(14);
+            CellFont font = new(name, size, color, style);
 
-            newCellFont.Size.Should().Be(14);
-            newCellFont.Should().NotBeSameAs(cellFont);
-            cellFont.Size.Should().Be(12);
+            font.Name.Should().Be(name);
+            font.Size.Should().Be(size);
+            font.Color.Should().Be(color);
+            font.Style.Should().Be(style);
         }
 
         [Test]
-        public void CloneAndSetColor_SetColor_ShouldCloneAndSetColor() {
-            CellFont font = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-            Color expectedColor = Color.Green;
+        public void Empty_ShouldReturnDefaultFont() {
+            CellFont emptyFont = CellFont.Empty;
 
-            CellFont clonedFont = font.CloneAndSetColor(expectedColor);
-
-            clonedFont.Color.Should().Be(expectedColor);
-            clonedFont.Name.Should().Be(font.Name);
-            clonedFont.Size.Should().Be(font.Size);
-            clonedFont.Style.Should().Be(font.Style);
-        }
-
-        [Test]
-        public void CloneAndSetStyle_SetStyle_ShouldCloneAndSetStyle() {
-            CellFont font = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-            FontStyles expectedStyle = FontStyles.IsItalic;
-
-            CellFont clonedFont = font.CloneAndSetStyle(expectedStyle);
-
-            clonedFont.Color.Should().Be(font.Color);
-            clonedFont.Name.Should().Be(font.Name);
-            clonedFont.Size.Should().Be(font.Size);
-            clonedFont.Style.Should().Be(expectedStyle);
-        }
-
-        [Test]
-        public void Equals_SameProperties_ShouldBeTrue() {
-            CellFont font1 = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-            CellFont font2 = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-
-            font1.Equals(font2).Should().BeTrue();
-        }
-
-        [Test]
-        public void Equals_DifferentName_ShouldBeFalse() {
-            CellFont font1 = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-            CellFont font2 = new CellFont("Calibri", 12, Color.Red, FontStyles.IsBold);
-
-            font1.Equals(font2).Should().BeFalse();
-        }
-
-        [Test]
-        public void Equals_DifferentSize_ShouldBeFalse() {
-            CellFont font1 = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-            CellFont font2 = new CellFont("Arial", 14, Color.Red, FontStyles.IsBold);
-
-            font1.Equals(font2).Should().BeFalse();
-        }
-
-        [Test]
-        public void Equals_DifferentColor_ShouldBeFalse() {
-            CellFont font1 = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-            CellFont font2 = new CellFont("Arial", 12, Color.Green, FontStyles.IsBold);
-
-            font1.Equals(font2).Should().BeFalse();
-        }
-
-        [Test]
-        public void Equals_DifferentStyle_ShouldBeFalse() {
-            CellFont font1 = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-            CellFont font2 = new CellFont("Arial", 12, Color.Red, FontStyles.IsItalic);
-
-            font1.Equals(font2).Should().BeFalse();
-        }
-
-        [Test]
-        public void GetHashCode_SameProperties_ShouldBeEqual() {
-            CellFont font1 = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-            CellFont font2 = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-
-            int hashCode1 = font1.GetHashCode();
-            int hashCode2 = font2.GetHashCode();
-
-            hashCode1.Should().Be(hashCode2);
-        }
-
-        [Test]
-        public void GetHashCode_DifferentName_ShouldNotBeEqual() {
-            CellFont font1 = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-            CellFont font2 = new CellFont("Calibri", 12, Color.Red, FontStyles.IsBold);
-
-            int hashCode1 = font1.GetHashCode();
-            int hashCode2 = font2.GetHashCode();
-
-            hashCode1.Should().NotBe(hashCode2);
-        }
-
-        [Test]
-        public void GetHashCode_DifferentSize_ShouldNotBeEqual() {
-            CellFont font1 = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-            CellFont font2 = new CellFont("Arial", 14, Color.Red, FontStyles.IsBold);
-
-
-            int hashCode1 = font1.GetHashCode();
-            int hashCode2 = font2.GetHashCode();
-
-            hashCode1.Should().NotBe(hashCode2);
-        }
-
-        [Test]
-        public void GetHashCode_DifferentColor_ShouldNotBeEqual() {
-            CellFont font1 = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-            CellFont font2 = new CellFont("Arial", 12, Color.Green, FontStyles.IsBold);
-
-
-            int hashCode1 = font1.GetHashCode();
-            int hashCode2 = font2.GetHashCode();
-
-            hashCode1.Should().NotBe(hashCode2);
-        }
-
-        [Test]
-        public void GetHashCode_DifferentStyle_ShouldNotBeEqual() {
-            CellFont font1 = new CellFont("Arial", 12, Color.Red, FontStyles.IsBold);
-            CellFont font2 = new CellFont("Arial", 12, Color.Red, FontStyles.IsItalic);
-
-
-            int hashCode1 = font1.GetHashCode();
-            int hashCode2 = font2.GetHashCode();
-
-            hashCode1.Should().NotBe(hashCode2);
+            emptyFont.Name.Should().BeNull();
+            emptyFont.Size.Should().Be(0);
+            emptyFont.Color.Should().Be(default(Color));
+            emptyFont.Style.Should().Be(FontStyles.None);
         }
     }
 }

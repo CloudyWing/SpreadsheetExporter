@@ -6,13 +6,12 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates {
     internal class MergedTemplateTests {
         [Test]
         public void GetContext_ShouldReturnExpectedTemplateContext() {
-
-            Cell cell11 = new Cell {
+            Cell cell11 = new() {
                 Point = new Point(0, 0),
                 Size = new Size(2, 2),
                 ValueGenerator = (x, y) => "A1"
             };
-            Cell cell12 = new Cell {
+            Cell cell12 = new() {
                 Point = new Point(0, 2),
                 Size = new Size(2, 2),
                 ValueGenerator = (x, y) => "C1"
@@ -21,12 +20,12 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates {
             ITemplate template1 = Substitute.For<ITemplate>();
             template1.GetContext().Returns(new TemplateContext(new[] { cell11, cell12 }, template1RowSpan, new Dictionary<int, double?> { { 0, 10 } }));
 
-            Cell cell21 = new Cell {
+            Cell cell21 = new() {
                 Point = new Point(0, 0),
                 Size = new Size(3, 3),
                 ValueGenerator = (x, y) => "A3"
             };
-            Cell cell22 = new Cell {
+            Cell cell22 = new() {
                 Point = new Point(0, 0),
                 Size = new Size(3, 3),
                 ValueGenerator = (x, y) => "D3"
@@ -34,7 +33,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates {
             ITemplate template2 = Substitute.For<ITemplate>();
             template2.GetContext().Returns(new TemplateContext(new[] { cell21, cell22 }, 3, new Dictionary<int, double?> { { 0, 20 } }));
 
-            MergedTemplate mergedTemplate = new MergedTemplate(template1, template2);
+            MergedTemplate mergedTemplate = new(template1, template2);
 
             TemplateContext context = mergedTemplate.GetContext();
 

@@ -102,10 +102,19 @@ CellStyleConfiguration cellStyles = SpreadsheetManager.DefaultCellStyles;
 // 標題背景色是紅色，Id 為 0 的資料背景色是藍色，其他是黃色
 template.Columns.Add(
     "樣式", x => x.Id,
-    cellStyles.HeaderStyle.CloneAndSetBackgroundColor(Color.Red),
+    cellStyles.HeaderStyle
+    with {
+        BackgroundColor = Color.Red
+    },
     x => x.Value == 0
-        ? cellStyles.FieldStyle.CloneAndSetBackgroundColor(Color.Blue)
-        : cellStyles.FieldStyle.CloneAndSetBackgroundColor(Color.Yellow)
+        ? cellStyles.FieldStyle
+        with {
+            BackgroundColor = Color.Blue
+        }
+        : cellStyles.FieldStyle
+        with {
+            BackgroundColor = Color.Yellow
+        }
 );
 ```
 
@@ -165,15 +174,27 @@ public class ReportInfoTemplate : ITemplate {
 
     public ReportInfoTemplate(string title, string user, int colSpan) {
         CellStyleConfiguration cellStyles = SpreadsheetManager.DefaultCellStyles;
-        CellStyle titleStyle = cellStyles.CellStyle.CloneAndSetHorizontalAlignment(HorizontalAlignment.Center)
-            .CloneAndSetFont(SpreadsheetManager.DefaultCellStyles.CellStyle.Font.CloneAndSetSize(14));
+        CellStyle titleStyle = cellStyles.CellStyle
+        with {
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Font = SpreadsheetManager.DefaultCellStyles.CellStyle.Font
+            with {
+                Size = 14
+            }
+        };
 
         gridTemplate.CreateRow();
         gridTemplate.CreateCell(title, 8, cellStyle: titleStyle);
 
         int leftColSpan = colSpan / 2;
-        CellStyle rightCellStyle = cellStyles.CellStyle.CloneAndSetHorizontalAlignment(HorizontalAlignment.Left);
-        CellStyle leftCellStyle = cellStyles.CellStyle.CloneAndSetHorizontalAlignment(HorizontalAlignment.Left);
+        CellStyle rightCellStyle = cellStyles.CellStyle
+        with {
+            HorizontalAlignment = HorizontalAlignment.Left
+        };
+        CellStyle leftCellStyle = cellStyles.CellStyle
+        with {
+            HorizontalAlignment = HorizontalAlignment.Left
+        };
 
         gridTemplate.CreateRow();
         gridTemplate.CreateCell("列印者：" + user, leftColSpan, cellStyle: rightCellStyle);

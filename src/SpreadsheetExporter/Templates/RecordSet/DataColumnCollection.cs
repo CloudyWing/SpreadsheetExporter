@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -42,7 +42,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         public DataColumnCollection<T> RootColumns {
             get {
                 DataColumnCollection<T> items = this;
-                while (items.parentItem != null && items.parentItem.ParentColumns != null) {
+                while (items.parentItem?.ParentColumns != null) {
                     items = items.parentItem.ParentColumns;
                 }
                 return items;
@@ -55,7 +55,6 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         internal void ResetRootPoint() {
             RootColumns.ResetColumnsPoint(Point.Empty);
         }
-
 
         /// <summary>
         /// Resets the columns point.
@@ -240,11 +239,11 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         /// <returns>The self.</returns>
         /// <exception cref="NullReferenceException"></exception>
         public DataColumnCollection<T> AddChildToLast(DataColumnBase<T> childColumn) {
-            DataColumnBase<T> column = this.LastOrDefault();
-            if (column is null) {
-                throw new NullReferenceException($"No {nameof(DataColumnBase<T>)} have been created.");
+            if (Count == 0) {
+                throw new InvalidOperationException("No columns available to add child to.");
             }
 
+            DataColumnBase<T> column = this.Last();
             column.ChildColumns.Add(childColumn);
 
             return this;
@@ -404,8 +403,8 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
 
         /// <inheritdoc/>
         protected override void RemoveItem(int index) {
-            Items[index].ParentColumns = null;
             base.RemoveItem(index);
+            Items[index].ParentColumns = null;
             ResetRootPoint();
         }
 
@@ -415,16 +414,16 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
                 throw new ArgumentException($"{nameof(DataColumnBase<T>)} is already contained by another {nameof(DataColumnCollection<T>)}.", nameof(item));
             }
 
-            Items[index].ParentColumns = null;
             base.SetItem(index, item);
+            Items[index].ParentColumns = null;
             item.ParentColumns = this;
             ResetRootPoint();
         }
 
         /// <inheritdoc/>
         protected override void ClearItems() {
-            foreach (DataColumnBase<T> item in Items) {
-                item.ParentColumns = null;
+            for (int i = 0; i < Items.Count; i++) {
+                Items[i].ParentColumns = null;
             }
             base.ClearItems();
             ResetRootPoint();
@@ -482,28 +481,31 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             internal void SetGeneratorForColumn(RecordDataColumn<TRecord> dataColumn) {
                 switch (type) {
                     case ProviderType.Value:
-                        dataColumn.FieldValueGenerator = valueGenerator as Func<RecordContext<TRecord>, object>;
+                        dataColumn.FieldValueGenerator = ConvertGenerator<Func<RecordContext<TRecord>, object>>(valueGenerator);
                         break;
                     case ProviderType.Formula:
-                        dataColumn.FieldFormulaGenerator = formulaGenerator as Func<RecordContext<TRecord>, string>;
+                        dataColumn.FieldFormulaGenerator = ConvertGenerator<Func<RecordContext<TRecord>, string>>(formulaGenerator);
                         break;
                     default:
-                        throw new ArgumentException();
+                        throw new ArgumentException("Invalid provider type.");
                 }
             }
 
             internal void SetGeneratorForColumn<TField>(DataColumn<TRecord, TField> dataColumn) {
                 switch (type) {
                     case ProviderType.Value:
-                        dataColumn.FieldValueGenerator = valueGenerator as Func<FieldContext<TRecord, TField>, object>;
+                        dataColumn.FieldValueGenerator = ConvertGenerator<Func<FieldContext<TRecord, TField>, object>>(valueGenerator);
                         break;
                     case ProviderType.Formula:
-                        dataColumn.FieldFormulaGenerator = formulaGenerator as Func<FieldContext<TRecord, TField>, string>;
+                        dataColumn.FieldFormulaGenerator = ConvertGenerator<Func<FieldContext<TRecord, TField>, string>>(formulaGenerator);
                         break;
                     default:
-                        throw new ArgumentException();
+                        throw new ArgumentException("Invalid provider type.");
                 }
             }
+
+            private static TField ConvertGenerator<TField>(object generator) where TField : class =>
+                generator as TField ?? throw new InvalidCastException("Generator type mismatch.");
 
             private enum ProviderType {
                 None,

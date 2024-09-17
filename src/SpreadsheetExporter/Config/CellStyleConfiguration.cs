@@ -56,24 +56,27 @@ namespace CloudyWing.SpreadsheetExporter.Config {
                 HorizontalAlignment.Center,
                 VerticalAlignment.Middle,
                 false, false,
-                null,
-                new CellFont("新細明體", 10, null, FontStyles.None),
+                default,
+                new CellFont("新細明體", 10, default, FontStyles.None),
                 null,
                 false
             );
 
-            CellFont headerFont = cellStyle.Font
-                .CloneAndSetStyle(cellStyle.Font.Style | FontStyles.IsBold);
+            CellFont headerFont = cellStyle.Font with {
+                Style = cellStyle.Font.Style | FontStyles.IsBold
+            };
 
             CellStyle = cellStyle;
             GridCellStyle = cellStyle;
-            HeaderStyle = cellStyle
-                .CloneAndSetFont(headerFont)
-                .CloneAndSetHorizontalAlignment(HorizontalAlignment.Center)
-                .CloneAndSetBorder(true);
-            FieldStyle = cellStyle
-                .CloneAndSetHorizontalAlignment(HorizontalAlignment.Center)
-                .CloneAndSetBorder(true);
+            HeaderStyle = cellStyle with {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                HasBorder = true,
+                Font = headerFont
+            };
+            FieldStyle = cellStyle with {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                HasBorder = true
+            };
         }
 
         /// <summary>

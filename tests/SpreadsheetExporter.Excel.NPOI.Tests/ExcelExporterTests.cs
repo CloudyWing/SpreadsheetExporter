@@ -7,7 +7,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
         [TestCase(ExcelFormat.ExcelBinaryFileFormat, "application/vnd.ms-excel")]
         [TestCase(ExcelFormat.OfficeOpenXmlDocument, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")]
         public void ContentType_ShouldReturnExpectedValue(ExcelFormat format, string contentType) {
-            var exporter = new ExcelExporter(format);
+            ExcelExporter exporter = new(format);
 
             exporter.ContentType.Should().Be(contentType);
         }
@@ -16,7 +16,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
         [TestCase(ExcelFormat.ExcelBinaryFileFormat, ".xls")]
         [TestCase(ExcelFormat.OfficeOpenXmlDocument, ".xlsx")]
         public void FileNameExtension_ShouldReturnExpectedValue(ExcelFormat format, string fileNameExtension) {
-            ExcelExporter exporter = new ExcelExporter(format);
+            ExcelExporter exporter = new(format);
 
             exporter.FileNameExtension.Should().Be(fileNameExtension);
         }
@@ -25,14 +25,14 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
         [TestCase(ExcelFormat.ExcelBinaryFileFormat, false)]
         [TestCase(ExcelFormat.OfficeOpenXmlDocument, true)]
         public void IsOfficeOpenXmlDocument_ShouldReturnExpectedValue(ExcelFormat format, bool isXlsx) {
-            ExcelExporter exporter = new ExcelExporter(format);
+            ExcelExporter exporter = new(format);
 
             exporter.IsOfficeOpenXmlDocument.Should().Be(isXlsx);
         }
 
         [Test]
         public void Export_ShouldReturnExpectedByteArray() {
-            ExcelExporter exporter = new ExcelExporter();
+            ExcelExporter exporter = new();
             exporter.CreateSheeter();
 
             exporter.Export().Should().NotBeEmpty();
@@ -44,7 +44,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
         [TestCase(ExcelFormat.ExcelBinaryFileFormat, false)]
         [TestCase(ExcelFormat.OfficeOpenXmlDocument, false)]
         public void Export_IsClosedNotImplementedException_WithPassword(ExcelFormat format, bool isClosedNotImplementedException) {
-            ExcelExporter exporter = new ExcelExporter(format) {
+            ExcelExporter exporter = new(format) {
                 IsClosedNotImplementedException = isClosedNotImplementedException,
                 Password = "password"
             };
@@ -63,9 +63,9 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
 
         [Test]
         public void Export_SheetCreatedEvent_SheetInfoIsSetCorrectly() {
-            ExcelExporter exporter = new ExcelExporter();
+            ExcelExporter exporter = new();
             Sheeter sheeter = exporter.CreateSheeter("Sheet Name");
-            GridTemplate template = new GridTemplate();
+            GridTemplate template = new();
             string cellValue = "Cell Value";
             template.CreateRow().CreateCell(cellValue);
             sheeter.AddTemplate(template);

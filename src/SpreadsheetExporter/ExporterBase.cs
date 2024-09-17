@@ -9,7 +9,7 @@ namespace CloudyWing.SpreadsheetExporter {
     /// The exporter base.
     /// </summary>
     public abstract class ExporterBase {
-        private readonly IList<Sheeter> sheeters = new List<Sheeter>();
+        private readonly IList<Sheeter> sheeters = [];
 
         /// <summary>
         /// Occurs when [spreadsheet exporting event].
@@ -58,6 +58,14 @@ namespace CloudyWing.SpreadsheetExporter {
         public bool HasPassword => !string.IsNullOrEmpty(Password);
 
         /// <summary>
+        /// Gets or sets the default font.
+        /// </summary>
+        /// <value>
+        /// The default font.
+        /// </value>
+        public CellFont? DefaultFont { get; set; }
+
+        /// <summary>
         /// Gets or sets the default basic name of the sheet.
         /// </summary>
         /// <value>
@@ -74,24 +82,13 @@ namespace CloudyWing.SpreadsheetExporter {
         public Sheeter LastSheeter => sheeters.LastOrDefault() ?? CreateSheeter();
 
         /// <summary>
-        /// Gets or sets the default font.</summary>
-        /// <value>
-        /// The default font.
-        /// </value>
-        public CellFont? DefaultFont { get; set; }
-
-        /// <summary>
         /// Creates the sheeter.
         /// </summary>
         /// <param name="sheetName">Name of the sheet.</param>
         /// <param name="defaultRowHeight">Default height of the row.</param>
         /// <returns>The sheeter.</returns>
         public Sheeter CreateSheeter(string sheetName = null, double? defaultRowHeight = null) {
-            if (string.IsNullOrWhiteSpace(sheetName)) {
-                sheetName = GetDefaultSheetName();
-            } else if (IsSheetNameExists(sheetName)) {
-                sheetName = FixSheetName(sheetName);
-            }
+            sheetName = GetUniqueSheetName(sheetName);
 
             Sheeter sheeter = new(sheetName) {
                 DefaultRowHeight = defaultRowHeight
@@ -101,6 +98,39 @@ namespace CloudyWing.SpreadsheetExporter {
             return sheeter;
         }
 
+        private string GetUniqueSheetName(string sheetName) {
+            if (string.IsNullOrWhiteSpace(sheetName)) {
+                return GenerateDefaultSheetName();
+            }
+            if (IsSheetNameExists(sheetName)) {
+                return GenerateUniqueSheetName(sheetName);
+            }
+            return sheetName;
+        }
+
+        private string GenerateDefaultSheetName() {
+            string baseName = DefaultBasicSheetName;
+            int i = 1;
+            string name;
+            do {
+                name = $"{baseName}{i++}";
+            } while (IsSheetNameExists(name));
+            return name;
+        }
+
+        private string GenerateUniqueSheetName(string sheetName) {
+            int i = 1;
+            string name;
+            do {
+                name = $"{sheetName}({i++})";
+            } while (IsSheetNameExists(name));
+            return name;
+        }
+
+        private bool IsSheetNameExists(string sheetName) {
+            return sheeters.Select(x => x.SheetName).Contains(sheetName);
+        }
+
         /// <summary>
         /// Gets the sheeter.
         /// </summary>
@@ -108,31 +138,6 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <returns>The sheeter.</returns>
         public Sheeter GetSheeter(int index) {
             return sheeters[index];
-        }
-
-        private bool IsSheetNameExists(string sheetName) {
-            return sheeters.Select(x => x.SheetName).Contains(sheetName);
-        }
-
-        private string GetDefaultSheetName() {
-            string basicSheetName = DefaultBasicSheetName;
-            string defaultSheetName;
-            int i = 1;
-            do {
-                defaultSheetName = basicSheetName + i++;
-            } while (IsSheetNameExists(defaultSheetName));
-
-            return defaultSheetName;
-        }
-
-        private string FixSheetName(string sheetName) {
-            string fixedSheetName;
-            int i = 1;
-            do {
-                fixedSheetName = $"{sheetName}({i++})";
-            } while (IsSheetNameExists(fixedSheetName));
-
-            return fixedSheetName;
         }
 
         /// <summary>

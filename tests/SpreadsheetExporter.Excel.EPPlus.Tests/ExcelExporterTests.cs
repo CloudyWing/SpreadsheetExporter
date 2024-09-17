@@ -5,21 +5,21 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus.Tests {
     public class Tests {
         [Test]
         public void ContentType_ShouldReturnExpectedContentType() {
-            var exporter = new ExcelExporter();
+            ExcelExporter exporter = new();
 
             exporter.ContentType.Should().Be("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
         [Test]
         public void FileNameExtension_ShouldReturnExpectedFileNameExtension() {
-            ExcelExporter exporter = new ExcelExporter();
+            ExcelExporter exporter = new();
 
             exporter.FileNameExtension.Should().Be(".xlsx");
         }
 
         [Test]
         public void Export_ShouldReturnExpectedByteArray() {
-            ExcelExporter exporter = new ExcelExporter();
+            ExcelExporter exporter = new();
             exporter.CreateSheeter();
 
             exporter.Export().Should().NotBeEmpty();
@@ -27,9 +27,9 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus.Tests {
 
         [Test]
         public void Export_SheetCreatedEvent_SheetInfoIsSetCorrectly() {
-            ExcelExporter exporter = new ExcelExporter();
+            ExcelExporter exporter = new();
             Sheeter sheeter = exporter.CreateSheeter("Sheet Name");
-            GridTemplate template = new GridTemplate();
+            GridTemplate template = new();
             string cellValue = "Cell Value";
             template.CreateRow().CreateCell(cellValue);
             sheeter.AddTemplate(template);

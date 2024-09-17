@@ -10,13 +10,18 @@ public sealed class CellStyleSetuper
 ```
 
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; CellStyleSetuper
+
+#### Exceptions
+
+[System.ArgumentNullException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentNullException 'System.ArgumentNullException')  
+configuration
 ### Constructors
 
 <a name='CloudyWing.SpreadsheetExporter.Config.CellStyleSetuper.CellStyleSetuper(CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration)'></a>
 
 ## CellStyleSetuper(CellStyleConfiguration) Constructor
 
-Initializes a new instance of the [CellStyleSetuper](CloudyWing.SpreadsheetExporter.Config.CellStyleSetuper.md 'CloudyWing.SpreadsheetExporter.Config.CellStyleSetuper') class.
+The cell style setuper.
 
 ```csharp
 public CellStyleSetuper(CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration configuration);

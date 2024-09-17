@@ -60,7 +60,7 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <exception cref="NullReferenceException">Exporter factory is not set.</exception>
         public static ExporterBase CreateExporter() {
             return exporterFactory is null
-                ? throw new NullReferenceException("Exporter factory is not set.")
+                ? throw new InvalidOperationException("Exporter factory is not set.")
                 : exporterFactory();
         }
     }

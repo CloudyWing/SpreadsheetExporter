@@ -63,8 +63,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         /// </value>
         public DataColumnCollection<T> ChildColumns {
             get {
-                childColumns ??= new DataColumnCollection<T>(this);
-                return childColumns;
+                return childColumns ??= new DataColumnCollection<T>(this);
             }
         }
 
@@ -85,7 +84,8 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         /// <remarks>
         /// 自己和子層共幾層 Column，用來計算 RowSpan
         /// </remarks>
-        public int ColumnLayers => ChildColumns.Count == 0 ? 1 : ChildColumns.RowSpan + 1;
+        public int ColumnLayers => ChildColumns.Count == 0
+            ? 1 : ChildColumns.RowSpan + 1;
 
         /// <summary>
         /// Gets the field value.
