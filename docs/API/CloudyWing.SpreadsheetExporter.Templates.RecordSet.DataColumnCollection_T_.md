@@ -658,6 +658,21 @@ The field style generator. The dafault is `(context) => SpreadsheetManager.Defau
 [CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>')  
 The self.
 
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.CalculatePoints(System.Drawing.Point)'></a>
+
+## DataColumnCollection<T>.CalculatePoints(Point) Method
+
+Calculates the points.
+
+```csharp
+internal void CalculatePoints(System.Drawing.Point point);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.CalculatePoints(System.Drawing.Point).point'></a>
+
+`point` [System.Drawing.Point](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Point 'System.Drawing.Point')
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.ClearItems()'></a>
 
 ## DataColumnCollection<T>.ClearItems() Method
@@ -689,30 +704,3 @@ The zero-based index of the element to remove.
 
 [System.ArgumentOutOfRangeException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentOutOfRangeException 'System.ArgumentOutOfRangeException')  
 [index](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.RemoveItem(int).index 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.RemoveItem(int).index') is less than zero.-or-[index](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.RemoveItem(int).index 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.RemoveItem(int).index') is equal to or greater than [System.Collections.ObjectModel.Collection&lt;&gt;.Count](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.ObjectModel.Collection-1.Count 'System.Collections.ObjectModel.Collection`1.Count').
-
-<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.ResetColumnsPoint(System.Drawing.Point)'></a>
-
-## DataColumnCollection<T>.ResetColumnsPoint(Point) Method
-
-Resets the columns point.
-
-```csharp
-internal void ResetColumnsPoint(System.Drawing.Point point);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.ResetColumnsPoint(System.Drawing.Point).point'></a>
-
-`point` [System.Drawing.Point](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Point 'System.Drawing.Point')
-
-The point.
-
-<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.ResetRootPoint()'></a>
-
-## DataColumnCollection<T>.ResetRootPoint() Method
-
-Resets the root point.
-
-```csharp
-internal void ResetRootPoint();
-```

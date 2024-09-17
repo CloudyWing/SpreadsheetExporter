@@ -7,7 +7,6 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
     /// <typeparam name="T">The type of the record.</typeparam>
     public abstract class DataColumnBase<T> {
         private DataColumnCollection<T> childColumns;
-        private Point point;
 
         /// <summary>
         /// Gets or sets the header text.
@@ -31,13 +30,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         /// <value>
         /// The point.
         /// </value>
-        public Point Point {
-            get => point;
-            internal set {
-                point = value;
-                ChildColumns.ResetColumnsPoint(value + new Size(0, RowSpan));
-            }
-        }
+        public Point Point { get; internal set; }
 
         /// <summary>
         /// Gets the column span.

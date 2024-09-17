@@ -60,39 +60,41 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         /// </value>
         public int RowSpan => DataSource.Count() + Columns.RowSpan;
 
-        private IEnumerable<Cell> GetHearderCells(DataColumnCollection<T> cols) {
-            foreach (DataColumnBase<T> col in cols) {
+        private IEnumerable<Cell> GetHearderCells(DataColumnCollection<T> columns) {
+            foreach (DataColumnBase<T> column in columns) {
                 yield return new Cell {
-                    ValueGenerator = (cellIndex, rowIndex) => col.HeaderText,
-                    CellStyleGenerator = (cellIndex, rowIndex) => col.HeaderStyle,
-                    Point = col.Point,
-                    Size = new Size(col.ColumnSpan, col.RowSpan)
+                    ValueGenerator = (cellIndex, rowIndex) => column.HeaderText,
+                    CellStyleGenerator = (cellIndex, rowIndex) => column.HeaderStyle,
+                    Point = column.Point,
+                    Size = new Size(column.ColumnSpan, column.RowSpan)
                 };
-                foreach (Cell childCell in GetHearderCells(col.ChildColumns)) {
+
+                foreach (Cell childCell in GetHearderCells(column.ChildColumns)) {
                     yield return childCell;
                 }
             }
         }
 
         private IEnumerable<Cell> GetRecordCells() {
-            Point p = new(0, Columns.RowSpan);
+            Point point = new(0, Columns.RowSpan);
             foreach (T record in DataSource) {
-                foreach (DataColumnBase<T> col in Columns.DataSourceColumns) {
+                foreach (DataColumnBase<T> column in Columns.DataSourceColumns) {
                     yield return new Cell {
-                        ValueGenerator = (cellIndex, rowIndex) => col.GetFieldValue(new RecordContext<T>(cellIndex, rowIndex, record)),
-                        CellStyleGenerator = (cellIndex, rowIndex) => col.GetFieldStyle(new RecordContext<T>(cellIndex, rowIndex, record)),
-                        Point = p,
-                        Size = new Size(col.ColumnSpan, 1),
-                        FormulaGenerator = (cellIndex, rowIndex) => col.GetFieldFormula(new RecordContext<T>(cellIndex, rowIndex, record))
+                        ValueGenerator = (cellIndex, rowIndex) => column.GetFieldValue(new RecordContext<T>(cellIndex, rowIndex, record)),
+                        CellStyleGenerator = (cellIndex, rowIndex) => column.GetFieldStyle(new RecordContext<T>(cellIndex, rowIndex, record)),
+                        Point = point,
+                        Size = new Size(column.ColumnSpan, 1),
+                        FormulaGenerator = (cellIndex, rowIndex) => column.GetFieldFormula(new RecordContext<T>(cellIndex, rowIndex, record))
                     };
-                    p.X += col.ColumnSpan;
+                    point.X += column.ColumnSpan;
                 }
-                p = new Point(0, p.Y + 1);
+                point = new Point(0, point.Y + 1);
             }
         }
 
         /// <inheritdoc/>
         public TemplateContext GetContext() {
+            Columns.CalculatePoints(Point.Empty);
             return new TemplateContext(GetCells(), RowSpan, GetRowHeights());
         }
 

@@ -50,20 +50,14 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         }
 
         /// <summary>
-        /// Resets the root point.
+        /// Calculates the points.
         /// </summary>
-        internal void ResetRootPoint() {
-            RootColumns.ResetColumnsPoint(Point.Empty);
-        }
-
-        /// <summary>
-        /// Resets the columns point.
-        /// </summary>
-        /// <param name="point">The point.</param>
-        internal void ResetColumnsPoint(Point point) {
+        internal void CalculatePoints(Point point) {
             Size offset = new();
 
             foreach (DataColumnBase<T> item in this) {
+                item.ChildColumns?
+                    .CalculatePoints(point + new Size(offset.Width, item.RowSpan));
                 item.Point = point + offset;
                 offset.Width += item.ColumnSpan;
             }
@@ -398,14 +392,12 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
 
             base.InsertItem(index, item);
             item.ParentColumns = this;
-            ResetRootPoint();
         }
 
         /// <inheritdoc/>
         protected override void RemoveItem(int index) {
             base.RemoveItem(index);
             Items[index].ParentColumns = null;
-            ResetRootPoint();
         }
 
         /// <inheritdoc/>
@@ -417,7 +409,6 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             base.SetItem(index, item);
             Items[index].ParentColumns = null;
             item.ParentColumns = this;
-            ResetRootPoint();
         }
 
         /// <inheritdoc/>
@@ -426,7 +417,6 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
                 Items[i].ParentColumns = null;
             }
             base.ClearItems();
-            ResetRootPoint();
         }
 
         /// <summary>
