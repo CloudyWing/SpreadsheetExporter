@@ -5,7 +5,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
     internal class SheeterContextTests {
         [Test]
         public void Constructor_ShouldInitializeProperties() {
-            Sheeter sheeter = new Sheeter("Sheet1") {
+            Sheeter sheeter = new("Sheet1") {
                 Password = "password"
             };
             sheeter.PageSettings.PaperSize = PaperSize.A4;
@@ -13,10 +13,10 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             sheeter.SetColumnWidth(2, 75D);
 
             ITemplate template = Substitute.For<ITemplate>();
-            template.GetContext().Returns(new TemplateContext(Enumerable.Empty<Cell>(), 0, new Dictionary<int, double>()));
+            template.GetContext().Returns(new TemplateContext(Enumerable.Empty<Cell>(), 0, new Dictionary<int, double?>()));
             sheeter.AddTemplate(template);
 
-            SheeterContext sut = new SheeterContext(sheeter);
+            SheeterContext sut = new(sheeter);
 
             sut.SheetName.Should().Be(sheeter.SheetName);
             sut.Cells.Should().BeEmpty();

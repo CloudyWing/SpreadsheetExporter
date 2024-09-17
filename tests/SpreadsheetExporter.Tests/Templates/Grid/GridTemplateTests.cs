@@ -7,7 +7,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
     internal class GridTemplateTests {
         [Test]
         public void CreateRow_ShouldAddRowToTemplate() {
-            GridTemplate template = new GridTemplate();
+            GridTemplate template = new();
             template.CreateRow();
 
             template.RowSpan.Should().Be(1);
@@ -15,7 +15,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
 
         [Test]
         public void CreateRow_SetRowHeight_ShouldAddRowWithSpecifiedHeightToTemplate() {
-            GridTemplate template = new GridTemplate();
+            GridTemplate template = new();
             template.CreateRow(10);
 
             template.GetContext().RowHeights[0].Should().Be(10);
@@ -23,56 +23,56 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
 
         [Test]
         public void CreateCell_ShouldAddCellToLastRow() {
-            GridTemplate template = new GridTemplate();
-            template.CreateRow();
-            template.CreateCell("A1");
+            GridTemplate template = new();
+            template.CreateRow()
+                .CreateCell("A1");
 
             template.GetContext().Cells.Count.Should().Be(1);
         }
 
         [Test]
         public void CreateCell_SetCellValue_ShouldAddCellWithSpecifiedValue() {
-            GridTemplate template = new GridTemplate();
-            template.CreateRow();
-            template.CreateCell("A1");
+            GridTemplate template = new();
+            template.CreateRow()
+                .CreateCell("A1");
 
             template.GetContext().Cells.Single().GetValue().Should().Be("A1");
         }
 
         [Test]
         public void CreateCell_SetColumnSpan_ShouldAddCellWithSpecifiedColumnSpan() {
-            GridTemplate template = new GridTemplate();
-            template.CreateRow();
-            template.CreateCell("A1", 2);
+            GridTemplate template = new();
+            template.CreateRow()
+                .CreateCell("A1", 2);
 
             template.GetContext().Cells.Single().Size.Width.Should().Be(2);
         }
 
         [Test]
         public void CreateCell_SetRowSpan_ShouldAddCellWithSpecifiedRowSpan() {
-            GridTemplate template = new GridTemplate();
-            template.CreateRow();
-            template.CreateCell("A1", rowSpan: 2);
+            GridTemplate template = new();
+            template.CreateRow()
+                .CreateCell("A1", rowSpan: 2);
 
             template.GetContext().Cells.Single().Size.Height.Should().Be(2);
         }
 
         [Test]
         public void CreateCell_SetCellStyle_ShouldAddCellWithSpecifiedStyle() {
-            CellStyle cellStyle = new CellStyle(font: new CellFont("Arial", 10));
+            CellStyle cellStyle = new(Font: new CellFont("Arial", 10));
 
-            GridTemplate template = new GridTemplate();
-            template.CreateRow();
-            template.CreateCell("A1", cellStyle: cellStyle);
+            GridTemplate template = new();
+            template.CreateRow()
+                .CreateCell("A1", cellStyle: cellStyle);
 
             template.GetContext().Cells.Single().GetCellStyle().Should().BeEquivalentTo(cellStyle);
         }
 
         [Test]
         public void CreateCell_SetFormula_ShouldCreateCellWithFormula() {
-            GridTemplate template = new GridTemplate();
-            template.CreateRow();
-            template.CreateCell((x, y) => "A1 + B1", 2, 2, SpreadsheetManager.DefaultCellStyles.GridCellStyle);
+            GridTemplate template = new();
+            template.CreateRow()
+                .CreateCell((x, y) => "A1 + B1", 2, 2, SpreadsheetManager.DefaultCellStyles.GridCellStyle);
 
             TemplateContext context = template.GetContext();
             Cell cell = context.Cells.Single();
@@ -101,7 +101,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             context.RowSpan.Should().Be(3);
             context.RowHeights.Count.Should().Be(2);
             context.RowHeights[0].Should().Be(20);
-            context.RowHeights[1].Should().Be(16.5);
+            context.RowHeights[1].Should().Be(null);
         }
     }
 }

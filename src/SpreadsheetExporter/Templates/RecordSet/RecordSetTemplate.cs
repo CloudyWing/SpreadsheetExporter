@@ -4,80 +4,97 @@ using System.Drawing;
 using System.Linq;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
-    /// <summary>The recordset template. Create cell information using set data source and data column.</summary>
-    /// <typeparam name="T">The type of the record.</typeparam>
+    /// <summary>
+    /// The recordset template. Create cell information using set data source and data column.
+    /// </summary>
     /// <seealso cref="ITemplate" />
-    public class RecordSetTemplate<T> : ITemplate {
-        /// <summary>Initializes a new instance of the <see cref="RecordSetTemplate{T}" /> class.</summary>
-        /// <param name="dataSource">The data source.</param>
-        /// <exception cref="ArgumentNullException">dataSource</exception>
-        public RecordSetTemplate(IEnumerable<T> dataSource) {
-            DataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
-        }
+    /// <typeparam name="T">The type of the record.</typeparam>
+    /// <param name="dataSource">The data source.</param>
+    /// <exception cref="ArgumentNullException">dataSource</exception>
+    public class RecordSetTemplate<T>(IEnumerable<T> dataSource) : ITemplate {
+        /// <summary>
+        /// Gets or sets the data source.
+        /// </summary>
+        /// <value>
+        /// The data source.
+        /// </value>
+        public IEnumerable<T> DataSource { get; set; } = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
 
-        /// <summary>Gets or sets the data source.</summary>
-        /// <value>The data source.</value>
-        public IEnumerable<T> DataSource { get; set; }
-
-        /// <summary>Gets the columns.</summary>
-        /// <value>The columns.</value>
+        /// <summary>
+        /// Gets the columns.
+        /// </summary>
+        /// <value>
+        /// The columns.
+        /// </value>
         public DataColumnCollection<T> Columns { get; } = new DataColumnCollection<T>(null);
 
-        /// <summary>Gets or sets the height of the header.</summary>
-        /// <value>The height of the header.</value>
-        public double HeaderHeight { get; set; } = 16.5d;
+        /// <summary>
+        /// Gets or sets the height of the header.
+        /// </summary>
+        /// <value>
+        /// The height of the header.
+        /// </value>
+        public double? HeaderHeight { get; set; }
 
-        /// <summary>Gets or sets the height of the record.</summary>
-        /// <value>The height of the record.</value>
-        public double RecordHeight { get; set; } = 16.5d;
+        /// <summary>
+        /// Gets or sets the height of the record.
+        /// </summary>
+        /// <value>
+        /// The height of the record.
+        /// </value>
+        public double? RecordHeight { get; set; }
 
-        /// <summary>Gets the column span.</summary>
-        /// <value>The column span.</value>
+        /// <summary>
+        /// Gets the column span.
+        /// </summary>
+        /// <value>
+        /// The column span.
+        /// </value>
         public int ColumnSpan => Columns.ColumnSpan;
 
-        /// <summary>Gets the row span.</summary>
-        /// <value>The row span.</value>
+        /// <summary>
+        /// Gets the row span.
+        /// </summary>
+        /// <value>
+        /// The row span.
+        /// </value>
         public int RowSpan => DataSource.Count() + Columns.RowSpan;
 
+        private IEnumerable<Cell> GetHearderCells(DataColumnCollection<T> columns) {
+            foreach (DataColumnBase<T> column in columns) {
+                yield return new Cell {
+                    ValueGenerator = (cellIndex, rowIndex) => column.HeaderText,
+                    CellStyleGenerator = (cellIndex, rowIndex) => column.HeaderStyle,
+                    Point = column.Point,
+                    Size = new Size(column.ColumnSpan, column.RowSpan)
+                };
 
-        private IEnumerable<Cell> GetHearderCells(DataColumnCollection<T> cols) {
-            List<Cell> cells = new();
-            foreach (DataColumnBase<T> col in cols) {
-                cells.Add(new Cell() {
-                    ValueGenerator = (cellIndex, rowIndex) => col.HeaderText,
-                    CellStyleGenerator = (cellIndex, rowIndex) => col.HeaderStyle,
-                    Point = col.Point,
-                    Size = new Size(col.ColumnSpan, col.RowSpan)
-                });
-
-                cells.AddRange(GetHearderCells(col.ChildColumns));
+                foreach (Cell childCell in GetHearderCells(column.ChildColumns)) {
+                    yield return childCell;
+                }
             }
-            return cells;
         }
 
         private IEnumerable<Cell> GetRecordCells() {
-            Point p = new(0, Columns.RowSpan);
-
-            int i = 0;
+            Point point = new(0, Columns.RowSpan);
             foreach (T record in DataSource) {
-                foreach (DataColumnBase<T> col in Columns.DataSourceColumns) {
+                foreach (DataColumnBase<T> column in Columns.DataSourceColumns) {
                     yield return new Cell {
-                        ValueGenerator = (cellIndex, rowIndex) => col.GetFieldValue(new(cellIndex, rowIndex, record)),
-                        CellStyleGenerator = (cellIndex, rowIndex) => col.GetFieldStyle(new(cellIndex, rowIndex, record)),
-                        Point = p,
-                        Size = new Size(col.ColumnSpan, 1),
-                        FormulaGenerator = (cellIndex, rowIndex) => col.GetFieldFormula(new(cellIndex, rowIndex, record))
+                        ValueGenerator = (cellIndex, rowIndex) => column.GetFieldValue(new RecordContext<T>(cellIndex, rowIndex, record)),
+                        CellStyleGenerator = (cellIndex, rowIndex) => column.GetFieldStyle(new RecordContext<T>(cellIndex, rowIndex, record)),
+                        Point = point,
+                        Size = new Size(column.ColumnSpan, 1),
+                        FormulaGenerator = (cellIndex, rowIndex) => column.GetFieldFormula(new RecordContext<T>(cellIndex, rowIndex, record))
                     };
-                    p += new Size(col.ColumnSpan, 0);
+                    point.X += column.ColumnSpan;
                 }
-
-                p = new Point(0, p.Y + 1);
-                i++;
+                point = new Point(0, point.Y + 1);
             }
         }
 
         /// <inheritdoc/>
         public TemplateContext GetContext() {
+            Columns.CalculatePoints(Point.Empty);
             return new TemplateContext(GetCells(), RowSpan, GetRowHeights());
         }
 
@@ -85,18 +102,15 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return GetHearderCells(Columns).Union(GetRecordCells());
         }
 
-        private Dictionary<int, double> GetRowHeights() {
-            Dictionary<int, double> dic = new();
+        private Dictionary<int, double?> GetRowHeights() {
+            Dictionary<int, double?> dic = [];
             int i;
-
             for (i = 0; i < Columns.RowSpan; i++) {
-                dic.Add(i, HeaderHeight);
+                dic[i] = HeaderHeight;
             }
-
-            foreach (T item in DataSource) {
-                dic.Add(i++, RecordHeight);
+            foreach (T _ in DataSource) {
+                dic[i++] = RecordHeight;
             }
-
             return dic;
         }
     }

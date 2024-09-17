@@ -2,9 +2,12 @@
 using System.Drawing;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using OfficeOpenXml.Style.XmlAccess;
 
 namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
-    /// <summary>The excel exporter, using epplus.</summary>
+    /// <summary>
+    /// The excel exporter, using epplus.
+    /// </summary>
     /// <seealso cref="ExporterBase" />
     public class ExcelExporter : ExporterBase {
         private readonly Dictionary<HorizontalAlignment, ExcelHorizontalAlignment> horizontalAlignmentMap = new() {
@@ -30,6 +33,11 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
         /// <inheritdoc/>
         protected override byte[] ExecuteExport(IEnumerable<SheeterContext> contexts) {
             using ExcelPackage package = new();
+
+            if (DefaultFont.HasValue) {
+                SetDefaultFont(package, DefaultFont.Value);
+            }
+
             foreach (SheeterContext context in contexts) {
                 CreateSheetToWorkbook(package.Workbook, context);
             }
@@ -39,9 +47,32 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
                 : package.GetAsByteArray();
         }
 
+        private void SetDefaultFont(ExcelPackage package, CellFont font) {
+            ExcelFontXml defaultFont = package.Workbook.Styles.Fonts[0];
+            if (!string.IsNullOrWhiteSpace(font.Name)) {
+                defaultFont.Name = font.Name;
+            }
+
+            if (font.Size != 0) {
+                defaultFont.Size = font.Size;
+            }
+
+            if (font.Color != Color.Empty) {
+                defaultFont.Color.SetColor(font.Color);
+            }
+
+            defaultFont.Bold = (font.Style & FontStyles.IsBold) == FontStyles.IsBold;
+            defaultFont.Italic = (font.Style & FontStyles.IsItalic) == FontStyles.IsItalic;
+            defaultFont.UnderLine = (font.Style & FontStyles.HasUnderline) == FontStyles.HasUnderline;
+            defaultFont.Strike = (font.Style & FontStyles.IsStrikeout) == FontStyles.IsStrikeout;
+        }
+
         private void CreateSheetToWorkbook(ExcelWorkbook workbook, SheeterContext context) {
             ExcelWorksheet sheet = workbook.Worksheets.Add(context.SheetName);
-            sheet.DefaultRowHeight = 16.5d;
+
+            if (context.DefaultRowHeight.HasValue) {
+                sheet.DefaultRowHeight = context.DefaultRowHeight.Value;
+            }
 
             SetSheetCells(sheet, context.Cells);
             SetSheetColumnWidths(sheet, context.ColumnWidths);
@@ -131,7 +162,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
 
         private void SetSheetColumnWidths(ExcelWorksheet sheet, IReadOnlyDictionary<int, double> columnWidths) {
             foreach (KeyValuePair<int, double> pair in columnWidths) {
-                // EPPlus從1開始算
+                // EPPlus 從 1 開始算
                 ExcelColumn column = sheet.Column(pair.Key + 1);
                 if (pair.Value <= Constants.AutoFitColumnWidth) {
                     column.AutoFit();
@@ -143,16 +174,16 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
             }
         }
 
-        private void SetSheetRowHeights(ExcelWorksheet sheet, IReadOnlyDictionary<int, double> rowHeights) {
-            foreach (KeyValuePair<int, double> pair in rowHeights) {
-                // EPPlus從1開始算
+        private void SetSheetRowHeights(ExcelWorksheet sheet, IReadOnlyDictionary<int, double?> rowHeights) {
+            foreach (KeyValuePair<int, double?> pair in rowHeights) {
+                // EPPlus 從 1 開始算
                 ExcelRow row = sheet.Row(pair.Key + 1);
                 if (pair.Value <= Constants.AutoFiteRowHeight) {
                     row.CustomHeight = false;
                 } else if (pair.Value == Constants.HiddenRow) {
                     row.Hidden = true;
-                } else {
-                    row.Height = pair.Value;
+                } else if (pair.Value.HasValue) {
+                    row.Height = pair.Value.Value;
                 }
             }
         }

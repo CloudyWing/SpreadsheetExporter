@@ -14,11 +14,11 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void FieldContext_Properties_ShouldGetCorrectValue() {
-            object record = new object();
-            RecordContext<object> recordContext = new RecordContext<object>(1, 2, record);
+            object record = new();
+            RecordContext<object> recordContext = new(1, 2, record);
             string key = "key";
-            object value = new object();
-            FieldContext<object, object> fieldContext = new FieldContext<object, object>(recordContext, key, value);
+            object value = new();
+            FieldContext<object, object> fieldContext = new(recordContext, key, value);
 
             int cellIndex = fieldContext.CellIndex;
             int rowIndex = fieldContext.RowIndex;

@@ -10,9 +10,12 @@ using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 
 namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
-    /// <summary>The excel exporter, using npoi.</summary>
+    /// <summary>
+    /// The excel exporter, using npoi.
+    /// </summary>
     /// <seealso cref="ExporterBase" />
-    public sealed class ExcelExporter : ExporterBase {
+    /// <param name="excelFormat">The excel format.</param>
+    public sealed class ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOpenXmlDocument) : ExporterBase {
         private IWorkbook workbook;
         private readonly IDictionary<CellStyle, ICellStyle> cellStyles = new Dictionary<CellStyle, ICellStyle>();
         private readonly IDictionary<CellFont, IFont> fonts = new Dictionary<CellFont, IFont>();
@@ -43,23 +46,23 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
         private readonly object thisLock = new();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExcelExporter"/> class.
+        /// Gets or sets the excel format.
         /// </summary>
-        /// <param name="excelFormat">The excel format.</param>
-        public ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOpenXmlDocument) {
-            ExcelFormat = excelFormat;
-        }
+        /// <value>
+        /// The excel format.
+        /// </value>
+        public ExcelFormat ExcelFormat { get; set; } = excelFormat;
 
-        /// <summary>Gets or sets the excel format.</summary>
-        /// <value>The excel format.</value>
-        public ExcelFormat ExcelFormat { get; set; }
-
-        /// <summary>Gets a value indicating whether this instance is office open XML document.</summary>
+        /// <summary>
+        /// Gets a value indicating whether this instance is office open XML document.
+        /// </summary>
         /// <value>
         ///   <c>true</c> if this instance is office open XML document; otherwise, <c>false</c>.</value>
         public bool IsOfficeOpenXmlDocument => ExcelFormat == ExcelFormat.OfficeOpenXmlDocument;
 
-        /// <summary>Gets or sets a value indicating whether this instance is closed not implemented exception.</summary>
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is closed not implemented exception.
+        /// </summary>
         /// <value>
         ///   <c>true</c> if this instance is closed not implemented exception; otherwise, <c>false</c>.</value>
         public bool IsClosedNotImplementedException { get; set; }
@@ -75,6 +78,11 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             lock (thisLock) {
                 // 因為 ParseCellStyle 和 ParseFont 會用到，所以用 field 處理
                 workbook = IsOfficeOpenXmlDocument ? new XSSFWorkbook() : new HSSFWorkbook();
+
+                if (DefaultFont.HasValue) {
+                    SetDefaultFont(workbook, DefaultFont.Value);
+                }
+
                 foreach (SheeterContext context in contexts) {
                     CreateSheet(context);
                 }
@@ -97,19 +105,46 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
 
                 workbook.Write(ms);
 
-                // Dispose() 和 Close() 疑似有問題，所以設為 null
-                workbook = null;
+                workbook?.Close();
                 cellStyles.Clear();
                 fonts.Clear();
+                workbook = null;
 
                 return ms.ToArray();
             }
         }
 
+        private void SetDefaultFont(IWorkbook workbook, CellFont font) {
+            IFont defaultFont = workbook.GetFontAt(0);
+            if (!string.IsNullOrWhiteSpace(font.Name)) {
+                defaultFont.FontName = font.Name;
+            }
+
+            // NPOI 可能只有 Size 可以生效
+            if (font.Size != 0) {
+                defaultFont.FontHeightInPoints = font.Size;
+            }
+
+            if (font.Color != Color.Empty) {
+                if (defaultFont is HSSFFont) {
+                    defaultFont.Color = ParseColor(font.Color);
+                } else {
+                    ((XSSFFont)defaultFont).SetColor(new XSSFColor(font.Color));
+                }
+            }
+            defaultFont.IsBold = (font.Style & FontStyles.IsBold) == FontStyles.IsBold;
+            defaultFont.IsItalic = (font.Style & FontStyles.IsItalic) == FontStyles.IsItalic;
+            if ((font.Style & FontStyles.HasUnderline) == FontStyles.HasUnderline) {
+                defaultFont.Underline = FontUnderlineType.Single;
+            }
+            defaultFont.IsStrikeout = (font.Style & FontStyles.IsStrikeout) == FontStyles.IsStrikeout;
+        }
+
         private void CreateSheet(SheeterContext context) {
             ISheet sheet = workbook.CreateSheet(context.SheetName);
-            // 不知道為什麼預設給很小，所以設定 default
-            sheet.DefaultRowHeight = 330;
+            if (context.DefaultRowHeight.HasValue) {
+                sheet.DefaultRowHeightInPoints = (float)context.DefaultRowHeight;
+            }
             SetSheetCells(sheet, context.Cells);
             SetSheetColumnWidths(sheet, context.ColumnWidths);
             SetSheetRowHeights(sheet, context.RowHeights);
@@ -303,15 +338,15 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             }
         }
 
-        private void SetSheetRowHeights(ISheet sheet, IReadOnlyDictionary<int, double> rowHeights) {
-            foreach (KeyValuePair<int, double> pair in rowHeights) {
+        private void SetSheetRowHeights(ISheet sheet, IReadOnlyDictionary<int, double?> rowHeights) {
+            foreach (KeyValuePair<int, double?> pair in rowHeights) {
                 IRow row = sheet.GetRow(pair.Key) ?? sheet.CreateRow(pair.Key);
                 if (pair.Value <= Constants.AutoFiteRowHeight) {
                     row.Height = -1;
                 } else if (pair.Value == Constants.HiddenRow) {
                     row.ZeroHeight = true;
-                } else {
-                    row.Height = (short)(pair.Value * 20);
+                } else if (pair.Value.HasValue) {
+                    row.HeightInPoints = (float)pair.Value.Value;
                 }
             }
         }

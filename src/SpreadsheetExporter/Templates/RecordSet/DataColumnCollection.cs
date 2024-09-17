@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -6,7 +6,9 @@ using System.Linq;
 using System.Linq.Expressions;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
-    /// <summary>The data column collection.</summary>
+    /// <summary>
+    /// The data column collection.
+    /// </summary>
     /// <typeparam name="T">The type of the record.</typeparam>
     public class DataColumnCollection<T> : Collection<DataColumnBase<T>> {
         private readonly DataColumnBase<T> parentItem;
@@ -15,20 +17,32 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             parentItem = cell;
         }
 
-        /// <summary>Gets the column span.</summary>
-        /// <value>The column span.</value>
+        /// <summary>
+        /// Gets the column span.
+        /// </summary>
+        /// <value>
+        /// The column span.
+        /// </value>
         public int ColumnSpan => Count == 0 ? 0 : this.Sum(x => x.ColumnSpan);
 
-        /// <summary>Gets the row span.</summary>
-        /// <value>The row span.</value>
+        /// <summary>
+        /// Gets the row span.
+        /// </summary>
+        /// <value>
+        /// The row span.
+        /// </value>
         public int RowSpan => Count == 0 ? 0 : this.Max(x => x.ColumnLayers);
 
-        /// <summary>Gets the root columns.</summary>
-        /// <value>The root columns.</value>
+        /// <summary>
+        /// Gets the root columns.
+        /// </summary>
+        /// <value>
+        /// The root columns.
+        /// </value>
         public DataColumnCollection<T> RootColumns {
             get {
                 DataColumnCollection<T> items = this;
-                while (items.parentItem != null && items.parentItem.ParentColumns != null) {
+                while (items.parentItem?.ParentColumns != null) {
                     items = items.parentItem.ParentColumns;
                 }
                 return items;
@@ -36,26 +50,22 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         }
 
         /// <summary>
-        /// 從根節點往下重設座標
+        /// Calculates the points.
         /// </summary>
-        internal void ResetRootPoint() {
-            RootColumns.ResetColumnsPoint(Point.Empty);
-        }
-
-        /// <summary>
-        /// 重設底下所有DataColumn的座標
-        /// </summary>
-        /// <param name="point"></param>
-        internal void ResetColumnsPoint(Point point) {
+        internal void CalculatePoints(Point point) {
             Size offset = new();
 
             foreach (DataColumnBase<T> item in this) {
+                item.ChildColumns?
+                    .CalculatePoints(point + new Size(offset.Width, item.RowSpan));
                 item.Point = point + offset;
                 offset.Width += item.ColumnSpan;
             }
         }
 
-        /// <summary>Adds the specified header text.</summary>
+        /// <summary>
+        /// Adds the specified header text.
+        /// </summary>
         /// <param name="dataColumn">The data column.</param>
         /// <returns>The self.</returns>
         public new DataColumnCollection<T> Add(DataColumnBase<T> dataColumn) {
@@ -63,7 +73,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return this;
         }
 
-        /// <summary>Adds the specified header text.</summary>
+        /// <summary>
+        /// Adds the specified header text.
+        /// </summary>
         /// <param name="headerText">The header text.</param>
         /// <param name="headerStyle">The header style.</param>
         /// <param name="fieldStyleGenerator">The field style generator.</param>
@@ -81,7 +93,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return this;
         }
 
-        /// <summary>Adds the data column to the end of the DataColumnCollection&lt;T&gt;.</summary>
+        /// <summary>
+        /// Adds the data column to the end of the DataColumnCollection&lt;T&gt;.
+        /// </summary>
         /// <param name="headerText">The header text.</param>
         /// <param name="providerSetter">The provider setter.</param>
         /// <param name="headerStyle">The header style. The dafault is <c>SpreadsheetManager.DefaultCellStyles.HeaderStyle</c>.</param>
@@ -107,7 +121,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return this;
         }
 
-        /// <summary>Adds the data column to the end of the DataColumnCollection&lt;T&gt;.</summary>
+        /// <summary>
+        /// Adds the data column to the end of the DataColumnCollection&lt;T&gt;.
+        /// </summary>
         /// <typeparam name="TField">The type of the field.</typeparam>
         /// <param name="headerText">The header text.</param>
         /// <param name="fieldKey">The field key.</param>
@@ -127,7 +143,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return this;
         }
 
-        /// <summary>Adds the data column to the end of the DataColumnCollection&lt;T&gt;.</summary>
+        /// <summary>
+        /// Adds the data column to the end of the DataColumnCollection&lt;T&gt;.
+        /// </summary>
         /// <typeparam name="TField">The type of the field.</typeparam>
         /// <param name="headerText">The header text.</param>
         /// <param name="fieldKeyExpression">The field key expression.</param>
@@ -147,7 +165,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return this;
         }
 
-        /// <summary>Adds the data column to the end of the DataColumnCollection&lt;T&gt;.</summary>
+        /// <summary>
+        /// Adds the data column to the end of the DataColumnCollection&lt;T&gt;.
+        /// </summary>
         /// <typeparam name="TField">The type of the field.</typeparam>
         /// <param name="headerText">The header text.</param>
         /// <param name="fieldKey">The field key.</param>
@@ -175,7 +195,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return this;
         }
 
-        /// <summary>Adds the data column to the end of the DataColumnCollection&lt;T&gt;.</summary>
+        /// <summary>
+        /// Adds the data column to the end of the DataColumnCollection&lt;T&gt;.
+        /// </summary>
         /// <typeparam name="TField">The type of the field.</typeparam>
         /// <param name="headerText">The header text.</param>
         /// <param name="fieldKeyExpression">The field key expression.</param>
@@ -204,22 +226,26 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return this;
         }
 
-        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <summary>
+        /// Adds the child data column at the end of the last data column.
+        /// </summary>
         /// <param name="childColumn">The child data column.</param>
         /// <returns>The self.</returns>
         /// <exception cref="NullReferenceException"></exception>
         public DataColumnCollection<T> AddChildToLast(DataColumnBase<T> childColumn) {
-            DataColumnBase<T> column = this.LastOrDefault();
-            if (column is null) {
-                throw new NullReferenceException($"No {nameof(DataColumnBase<T>)} have been created.");
+            if (Count == 0) {
+                throw new InvalidOperationException("No columns available to add child to.");
             }
 
+            DataColumnBase<T> column = this.Last();
             column.ChildColumns.Add(childColumn);
 
             return this;
         }
 
-        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <summary>
+        /// Adds the child data column at the end of the last data column.
+        /// </summary>
         /// <param name="headerText">The header text.</param>
         /// <param name="headerStyle">The header style.</param>
         /// <param name="fieldStyleGenerator">The field style generator.</param>
@@ -235,7 +261,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             });
         }
 
-        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <summary>
+        /// Adds the child data column at the end of the last data column.
+        /// </summary>
         /// <param name="headerText">The header text.</param>
         /// <param name="providerSetter">The provider setter.</param>
         /// <param name="headerStyle">The header style. The dafault is <c>SpreadsheetManager.DefaultCellStyles.HeaderStyle</c>.</param>
@@ -259,7 +287,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return AddChildToLast(dataColumn);
         }
 
-        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <summary>
+        /// Adds the child data column at the end of the last data column.
+        /// </summary>
         /// <typeparam name="TField">The type of the field.</typeparam>
         /// <param name="headerText">The header text.</param>
         /// <param name="fieldKey">The field key.</param>
@@ -277,7 +307,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             });
         }
 
-        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <summary>
+        /// Adds the child data column at the end of the last data column.
+        /// </summary>
         /// <typeparam name="TField">The type of the field.</typeparam>
         /// <param name="headerText">The header text.</param>
         /// <param name="fieldKeyExpression">The field key expression.</param>
@@ -295,7 +327,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             });
         }
 
-        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <summary>
+        /// Adds the child data column at the end of the last data column.
+        /// </summary>
         /// <typeparam name="TField">The type of the field.</typeparam>
         /// <param name="headerText">The header text.</param>
         /// <param name="fieldKey">The field key.</param>
@@ -321,7 +355,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return AddChildToLast(dataColumn);
         }
 
-        /// <summary>Adds the child data column at the end of the last data column.</summary>
+        /// <summary>
+        /// Adds the child data column at the end of the last data column.
+        /// </summary>
         /// <typeparam name="TField">The type of the field.</typeparam>
         /// <param name="headerText">The header text.</param>
         /// <param name="fieldKeyExpression">The field key expression.</param>
@@ -356,14 +392,12 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
 
             base.InsertItem(index, item);
             item.ParentColumns = this;
-            ResetRootPoint();
         }
 
         /// <inheritdoc/>
         protected override void RemoveItem(int index) {
-            Items[index].ParentColumns = null;
             base.RemoveItem(index);
-            ResetRootPoint();
+            Items[index].ParentColumns = null;
         }
 
         /// <inheritdoc/>
@@ -372,23 +406,25 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
                 throw new ArgumentException($"{nameof(DataColumnBase<T>)} is already contained by another {nameof(DataColumnCollection<T>)}.", nameof(item));
             }
 
-            Items[index].ParentColumns = null;
             base.SetItem(index, item);
+            Items[index].ParentColumns = null;
             item.ParentColumns = this;
-            ResetRootPoint();
         }
 
         /// <inheritdoc/>
         protected override void ClearItems() {
-            foreach (DataColumnBase<T> item in Items) {
-                item.ParentColumns = null;
+            for (int i = 0; i < Items.Count; i++) {
+                Items[i].ParentColumns = null;
             }
             base.ClearItems();
-            ResetRootPoint();
         }
 
-        /// <summary>Get the column containing the properties of the data source.</summary>
-        /// <value>The data columns.</value>
+        /// <summary>
+        /// Get the column containing the properties of the data source.
+        /// </summary>
+        /// <value>
+        /// The data columns.
+        /// </value>
         public IEnumerable<DataColumnBase<T>> DataSourceColumns {
             get {
                 foreach (DataColumnBase<T> item in this) {
@@ -403,7 +439,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             }
         }
 
-        /// <summary>The generator provider.</summary>
+        /// <summary>
+        /// The generator provider.
+        /// </summary>
         /// <typeparam name="TRecord">The type of the record.</typeparam>
         /// <typeparam name="TContext">The type of the context.</typeparam>
         /// <seealso cref="Collection{DataColumnBase}">Collection{DataColumnBase}</seealso>
@@ -412,14 +450,18 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             private Func<TContext, object> valueGenerator;
             private Func<TContext, string> formulaGenerator;
 
-            /// <summary>Uses the value.</summary>
+            /// <summary>
+            /// Uses the value.
+            /// </summary>
             /// <param name="generator">The generator.</param>
             public void UseValue(Func<TContext, object> generator) {
                 type = ProviderType.Value;
                 valueGenerator = generator;
             }
 
-            /// <summary>Uses the formula.</summary>
+            /// <summary>
+            /// Uses the formula.
+            /// </summary>
             /// <param name="generator">The generator.</param>
             public void UseFormula(Func<TContext, string> generator) {
                 type = ProviderType.Formula;
@@ -429,28 +471,31 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             internal void SetGeneratorForColumn(RecordDataColumn<TRecord> dataColumn) {
                 switch (type) {
                     case ProviderType.Value:
-                        dataColumn.FieldValueGenerator = valueGenerator as Func<RecordContext<TRecord>, object>;
+                        dataColumn.FieldValueGenerator = ConvertGenerator<Func<RecordContext<TRecord>, object>>(valueGenerator);
                         break;
                     case ProviderType.Formula:
-                        dataColumn.FieldFormulaGenerator = formulaGenerator as Func<RecordContext<TRecord>, string>;
+                        dataColumn.FieldFormulaGenerator = ConvertGenerator<Func<RecordContext<TRecord>, string>>(formulaGenerator);
                         break;
                     default:
-                        throw new ArgumentException();
+                        throw new ArgumentException("Invalid provider type.");
                 }
             }
 
             internal void SetGeneratorForColumn<TField>(DataColumn<TRecord, TField> dataColumn) {
                 switch (type) {
                     case ProviderType.Value:
-                        dataColumn.FieldValueGenerator = valueGenerator as Func<FieldContext<TRecord, TField>, object>;
+                        dataColumn.FieldValueGenerator = ConvertGenerator<Func<FieldContext<TRecord, TField>, object>>(valueGenerator);
                         break;
                     case ProviderType.Formula:
-                        dataColumn.FieldFormulaGenerator = formulaGenerator as Func<FieldContext<TRecord, TField>, string>;
+                        dataColumn.FieldFormulaGenerator = ConvertGenerator<Func<FieldContext<TRecord, TField>, string>>(formulaGenerator);
                         break;
                     default:
-                        throw new ArgumentException();
+                        throw new ArgumentException("Invalid provider type.");
                 }
             }
+
+            private static TField ConvertGenerator<TField>(object generator) where TField : class =>
+                generator as TField ?? throw new InvalidCastException("Generator type mismatch.");
 
             private enum ProviderType {
                 None,

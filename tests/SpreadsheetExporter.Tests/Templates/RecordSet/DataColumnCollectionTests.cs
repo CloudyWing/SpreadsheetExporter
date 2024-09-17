@@ -5,8 +5,8 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
     [TestFixture]
     internal class DataColumnCollectionTests {
         private const string HeaderText = "Header Text";
-        private static CellStyle headerStyle = new CellStyle();
-        private static CellStyle fieldStyle = new CellStyle();
+        private static CellStyle headerStyle = new();
+        private static CellStyle fieldStyle = new();
         private static readonly Func<RecordContext<Record>, CellStyle> fieldStyleGenerator = (x) => fieldStyle;
         private DataColumnCollection<Record>? columns;
 
@@ -52,7 +52,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void Add_ByRecordDataColumn_ShouldAddToColumns() {
-            RecordDataColumn<Record> column = new RecordDataColumn<Record>();
+            RecordDataColumn<Record> column = new();
             columns!.Add(column);
 
             columns.Should().Contain(column);
@@ -153,7 +153,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void AddChildToLast_ByRecordDataColumn_ShouldAddToColumns() {
-            RecordDataColumn<Record> column = new RecordDataColumn<Record>();
+            RecordDataColumn<Record> column = new();
             columns!.Add(HeaderText);
             columns.AddChildToLast(column);
 

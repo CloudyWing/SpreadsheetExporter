@@ -4,28 +4,31 @@ using CloudyWing.SpreadsheetExporter.Config;
 namespace CloudyWing.SpreadsheetExporter.Tests.Config {
     [TestFixture]
     public class CellStyleConfigurationTests {
-        private void CreateTestCellStyle(CellStyle cellStyle, out CellStyle headerStyle, out CellStyle fieldStyle) {
-            CellFont headerFont = cellStyle.Font
-                    .CloneAndSetStyle(cellStyle.Font.Style | FontStyles.IsBold);
+        private static void CreateTestCellStyle(CellStyle cellStyle, out CellStyle headerStyle, out CellStyle fieldStyle) {
+            CellFont headerFont = cellStyle.Font with {
+                Style = cellStyle.Font.Style | FontStyles.IsBold
+            };
 
-            headerStyle = cellStyle
-                    .CloneAndSetFont(headerFont)
-                    .CloneAndSetHorizontalAlignment(HorizontalAlignment.Center)
-                    .CloneAndSetBorder(true);
+            headerStyle = cellStyle with {
+                Font = headerFont,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                HasBorder = true
+            };
 
-            fieldStyle = cellStyle
-                .CloneAndSetBorder(true)
-                .CloneAndSetHorizontalAlignment(HorizontalAlignment.Left);
+            fieldStyle = cellStyle with {
+                HasBorder = true,
+                HorizontalAlignment = HorizontalAlignment.Left
+            };
         }
 
         [Test]
         public void Constructor_UseAction_ReturnTrue() {
-            CellFont cellFont = new CellFont("新細明體", 10, Color.Black, FontStyles.None);
-            CellStyle cellStyle = new CellStyle(HorizontalAlignment.General, VerticalAlignment.Middle, false, false, Color.Empty, cellFont);
+            CellFont cellFont = new("新細明體", 10, Color.Black, FontStyles.None);
+            CellStyle cellStyle = new(HorizontalAlignment.General, VerticalAlignment.Middle, false, false, Color.Empty, cellFont);
 
             CreateTestCellStyle(cellStyle, out CellStyle headerStyle, out CellStyle fieldStyle);
 
-            CellStyleConfiguration actual = new CellStyleConfiguration(x => {
+            CellStyleConfiguration actual = new(x => {
                 x.CellStyle = cellStyle;
                 x.HeaderStyle = headerStyle;
                 x.FieldStyle = fieldStyle;

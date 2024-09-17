@@ -6,18 +6,28 @@ using System.Drawing;
 using System.Linq;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
-    /// <summary>The grid template. Create cell information using <c>CreateRow()</c> and <c>CreateCell()</c>.</summary>
+    /// <summary>
+    /// The grid template. Create cell information using <c>CreateRow()</c> and <c>CreateCell()</c>.
+    /// </summary>
     public class GridTemplate : ITemplate {
-        private readonly IList<CellCollection> rows = new List<CellCollection>();
-        private readonly IList<Point> points = new List<Point>();
-        private readonly IDictionary<int, double> rowHeights = new Dictionary<int, double>();
+        private readonly List<CellCollection> rows = [];
+        private readonly HashSet<Point> points = [];
+        private readonly Dictionary<int, double?> rowHeights = [];
 
-        /// <summary>Gets the column span.</summary>
-        /// <value>The column span.</value>
+        /// <summary>
+        /// Gets the column span.
+        /// </summary>
+        /// <value>
+        /// The column span.
+        /// </value>
         public int ColumnSpan => points.Count == 0 ? 0 : points.Max(x => x.X) + 1;
 
-        /// <summary>Gets the row span.</summary>
-        /// <value>The row span.</value>
+        /// <summary>
+        /// Gets the row span.
+        /// </summary>
+        /// <value>
+        /// The row span.
+        /// </value>
         public int RowSpan => points.Count == 0 ? 0 : points.Max(x => x.Y) + 1;
 
         /// <summary>
@@ -25,7 +35,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         /// </summary>
         /// <param name="height">The height.</param>
         /// <returns>The self.</returns>
-        public GridTemplate CreateRow(double height = 16.5d) {
+        public GridTemplate CreateRow(double? height = null) {
             // 避免建立最後一筆 Row，卻沒加入 Cell 導致用作標算列數會不正確，所以加一個 -x 座標
             points.Add(new Point(-1, rows.Count));
             rowHeights.Add(rows.Count, height);
@@ -34,42 +44,41 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
             return this;
         }
 
-        /// <summary>Creates the cell.</summary>
+        /// <summary>
+        /// Creates the cell.
+        /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="columnSpan">The column span.</param>
         /// <param name="rowSpan">The row span.</param>
         /// <param name="cellStyle">The cell style. The default is <c>SpreadsheetManager.DefaultCellStyles.GridCellStyle</c>.</param>
         /// <returns>The self.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">columnSpan - Must be greater than 0.
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// columnSpan - Must be greater than 0.
         /// or
-        /// rowSpan - Must be greater than 0.</exception>
+        /// rowSpan - Must be greater than 0.
+        /// </exception>
         public GridTemplate CreateCell(
             object value, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
         ) {
-            if (columnSpan <= 0) {
-                throw new ArgumentOutOfRangeException(nameof(columnSpan), "Must be greater than 0.");
-            }
-            if (rowSpan <= 0) {
-                throw new ArgumentOutOfRangeException(nameof(rowSpan), "Must be greater than 0.");
-            }
+            ValidateCellParameters(columnSpan, rowSpan);
             cellStyle ??= SpreadsheetManager.DefaultCellStyles.GridCellStyle;
 
             if (rows.Count == 0) {
                 CreateRow();
             }
 
-            CellCollection lastRow = rows.Last();
-            Cell cell = new() {
+            AddCell(new Cell {
                 ValueGenerator = (cellIndex, rowIndex) => value,
                 Size = new Size(columnSpan, rowSpan),
                 CellStyleGenerator = (cellIndex, rowIndex) => (CellStyle)cellStyle
-            };
-            lastRow.Add(cell);
+            });
 
             return this;
         }
 
-        /// <summary>Create cell that contain formula.</summary>
+        /// <summary>
+        /// Create cell that contain formula.
+        /// </summary>
         /// <param name="formulaGenerator">The formula generator. Pass the cell index and row index to the generator. The  index start at 0.</param>
         /// <param name="columnSpan">The column span.</param>
         /// <param name="rowSpan">The row span.</param>
@@ -81,33 +90,40 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         public GridTemplate CreateCell(
             Func<int, int, string> formulaGenerator, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
         ) {
-            if (columnSpan <= 0) {
-                throw new ArgumentOutOfRangeException(nameof(columnSpan), "Must be greater than 0.");
-            }
-            if (rowSpan <= 0) {
-                throw new ArgumentOutOfRangeException(nameof(rowSpan), "Must be greater than 0.");
-            }
+            ValidateCellParameters(columnSpan, rowSpan);
             cellStyle ??= SpreadsheetManager.DefaultCellStyles.GridCellStyle;
 
             if (rows.Count == 0) {
                 CreateRow();
             }
 
-            CellCollection lastRow = rows.Last();
-            Cell cell = new() {
+            AddCell(new Cell {
                 Size = new Size(columnSpan, rowSpan),
                 CellStyleGenerator = (cellIndex, rowIndex) => (CellStyle)cellStyle,
                 FormulaGenerator = formulaGenerator
-            };
-            lastRow.Add(cell);
+            });
 
             return this;
+        }
+
+        private static void ValidateCellParameters(int columnSpan, int rowSpan) {
+            if (columnSpan <= 0) {
+                throw new ArgumentOutOfRangeException(nameof(columnSpan), "Must be greater than 0.");
+            }
+            if (rowSpan <= 0) {
+                throw new ArgumentOutOfRangeException(nameof(rowSpan), "Must be greater than 0.");
+            }
+        }
+
+        private void AddCell(Cell cell) {
+            CellCollection lastRow = rows.Last();
+            lastRow.Add(cell);
         }
 
         /// <inheritdoc/>
         public TemplateContext GetContext() {
             return new TemplateContext(
-                GetCells(), RowSpan, new ReadOnlyDictionary<int, double>(rowHeights)
+                GetCells(), RowSpan, new ReadOnlyDictionary<int, double?>(rowHeights)
             );
         }
 
@@ -121,7 +137,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
 
         private class CellCollection : IEnumerable<Cell>, IEnumerable {
             private readonly GridTemplate grid;
-            private readonly IList<Cell> items = new List<Cell>();
+            private readonly List<Cell> items = [];
 
             internal CellCollection(GridTemplate grid) {
                 this.grid = grid;
@@ -132,7 +148,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
 
                 item.Point = new Point(0, grid.rows.Count - 1);
 
-                while (IsPointExists(item.Point)) {
+                while (grid.points.Contains(item.Point)) {
                     item.Point += new Size(1, 0);
                 }
                 grid.points.Add(item.Point);
@@ -144,16 +160,11 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
                             continue;
                         }
                         Point point = item.Point + new Size(colOffset, rowOffset);
-                        if (IsPointExists(point)) {
-                            throw new ArgumentException($"The point ({colOffset}, {rowOffset}) already exist.");
+                        if (!grid.points.Add(point)) {
+                            throw new ArgumentException($"The point ({colOffset}, {rowOffset}) already exists.");
                         }
-                        grid.points.Add(point);
                     }
                 }
-            }
-
-            private bool IsPointExists(Point point) {
-                return grid.points.Contains(point);
             }
 
             IEnumerator<Cell> IEnumerable<Cell>.GetEnumerator() {

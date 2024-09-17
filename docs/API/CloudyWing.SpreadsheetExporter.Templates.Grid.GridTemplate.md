@@ -87,8 +87,8 @@ The self.
 
 [System.ArgumentOutOfRangeException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentOutOfRangeException 'System.ArgumentOutOfRangeException')  
 columnSpan - Must be greater than 0.  
-            or  
-            rowSpan - Must be greater than 0.
+or  
+rowSpan - Must be greater than 0.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(System.Func_int,int,string_,int,int,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
@@ -136,20 +136,20 @@ columnSpan - Must be greater than 0.
             or  
             rowSpan - Must be greater than 0.
 
-<a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateRow(double)'></a>
+<a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateRow(System.Nullable_double_)'></a>
 
-## GridTemplate.CreateRow(double) Method
+## GridTemplate.CreateRow(Nullable<double>) Method
 
 Creates the row.
 
 ```csharp
-public CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate CreateRow(double height=16.5);
+public CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate CreateRow(System.Nullable<double> height=null);
 ```
 #### Parameters
 
-<a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateRow(double).height'></a>
+<a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateRow(System.Nullable_double_).height'></a>
 
-`height` [System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')
+`height` [System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')
 
 The height.
 

@@ -9,7 +9,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             int rowIndex = 2;
             int record = 1;
 
-            RecordContext<int> sut = new RecordContext<int>(cellIndex, rowIndex, record);
+            RecordContext<int> sut = new(cellIndex, rowIndex, record);
 
             sut.CellIndex.Should().Be(cellIndex);
             sut.RowIndex.Should().Be(rowIndex);

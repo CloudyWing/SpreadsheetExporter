@@ -14,6 +14,11 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 
 Implements [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')
 
+#### Exceptions
+
+[System.ArgumentNullException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentNullException 'System.ArgumentNullException')  
+templates
+
 ### See Also
 - [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')
 ### Constructors
@@ -39,7 +44,7 @@ The templates.
 
 ## MergedTemplate(IEnumerable<ITemplate>) Constructor
 
-Initializes a new instance of the [MergedTemplate](CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.md 'CloudyWing.SpreadsheetExporter.Templates.MergedTemplate') class.
+The merged template. Merge templates into new template.
 
 ```csharp
 public MergedTemplate(System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.Templates.ITemplate> templates);
@@ -56,6 +61,9 @@ The templates.
 
 [System.ArgumentNullException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentNullException 'System.ArgumentNullException')  
 templates
+
+### See Also
+- [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')
 ### Methods
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.GetContext()'></a>

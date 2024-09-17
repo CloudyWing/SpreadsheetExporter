@@ -21,6 +21,11 @@ Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.O
 
 Implements [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')
 
+#### Exceptions
+
+[System.ArgumentNullException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentNullException 'System.ArgumentNullException')  
+dataSource
+
 ### See Also
 - [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')
 ### Constructors
@@ -29,7 +34,7 @@ Implements [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'Cl
 
 ## RecordSetTemplate(IEnumerable<T>) Constructor
 
-Initializes a new instance of the [RecordSetTemplate&lt;T&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>') class.
+The recordset template. Create cell information using set data source and data column.
 
 ```csharp
 public RecordSetTemplate(System.Collections.Generic.IEnumerable<T> dataSource);
@@ -46,6 +51,9 @@ The data source.
 
 [System.ArgumentNullException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentNullException 'System.ArgumentNullException')  
 dataSource
+
+### See Also
+- [ITemplate](CloudyWing.SpreadsheetExporter.Templates.ITemplate.md 'CloudyWing.SpreadsheetExporter.Templates.ITemplate')
 ### Properties
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.Columns'></a>
@@ -97,11 +105,11 @@ The data source.
 Gets or sets the height of the header.
 
 ```csharp
-public double HeaderHeight { get; set; }
+public System.Nullable<double> HeaderHeight { get; set; }
 ```
 
 #### Property Value
-[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')  
+[System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')  
 The height of the header.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.RecordHeight'></a>
@@ -111,11 +119,11 @@ The height of the header.
 Gets or sets the height of the record.
 
 ```csharp
-public double RecordHeight { get; set; }
+public System.Nullable<double> RecordHeight { get; set; }
 ```
 
 #### Property Value
-[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')  
+[System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')  
 The height of the record.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.RowSpan'></a>

@@ -11,83 +11,66 @@ System.IEquatable<CloudyWing.SpreadsheetExporter.CellStyle>
 ```
 
 Implements [System.IEquatable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.IEquatable-1 'System.IEquatable`1')[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.IEquatable-1 'System.IEquatable`1')
-
-### See Also
-- [System.IEquatable&lt;&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.IEquatable-1 'System.IEquatable`1')
 ### Constructors
 
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Nullable_System.Drawing.Color_,System.Nullable_CloudyWing.SpreadsheetExporter.CellFont_,string,bool)'></a>
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Drawing.Color,CloudyWing.SpreadsheetExporter.CellFont,string,bool)'></a>
 
-## CellStyle(HorizontalAlignment, VerticalAlignment, bool, bool, Nullable<Color>, Nullable<CellFont>, string, bool) Constructor
+## CellStyle(HorizontalAlignment, VerticalAlignment, bool, bool, Color, CellFont, string, bool) Constructor
 
-Initializes a new instance of the [CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle') struct.
+The cell style.
 
 ```csharp
-public CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment halign=CloudyWing.SpreadsheetExporter.HorizontalAlignment.Center, CloudyWing.SpreadsheetExporter.VerticalAlignment valign=CloudyWing.SpreadsheetExporter.VerticalAlignment.Middle, bool hasBorder=false, bool wrapText=false, System.Nullable<System.Drawing.Color> backgroundColor=null, System.Nullable<CloudyWing.SpreadsheetExporter.CellFont> font=null, string dataFormat=null, bool isLocked=false);
+public CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment HorizontalAlignment=CloudyWing.SpreadsheetExporter.HorizontalAlignment.General, CloudyWing.SpreadsheetExporter.VerticalAlignment VerticalAlignment=CloudyWing.SpreadsheetExporter.VerticalAlignment.Top, bool HasBorder=false, bool WrapText=false, System.Drawing.Color BackgroundColor=default(System.Drawing.Color), CloudyWing.SpreadsheetExporter.CellFont Font=default(CloudyWing.SpreadsheetExporter.CellFont), string DataFormat=null, bool IsLocked=false);
 ```
 #### Parameters
 
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Nullable_System.Drawing.Color_,System.Nullable_CloudyWing.SpreadsheetExporter.CellFont_,string,bool).halign'></a>
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Drawing.Color,CloudyWing.SpreadsheetExporter.CellFont,string,bool).HorizontalAlignment'></a>
 
-`halign` [HorizontalAlignment](CloudyWing.SpreadsheetExporter.HorizontalAlignment.md 'CloudyWing.SpreadsheetExporter.HorizontalAlignment')
+`HorizontalAlignment` [HorizontalAlignment](CloudyWing.SpreadsheetExporter.HorizontalAlignment.md 'CloudyWing.SpreadsheetExporter.HorizontalAlignment')
 
-The halign.
+Gets the horizontal alignment.
 
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Nullable_System.Drawing.Color_,System.Nullable_CloudyWing.SpreadsheetExporter.CellFont_,string,bool).valign'></a>
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Drawing.Color,CloudyWing.SpreadsheetExporter.CellFont,string,bool).VerticalAlignment'></a>
 
-`valign` [VerticalAlignment](CloudyWing.SpreadsheetExporter.VerticalAlignment.md 'CloudyWing.SpreadsheetExporter.VerticalAlignment')
+`VerticalAlignment` [VerticalAlignment](CloudyWing.SpreadsheetExporter.VerticalAlignment.md 'CloudyWing.SpreadsheetExporter.VerticalAlignment')
 
-The valign.
+Gets the vertical alignment.
 
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Nullable_System.Drawing.Color_,System.Nullable_CloudyWing.SpreadsheetExporter.CellFont_,string,bool).hasBorder'></a>
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Drawing.Color,CloudyWing.SpreadsheetExporter.CellFont,string,bool).HasBorder'></a>
 
-`hasBorder` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
+`HasBorder` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
 
-if set to `true` [has border].
+Gets a value indicating whether this instance has border.
 
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Nullable_System.Drawing.Color_,System.Nullable_CloudyWing.SpreadsheetExporter.CellFont_,string,bool).wrapText'></a>
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Drawing.Color,CloudyWing.SpreadsheetExporter.CellFont,string,bool).WrapText'></a>
 
-`wrapText` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
+`WrapText` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
 
-if set to `true` [wrap text].
+Gets a value indicating whether [wrap text].
 
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Nullable_System.Drawing.Color_,System.Nullable_CloudyWing.SpreadsheetExporter.CellFont_,string,bool).backgroundColor'></a>
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Drawing.Color,CloudyWing.SpreadsheetExporter.CellFont,string,bool).BackgroundColor'></a>
 
-`backgroundColor` [System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[System.Drawing.Color](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Color 'System.Drawing.Color')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')
+`BackgroundColor` [System.Drawing.Color](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Color 'System.Drawing.Color')
 
-Color of the background. The default is `Color.Empty`.
+Gets the color of the background.
 
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Nullable_System.Drawing.Color_,System.Nullable_CloudyWing.SpreadsheetExporter.CellFont_,string,bool).font'></a>
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Drawing.Color,CloudyWing.SpreadsheetExporter.CellFont,string,bool).Font'></a>
 
-`font` [System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[CellFont](CloudyWing.SpreadsheetExporter.CellFont.md 'CloudyWing.SpreadsheetExporter.CellFont')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')
+`Font` [CellFont](CloudyWing.SpreadsheetExporter.CellFont.md 'CloudyWing.SpreadsheetExporter.CellFont')
 
-The font. The default is `CellFont.Empty`.
+Gets the font.
 
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Nullable_System.Drawing.Color_,System.Nullable_CloudyWing.SpreadsheetExporter.CellFont_,string,bool).dataFormat'></a>
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Drawing.Color,CloudyWing.SpreadsheetExporter.CellFont,string,bool).DataFormat'></a>
 
-`dataFormat` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+`DataFormat` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
-The data format.
+Gets the data format.
 
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Nullable_System.Drawing.Color_,System.Nullable_CloudyWing.SpreadsheetExporter.CellFont_,string,bool).isLocked'></a>
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,bool,bool,System.Drawing.Color,CloudyWing.SpreadsheetExporter.CellFont,string,bool).IsLocked'></a>
 
-`isLocked` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
+`IsLocked` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
 
-if set to `true` [is locked].
-### Fields
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.Empty'></a>
-
-## CellStyle.Empty Field
-
-The cell style equals to `new CellStyle()`.
-
-```csharp
-public static CellStyle Empty;
-```
-
-#### Field Value
-[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')
+Gets a value indicating whether this instance is locked.
 ### Properties
 
 <a name='CloudyWing.SpreadsheetExporter.CellStyle.BackgroundColor'></a>
@@ -101,8 +84,7 @@ public System.Drawing.Color BackgroundColor { get; set; }
 ```
 
 #### Property Value
-[System.Drawing.Color](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Color 'System.Drawing.Color')  
-The color of the background.
+[System.Drawing.Color](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Color 'System.Drawing.Color')
 
 <a name='CloudyWing.SpreadsheetExporter.CellStyle.DataFormat'></a>
 
@@ -115,8 +97,20 @@ public string DataFormat { get; set; }
 ```
 
 #### Property Value
-[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
-The data format.
+[System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
+
+<a name='CloudyWing.SpreadsheetExporter.CellStyle.Empty'></a>
+
+## CellStyle.Empty Property
+
+The cell style equals to `new CellStyle()`.
+
+```csharp
+public static CloudyWing.SpreadsheetExporter.CellStyle Empty { get; }
+```
+
+#### Property Value
+[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')
 
 <a name='CloudyWing.SpreadsheetExporter.CellStyle.Font'></a>
 
@@ -129,8 +123,7 @@ public CloudyWing.SpreadsheetExporter.CellFont Font { get; set; }
 ```
 
 #### Property Value
-[CellFont](CloudyWing.SpreadsheetExporter.CellFont.md 'CloudyWing.SpreadsheetExporter.CellFont')  
-The font.
+[CellFont](CloudyWing.SpreadsheetExporter.CellFont.md 'CloudyWing.SpreadsheetExporter.CellFont')
 
 <a name='CloudyWing.SpreadsheetExporter.CellStyle.HasBorder'></a>
 
@@ -143,8 +136,7 @@ public bool HasBorder { get; set; }
 ```
 
 #### Property Value
-[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
-`true` if this instance has border; otherwise, `false`.
+[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
 
 <a name='CloudyWing.SpreadsheetExporter.CellStyle.HorizontalAlignment'></a>
 
@@ -157,8 +149,7 @@ public CloudyWing.SpreadsheetExporter.HorizontalAlignment HorizontalAlignment { 
 ```
 
 #### Property Value
-[HorizontalAlignment](CloudyWing.SpreadsheetExporter.HorizontalAlignment.md 'CloudyWing.SpreadsheetExporter.HorizontalAlignment')  
-The horizontal alignment.
+[HorizontalAlignment](CloudyWing.SpreadsheetExporter.HorizontalAlignment.md 'CloudyWing.SpreadsheetExporter.HorizontalAlignment')
 
 <a name='CloudyWing.SpreadsheetExporter.CellStyle.IsLocked'></a>
 
@@ -171,8 +162,7 @@ public bool IsLocked { get; set; }
 ```
 
 #### Property Value
-[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
-`true` if this instance is locked; otherwise, `false`.
+[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
 
 <a name='CloudyWing.SpreadsheetExporter.CellStyle.VerticalAlignment'></a>
 
@@ -185,8 +175,7 @@ public CloudyWing.SpreadsheetExporter.VerticalAlignment VerticalAlignment { get;
 ```
 
 #### Property Value
-[VerticalAlignment](CloudyWing.SpreadsheetExporter.VerticalAlignment.md 'CloudyWing.SpreadsheetExporter.VerticalAlignment')  
-The vertical alignment.
+[VerticalAlignment](CloudyWing.SpreadsheetExporter.VerticalAlignment.md 'CloudyWing.SpreadsheetExporter.VerticalAlignment')
 
 <a name='CloudyWing.SpreadsheetExporter.CellStyle.WrapText'></a>
 
@@ -199,229 +188,4 @@ public bool WrapText { get; set; }
 ```
 
 #### Property Value
-[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
-`true` if [wrap text]; otherwise, `false`.
-### Methods
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetBackgroundColor(System.Drawing.Color)'></a>
-
-## CellStyle.CloneAndSetBackgroundColor(Color) Method
-
-Clones and set background color of new instance.
-
-```csharp
-public CloudyWing.SpreadsheetExporter.CellStyle CloneAndSetBackgroundColor(System.Drawing.Color backgroundColor);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetBackgroundColor(System.Drawing.Color).backgroundColor'></a>
-
-`backgroundColor` [System.Drawing.Color](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Color 'System.Drawing.Color')
-
-Color of the background.
-
-#### Returns
-[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')  
-The cloned new cell style.
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetBorder(bool)'></a>
-
-## CellStyle.CloneAndSetBorder(bool) Method
-
-Clones and set border of new instance.
-
-```csharp
-public CloudyWing.SpreadsheetExporter.CellStyle CloneAndSetBorder(bool hasBolder);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetBorder(bool).hasBolder'></a>
-
-`hasBolder` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
-
-if set to `true` [has bolder].
-
-#### Returns
-[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')  
-The cloned new cell style.
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetDataFormat(string)'></a>
-
-## CellStyle.CloneAndSetDataFormat(string) Method
-
-Clones and set data format of new instance.
-
-```csharp
-public CloudyWing.SpreadsheetExporter.CellStyle CloneAndSetDataFormat(string dataForamt);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetDataFormat(string).dataForamt'></a>
-
-`dataForamt` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
-
-The data foramt.
-
-#### Returns
-[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')  
-The cloned new cell style.
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetFont(CloudyWing.SpreadsheetExporter.CellFont)'></a>
-
-## CellStyle.CloneAndSetFont(CellFont) Method
-
-Clones and set font of new instance.
-
-```csharp
-public CloudyWing.SpreadsheetExporter.CellStyle CloneAndSetFont(CloudyWing.SpreadsheetExporter.CellFont font);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetFont(CloudyWing.SpreadsheetExporter.CellFont).font'></a>
-
-`font` [CellFont](CloudyWing.SpreadsheetExporter.CellFont.md 'CloudyWing.SpreadsheetExporter.CellFont')
-
-The font.
-
-#### Returns
-[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')  
-The cloned new cell style.
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetHorizontalAlignment(CloudyWing.SpreadsheetExporter.HorizontalAlignment)'></a>
-
-## CellStyle.CloneAndSetHorizontalAlignment(HorizontalAlignment) Method
-
-Clones and set horizontal alignment of new instance.
-
-```csharp
-public CloudyWing.SpreadsheetExporter.CellStyle CloneAndSetHorizontalAlignment(CloudyWing.SpreadsheetExporter.HorizontalAlignment align);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetHorizontalAlignment(CloudyWing.SpreadsheetExporter.HorizontalAlignment).align'></a>
-
-`align` [HorizontalAlignment](CloudyWing.SpreadsheetExporter.HorizontalAlignment.md 'CloudyWing.SpreadsheetExporter.HorizontalAlignment')
-
-The align.
-
-#### Returns
-[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')  
-The cloned new cell style.
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetLocked(bool)'></a>
-
-## CellStyle.CloneAndSetLocked(bool) Method
-
-Clones and set lockedof of new instance.
-
-```csharp
-public CloudyWing.SpreadsheetExporter.CellStyle CloneAndSetLocked(bool isLocked);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetLocked(bool).isLocked'></a>
-
-`isLocked` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
-
-if set to `true` [is locked].
-
-#### Returns
-[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')  
-The cloned new cell style.
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetVerticalAlignment(CloudyWing.SpreadsheetExporter.VerticalAlignment)'></a>
-
-## CellStyle.CloneAndSetVerticalAlignment(VerticalAlignment) Method
-
-Clones and set vertical alignment of new instance.
-
-```csharp
-public CloudyWing.SpreadsheetExporter.CellStyle CloneAndSetVerticalAlignment(CloudyWing.SpreadsheetExporter.VerticalAlignment valign);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetVerticalAlignment(CloudyWing.SpreadsheetExporter.VerticalAlignment).valign'></a>
-
-`valign` [VerticalAlignment](CloudyWing.SpreadsheetExporter.VerticalAlignment.md 'CloudyWing.SpreadsheetExporter.VerticalAlignment')
-
-The valign.
-
-#### Returns
-[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')  
-The cloned new cell style.
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetWrapText(bool)'></a>
-
-## CellStyle.CloneAndSetWrapText(bool) Method
-
-Clones and set wrap text of new instance.
-
-```csharp
-public CloudyWing.SpreadsheetExporter.CellStyle CloneAndSetWrapText(bool wrapText);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.CloneAndSetWrapText(bool).wrapText'></a>
-
-`wrapText` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')
-
-if set to `true` [wrap text].
-
-#### Returns
-[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')  
-The cloned new cell style.
-### Operators
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.op_Equality(CloudyWing.SpreadsheetExporter.CellStyle,CloudyWing.SpreadsheetExporter.CellStyle)'></a>
-
-## CellStyle.operator ==(CellStyle, CellStyle) Operator
-
-Implements the operator op_Equality.
-
-```csharp
-public static bool operator ==(CloudyWing.SpreadsheetExporter.CellStyle left, CloudyWing.SpreadsheetExporter.CellStyle right);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.op_Equality(CloudyWing.SpreadsheetExporter.CellStyle,CloudyWing.SpreadsheetExporter.CellStyle).left'></a>
-
-`left` [CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')
-
-The left.
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.op_Equality(CloudyWing.SpreadsheetExporter.CellStyle,CloudyWing.SpreadsheetExporter.CellStyle).right'></a>
-
-`right` [CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')
-
-The right.
-
-#### Returns
-[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
-The result of the operator.
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.op_Inequality(CloudyWing.SpreadsheetExporter.CellStyle,CloudyWing.SpreadsheetExporter.CellStyle)'></a>
-
-## CellStyle.operator !=(CellStyle, CellStyle) Operator
-
-Implements the operator op_Inequality.
-
-```csharp
-public static bool operator !=(CloudyWing.SpreadsheetExporter.CellStyle left, CloudyWing.SpreadsheetExporter.CellStyle right);
-```
-#### Parameters
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.op_Inequality(CloudyWing.SpreadsheetExporter.CellStyle,CloudyWing.SpreadsheetExporter.CellStyle).left'></a>
-
-`left` [CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')
-
-The left.
-
-<a name='CloudyWing.SpreadsheetExporter.CellStyle.op_Inequality(CloudyWing.SpreadsheetExporter.CellStyle,CloudyWing.SpreadsheetExporter.CellStyle).right'></a>
-
-`right` [CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle')
-
-The right.
-
-#### Returns
-[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
-The result of the operator.
+[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')

@@ -40,6 +40,20 @@ public string DefaultBasicSheetName { get; set; }
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
 The default basic name of the sheet.
 
+<a name='CloudyWing.SpreadsheetExporter.ExporterBase.DefaultFont'></a>
+
+## ExporterBase.DefaultFont Property
+
+Gets or sets the default font.
+
+```csharp
+public System.Nullable<CloudyWing.SpreadsheetExporter.CellFont> DefaultFont { get; set; }
+```
+
+#### Property Value
+[System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[CellFont](CloudyWing.SpreadsheetExporter.CellFont.md 'CloudyWing.SpreadsheetExporter.CellFont')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')  
+The default font.
+
 <a name='CloudyWing.SpreadsheetExporter.ExporterBase.FileNameExtension'></a>
 
 ## ExporterBase.FileNameExtension Property
@@ -97,22 +111,28 @@ public string Password { get; set; }
 The password.
 ### Methods
 
-<a name='CloudyWing.SpreadsheetExporter.ExporterBase.CreateSheeter(string)'></a>
+<a name='CloudyWing.SpreadsheetExporter.ExporterBase.CreateSheeter(string,System.Nullable_double_)'></a>
 
-## ExporterBase.CreateSheeter(string) Method
+## ExporterBase.CreateSheeter(string, Nullable<double>) Method
 
 Creates the sheeter.
 
 ```csharp
-public CloudyWing.SpreadsheetExporter.Sheeter CreateSheeter(string sheetName=null);
+public CloudyWing.SpreadsheetExporter.Sheeter CreateSheeter(string sheetName=null, System.Nullable<double> defaultRowHeight=null);
 ```
 #### Parameters
 
-<a name='CloudyWing.SpreadsheetExporter.ExporterBase.CreateSheeter(string).sheetName'></a>
+<a name='CloudyWing.SpreadsheetExporter.ExporterBase.CreateSheeter(string,System.Nullable_double_).sheetName'></a>
 
 `sheetName` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')
 
 Name of the sheet.
+
+<a name='CloudyWing.SpreadsheetExporter.ExporterBase.CreateSheeter(string,System.Nullable_double_).defaultRowHeight'></a>
+
+`defaultRowHeight` [System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')
+
+Default height of the row.
 
 #### Returns
 [Sheeter](CloudyWing.SpreadsheetExporter.Sheeter.md 'CloudyWing.SpreadsheetExporter.Sheeter')  

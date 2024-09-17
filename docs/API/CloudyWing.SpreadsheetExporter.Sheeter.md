@@ -26,6 +26,20 @@ public System.Collections.Generic.IReadOnlyDictionary<int,double> ColumnWidths {
 [System.Collections.Generic.IReadOnlyDictionary&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')[,](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IReadOnlyDictionary-2 'System.Collections.Generic.IReadOnlyDictionary`2')  
 The width of columns.
 
+<a name='CloudyWing.SpreadsheetExporter.Sheeter.DefaultRowHeight'></a>
+
+## Sheeter.DefaultRowHeight Property
+
+Gets or sets the default height of the row.
+
+```csharp
+public System.Nullable<double> DefaultRowHeight { get; set; }
+```
+
+#### Property Value
+[System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')  
+The default height of the row.
+
 <a name='CloudyWing.SpreadsheetExporter.Sheeter.PageSettings'></a>
 
 ## Sheeter.PageSettings Property

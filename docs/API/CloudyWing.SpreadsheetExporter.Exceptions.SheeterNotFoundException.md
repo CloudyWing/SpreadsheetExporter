@@ -63,7 +63,13 @@ The error message that explains the reason for the exception.
 
 `innerException` [System.Exception](https://docs.microsoft.com/en-us/dotnet/api/System.Exception 'System.Exception')
 
-The exception that is the cause of the current exception, or a null reference ([Nothing](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/Nothing 'https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/Nothing') in Visual Basic) if no inner exception is specified.
+The exception that is thecause of the current exception, or a null reference (<span class="keyword">  
+  <span class="languageSpecificText">  
+    <span class="cs">null</span>  
+    <span class="vb">Nothing</span>  
+    <span class="cpp">nullptr</span>  
+  </span>  
+</span><span class="nu">a null reference (<span class="keyword">Nothing</span> in Visual Basic)</span> in Visual Basic) if no inner exception is specified.
 
 <a name='CloudyWing.SpreadsheetExporter.Exceptions.SheeterNotFoundException.SheeterNotFoundException(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)'></a>
 

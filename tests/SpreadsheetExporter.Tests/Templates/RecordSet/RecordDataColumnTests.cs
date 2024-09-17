@@ -3,7 +3,7 @@
 namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
     [TestFixture]
     internal class RecordDataColumnTests {
-        private readonly RecordContext<Record> context = new RecordContext<Record>(0, 0, new Record { Id = 0 });
+        private readonly RecordContext<Record> context = new(0, 0, new Record { Id = 0 });
         private RecordDataColumn<Record>? column;
 
         [SetUp]
@@ -31,7 +31,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void GetFieldStyle_FieldFormulaGeneratorIsNotNull_ShouldReturnGeneratedStyle() {
-            CellStyle cellStyle = new CellStyle();
+            CellStyle cellStyle = new();
             column!.FieldStyleGenerator = (x) => cellStyle;
 
             column!.GetFieldStyle(context).Should().Be(cellStyle);

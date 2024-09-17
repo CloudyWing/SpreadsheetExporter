@@ -3,7 +3,7 @@
 namespace CloudyWing.SpreadsheetExporter.Tests.Util {
     [TestFixture]
     internal class DictionaryUtilsTests {
-        private readonly TestRecord record = new TestRecord {
+        private readonly TestRecord record = new() {
             Id = 1,
             Name = "Test",
             Address = new Address {
