@@ -4,39 +4,61 @@ using System.Linq.Expressions;
 using CloudyWing.SpreadsheetExporter.Util;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
-    /// <summary>The data column.</summary>
+    /// <summary>
+    /// The data column.
+    /// </summary>
     /// <typeparam name="TRecord">The type of the record.</typeparam>
-    /// <typeparam name="TField">The type of the record field.</typeparam>
+    /// <typeparam name="TField">The type of the field.</typeparam>
+    /// <seealso cref="DataColumnBase&lt;TRecord&gt;" />
     internal class DataColumn<TRecord, TField> : DataColumnBase<TRecord> {
         private readonly Dictionary<RecordContext<TRecord>, FieldContext<TRecord, TField>> contextMaps = new();
 
-        /// <summary>Initializes a new instance of the <see cref="DataColumn{TRecord, TField}" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataColumn{TRecord, TField}" /> class.
+        /// </summary>
         /// <param name="fieldKey">The field key.</param>
         public DataColumn(string fieldKey) {
             FieldKey = fieldKey;
         }
 
-
-        /// <summary>Initializes a new instance of the <see cref="DataColumn{TRecord, TField}" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataColumn{TRecord, TField}" /> class.
+        /// </summary>
         /// <param name="fieldKeyExpression">The field key expression.</param>
         public DataColumn(Expression<Func<TRecord, TField>> fieldKeyExpression) {
             FieldKey = GetFieldKeyByExpression(fieldKeyExpression);
         }
 
-        /// <summary>Gets the field key.</summary>
-        /// <value>The field key.</value>
+        /// <summary>
+        /// Gets the field key.
+        /// </summary>
+        /// <value>
+        /// The field key.
+        /// </value>
         public string FieldKey { get; }
 
-        /// <summary>Gets the field value generator.</summary>
-        /// <value>The field value generator.</value>
+        /// <summary>
+        /// Gets the field value generator.
+        /// </summary>
+        /// <value>
+        /// The field value generator.
+        /// </value>
         public Func<FieldContext<TRecord, TField>, object> FieldValueGenerator { get; set; }
 
-        /// <summary>Gets or sets the field formula generator.</summary>
-        /// <value>The field formula generator.</value>
+        /// <summary>
+        /// Gets or sets the field formula generator.
+        /// </summary>
+        /// <value>
+        /// The field formula generator.
+        /// </value>
         public Func<FieldContext<TRecord, TField>, string> FieldFormulaGenerator { get; set; }
 
-        /// <summary>Gets or sets the field style generator.</summary>
-        /// <value>The field style generator.</value>
+        /// <summary>
+        /// Gets or sets the field style generator.
+        /// </summary>
+        /// <value>
+        /// The field style generator.
+        /// </value>
         public Func<FieldContext<TRecord, TField>, CellStyle> FieldStyleGenerator { get; set; }
 
         private string GetFieldKeyByExpression(Expression<Func<TRecord, TField>> expression) {

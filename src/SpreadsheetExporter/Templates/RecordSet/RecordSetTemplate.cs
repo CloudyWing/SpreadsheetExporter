@@ -4,41 +4,68 @@ using System.Drawing;
 using System.Linq;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
-    /// <summary>The recordset template. Create cell information using set data source and data column.</summary>
+    /// <summary>
+    /// The recordset template. Create cell information using set data source and data column.
+    /// </summary>
     /// <typeparam name="T">The type of the record.</typeparam>
     /// <seealso cref="ITemplate" />
     public class RecordSetTemplate<T> : ITemplate {
-        /// <summary>Initializes a new instance of the <see cref="RecordSetTemplate{T}" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RecordSetTemplate{T}" /> class.
+        /// </summary>
         /// <param name="dataSource">The data source.</param>
         /// <exception cref="ArgumentNullException">dataSource</exception>
         public RecordSetTemplate(IEnumerable<T> dataSource) {
             DataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
         }
 
-        /// <summary>Gets or sets the data source.</summary>
-        /// <value>The data source.</value>
+        /// <summary>
+        /// Gets or sets the data source.
+        /// </summary>
+        /// <value>
+        /// The data source.
+        /// </value>
         public IEnumerable<T> DataSource { get; set; }
 
-        /// <summary>Gets the columns.</summary>
-        /// <value>The columns.</value>
+        /// <summary>
+        /// Gets the columns.
+        /// </summary>
+        /// <value>
+        /// The columns.
+        /// </value>
         public DataColumnCollection<T> Columns { get; } = new DataColumnCollection<T>(null);
 
-        /// <summary>Gets or sets the height of the header.</summary>
-        /// <value>The height of the header.</value>
+        /// <summary>
+        /// Gets or sets the height of the header.
+        /// </summary>
+        /// <value>
+        /// The height of the header.
+        /// </value>
         public double? HeaderHeight { get; set; }
 
-        /// <summary>Gets or sets the height of the record.</summary>
-        /// <value>The height of the record.</value>
+        /// <summary>
+        /// Gets or sets the height of the record.
+        /// </summary>
+        /// <value>
+        /// The height of the record.
+        /// </value>
         public double? RecordHeight { get; set; }
 
-        /// <summary>Gets the column span.</summary>
-        /// <value>The column span.</value>
+        /// <summary>
+        /// Gets the column span.
+        /// </summary>
+        /// <value>
+        /// The column span.
+        /// </value>
         public int ColumnSpan => Columns.ColumnSpan;
 
-        /// <summary>Gets the row span.</summary>
-        /// <value>The row span.</value>
+        /// <summary>
+        /// Gets the row span.
+        /// </summary>
+        /// <value>
+        /// The row span.
+        /// </value>
         public int RowSpan => DataSource.Count() + Columns.RowSpan;
-
 
         private IEnumerable<Cell> GetHearderCells(DataColumnCollection<T> cols) {
             List<Cell> cells = new();

@@ -87,8 +87,8 @@ The self.
 
 [System.ArgumentOutOfRangeException](https://docs.microsoft.com/en-us/dotnet/api/System.ArgumentOutOfRangeException 'System.ArgumentOutOfRangeException')  
 columnSpan - Must be greater than 0.  
-            or  
-            rowSpan - Must be greater than 0.
+or  
+rowSpan - Must be greater than 0.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(System.Func_int,int,string_,int,int,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 

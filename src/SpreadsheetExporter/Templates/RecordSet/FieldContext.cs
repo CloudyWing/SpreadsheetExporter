@@ -1,11 +1,15 @@
 ﻿using System;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
-    /// <summary>The field context.</summary>
+    /// <summary>
+    /// The field context.
+    /// </summary>
     /// <typeparam name="TRecoed">The type of the recoed.</typeparam>
     /// <typeparam name="TField">The type of the field.</typeparam>
     public class FieldContext<TRecoed, TField> : RecordContext<TRecoed> {
-        /// <summary>Initializes a new instance of the <see cref="FieldContext{TRecoed, TField}" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FieldContext{TRecoed, TField}" /> class.
+        /// </summary>
         /// <param name="recordContext">The record context.</param>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
@@ -16,12 +20,20 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             Value = value;
         }
 
-        /// <summary>Gets the key.</summary>
-        /// <value>The key.</value>
+        /// <summary>
+        /// Gets the key.
+        /// </summary>
+        /// <value>
+        /// The key.
+        /// </value>
         public string Key { get; }
 
-        /// <summary>Gets the value.</summary>
-        /// <value>The value.</value>
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
         public TField Value { get; }
     }
 }

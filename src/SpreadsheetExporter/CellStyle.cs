@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Drawing;
 
 namespace CloudyWing.SpreadsheetExporter {
-    /// <summary>The cell style.</summary>
+    /// <summary>
+    /// The cell style.
+    /// </summary>
     /// <seealso cref="IEquatable{CellStyle}" />
     public struct CellStyle : IEquatable<CellStyle> {
-        /// <summary>The cell style equals to <c>new CellStyle()</c>.</summary>
+        /// <summary>
+        /// The cell style equals to <c>new CellStyle()</c>.
+        /// </summary>
         public static CellStyle Empty = new();
 
         /// <summary>
@@ -37,91 +41,133 @@ namespace CloudyWing.SpreadsheetExporter {
             IsLocked = isLocked;
         }
 
-        /// <summary>Gets the horizontal alignment.</summary>
-        /// <value>The horizontal alignment.</value>
+        /// <summary>
+        /// Gets the horizontal alignment.
+        /// </summary>
+        /// <value>
+        /// The horizontal alignment.
+        /// </value>
         public HorizontalAlignment HorizontalAlignment { get; private set; }
 
-        /// <summary>Gets the vertical alignment.</summary>
-        /// <value>The vertical alignment.</value>
+        /// <summary>
+        /// Gets the vertical alignment.
+        /// </summary>
+        /// <value>
+        /// The vertical alignment.
+        /// </value>
         public VerticalAlignment VerticalAlignment { get; private set; }
 
-        /// <summary>Gets a value indicating whether this instance has border.</summary>
+        /// <summary>
+        /// Gets a value indicating whether this instance has border.
+        /// </summary>
         /// <value>
         ///   <c>true</c> if this instance has border; otherwise, <c>false</c>.</value>
         public bool HasBorder { get; private set; }
 
-        /// <summary>Gets a value indicating whether [wrap text].</summary>
+        /// <summary>
+        /// Gets a value indicating whether [wrap text].
+        /// </summary>
         /// <value>
         ///   <c>true</c> if [wrap text]; otherwise, <c>false</c>.</value>
         public bool WrapText { get; private set; }
 
-        /// <summary>Gets the color of the background.</summary>
-        /// <value>The color of the background.</value>
+        /// <summary>
+        /// Gets the color of the background.
+        /// </summary>
+        /// <value>
+        /// The color of the background.
+        /// </value>
         public Color BackgroundColor { get; private set; }
 
-        /// <summary>Gets the font.</summary>
-        /// <value>The font.</value>
+        /// <summary>
+        /// Gets the font.
+        /// </summary>
+        /// <value>
+        /// The font.
+        /// </value>
         public CellFont Font { get; private set; }
 
-        /// <summary>Gets the data format.</summary>
-        /// <value>The data format.</value>
+        /// <summary>
+        /// Gets the data format.
+        /// </summary>
+        /// <value>
+        /// The data format.
+        /// </value>
         public string DataFormat { get; private set; }
 
-        /// <summary>Gets a value indicating whether this instance is locked.</summary>
+        /// <summary>
+        /// Gets a value indicating whether this instance is locked.
+        /// </summary>
         /// <value>
         ///   <c>true</c> if this instance is locked; otherwise, <c>false</c>.</value>
         public bool IsLocked { get; private set; }
 
-        /// <summary>Clones and set horizontal alignment of new instance.</summary>
+        /// <summary>
+        /// Clones and set horizontal alignment of new instance.
+        /// </summary>
         /// <param name="align">The align.</param>
         /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetHorizontalAlignment(HorizontalAlignment align) {
             return this with { HorizontalAlignment = align };
         }
 
-        /// <summary>Clones and set vertical alignment of new instance.</summary>
+        /// <summary>
+        /// Clones and set vertical alignment of new instance.
+        /// </summary>
         /// <param name="valign">The valign.</param>
         /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetVerticalAlignment(VerticalAlignment valign) {
             return this with { VerticalAlignment = valign };
         }
 
-        /// <summary>Clones and set border of new instance.</summary>
+        /// <summary>
+        /// Clones and set border of new instance.
+        /// </summary>
         /// <param name="hasBolder">if set to <c>true</c> [has bolder].</param>
         /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetBorder(bool hasBolder) {
             return this with { HasBorder = hasBolder };
         }
 
-        /// <summary>Clones and set wrap text of new instance.</summary>
+        /// <summary>
+        /// Clones and set wrap text of new instance.
+        /// </summary>
         /// <param name="wrapText">if set to <c>true</c> [wrap text].</param>
         /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetWrapText(bool wrapText) {
             return this with { WrapText = wrapText };
         }
 
-        /// <summary>Clones and set background color of new instance.</summary>
+        /// <summary>
+        /// Clones and set background color of new instance.
+        /// </summary>
         /// <param name="backgroundColor">Color of the background.</param>
         /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetBackgroundColor(Color backgroundColor) {
             return this with { BackgroundColor = backgroundColor };
         }
 
-        /// <summary>Clones and set font of new instance.</summary>
+        /// <summary>
+        /// Clones and set font of new instance.
+        /// </summary>
         /// <param name="font">The font.</param>
         /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetFont(CellFont font) {
             return this with { Font = font };
         }
 
-        /// <summary>Clones and set data format of new instance.</summary>
+        /// <summary>
+        /// Clones and set data format of new instance.
+        /// </summary>
         /// <param name="dataForamt">The data foramt.</param>
         /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetDataFormat(string dataForamt) {
             return this with { DataFormat = dataForamt };
         }
 
-        /// <summary>Clones and set lockedof of new instance.</summary>
+        /// <summary>
+        /// Clones and set lockedof of new instance.
+        /// </summary>
         /// <param name="isLocked">if set to <c>true</c> [is locked].</param>
         /// <returns>The cloned new cell style.</returns>
         public CellStyle CloneAndSetLocked(bool isLocked) {

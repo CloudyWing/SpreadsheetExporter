@@ -9,18 +9,24 @@ namespace CloudyWing.SpreadsheetExporter.Templates {
     public class MergedTemplate : ITemplate {
         private readonly IEnumerable<ITemplate> templates;
 
-        /// <summary>Initializes a new instance of the <see cref="MergedTemplate" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MergedTemplate" /> class.
+        /// </summary>
         /// <param name="templates">The templates.</param>
         /// <exception cref="ArgumentNullException">templates</exception>
         public MergedTemplate(IEnumerable<ITemplate> templates) {
             this.templates = templates ?? throw new ArgumentNullException(nameof(templates));
         }
 
-        /// <summary>Initializes a new instance of the <see cref="MergedTemplate" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MergedTemplate" /> class.
+        /// </summary>
         /// <param name="templates">The templates.</param>
         public MergedTemplate(params ITemplate[] templates) : this(templates as IEnumerable<ITemplate>) { }
 
-        /// <summary>Gets the context.</summary>
+        /// <summary>
+        /// Gets the context.
+        /// </summary>
         /// <returns>The template context.</returns>
         public TemplateContext GetContext() {
             return TemplateContext.Create(templates);

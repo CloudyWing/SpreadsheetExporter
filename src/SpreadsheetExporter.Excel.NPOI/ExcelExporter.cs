@@ -10,7 +10,9 @@ using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 
 namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
-    /// <summary>The excel exporter, using npoi.</summary>
+    /// <summary>
+    /// The excel exporter, using npoi.
+    /// </summary>
     /// <seealso cref="ExporterBase" />
     public sealed class ExcelExporter : ExporterBase {
         private IWorkbook workbook;
@@ -50,16 +52,24 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             ExcelFormat = excelFormat;
         }
 
-        /// <summary>Gets or sets the excel format.</summary>
-        /// <value>The excel format.</value>
+        /// <summary>
+        /// Gets or sets the excel format.
+        /// </summary>
+        /// <value>
+        /// The excel format.
+        /// </value>
         public ExcelFormat ExcelFormat { get; set; }
 
-        /// <summary>Gets a value indicating whether this instance is office open XML document.</summary>
+        /// <summary>
+        /// Gets a value indicating whether this instance is office open XML document.
+        /// </summary>
         /// <value>
         ///   <c>true</c> if this instance is office open XML document; otherwise, <c>false</c>.</value>
         public bool IsOfficeOpenXmlDocument => ExcelFormat == ExcelFormat.OfficeOpenXmlDocument;
 
-        /// <summary>Gets or sets a value indicating whether this instance is closed not implemented exception.</summary>
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is closed not implemented exception.
+        /// </summary>
         /// <value>
         ///   <c>true</c> if this instance is closed not implemented exception; otherwise, <c>false</c>.</value>
         public bool IsClosedNotImplementedException { get; set; }

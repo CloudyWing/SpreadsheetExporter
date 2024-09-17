@@ -694,7 +694,7 @@ The zero-based index of the element to remove.
 
 ## DataColumnCollection<T>.ResetColumnsPoint(Point) Method
 
-重設底下所有DataColumn的座標
+Resets the columns point.
 
 ```csharp
 internal void ResetColumnsPoint(System.Drawing.Point point);
@@ -705,11 +705,13 @@ internal void ResetColumnsPoint(System.Drawing.Point point);
 
 `point` [System.Drawing.Point](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Point 'System.Drawing.Point')
 
+The point.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.ResetRootPoint()'></a>
 
 ## DataColumnCollection<T>.ResetRootPoint() Method
 
-從根節點往下重設座標
+Resets the root point.
 
 ```csharp
 internal void ResetRootPoint();

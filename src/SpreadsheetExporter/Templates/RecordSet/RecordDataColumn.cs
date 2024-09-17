@@ -1,19 +1,33 @@
 ﻿using System;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
-    /// <summary>The simple data column.</summary>
+    /// <summary>
+    /// The simple data column.
+    /// </summary>
     /// <typeparam name="T">The type of the record.</typeparam>
     internal class RecordDataColumn<T> : DataColumnBase<T> {
-        /// <summary>Gets the field value generator.</summary>
-        /// <value>The field value generator.</value>
+        /// <summary>
+        /// Gets the field value generator.
+        /// </summary>
+        /// <value>
+        /// The field value generator.
+        /// </value>
         public Func<RecordContext<T>, object> FieldValueGenerator { get; set; }
 
-        /// <summary>Gets the field formula generator.</summary>
-        /// <value>The field formula generator.</value>
+        /// <summary>
+        /// Gets the field formula generator.
+        /// </summary>
+        /// <value>
+        /// The field formula generator.
+        /// </value>
         public Func<RecordContext<T>, string> FieldFormulaGenerator { get; set; }
 
-        /// <summary>Gets or sets the field style generator.</summary>
-        /// <value>The field style generator.</value>
+        /// <summary>
+        /// Gets or sets the field style generator.
+        /// </summary>
+        /// <value>
+        /// The field style generator.
+        /// </value>
         public Func<RecordContext<T>, CellStyle> FieldStyleGenerator { get; set; }
 
         public override object GetFieldValue(RecordContext<T> context) {

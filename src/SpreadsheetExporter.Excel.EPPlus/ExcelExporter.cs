@@ -5,7 +5,9 @@ using OfficeOpenXml.Style;
 using OfficeOpenXml.Style.XmlAccess;
 
 namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus {
-    /// <summary>The excel exporter, using epplus.</summary>
+    /// <summary>
+    /// The excel exporter, using epplus.
+    /// </summary>
     /// <seealso cref="ExporterBase" />
     public class ExcelExporter : ExporterBase {
         private readonly Dictionary<HorizontalAlignment, ExcelHorizontalAlignment> horizontalAlignmentMap = new() {

@@ -20,9 +20,12 @@ The type of the record.
 
 `TField`
 
-The type of the record field.
+The type of the field.
 
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; [CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase<T>')[TRecord](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.TRecord 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn<TRecord,TField>.TRecord')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase<T>') &#129106; DataColumn<TRecord,TField>
+
+### See Also
+- [DataColumnBase&lt;T&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase<T>')
 ### Constructors
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.DataColumn(string)'></a>

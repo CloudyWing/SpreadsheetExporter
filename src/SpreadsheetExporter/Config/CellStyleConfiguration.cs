@@ -1,9 +1,13 @@
 ﻿using System;
 
 namespace CloudyWing.SpreadsheetExporter.Config {
-    /// <summary>The spreadsheet default style.</summary>
+    /// <summary>
+    /// The spreadsheet default style.
+    /// </summary>
     public class CellStyleConfiguration {
-        /// <summary>Initializes a new instance of the <see cref="CellStyleConfiguration" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CellStyleConfiguration" /> class.
+        /// </summary>
         /// <param name="loader">The loader.</param>
         public CellStyleConfiguration(Action<CellStyleSetuper> loader) {
             CellStyleSetuper setuper = new(this);
@@ -72,21 +76,36 @@ namespace CloudyWing.SpreadsheetExporter.Config {
                 .CloneAndSetBorder(true);
         }
 
-        /// <summary>Gets the cell style.</summary>
-        /// <value>The cell style.</value>
+        /// <summary>
+        /// Gets the cell style.
+        /// </summary>
+        /// <value>
+        /// The cell style.
+        /// </value>
         public virtual CellStyle CellStyle { get; internal set; }
 
-        /// <summary>Gets the grid cell style.</summary>
-        /// <value>The grid cell style.</value>
+        /// <summary>
+        /// Gets the grid cell style.
+        /// </summary>
+        /// <value>
+        /// The grid cell style.
+        /// </value>
         public virtual CellStyle GridCellStyle { get; internal set; }
 
-
-        /// <summary>Gets the header style.</summary>
-        /// <value>The header style.</value>
+        /// <summary>
+        /// Gets the header style.
+        /// </summary>
+        /// <value>
+        /// The header style.
+        /// </value>
         public virtual CellStyle HeaderStyle { get; internal set; }
 
-        /// <summary>Gets the field style.</summary>
-        /// <value>The field style.</value>
+        /// <summary>
+        /// Gets the field style.
+        /// </summary>
+        /// <value>
+        /// The field style.
+        /// </value>
         public virtual CellStyle FieldStyle { get; internal set; }
     }
 }

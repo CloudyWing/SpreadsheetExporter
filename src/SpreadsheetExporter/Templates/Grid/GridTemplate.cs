@@ -6,18 +6,28 @@ using System.Drawing;
 using System.Linq;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
-    /// <summary>The grid template. Create cell information using <c>CreateRow()</c> and <c>CreateCell()</c>.</summary>
+    /// <summary>
+    /// The grid template. Create cell information using <c>CreateRow()</c> and <c>CreateCell()</c>.
+    /// </summary>
     public class GridTemplate : ITemplate {
         private readonly IList<CellCollection> rows = new List<CellCollection>();
         private readonly IList<Point> points = new List<Point>();
         private readonly IDictionary<int, double?> rowHeights = new Dictionary<int, double?>();
 
-        /// <summary>Gets the column span.</summary>
-        /// <value>The column span.</value>
+        /// <summary>
+        /// Gets the column span.
+        /// </summary>
+        /// <value>
+        /// The column span.
+        /// </value>
         public int ColumnSpan => points.Count == 0 ? 0 : points.Max(x => x.X) + 1;
 
-        /// <summary>Gets the row span.</summary>
-        /// <value>The row span.</value>
+        /// <summary>
+        /// Gets the row span.
+        /// </summary>
+        /// <value>
+        /// The row span.
+        /// </value>
         public int RowSpan => points.Count == 0 ? 0 : points.Max(x => x.Y) + 1;
 
         /// <summary>
@@ -34,15 +44,19 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
             return this;
         }
 
-        /// <summary>Creates the cell.</summary>
+        /// <summary>
+        /// Creates the cell.
+        /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="columnSpan">The column span.</param>
         /// <param name="rowSpan">The row span.</param>
         /// <param name="cellStyle">The cell style. The default is <c>SpreadsheetManager.DefaultCellStyles.GridCellStyle</c>.</param>
         /// <returns>The self.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">columnSpan - Must be greater than 0.
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// columnSpan - Must be greater than 0.
         /// or
-        /// rowSpan - Must be greater than 0.</exception>
+        /// rowSpan - Must be greater than 0.
+        /// </exception>
         public GridTemplate CreateCell(
             object value, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
         ) {
@@ -69,7 +83,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
             return this;
         }
 
-        /// <summary>Create cell that contain formula.</summary>
+        /// <summary>
+        /// Create cell that contain formula.
+        /// </summary>
         /// <param name="formulaGenerator">The formula generator. Pass the cell index and row index to the generator. The  index start at 0.</param>
         /// <param name="columnSpan">The column span.</param>
         /// <param name="rowSpan">The row span.</param>
