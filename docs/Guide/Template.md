@@ -8,7 +8,7 @@
 使用 `CreateRow()` 建立新列，並指定列高。
 ```csharp
 GridTemplate template = new GridTemplate();
-// 預設列高 16.5d
+// 使用預設列高
 template.CreateRow();
 
 // 可設定列高
@@ -102,17 +102,14 @@ CellStyleConfiguration cellStyles = SpreadsheetManager.DefaultCellStyles;
 // 標題背景色是紅色，Id 為 0 的資料背景色是藍色，其他是黃色
 template.Columns.Add(
     "樣式", x => x.Id,
-    cellStyles.HeaderStyle
-    with {
+    cellStyles.HeaderStyle with {
         BackgroundColor = Color.Red
     },
     x => x.Value == 0
-        ? cellStyles.FieldStyle
-        with {
+        ? cellStyles.FieldStyle with {
             BackgroundColor = Color.Blue
         }
-        : cellStyles.FieldStyle
-        with {
+        : cellStyles.FieldStyle with {
             BackgroundColor = Color.Yellow
         }
 );
@@ -174,11 +171,9 @@ public class ReportInfoTemplate : ITemplate {
 
     public ReportInfoTemplate(string title, string user, int colSpan) {
         CellStyleConfiguration cellStyles = SpreadsheetManager.DefaultCellStyles;
-        CellStyle titleStyle = cellStyles.CellStyle
-        with {
+        CellStyle titleStyle = cellStyles.CellStyle with {
             HorizontalAlignment = HorizontalAlignment.Center,
-            Font = SpreadsheetManager.DefaultCellStyles.CellStyle.Font
-            with {
+            Font = SpreadsheetManager.DefaultCellStyles.CellStyle.Font with {
                 Size = 14
             }
         };
@@ -187,12 +182,10 @@ public class ReportInfoTemplate : ITemplate {
         gridTemplate.CreateCell(title, 8, cellStyle: titleStyle);
 
         int leftColSpan = colSpan / 2;
-        CellStyle rightCellStyle = cellStyles.CellStyle
-        with {
+        CellStyle rightCellStyle = cellStyles.CellStyle with {
             HorizontalAlignment = HorizontalAlignment.Left
         };
-        CellStyle leftCellStyle = cellStyles.CellStyle
-        with {
+        CellStyle leftCellStyle = cellStyles.CellStyle with {
             HorizontalAlignment = HorizontalAlignment.Left
         };
 
