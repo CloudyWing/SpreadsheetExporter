@@ -8,7 +8,7 @@ namespace CloudyWing.SpreadsheetExporter {
     public static class SpreadsheetManager {
         private static readonly object exporterFactoryLock = new();
         private static readonly object cellStyleLock = new();
-        private static Func<ExporterBase> exporterFactory;
+        private static Func<ISpreadsheetExporter> exporterFactory;
         private static CellStyleConfiguration defaultCellStyles;
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <param name="exporterFactory">The exporter factory.</param>
         /// <exception cref="ArgumentNullException">exporterFactory</exception>
         /// <exception cref="ArgumentException">Factory return value cannot be null. - exporterFactory</exception>
-        public static void SetExporter(Func<ExporterBase> exporterFactory) {
+        public static void SetExporter(Func<ISpreadsheetExporter> exporterFactory) {
             if (exporterFactory is null) {
                 throw new ArgumentNullException(nameof(exporterFactory));
             }
@@ -58,7 +58,7 @@ namespace CloudyWing.SpreadsheetExporter {
         /// </summary>
         /// <returns>The exporter.</returns>
         /// <exception cref="NullReferenceException">Exporter factory is not set.</exception>
-        public static ExporterBase CreateExporter() {
+        public static ISpreadsheetExporter CreateExporter() {
             return exporterFactory is null
                 ? throw new InvalidOperationException("Exporter factory is not set.")
                 : exporterFactory();

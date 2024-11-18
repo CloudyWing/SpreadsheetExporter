@@ -26,14 +26,14 @@ SpreadsheetManager.SetExporter(() => {
 ### Spreadsheet 資訊
 不同 Spreadsheet 的 Content-Type 和 副檔名可能會不一樣，可使用 `ContentType` 和 `FileNameExtension` 取得當前 Exporter 的資訊。
 ```csharp
-ExporterBase exporter = SpreadsheetManager.CreateExporter();
+ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
 string contentType = exporter.ContentType;
 string fileNameExtension = exporter.FileNameExtension;
 ```
 
 ### 建立或取得 Sheeter
 ```csharp
-ExporterBase exporter = SpreadsheetManager.CreateExporter();
+ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
 // 後續產出 Spreadsheet，會建立一個名為 Test 的 Sheet
 Sheeter sheeter = exporter.CreateSheeter("Test");
 // 未傳入參數，則 Sheet 名稱會是 DefaultBasicSheetName{Index}，e.g.「工作表1」
@@ -51,7 +51,7 @@ Sheeter sheeter4 = exporter.GetSheeter(0);
 使用於不需要實際產出檔案在主機上的場合，如 Web 產出檔案給使用者下載。
 ```csharp
 public IActionResult Download() {
-    ExporterBase exporter = SpreadsheetManager.CreateExporter();
+    ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
     exporter.CreateSheeter();
 
     return File(exporter.Export(), exporter.ContentType, $"Spreadsheet{exporter.FileNameExtension}");
@@ -61,7 +61,7 @@ public IActionResult Download() {
 #### `ExportFile()`
 產出檔案在主機上。
 ```csharp
-ExporterBase exporter = SpreadsheetManager.CreateExporter();
+ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
 exporter.CreateSheeter();
 exporter.ExportFile($@"C:\Sample{exporter.FileNameExtension}");
 

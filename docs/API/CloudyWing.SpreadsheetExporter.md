@@ -21,6 +21,10 @@
 | [CellFont](CloudyWing.SpreadsheetExporter.CellFont.md 'CloudyWing.SpreadsheetExporter.CellFont') | The cell font. |
 | [CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing.SpreadsheetExporter.CellStyle') | The cell style. |
 
+| Interfaces | |
+| :--- | :--- |
+| [ISpreadsheetExporter](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter') | Interface for spreadsheet exporters. |
+
 | Enums | |
 | :--- | :--- |
 | [FontStyles](CloudyWing.SpreadsheetExporter.FontStyles.md 'CloudyWing.SpreadsheetExporter.FontStyles') | The font styles. |

@@ -14,12 +14,13 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Util {
         };
 
         [Test]
-        public void ConvertFrom_NestedPropertyLevelIs1_ShouldWidthoutNestedProperties() {
+        public void ConvertFrom_NestedPropertyLevelIs1_ShouldWithoutNestedProperties() {
             IDictionary<string, object> result = DictionaryUtils.ConvertFrom(record, 1);
 
-            result.Count.Should().Be(2);
+            result.Count.Should().Be(3);
             result.Should().ContainKey("Id").WhoseValue.Should().Be(1);
             result.Should().ContainKey("Name").WhoseValue.Should().Be("Test");
+            result.Should().ContainKey("Address").WhoseValue.Should().Be(record.Address);
         }
 
         [Test]

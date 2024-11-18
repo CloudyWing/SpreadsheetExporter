@@ -24,6 +24,8 @@ Gets the content-type.
 public override string ContentType { get; }
 ```
 
+Implements [ContentType](https://docs.microsoft.com/en-us/dotnet/api/CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.ContentType 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.ContentType')
+
 #### Property Value
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
 The content-type.
@@ -37,6 +39,8 @@ Gets the file name extension.
 ```csharp
 public override string FileNameExtension { get; }
 ```
+
+Implements [FileNameExtension](https://docs.microsoft.com/en-us/dotnet/api/CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.FileNameExtension 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.FileNameExtension')
 
 #### Property Value
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  

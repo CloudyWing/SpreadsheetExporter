@@ -8,7 +8,7 @@ namespace CloudyWing.SpreadsheetExporter {
     /// <summary>
     /// The exporter base.
     /// </summary>
-    public abstract class ExporterBase {
+    public abstract class ExporterBase : ISpreadsheetExporter {
         private readonly IList<Sheeter> sheeters = [];
 
         /// <summary>

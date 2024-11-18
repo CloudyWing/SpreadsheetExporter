@@ -61,7 +61,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         /// </value>
         public Func<FieldContext<TRecord, TField>, CellStyle> FieldStyleGenerator { get; set; }
 
-        private string GetFieldKeyByExpression(Expression<Func<TRecord, TField>> expression) {
+        private static string GetFieldKeyByExpression(Expression<Func<TRecord, TField>> expression) {
             Stack<string> memberExpressions = [];
             if (expression.Body is ConstantExpression constant) {
                 memberExpressions.Push(constant.Value as string);
@@ -77,7 +77,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return string.Join(".", memberExpressions);
         }
 
-        private MemberExpression GetMemberExpression(Expression expression) {
+        private static MemberExpression GetMemberExpression(Expression expression) {
             return expression switch {
                 MemberExpression member => member,
                 LambdaExpression lambda => (lambda.Body as MemberExpression)
@@ -129,7 +129,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             return fieldContext;
         }
 
-        private TField ChangeFieldValueType(object value) {
+        private static TField ChangeFieldValueType(object value) {
             if (value is null) {
                 return default;
             }

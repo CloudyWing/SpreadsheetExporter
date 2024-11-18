@@ -6,10 +6,13 @@
 The exporter base.
 
 ```csharp
-public abstract class ExporterBase
+public abstract class ExporterBase :
+CloudyWing.SpreadsheetExporter.ISpreadsheetExporter
 ```
 
 Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; ExporterBase
+
+Implements [ISpreadsheetExporter](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter')
 ### Properties
 
 <a name='CloudyWing.SpreadsheetExporter.ExporterBase.ContentType'></a>
@@ -21,6 +24,8 @@ Gets the content-type.
 ```csharp
 public abstract string ContentType { get; }
 ```
+
+Implements [ContentType](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.ContentType 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.ContentType')
 
 #### Property Value
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
@@ -36,6 +41,8 @@ Gets or sets the default basic name of the sheet.
 public string DefaultBasicSheetName { get; set; }
 ```
 
+Implements [DefaultBasicSheetName](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.DefaultBasicSheetName 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.DefaultBasicSheetName')
+
 #### Property Value
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
 The default basic name of the sheet.
@@ -49,6 +56,8 @@ Gets or sets the default font.
 ```csharp
 public System.Nullable<CloudyWing.SpreadsheetExporter.CellFont> DefaultFont { get; set; }
 ```
+
+Implements [DefaultFont](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.DefaultFont 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.DefaultFont')
 
 #### Property Value
 [System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[CellFont](CloudyWing.SpreadsheetExporter.CellFont.md 'CloudyWing.SpreadsheetExporter.CellFont')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')  
@@ -64,6 +73,8 @@ Gets the file name extension.
 public abstract string FileNameExtension { get; }
 ```
 
+Implements [FileNameExtension](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.FileNameExtension 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.FileNameExtension')
+
 #### Property Value
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
 The file name extension.
@@ -77,6 +88,8 @@ Gets a value indicating whether this instance has password.
 ```csharp
 public bool HasPassword { get; }
 ```
+
+Implements [HasPassword](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.HasPassword 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.HasPassword')
 
 #### Property Value
 [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
@@ -92,6 +105,8 @@ Gets the last sheeter. When there is no sheeter, create a sheeter.
 public CloudyWing.SpreadsheetExporter.Sheeter LastSheeter { get; }
 ```
 
+Implements [LastSheeter](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.LastSheeter 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.LastSheeter')
+
 #### Property Value
 [Sheeter](CloudyWing.SpreadsheetExporter.Sheeter.md 'CloudyWing.SpreadsheetExporter.Sheeter')  
 The last sheeter.
@@ -105,6 +120,8 @@ Gets or sets the workbook protection password.
 ```csharp
 public string Password { get; set; }
 ```
+
+Implements [Password](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.Password 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.Password')
 
 #### Property Value
 [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
@@ -133,6 +150,8 @@ Name of the sheet.
 `defaultRowHeight` [System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[System.Double](https://docs.microsoft.com/en-us/dotnet/api/System.Double 'System.Double')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')
 
 Default height of the row.
+
+Implements [CreateSheeter(string, Nullable&lt;double&gt;)](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.CreateSheeter(string,System.Nullable_double_) 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.CreateSheeter(string, System.Nullable<double>)')
 
 #### Returns
 [Sheeter](CloudyWing.SpreadsheetExporter.Sheeter.md 'CloudyWing.SpreadsheetExporter.Sheeter')  
@@ -169,6 +188,8 @@ Exports bytes of spreadsheet.
 public byte[] Export();
 ```
 
+Implements [Export()](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.Export() 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.Export()')
+
 #### Returns
 [System.Byte](https://docs.microsoft.com/en-us/dotnet/api/System.Byte 'System.Byte')[[]](https://docs.microsoft.com/en-us/dotnet/api/System.Array 'System.Array')  
 The bytes of spreadsheet.
@@ -201,6 +222,8 @@ The path.
 
 The file mode.
 
+Implements [ExportFile(string, SpreadsheetFileMode)](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.ExportFile(string,CloudyWing.SpreadsheetExporter.SpreadsheetFileMode) 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.ExportFile(string, CloudyWing.SpreadsheetExporter.SpreadsheetFileMode)')
+
 <a name='CloudyWing.SpreadsheetExporter.ExporterBase.GetSheeter(int)'></a>
 
 ## ExporterBase.GetSheeter(int) Method
@@ -217,6 +240,8 @@ public CloudyWing.SpreadsheetExporter.Sheeter GetSheeter(int index);
 `index` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
 
 The index.
+
+Implements [GetSheeter(int)](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.GetSheeter(int) 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.GetSheeter(int)')
 
 #### Returns
 [Sheeter](CloudyWing.SpreadsheetExporter.Sheeter.md 'CloudyWing.SpreadsheetExporter.Sheeter')  
@@ -284,6 +309,8 @@ Occurs when [sheet created event].
 public event EventHandler<SheetCreatedEventArgs> SheetCreatedEvent;
 ```
 
+Implements [SheetCreatedEvent](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.SheetCreatedEvent 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.SheetCreatedEvent')
+
 #### Event Type
 [System.EventHandler&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.EventHandler-1 'System.EventHandler`1')[SheetCreatedEventArgs](CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs.md 'CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.EventHandler-1 'System.EventHandler`1')
 
@@ -297,6 +324,8 @@ Occurs when [spreadsheet exported event].
 public event EventHandler<SpreadsheetExportedEventArgs> SpreadsheetExportedEvent;
 ```
 
+Implements [SpreadsheetExportedEvent](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.SpreadsheetExportedEvent 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.SpreadsheetExportedEvent')
+
 #### Event Type
 [System.EventHandler&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.EventHandler-1 'System.EventHandler`1')[SpreadsheetExportedEventArgs](CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs.md 'CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.EventHandler-1 'System.EventHandler`1')
 
@@ -309,6 +338,8 @@ Occurs when [spreadsheet exporting event].
 ```csharp
 public event EventHandler<SpreadsheetExportingEventArgs> SpreadsheetExportingEvent;
 ```
+
+Implements [SpreadsheetExportingEvent](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.SpreadsheetExportingEvent 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.SpreadsheetExportingEvent')
 
 #### Event Type
 [System.EventHandler&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.EventHandler-1 'System.EventHandler`1')[SpreadsheetExportingEventArgs](CloudyWing.SpreadsheetExporter.SpreadsheetExportingEventArgs.md 'CloudyWing.SpreadsheetExporter.SpreadsheetExportingEventArgs')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.EventHandler-1 'System.EventHandler`1')
