@@ -1,4 +1,4 @@
-# Template
+﻿# Template
 
 用來建立儲存格內容資訊的範本。
 

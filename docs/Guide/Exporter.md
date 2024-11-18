@@ -1,4 +1,4 @@
-# Exporter
+﻿# Exporter
 
 ## 設置
 用來設置與 Workbook 相關的資訊，提供以下設置。
