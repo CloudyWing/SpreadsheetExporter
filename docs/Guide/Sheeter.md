@@ -1,4 +1,4 @@
-# Sheeter
+﻿# Sheeter
 
 用來建立後續產生 Spreadsheet Sheet 的所需資訊。
 

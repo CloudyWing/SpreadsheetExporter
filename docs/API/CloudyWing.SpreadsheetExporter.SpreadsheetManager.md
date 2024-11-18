@@ -34,11 +34,11 @@ The configuration.
 Creates the exporter.
 
 ```csharp
-public static CloudyWing.SpreadsheetExporter.ExporterBase CreateExporter();
+public static CloudyWing.SpreadsheetExporter.ISpreadsheetExporter CreateExporter();
 ```
 
 #### Returns
-[ExporterBase](CloudyWing.SpreadsheetExporter.ExporterBase.md 'CloudyWing.SpreadsheetExporter.ExporterBase')  
+[ISpreadsheetExporter](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter')  
 The exporter.
 
 #### Exceptions
@@ -46,20 +46,20 @@ The exporter.
 [System.NullReferenceException](https://docs.microsoft.com/en-us/dotnet/api/System.NullReferenceException 'System.NullReferenceException')  
 Exporter factory is not set.
 
-<a name='CloudyWing.SpreadsheetExporter.SpreadsheetManager.SetExporter(System.Func_CloudyWing.SpreadsheetExporter.ExporterBase_)'></a>
+<a name='CloudyWing.SpreadsheetExporter.SpreadsheetManager.SetExporter(System.Func_CloudyWing.SpreadsheetExporter.ISpreadsheetExporter_)'></a>
 
-## SpreadsheetManager.SetExporter(Func<ExporterBase>) Method
+## SpreadsheetManager.SetExporter(Func<ISpreadsheetExporter>) Method
 
 Sets the exporter.
 
 ```csharp
-public static void SetExporter(System.Func<CloudyWing.SpreadsheetExporter.ExporterBase> exporterFactory);
+public static void SetExporter(System.Func<CloudyWing.SpreadsheetExporter.ISpreadsheetExporter> exporterFactory);
 ```
 #### Parameters
 
-<a name='CloudyWing.SpreadsheetExporter.SpreadsheetManager.SetExporter(System.Func_CloudyWing.SpreadsheetExporter.ExporterBase_).exporterFactory'></a>
+<a name='CloudyWing.SpreadsheetExporter.SpreadsheetManager.SetExporter(System.Func_CloudyWing.SpreadsheetExporter.ISpreadsheetExporter_).exporterFactory'></a>
 
-`exporterFactory` [System.Func&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-1 'System.Func`1')[ExporterBase](CloudyWing.SpreadsheetExporter.ExporterBase.md 'CloudyWing.SpreadsheetExporter.ExporterBase')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-1 'System.Func`1')
+`exporterFactory` [System.Func&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-1 'System.Func`1')[ISpreadsheetExporter](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md 'CloudyWing.SpreadsheetExporter.ISpreadsheetExporter')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Func-1 'System.Func`1')
 
 The exporter factory.
 

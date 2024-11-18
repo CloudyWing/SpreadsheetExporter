@@ -13,7 +13,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             }
         }
 
-        private (int Width, int Height) GetPaperSize(int value) {
+        private static (int Width, int Height) GetPaperSize(int value) {
             PrinterSettings settings = new() {
                 PrinterName = "Microsoft XPS Document Writer"
             };

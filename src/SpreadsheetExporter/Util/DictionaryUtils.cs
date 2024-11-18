@@ -7,44 +7,58 @@ using System.Reflection;
 namespace CloudyWing.SpreadsheetExporter.Util {
     internal static class DictionaryUtils {
         internal static IDictionary<string, object> ConvertFrom<T>(T record, int maxNestedLevel) {
-            IDictionary<string, object> dic = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-
-            AddPropertyToDictionary(dic, typeof(T), "", "", record, 0, maxNestedLevel);
-
-            return dic;
+            Dictionary<string, object> dictionary = new(StringComparer.OrdinalIgnoreCase);
+            AddPropertyToDictionary(dictionary, "", record, 0, maxNestedLevel);
+            return dictionary;
         }
 
+
         private static void AddPropertyToDictionary(
-            IDictionary<string, object> dictionary, Type type, string fulllName, string name, object value, int level, int maxNestedLevel
-        ) {
-            level++;
+            IDictionary<string, object> dictionary, string fullName, object value, int level, int maxNestedLevel) {
+            if (value is null) {
+                dictionary.Add(fullName, null);
+                return;
+            }
+
+            Type type = value.GetType();
             Type underlyingType = Nullable.GetUnderlyingType(type) ?? type;
 
-            if (underlyingType.IsPrimitive || typeof(IEnumerable).IsAssignableFrom(underlyingType)) {
-                dictionary.Add(fulllName, value);
-            } else {
-                if (typeof(IConvertible).IsAssignableFrom(underlyingType)) {
-                    dictionary.Add(fulllName, value);
-                }
-
-                PropertyInfo[] props = underlyingType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                foreach (PropertyInfo prop in props.Where(x => x.CanRead)) {
-                    // DateTime 的很多 Property 還是 DateTime，避免無限循環，所以額外判斷
-                    if (type == prop.PropertyType && type == typeof(DateTime) && name == prop.Name) {
-                        continue;
-                    }
-
-                    // 避免類似 DateTime 情況的 class，所以限制層級
-                    if (level <= maxNestedLevel) {
-                        string _prefix = fulllName.Length == 0 ? prop.Name : $"{fulllName}.{prop.Name}";
-                        AddPropertyToDictionary(
-                            dictionary, prop.PropertyType, _prefix, prop.Name,
-                            value is null ? null : prop.GetValue(value),
-                            level, maxNestedLevel
-                        );
-                    }
-                }
+            if (ShouldStoreDirectly(underlyingType)) {
+                dictionary.Add(fullName, value);
+                return;
             }
+
+            if (level >= maxNestedLevel) {
+                dictionary.Add(fullName, value);
+                return;
+            }
+
+            IEnumerable<PropertyInfo> properties = underlyingType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(p => p.CanRead);
+
+            foreach (PropertyInfo prop in properties) {
+                object propValue = prop.GetValue(value);
+                string propFullName = string.IsNullOrEmpty(fullName)
+                    ? prop.Name
+                    : $"{fullName}.{prop.Name}";
+
+                AddPropertyToDictionary(
+                    dictionary,
+                    propFullName,
+                    propValue,
+                    level + 1,
+                    maxNestedLevel
+                );
+            }
+        }
+
+        private static bool ShouldStoreDirectly(Type type) {
+            return type.IsPrimitive
+                || typeof(IEnumerable).IsAssignableFrom(type)
+                || typeof(IConvertible).IsAssignableFrom(type)
+                || type == typeof(DateTimeOffset)
+                || type == typeof(TimeSpan)
+                || type == typeof(Guid);
         }
     }
 }

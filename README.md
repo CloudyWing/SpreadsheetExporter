@@ -1,4 +1,4 @@
-# SpreadsheetExporter
+﻿# SpreadsheetExporter
 
 **SpreadsheetExporter** 為 [SpreadsheetExport](https://github.com/CloudyWing/SpreadsheetExport) 的 .NET Standard 版本。
 
