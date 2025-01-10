@@ -28,8 +28,9 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Util {
             IDictionary<string, object> result = DictionaryUtils.ConvertFrom(record, 2);
 
             result.Count.Should().Be(5);
-            result.Should().ContainKey("Id").WhoseValue.Should().Be(1);
-            result.Should().ContainKey("Name").WhoseValue.Should().Be("Test");
+            result.Should().ContainKey("Id").WhoseValue.Should().Be(1); // 雖然在第一層，但基本型別直接回傳
+            result.Should().ContainKey("Name").WhoseValue.Should().Be("Test"); // 雖然在第一層，但字串直接回傳
+            result.Should().NotContainKey("Address"); // 因為抓到第二層，第一層的 Address 直接回傳
             result.Should().ContainKey("Address.Street").WhoseValue.Should().Be("Test Street");
             result.Should().ContainKey("Address.City").WhoseValue.Should().Be("Test City");
             result.Should().ContainKey("Address.Country").WhoseValue.Should().Be("Test Country");
