@@ -84,12 +84,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             string headerText, CellStyle? headerStyle = null,
             Func<RecordContext<T>, CellStyle> fieldStyleGenerator = null
         ) {
-            Add(new RecordDataColumn<T>() {
-                HeaderText = headerText,
-                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
-                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
-            });
-
+            RecordDataColumn<T> column = new();
+            ApplyDefaultStyles(column, headerText, headerStyle, fieldStyleGenerator);
+            Add(column);
             return this;
         }
 
@@ -108,16 +105,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             GeneratorProvider<T, RecordContext<T>> provider = new();
             providerSetter?.Invoke(provider);
 
-            RecordDataColumn<T> dataColumn = new() {
-                HeaderText = headerText,
-                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
-                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
-            };
-
+            RecordDataColumn<T> dataColumn = new();
+            ApplyDefaultStyles(dataColumn, headerText, headerStyle, fieldStyleGenerator);
             provider.SetGeneratorForColumn(dataColumn);
-
             Add(dataColumn);
-
             return this;
         }
 
@@ -134,12 +125,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             string headerText, string fieldKey,
             CellStyle? headerStyle = null, Func<FieldContext<T, TField>, CellStyle> fieldStyleGenerator = null
         ) {
-            Add(new DataColumn<T, TField>(fieldKey) {
-                HeaderText = headerText,
-                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
-                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
-            });
-
+            DataColumn<T, TField> column = new(fieldKey);
+            ApplyDefaultStyles(column, headerText, headerStyle, fieldStyleGenerator);
+            Add(column);
             return this;
         }
 
@@ -156,12 +144,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             string headerText, Expression<Func<T, TField>> fieldKeyExpression,
             CellStyle? headerStyle = null, Func<FieldContext<T, TField>, CellStyle> fieldStyleGenerator = null
         ) {
-            Add(new DataColumn<T, TField>(fieldKeyExpression) {
-                HeaderText = headerText,
-                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
-                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
-            });
-
+            DataColumn<T, TField> column = new(fieldKeyExpression);
+            ApplyDefaultStyles(column, headerText, headerStyle, fieldStyleGenerator);
+            Add(column);
             return this;
         }
 
@@ -182,16 +167,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             GeneratorProvider<T, FieldContext<T, TField>> provider = new();
             providerSetter?.Invoke(provider);
 
-            DataColumn<T, TField> dataColumn = new(fieldKey) {
-                HeaderText = headerText,
-                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
-                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
-            };
-
+            DataColumn<T, TField> dataColumn = new(fieldKey);
+            ApplyDefaultStyles(dataColumn, headerText, headerStyle, fieldStyleGenerator);
             provider.SetGeneratorForColumn(dataColumn);
-
             Add(dataColumn);
-
             return this;
         }
 
@@ -213,16 +192,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             GeneratorProvider<T, FieldContext<T, TField>> provider = new();
             providerSetter?.Invoke(provider);
 
-            DataColumn<T, TField> dataColumn = new(fieldKeyExpression) {
-                HeaderText = headerText,
-                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
-                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
-            };
-
+            DataColumn<T, TField> dataColumn = new(fieldKeyExpression);
+            ApplyDefaultStyles(dataColumn, headerText, headerStyle, fieldStyleGenerator);
             provider.SetGeneratorForColumn(dataColumn);
-
             Add(dataColumn);
-
             return this;
         }
 
@@ -254,11 +227,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             string headerText, CellStyle? headerStyle = null,
             Func<RecordContext<T>, CellStyle> fieldStyleGenerator = null
         ) {
-            return AddChildToLast(new RecordDataColumn<T>() {
-                HeaderText = headerText,
-                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
-                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
-            });
+            RecordDataColumn<T> column = new();
+            ApplyDefaultStyles(column, headerText, headerStyle, fieldStyleGenerator);
+            return AddChildToLast(column);
         }
 
         /// <summary>
@@ -276,14 +247,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             GeneratorProvider<T, RecordContext<T>> provider = new();
             providerSetter?.Invoke(provider);
 
-            RecordDataColumn<T> dataColumn = new() {
-                HeaderText = headerText,
-                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
-                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
-            };
-
+            RecordDataColumn<T> dataColumn = new();
+            ApplyDefaultStyles(dataColumn, headerText, headerStyle, fieldStyleGenerator);
             provider.SetGeneratorForColumn(dataColumn);
-
             return AddChildToLast(dataColumn);
         }
 
@@ -300,11 +266,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             string headerText, string fieldKey,
             CellStyle? headerStyle = null, Func<FieldContext<T, TField>, CellStyle> fieldStyleGenerator = null
         ) {
-            return AddChildToLast(new DataColumn<T, TField>(fieldKey) {
-                HeaderText = headerText,
-                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
-                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
-            });
+            DataColumn<T, TField> column = new(fieldKey);
+            ApplyDefaultStyles(column, headerText, headerStyle, fieldStyleGenerator);
+            return AddChildToLast(column);
         }
 
         /// <summary>
@@ -320,11 +284,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             string headerText, Expression<Func<T, TField>> fieldKeyExpression,
             CellStyle? headerStyle = null, Func<FieldContext<T, TField>, CellStyle> fieldStyleGenerator = null
         ) {
-            return AddChildToLast(new DataColumn<T, TField>(fieldKeyExpression) {
-                HeaderText = headerText,
-                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
-                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
-            });
+            DataColumn<T, TField> column = new(fieldKeyExpression);
+            ApplyDefaultStyles(column, headerText, headerStyle, fieldStyleGenerator);
+            return AddChildToLast(column);
         }
 
         /// <summary>
@@ -344,14 +306,9 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             GeneratorProvider<T, FieldContext<T, TField>> provider = new();
             providerSetter?.Invoke(provider);
 
-            DataColumn<T, TField> dataColumn = new(fieldKey) {
-                HeaderText = headerText,
-                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
-                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
-            };
-
+            DataColumn<T, TField> dataColumn = new(fieldKey);
+            ApplyDefaultStyles(dataColumn, headerText, headerStyle, fieldStyleGenerator);
             provider.SetGeneratorForColumn(dataColumn);
-
             return AddChildToLast(dataColumn);
         }
 
@@ -373,15 +330,30 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
             GeneratorProvider<T, FieldContext<T, TField>> provider = new();
             providerSetter?.Invoke(provider);
 
-            DataColumn<T, TField> dataColumn = new(fieldKeyExpression) {
-                HeaderText = headerText,
-                HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle,
-                FieldStyleGenerator = fieldStyleGenerator ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle)
-            };
-
+            DataColumn<T, TField> dataColumn = new(fieldKeyExpression);
+            ApplyDefaultStyles(dataColumn, headerText, headerStyle, fieldStyleGenerator);
             provider.SetGeneratorForColumn(dataColumn);
-
             return AddChildToLast(dataColumn);
+        }
+
+        private static void ApplyDefaultStyles(
+            RecordDataColumn<T> column, string headerText,
+            CellStyle? headerStyle, Func<RecordContext<T>, CellStyle> fieldStyleGenerator
+        ) {
+            column.HeaderText = headerText;
+            column.HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle;
+            column.FieldStyleGenerator = fieldStyleGenerator
+                ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle);
+        }
+
+        private static void ApplyDefaultStyles<TField>(
+            DataColumn<T, TField> column, string headerText,
+            CellStyle? headerStyle, Func<FieldContext<T, TField>, CellStyle> fieldStyleGenerator
+        ) {
+            column.HeaderText = headerText;
+            column.HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle;
+            column.FieldStyleGenerator = fieldStyleGenerator
+                ?? ((context) => SpreadsheetManager.DefaultCellStyles.FieldStyle);
         }
 
         /// <inheritdoc/>
