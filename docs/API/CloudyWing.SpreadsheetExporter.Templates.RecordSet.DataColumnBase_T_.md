@@ -139,6 +139,27 @@ public int RowSpan { get; }
 The row span\.
 ### Methods
 
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_.GetFieldDataValidation(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_)'></a>
+
+## DataColumnBase\<T\>\.GetFieldDataValidation\(RecordContext\<T\>\) Method
+
+Gets the field data validation\.
+
+```csharp
+public abstract CloudyWing.SpreadsheetExporter.DataValidation GetFieldDataValidation(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T> context);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_.GetFieldDataValidation(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_).context'></a>
+
+`context` [CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_.T 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.DataColumnBase\<T\>\.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>')
+
+The context\.
+
+#### Returns
+[DataValidation](CloudyWing.SpreadsheetExporter.DataValidation.md 'CloudyWing\.SpreadsheetExporter\.DataValidation')  
+Returns the field data validation, or `null` if no validation is specified\.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase_T_.GetFieldFormula(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_)'></a>
 
 ## DataColumnBase\<T\>\.GetFieldFormula\(RecordContext\<T\>\) Method

@@ -6,6 +6,7 @@
 | :--- | :--- |
 | [Cell](CloudyWing.SpreadsheetExporter.Cell.md 'CloudyWing\.SpreadsheetExporter\.Cell') | The spreadsheet cell\. |
 | [Constants](CloudyWing.SpreadsheetExporter.Constants.md 'CloudyWing\.SpreadsheetExporter\.Constants') | The constants\. |
+| [DataValidation](CloudyWing.SpreadsheetExporter.DataValidation.md 'CloudyWing\.SpreadsheetExporter\.DataValidation') | Represents data validation rules that can be applied to spreadsheet cells\. Data validation restricts the type of data or values that users can enter into a cell\. |
 | [ExporterBase](CloudyWing.SpreadsheetExporter.ExporterBase.md 'CloudyWing\.SpreadsheetExporter\.ExporterBase') | The exporter base\. |
 | [PageSettings](CloudyWing.SpreadsheetExporter.PageSettings.md 'CloudyWing\.SpreadsheetExporter\.PageSettings') | The page settings\. |
 | [PaperSize](CloudyWing.SpreadsheetExporter.PaperSize.md 'CloudyWing\.SpreadsheetExporter\.PaperSize') | The paper size\. |
@@ -27,6 +28,8 @@
 
 | Enums | |
 | :--- | :--- |
+| [DataValidationOperator](CloudyWing.SpreadsheetExporter.DataValidationOperator.md 'CloudyWing\.SpreadsheetExporter\.DataValidationOperator') | Defines the comparison operators used in data validation\. |
+| [DataValidationType](CloudyWing.SpreadsheetExporter.DataValidationType.md 'CloudyWing\.SpreadsheetExporter\.DataValidationType') | Defines the types of data validation that can be applied to cells\. |
 | [FontStyles](CloudyWing.SpreadsheetExporter.FontStyles.md 'CloudyWing\.SpreadsheetExporter\.FontStyles') | The font styles\. |
 | [HorizontalAlignment](CloudyWing.SpreadsheetExporter.HorizontalAlignment.md 'CloudyWing\.SpreadsheetExporter\.HorizontalAlignment') | The horizontal text alignment\. |
 | [PageOrientation](CloudyWing.SpreadsheetExporter.PageOrientation.md 'CloudyWing\.SpreadsheetExporter\.PageOrientation') | The page orientation\. |

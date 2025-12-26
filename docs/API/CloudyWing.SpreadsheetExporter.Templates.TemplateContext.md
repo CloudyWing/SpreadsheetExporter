@@ -58,33 +58,33 @@ The cells\.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.TemplateContext.FreezePanes'></a>
 
-## TemplateContext.FreezePanes Property
+## TemplateContext\.FreezePanes Property
 
-Gets or sets the freeze panes position. The column and row at this position will be the first unfrozen cell.  
-For example, (1, 1) freezes the first column and first row (A1 becomes the frozen pane).
+Gets or sets the freeze panes position\. The column and row at this position will be the first unfrozen cell\.
+For example, \(1, 1\) freezes the first column and first row \(A1 becomes the frozen pane\)\.
 
 ```csharp
 public System.Nullable<System.Drawing.Point> FreezePanes { get; set; }
 ```
 
 #### Property Value
-[System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[System.Drawing.Point](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Point 'System.Drawing.Point')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')  
-The freeze panes position. Null means no freeze panes.
+[System\.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')[System\.Drawing\.Point](https://learn.microsoft.com/en-us/dotnet/api/system.drawing.point 'System\.Drawing\.Point')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')  
+The freeze panes position\. Null means no freeze panes\.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.TemplateContext.IsAutoFilterEnabled'></a>
 
-## TemplateContext.IsAutoFilterEnabled Property
+## TemplateContext\.IsAutoFilterEnabled Property
 
-Gets or sets a value indicating whether to enable auto filter for the data range.  
-Auto filter is typically applied to header rows in data tables.
+Gets or sets a value indicating whether to enable auto filter for the data range\.
+Auto filter is typically applied to header rows in data tables\.
 
 ```csharp
 public bool IsAutoFilterEnabled { get; set; }
 ```
 
 #### Property Value
-[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
-`true` if auto filter is enabled; otherwise, `false`. Default is `false`.
+[System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')  
+`true` if auto filter is enabled; otherwise, `false`\. Default is `false`\.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.TemplateContext.RowHeights'></a>
 

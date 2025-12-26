@@ -62,20 +62,12 @@ public class GridTemplate : ITemplate {
     public GridTemplate CreateCell(
         object value, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
     ) {
-        ValidateCellParameters(columnSpan, rowSpan);
-        cellStyle ??= SpreadsheetManager.DefaultCellStyles.GridCellStyle;
-
-        if (rows.Count == 0) {
-            CreateRow();
-        }
-
-        AddCell(new Cell {
-            ValueGenerator = (cellIndex, rowIndex) => value,
-            Size = new Size(columnSpan, rowSpan),
-            CellStyleGenerator = (cellIndex, rowIndex) => (CellStyle)cellStyle
-        });
-
-        return this;
+        return CreateCell(
+            cell => {
+                cell.ValueGenerator = (cellIndex, rowIndex) => value;
+            },
+            columnSpan, rowSpan, cellStyle
+        );
     }
 
     /// <summary>
@@ -95,6 +87,32 @@ public class GridTemplate : ITemplate {
     public GridTemplate CreateCell(
         Func<int, int, string> formulaGenerator, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
     ) {
+        return CreateCell(
+            cell => {
+                cell.FormulaGenerator = formulaGenerator;
+            },
+            columnSpan, rowSpan, cellStyle
+        );
+    }
+
+    /// <summary>
+    /// Creates a cell with custom configuration using a configurator action.
+    /// This method provides full flexibility for configuring cell properties including value, formula, data validation, and style.
+    /// </summary>
+    /// <param name="configurator">The action to configure the cell. The action receives the cell instance to configure.</param>
+    /// <param name="columnSpan">The column span.</param>
+    /// <param name="rowSpan">The row span.</param>
+    /// <param name="cellStyle">The cell style. The default is <c>SpreadsheetManager.DefaultCellStyles.GridCellStyle</c>.</param>
+    /// <returns>The self.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <paramref name="columnSpan"/> must be greater than 0.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <paramref name="rowSpan"/> must be greater than 0.
+    /// </exception>
+    public GridTemplate CreateCell(
+        Action<Cell> configurator, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
+    ) {
         ValidateCellParameters(columnSpan, rowSpan);
         cellStyle ??= SpreadsheetManager.DefaultCellStyles.GridCellStyle;
 
@@ -102,11 +120,15 @@ public class GridTemplate : ITemplate {
             CreateRow();
         }
 
-        AddCell(new Cell {
+        Cell cell = new Cell {
             Size = new Size(columnSpan, rowSpan),
-            CellStyleGenerator = (cellIndex, rowIndex) => (CellStyle)cellStyle,
-            FormulaGenerator = formulaGenerator
-        });
+            CellStyleGenerator = (cellIndex, rowIndex) => (CellStyle)cellStyle
+        };
+
+        configurator?.Invoke(cell);
+
+        CellCollection lastRow = rows.Last();
+        lastRow.Add(cell);
 
         return this;
     }
@@ -118,11 +140,6 @@ public class GridTemplate : ITemplate {
         if (rowSpan <= 0) {
             throw new ArgumentOutOfRangeException(nameof(rowSpan), "Must be greater than 0.");
         }
-    }
-
-    private void AddCell(Cell cell) {
-        CellCollection lastRow = rows.Last();
-        lastRow.Add(cell);
     }
 
     /// <inheritdoc/>

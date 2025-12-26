@@ -26,6 +26,20 @@ public System.Func<int,int,CloudyWing.SpreadsheetExporter.CellStyle> CellStyleGe
 [System\.Func&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.func-3 'System\.Func\`3')[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')[,](https://learn.microsoft.com/en-us/dotnet/api/system.func-3 'System\.Func\`3')[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')[,](https://learn.microsoft.com/en-us/dotnet/api/system.func-3 'System\.Func\`3')[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing\.SpreadsheetExporter\.CellStyle')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.func-3 'System\.Func\`3')  
 The cell style\.
 
+<a name='CloudyWing.SpreadsheetExporter.Cell.DataValidationGenerator'></a>
+
+## Cell\.DataValidationGenerator Property
+
+Gets or sets the data validation generator\. Pass the cell index and row index to the generator\. The  index start at 0\.
+
+```csharp
+public System.Func<int,int,CloudyWing.SpreadsheetExporter.DataValidation> DataValidationGenerator { get; set; }
+```
+
+#### Property Value
+[System\.Func&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.func-3 'System\.Func\`3')[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')[,](https://learn.microsoft.com/en-us/dotnet/api/system.func-3 'System\.Func\`3')[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')[,](https://learn.microsoft.com/en-us/dotnet/api/system.func-3 'System\.Func\`3')[DataValidation](CloudyWing.SpreadsheetExporter.DataValidation.md 'CloudyWing\.SpreadsheetExporter\.DataValidation')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.func-3 'System\.Func\`3')  
+The data validation generator\.
+
 <a name='CloudyWing.SpreadsheetExporter.Cell.FormulaGenerator'></a>
 
 ## Cell\.FormulaGenerator Property
@@ -96,6 +110,20 @@ public CloudyWing.SpreadsheetExporter.CellStyle GetCellStyle();
 #### Returns
 [CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing\.SpreadsheetExporter\.CellStyle')  
 The cell style\.
+
+<a name='CloudyWing.SpreadsheetExporter.Cell.GetDataValidation()'></a>
+
+## Cell\.GetDataValidation\(\) Method
+
+Gets the data validation\.
+
+```csharp
+public CloudyWing.SpreadsheetExporter.DataValidation GetDataValidation();
+```
+
+#### Returns
+[DataValidation](CloudyWing.SpreadsheetExporter.DataValidation.md 'CloudyWing\.SpreadsheetExporter\.DataValidation')  
+The data validation, or `null` if no validation is specified\.
 
 <a name='CloudyWing.SpreadsheetExporter.Cell.GetFormula()'></a>
 

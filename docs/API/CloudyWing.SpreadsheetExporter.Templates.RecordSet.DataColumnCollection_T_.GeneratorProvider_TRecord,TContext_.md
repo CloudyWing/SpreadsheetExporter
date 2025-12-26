@@ -33,6 +33,23 @@ Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system
 - [Collection\{DataColumnBase\}](https://learn.microsoft.com/en-us/dotnet/api/system.collections.objectmodel.collection-1 'System\.Collections\.ObjectModel\.Collection\`1')
 ### Methods
 
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.GeneratorProvider_TRecord,TContext_.UseDataValidation(System.Func_TContext,CloudyWing.SpreadsheetExporter.DataValidation_)'></a>
+
+## DataColumnCollection\<T\>\.GeneratorProvider\<TRecord,TContext\>\.UseDataValidation\(Func\<TContext,DataValidation\>\) Method
+
+Uses the data validation\.
+
+```csharp
+public void UseDataValidation(System.Func<TContext,CloudyWing.SpreadsheetExporter.DataValidation> dataValidationGenerator);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.GeneratorProvider_TRecord,TContext_.UseDataValidation(System.Func_TContext,CloudyWing.SpreadsheetExporter.DataValidation_).dataValidationGenerator'></a>
+
+`dataValidationGenerator` [System\.Func&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.func-2 'System\.Func\`2')[TContext](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.GeneratorProvider_TRecord,TContext_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.GeneratorProvider_TRecord,TContext_.TContext 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.DataColumnCollection\<T\>\.GeneratorProvider\<TRecord,TContext\>\.TContext')[,](https://learn.microsoft.com/en-us/dotnet/api/system.func-2 'System\.Func\`2')[DataValidation](CloudyWing.SpreadsheetExporter.DataValidation.md 'CloudyWing\.SpreadsheetExporter\.DataValidation')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.func-2 'System\.Func\`2')
+
+The data validation generator\.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.GeneratorProvider_TRecord,TContext_.UseFormula(System.Func_TContext,string_)'></a>
 
 ## DataColumnCollection\<T\>\.GeneratorProvider\<TRecord,TContext\>\.UseFormula\(Func\<TContext,string\>\) Method

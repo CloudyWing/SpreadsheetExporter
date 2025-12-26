@@ -13,7 +13,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet;
 /// <typeparam name="TField">The type of the field.</typeparam>
 /// <seealso cref="DataColumnBase&lt;TRecord&gt;" />
 internal class DataColumn<TRecord, TField> : DataColumnBase<TRecord> {
-    private readonly Dictionary<RecordContext<TRecord>, FieldContext<TRecord, TField>> contextMaps = [];
+    private readonly Dictionary<RecordContext<TRecord>, FieldContext<TRecord, TField>> contextMap = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DataColumn{TRecord, TField}" /> class.
@@ -62,6 +62,14 @@ internal class DataColumn<TRecord, TField> : DataColumnBase<TRecord> {
     /// The field style generator.
     /// </value>
     public Func<FieldContext<TRecord, TField>, CellStyle> FieldStyleGenerator { get; set; }
+
+    /// <summary>
+    /// Gets or sets the field data validation generator.
+    /// </summary>
+    /// <value>
+    /// The field data validation generator.
+    /// </value>
+    public Func<FieldContext<TRecord, TField>, DataValidation> FieldDataValidationGenerator { get; set; }
 
     private static string GetFieldKeyByExpression(Expression<Func<TRecord, TField>> expression) {
         Stack<string> memberExpressions = [];
@@ -116,7 +124,7 @@ internal class DataColumn<TRecord, TField> : DataColumnBase<TRecord> {
     }
 
     private FieldContext<TRecord, TField> GetFieldContextFromRecordContext(RecordContext<TRecord> recordContext) {
-        if (!contextMaps.TryGetValue(recordContext, out FieldContext<TRecord, TField> fieldContext)) {
+        if (!contextMap.TryGetValue(recordContext, out FieldContext<TRecord, TField> fieldContext)) {
             int maxNestedLevel = FieldKey.Split('.').Length;
             IDictionary<string, object> maps = DictionaryUtils.ConvertFrom(recordContext.Record, maxNestedLevel);
 
@@ -130,7 +138,7 @@ internal class DataColumn<TRecord, TField> : DataColumnBase<TRecord> {
 
             TField value = ChangeFieldValueType(maps[FieldKey]);
             fieldContext = new FieldContext<TRecord, TField>(recordContext, FieldKey, value);
-            contextMaps[recordContext] = fieldContext;
+            contextMap[recordContext] = fieldContext;
         }
         return fieldContext;
     }
@@ -156,5 +164,10 @@ internal class DataColumn<TRecord, TField> : DataColumnBase<TRecord> {
     /// <inheritdoc/>
     public override CellStyle GetFieldStyle(RecordContext<TRecord> recordContext) {
         return GetFromGenerator(FieldStyleGenerator, SpreadsheetManager.DefaultCellStyles.FieldStyle, recordContext);
+    }
+
+    /// <inheritdoc/>
+    public override DataValidation GetFieldDataValidation(RecordContext<TRecord> recordContext) {
+        return GetFromGenerator(FieldDataValidationGenerator, null, recordContext);
     }
 }

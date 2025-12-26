@@ -101,4 +101,11 @@ public abstract class DataColumnBase<T> {
     /// <param name="context">The context.</param>
     /// <returns>Returns the field style.</returns>
     public abstract CellStyle GetFieldStyle(RecordContext<T> context);
+
+    /// <summary>
+    /// Gets the field data validation.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <returns>Returns the field data validation, or <c>null</c> if no validation is specified.</returns>
+    public abstract DataValidation GetFieldDataValidation(RecordContext<T> context);
 }

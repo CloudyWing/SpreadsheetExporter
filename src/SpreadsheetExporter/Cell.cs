@@ -32,6 +32,14 @@ public class Cell {
     public Func<int, int, string> FormulaGenerator { get; set; }
 
     /// <summary>
+    /// Gets or sets the data validation generator. Pass the cell index and row index to the generator. The  index start at 0.
+    /// </summary>
+    /// <value>
+    /// The data validation generator.
+    /// </value>
+    public Func<int, int, DataValidation> DataValidationGenerator { get; set; }
+
+    /// <summary>
     /// Gets or sets the point.
     /// </summary>
     /// <value>
@@ -69,6 +77,14 @@ public class Cell {
     /// <returns>The the formula.</returns>
     public string GetFormula() {
         return FormulaGenerator?.Invoke(Point.X, Point.Y)?.TrimStart(' ').TrimStart('=');
+    }
+
+    /// <summary>
+    /// Gets the data validation.
+    /// </summary>
+    /// <returns>The data validation, or <c>null</c> if no validation is specified.</returns>
+    public DataValidation GetDataValidation() {
+        return DataValidationGenerator?.Invoke(Point.X, Point.Y);
     }
 
     /// <summary>

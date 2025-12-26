@@ -427,16 +427,17 @@ public class DataColumnCollection<T> : Collection<DataColumnBase<T>> {
     /// <typeparam name="TContext">The type of the context.</typeparam>
     /// <seealso cref="Collection{DataColumnBase}">Collection{DataColumnBase}</seealso>
     public sealed class GeneratorProvider<TRecord, TContext> where TContext : RecordContext<TRecord> {
-        private ProviderType type = ProviderType.None;
+        private ProviderTypes types = ProviderTypes.None;
         private Func<TContext, object> valueGenerator;
         private Func<TContext, string> formulaGenerator;
+        private Func<TContext, DataValidation> dataValidationGenerator;
 
         /// <summary>
         /// Uses the value.
         /// </summary>
         /// <param name="generator">The generator.</param>
         public void UseValue(Func<TContext, object> generator) {
-            type = ProviderType.Value;
+            types |= ProviderTypes.Value;
             valueGenerator = generator;
         }
 
@@ -445,43 +446,73 @@ public class DataColumnCollection<T> : Collection<DataColumnBase<T>> {
         /// </summary>
         /// <param name="generator">The generator.</param>
         public void UseFormula(Func<TContext, string> generator) {
-            type = ProviderType.Formula;
+            types |= ProviderTypes.Formula;
             formulaGenerator = generator;
         }
 
+        /// <summary>
+        /// Uses the data validation.
+        /// </summary>
+        /// <param name="dataValidationGenerator">The data validation generator.</param>
+        public void UseDataValidation(Func<TContext, DataValidation> dataValidationGenerator) {
+            types |= ProviderTypes.DataValidation;
+            this.dataValidationGenerator = dataValidationGenerator;
+        }
+
         internal void SetGeneratorForColumn(RecordDataColumn<TRecord> dataColumn) {
-            switch (type) {
-                case ProviderType.Value:
-                    dataColumn.FieldValueGenerator = ConvertGenerator<Func<RecordContext<TRecord>, object>>(valueGenerator);
-                    break;
-                case ProviderType.Formula:
-                    dataColumn.FieldFormulaGenerator = ConvertGenerator<Func<RecordContext<TRecord>, string>>(formulaGenerator);
-                    break;
-                default:
-                    throw new ArgumentException($"Invalid provider type: {type}. Expected Value or Formula.");
+            ValidateProviderTypes();
+
+            if (types.HasFlag(ProviderTypes.Value)) {
+                dataColumn.FieldValueGenerator = ConvertGenerator<Func<RecordContext<TRecord>, object>>(valueGenerator);
+            }
+
+            if (types.HasFlag(ProviderTypes.Formula)) {
+                dataColumn.FieldFormulaGenerator = ConvertGenerator<Func<RecordContext<TRecord>, string>>(formulaGenerator);
+            }
+
+            if (types.HasFlag(ProviderTypes.DataValidation)) {
+                dataColumn.FieldDataValidationGenerator = ConvertGenerator<Func<RecordContext<TRecord>, DataValidation>>(dataValidationGenerator);
             }
         }
 
         internal void SetGeneratorForColumn<TField>(DataColumn<TRecord, TField> dataColumn) {
-            switch (type) {
-                case ProviderType.Value:
-                    dataColumn.FieldValueGenerator = ConvertGenerator<Func<FieldContext<TRecord, TField>, object>>(valueGenerator);
-                    break;
-                case ProviderType.Formula:
-                    dataColumn.FieldFormulaGenerator = ConvertGenerator<Func<FieldContext<TRecord, TField>, string>>(formulaGenerator);
-                    break;
-                default:
-                    throw new ArgumentException($"Invalid provider type: {type}. Expected Value or Formula.");
+            ValidateProviderTypes();
+
+            if (types.HasFlag(ProviderTypes.Value)) {
+                dataColumn.FieldValueGenerator = ConvertGenerator<Func<FieldContext<TRecord, TField>, object>>(valueGenerator);
+            }
+
+            if (types.HasFlag(ProviderTypes.Formula)) {
+                dataColumn.FieldFormulaGenerator = ConvertGenerator<Func<FieldContext<TRecord, TField>, string>>(formulaGenerator);
+            }
+
+            if (types.HasFlag(ProviderTypes.DataValidation)) {
+                dataColumn.FieldDataValidationGenerator = ConvertGenerator<Func<FieldContext<TRecord, TField>, DataValidation>>(dataValidationGenerator);
+            }
+        }
+
+        private void ValidateProviderTypes() {
+            if (types == ProviderTypes.None) {
+                throw new ArgumentException("No provider type specified. Use UseValue, UseFormula, or UseDataValidation.");
+            }
+
+            if (types.HasFlag(ProviderTypes.Value) && types.HasFlag(ProviderTypes.Formula)) {
+                throw new InvalidOperationException(
+                    "Cannot use both UseValue and UseFormula on the same column. "
+                    + "A cell can only have a value or a formula, not both."
+                );
             }
         }
 
         private static TField ConvertGenerator<TField>(object generator) where TField : class =>
             generator as TField ?? throw new InvalidCastException("Generator type mismatch.");
 
-        private enum ProviderType {
-            None,
-            Value,
-            Formula
+        [Flags]
+        private enum ProviderTypes {
+            None = 0,
+            Value = 1,
+            Formula = 2,
+            DataValidation = 4
         }
     }
 }

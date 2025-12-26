@@ -282,6 +282,90 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             Assert.That(column.FieldStyleGenerator, Is.EqualTo(fieldStyleGenerator));
         }
 
+        [Test]
+        public void Add_ByDataValidationGenerator_ShouldAddToColumns() {
+            Func<RecordContext<Record>, DataValidation> dataValidationGenerator = x => new DataValidation {
+                ValidationType = DataValidationType.List,
+                ListItems = new[] { "A", "B", "C" }
+            };
+
+            columns!.Add(HeaderText, x => {
+                x.UseValue(ctx => ctx.Record.Name);
+                x.UseDataValidation(dataValidationGenerator);
+            }, headerStyle, fieldStyleGenerator);
+
+            Assert.That(columns, Has.Count.EqualTo(1));
+            RecordDataColumn<Record>? column = columns.Single() as RecordDataColumn<Record>;
+
+            Assert.That(column, Is.Not.Null);
+            Assert.That(column!.FieldDataValidationGenerator, Is.EqualTo(dataValidationGenerator));
+        }
+
+        [Test]
+        public void Add_WithValueAndDataValidation_ShouldAddToColumns() {
+            Func<RecordContext<Record>, object?> valueGenerator = x => x.Record.Name;
+            Func<RecordContext<Record>, DataValidation> dataValidationGenerator = x => new DataValidation {
+                ValidationType = DataValidationType.TextLength,
+                Operator = DataValidationOperator.LessThanOrEqual,
+                Value1 = 50
+            };
+
+            columns!.Add(HeaderText, x => {
+                x.UseValue(valueGenerator);
+                x.UseDataValidation(dataValidationGenerator);
+            }, headerStyle, fieldStyleGenerator);
+
+            RecordDataColumn<Record>? column = columns.Single() as RecordDataColumn<Record>;
+
+            Assert.Multiple(() => {
+                Assert.That(column, Is.Not.Null);
+                Assert.That(column!.FieldValueGenerator, Is.EqualTo(valueGenerator));
+                Assert.That(column.FieldDataValidationGenerator, Is.EqualTo(dataValidationGenerator));
+            });
+        }
+
+        [Test]
+        public void Add_WithValueAndFormula_ShouldThrowInvalidOperationException() {
+            Assert.Throws<InvalidOperationException>(() => {
+                columns!.Add(HeaderText, x => {
+                    x.UseValue(ctx => ctx.Record.Name);
+                    x.UseFormula(ctx => "A1+B1");
+                }, headerStyle, fieldStyleGenerator);
+            });
+        }
+
+        [Test]
+        public void Add_WithoutAnyProvider_ShouldThrowArgumentException() {
+            Assert.Throws<ArgumentException>(() => {
+                columns!.Add(HeaderText, x => {
+                    // No Use* method called
+                }, headerStyle, fieldStyleGenerator);
+            });
+        }
+
+        [Test]
+        public void Add_ByFieldKeyWithDataValidation_ShouldAddToColumns() {
+            Func<FieldContext<Record, string?>, object?> valueGenerator = ctx => ctx.Value;
+            Func<FieldContext<Record, string?>, DataValidation> dataValidationGenerator = x => new DataValidation {
+                ValidationType = DataValidationType.List,
+                ListItems = new[] { "Option1", "Option2" }
+            };
+
+            columns!.Add(HeaderText, x => x.Name, x => {
+                x.UseValue(valueGenerator);
+                x.UseDataValidation(dataValidationGenerator);
+            }, headerStyle, fieldStyleGenerator);
+
+            DataColumn<Record, string?>? column = columns.Single() as DataColumn<Record, string?>;
+
+            Assert.Multiple(() => {
+                Assert.That(column, Is.Not.Null);
+                Assert.That(column!.FieldKey, Is.EqualTo("Name"));
+                Assert.That(column.FieldValueGenerator, Is.EqualTo(valueGenerator));
+                Assert.That(column.FieldDataValidationGenerator, Is.EqualTo(dataValidationGenerator));
+            });
+        }
+
         private class Record {
             public int Id { get; set; }
 

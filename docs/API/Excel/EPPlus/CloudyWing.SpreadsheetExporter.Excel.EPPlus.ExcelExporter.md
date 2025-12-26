@@ -45,6 +45,20 @@ Implements [FileNameExtension](https://learn.microsoft.com/en-us/dotnet/api/clou
 #### Property Value
 [System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')  
 The file name extension\.
+
+<a name='CloudyWing.SpreadsheetExporter.Excel.EPPlus.ExcelExporter.IsClosedNotImplementedException'></a>
+
+## ExcelExporter\.IsClosedNotImplementedException Property
+
+Gets or sets a value indicating whether this instance is closed not implemented exception\.
+
+```csharp
+public bool IsClosedNotImplementedException { get; set; }
+```
+
+#### Property Value
+[System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')  
+`true` if this instance is closed not implemented exception; otherwise, `false`\.
 ### Methods
 
 <a name='CloudyWing.SpreadsheetExporter.Excel.EPPlus.ExcelExporter.ExecuteExport(System.Collections.Generic.IEnumerable_CloudyWing.SpreadsheetExporter.SheeterContext_)'></a>

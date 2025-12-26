@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using NPOI.HSSF.UserModel;
 using NPOI.HSSF.Util;
@@ -20,17 +21,28 @@ public sealed class ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOp
     private IWorkbook workbook;
     private readonly IDictionary<CellStyle, ICellStyle> cellStyles = new Dictionary<CellStyle, ICellStyle>();
     private readonly IDictionary<CellFont, IFont> fonts = new Dictionary<CellFont, IFont>();
-    private static readonly IDictionary<ExcelFormat, string> filenameExtensionMaps = new Dictionary<ExcelFormat, string> {
+    private static readonly IDictionary<ExcelFormat, string> filenameExtensionMap = new Dictionary<ExcelFormat, string> {
         [ExcelFormat.ExcelBinaryFileFormat] = ".xls",
         [ExcelFormat.OfficeOpenXmlDocument] = ".xlsx"
     };
 
-    private static readonly IDictionary<ExcelFormat, string> contentTypeMaps = new Dictionary<ExcelFormat, string> {
+    private static readonly IDictionary<ExcelFormat, string> contentTypeMap = new Dictionary<ExcelFormat, string> {
         [ExcelFormat.ExcelBinaryFileFormat] = "application/vnd.ms-excel",
         [ExcelFormat.OfficeOpenXmlDocument] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     };
 
-    private readonly Dictionary<HorizontalAlignment, global::NPOI.SS.UserModel.HorizontalAlignment> horizontalAlignmentMaps = new() {
+    private static readonly IDictionary<DataValidationOperator, int> validationOperatorMap = new Dictionary<DataValidationOperator, int> {
+        [DataValidationOperator.Between] = OperatorType.BETWEEN,
+        [DataValidationOperator.NotBetween] = OperatorType.NOT_BETWEEN,
+        [DataValidationOperator.Equal] = OperatorType.EQUAL,
+        [DataValidationOperator.NotEqual] = OperatorType.NOT_EQUAL,
+        [DataValidationOperator.GreaterThan] = OperatorType.GREATER_THAN,
+        [DataValidationOperator.LessThan] = OperatorType.LESS_THAN,
+        [DataValidationOperator.GreaterThanOrEqual] = OperatorType.GREATER_OR_EQUAL,
+        [DataValidationOperator.LessThanOrEqual] = OperatorType.LESS_OR_EQUAL
+    };
+
+    private readonly Dictionary<HorizontalAlignment, global::NPOI.SS.UserModel.HorizontalAlignment> horizontalAlignmentMap = new() {
         [HorizontalAlignment.General] = global::NPOI.SS.UserModel.HorizontalAlignment.General,
         [HorizontalAlignment.Left] = global::NPOI.SS.UserModel.HorizontalAlignment.Left,
         [HorizontalAlignment.Center] = global::NPOI.SS.UserModel.HorizontalAlignment.Center,
@@ -43,7 +55,7 @@ public sealed class ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOp
     /// </summary>
     private const int ExcelColumnWidthUnit = 256;
 
-    private readonly Dictionary<VerticalAlignment, global::NPOI.SS.UserModel.VerticalAlignment> verticalAlignmentMaps = new() {
+    private readonly Dictionary<VerticalAlignment, global::NPOI.SS.UserModel.VerticalAlignment> verticalAlignmentMap = new() {
         [VerticalAlignment.Top] = global::NPOI.SS.UserModel.VerticalAlignment.Top,
         [VerticalAlignment.Middle] = global::NPOI.SS.UserModel.VerticalAlignment.Center,
         [VerticalAlignment.Bottom] = global::NPOI.SS.UserModel.VerticalAlignment.Bottom
@@ -74,10 +86,10 @@ public sealed class ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOp
     public bool IsClosedNotImplementedException { get; set; }
 
     /// <inheritdoc/>
-    public override string ContentType => contentTypeMaps[ExcelFormat];
+    public override string ContentType => contentTypeMap[ExcelFormat];
 
     /// <inheritdoc/>
-    public override string FileNameExtension => filenameExtensionMaps[ExcelFormat];
+    public override string FileNameExtension => filenameExtensionMap[ExcelFormat];
 
     /// <inheritdoc/>
     protected override byte[] ExecuteExport(IEnumerable<SheeterContext> contexts) {
@@ -204,6 +216,11 @@ public sealed class ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOp
 
             excelCell.CellStyle = ParseCellStyle(cell.GetCellStyle());
 
+            DataValidation dataValidation = cell.GetDataValidation();
+            if (dataValidation is not null) {
+                SetDataValidation(sheet, cell.Point, cell.Size, dataValidation);
+            }
+
             if (cell.Size.Width > 1 || cell.Size.Height > 1) {
                 MergedRegion(
                     sheet,
@@ -223,8 +240,8 @@ public sealed class ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOp
         }
         excelCellStyle = workbook.CreateCellStyle();
 
-        excelCellStyle.Alignment = horizontalAlignmentMaps[cellStyle.HorizontalAlignment];
-        excelCellStyle.VerticalAlignment = verticalAlignmentMaps[cellStyle.VerticalAlignment];
+        excelCellStyle.Alignment = horizontalAlignmentMap[cellStyle.HorizontalAlignment];
+        excelCellStyle.VerticalAlignment = verticalAlignmentMap[cellStyle.VerticalAlignment];
 
         if (cellStyle.HasBorder) {
             excelCellStyle.BorderBottom = BorderStyle.Thin;
@@ -399,5 +416,117 @@ public sealed class ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOp
                 row.HeightInPoints = (float)pair.Value.Value;
             }
         }
+    }
+
+    private void SetDataValidation(ISheet sheet, Point point, Size size, DataValidation validation) {
+        CellRangeAddressList addressList = new(
+            point.Y,
+            point.Y + size.Height - 1,
+            point.X,
+            point.X + size.Width - 1
+        );
+
+        IDataValidationHelper validationHelper = sheet.GetDataValidationHelper();
+        IDataValidationConstraint constraint = CreateValidationConstraint(validationHelper, validation);
+        IDataValidation dataValidation = validationHelper.CreateValidation(constraint, addressList);
+
+        dataValidation.EmptyCellAllowed = validation.IsBlankAllowed;
+        dataValidation.ShowErrorBox = validation.IsErrorAlertShown;
+        dataValidation.ShowPromptBox = validation.IsInputPromptShown;
+
+        if (!string.IsNullOrWhiteSpace(validation.ErrorTitle)
+            || !string.IsNullOrWhiteSpace(validation.ErrorMessage)
+        ) {
+            dataValidation.CreateErrorBox(
+                validation.ErrorTitle ?? "",
+                validation.ErrorMessage ?? ""
+            );
+        }
+
+        if (!string.IsNullOrWhiteSpace(validation.PromptTitle)
+            || !string.IsNullOrWhiteSpace(validation.PromptMessage)
+        ) {
+            dataValidation.CreatePromptBox(
+                validation.PromptTitle ?? "",
+                validation.PromptMessage ?? ""
+            );
+        }
+
+        if (validation.ValidationType == DataValidationType.List
+            && dataValidation is XSSFDataValidation xssfValidation
+        ) {
+            xssfValidation.SuppressDropDownArrow = !validation.IsDropdownShown;
+        }
+
+        sheet.AddValidationData(dataValidation);
+    }
+
+    private IDataValidationConstraint CreateValidationConstraint(IDataValidationHelper helper, DataValidation validation) {
+        return validation.ValidationType switch {
+            DataValidationType.List => CreateListConstraint(helper, validation),
+            DataValidationType.Integer => CreateNumericConstraint(helper, validation, ValidationType.INTEGER),
+            DataValidationType.Decimal => CreateNumericConstraint(helper, validation, ValidationType.DECIMAL),
+            DataValidationType.Date => CreateDateConstraint(helper, validation),
+            DataValidationType.Time => CreateTimeConstraint(helper, validation),
+            DataValidationType.TextLength => CreateNumericConstraint(helper, validation, ValidationType.TEXT_LENGTH),
+            DataValidationType.Custom => helper.CreateCustomConstraint(validation.Formula),
+            _ => throw new ArgumentException($"Unsupported validation type: {validation.ValidationType}")
+        };
+    }
+
+    private IDataValidationConstraint CreateListConstraint(IDataValidationHelper helper, DataValidation validation) {
+        if (validation.ListItems is null || !validation.ListItems.Any()) {
+            throw new ArgumentException("ListItems cannot be null or empty for List validation type.");
+        }
+
+        string[] items = validation.ListItems.ToArray();
+        return helper.CreateExplicitListConstraint(items);
+    }
+
+    private IDataValidationConstraint CreateNumericConstraint(
+        IDataValidationHelper helper, DataValidation validation, int validationType
+    ) {
+        (int operatorType, string formula1, string formula2) = PrepareConstraintParameters(validation);
+        return helper.CreateNumericConstraint(validationType, operatorType, formula1, formula2);
+    }
+
+    private IDataValidationConstraint CreateDateConstraint(IDataValidationHelper helper, DataValidation validation) {
+        (int operatorType, string formula1, string formula2) = PrepareConstraintParameters(validation);
+        return helper.CreateDateConstraint(operatorType, formula1, formula2, null);
+    }
+
+    private IDataValidationConstraint CreateTimeConstraint(IDataValidationHelper helper, DataValidation validation) {
+        (int operatorType, string formula1, string formula2) = PrepareConstraintParameters(validation);
+        return helper.CreateTimeConstraint(operatorType, formula1, formula2);
+    }
+
+    private (int operatorType, string formula1, string formula2) PrepareConstraintParameters(DataValidation validation) {
+        if (!validation.Operator.HasValue) {
+            throw new ArgumentException($"Operator is required for {validation.ValidationType} validation type.");
+        }
+
+        int operatorType = ConvertOperator(validation.Operator.Value);
+        string formula1 = !string.IsNullOrWhiteSpace(validation.Formula)
+            ? EnsureFormulaPrefix(validation.Formula)
+            : validation.Value1?.ToString() ?? "";
+        string formula2 = validation.Value2?.ToString() ?? "";
+
+        if (string.IsNullOrWhiteSpace(formula1)) {
+            throw new ArgumentException($"Either Formula or Value1 is required for {validation.ValidationType} validation type.");
+        }
+
+        return (operatorType, formula1, formula2);
+    }
+
+    private static string EnsureFormulaPrefix(string formula) {
+        return formula.StartsWith("=") ? formula : $"={formula}";
+    }
+
+    private static int ConvertOperator(DataValidationOperator @operator) {
+        if (!validationOperatorMap.TryGetValue(@operator, out int result)) {
+            throw new ArgumentException($"Unsupported operator: {@operator}");
+        }
+
+        return result;
     }
 }

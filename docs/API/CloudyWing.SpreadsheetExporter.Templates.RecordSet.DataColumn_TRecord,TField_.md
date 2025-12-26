@@ -63,6 +63,20 @@ public DataColumn(System.Linq.Expressions.Expression<System.Func<TRecord,TField>
 The field key expression\.
 ### Properties
 
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.FieldDataValidationGenerator'></a>
+
+## DataColumn\<TRecord,TField\>\.FieldDataValidationGenerator Property
+
+Gets or sets the field data validation generator\.
+
+```csharp
+public System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TRecord,TField>,CloudyWing.SpreadsheetExporter.DataValidation> FieldDataValidationGenerator { get; set; }
+```
+
+#### Property Value
+[System\.Func&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.func-2 'System\.Func\`2')[CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.FieldContext&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecord,TField_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.FieldContext\<TRecord,TField\>')[TRecord](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.TRecord 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.DataColumn\<TRecord,TField\>\.TRecord')[,](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecord,TField_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.FieldContext\<TRecord,TField\>')[TField](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.TField 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.DataColumn\<TRecord,TField\>\.TField')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecord,TField_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.FieldContext\<TRecord,TField\>')[,](https://learn.microsoft.com/en-us/dotnet/api/system.func-2 'System\.Func\`2')[DataValidation](CloudyWing.SpreadsheetExporter.DataValidation.md 'CloudyWing\.SpreadsheetExporter\.DataValidation')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.func-2 'System\.Func\`2')  
+The field data validation generator\.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.FieldFormulaGenerator'></a>
 
 ## DataColumn\<TRecord,TField\>\.FieldFormulaGenerator Property
@@ -119,6 +133,25 @@ public System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldConte
 [System\.Func&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.func-2 'System\.Func\`2')[CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.FieldContext&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecord,TField_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.FieldContext\<TRecord,TField\>')[TRecord](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.TRecord 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.DataColumn\<TRecord,TField\>\.TRecord')[,](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecord,TField_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.FieldContext\<TRecord,TField\>')[TField](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.TField 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.DataColumn\<TRecord,TField\>\.TField')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecord,TField_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.FieldContext\<TRecord,TField\>')[,](https://learn.microsoft.com/en-us/dotnet/api/system.func-2 'System\.Func\`2')[System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.func-2 'System\.Func\`2')  
 The field value generator\.
 ### Methods
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.GetFieldDataValidation(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_TRecord_)'></a>
+
+## DataColumn\<TRecord,TField\>\.GetFieldDataValidation\(RecordContext\<TRecord\>\) Method
+
+Gets the field data validation\.
+
+```csharp
+public override CloudyWing.SpreadsheetExporter.DataValidation GetFieldDataValidation(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<TRecord> recordContext);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.GetFieldDataValidation(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_TRecord_).recordContext'></a>
+
+`recordContext` [CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>')[TRecord](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.TRecord 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.DataColumn\<TRecord,TField\>\.TRecord')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>')
+
+#### Returns
+[DataValidation](CloudyWing.SpreadsheetExporter.DataValidation.md 'CloudyWing\.SpreadsheetExporter\.DataValidation')  
+Returns the field data validation, or `null` if no validation is specified\.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumn_TRecord,TField_.GetFieldFormula(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_TRecord_)'></a>
 

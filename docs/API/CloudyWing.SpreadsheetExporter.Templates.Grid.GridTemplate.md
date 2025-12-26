@@ -90,6 +90,54 @@ The self\.
 [System\.ArgumentOutOfRangeException](https://learn.microsoft.com/en-us/dotnet/api/system.argumentoutofrangeexception 'System\.ArgumentOutOfRangeException')  
 [rowSpan](CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.md#CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(object,int,int,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_).rowSpan 'CloudyWing\.SpreadsheetExporter\.Templates\.Grid\.GridTemplate\.CreateCell\(object, int, int, System\.Nullable\<CloudyWing\.SpreadsheetExporter\.CellStyle\>\)\.rowSpan') must be greater than 0\.
 
+<a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(System.Action_CloudyWing.SpreadsheetExporter.Cell_,int,int,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
+
+## GridTemplate\.CreateCell\(Action\<Cell\>, int, int, Nullable\<CellStyle\>\) Method
+
+Creates a cell with custom configuration using a configurator action\.
+This method provides full flexibility for configuring cell properties including value, formula, data validation, and style\.
+
+```csharp
+public CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate CreateCell(System.Action<CloudyWing.SpreadsheetExporter.Cell> configurator, int columnSpan=1, int rowSpan=1, System.Nullable<CloudyWing.SpreadsheetExporter.CellStyle> cellStyle=null);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(System.Action_CloudyWing.SpreadsheetExporter.Cell_,int,int,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_).configurator'></a>
+
+`configurator` [System\.Action&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')[Cell](CloudyWing.SpreadsheetExporter.Cell.md 'CloudyWing\.SpreadsheetExporter\.Cell')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')
+
+The action to configure the cell\. The action receives the cell instance to configure\.
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(System.Action_CloudyWing.SpreadsheetExporter.Cell_,int,int,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_).columnSpan'></a>
+
+`columnSpan` [System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')
+
+The column span\.
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(System.Action_CloudyWing.SpreadsheetExporter.Cell_,int,int,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_).rowSpan'></a>
+
+`rowSpan` [System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')
+
+The row span\.
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(System.Action_CloudyWing.SpreadsheetExporter.Cell_,int,int,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_).cellStyle'></a>
+
+`cellStyle` [System\.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing\.SpreadsheetExporter\.CellStyle')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')
+
+The cell style\. The default is `SpreadsheetManager.DefaultCellStyles.GridCellStyle`\.
+
+#### Returns
+[GridTemplate](CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.md 'CloudyWing\.SpreadsheetExporter\.Templates\.Grid\.GridTemplate')  
+The self\.
+
+#### Exceptions
+
+[System\.ArgumentOutOfRangeException](https://learn.microsoft.com/en-us/dotnet/api/system.argumentoutofrangeexception 'System\.ArgumentOutOfRangeException')  
+[columnSpan](CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.md#CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(System.Action_CloudyWing.SpreadsheetExporter.Cell_,int,int,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_).columnSpan 'CloudyWing\.SpreadsheetExporter\.Templates\.Grid\.GridTemplate\.CreateCell\(System\.Action\<CloudyWing\.SpreadsheetExporter\.Cell\>, int, int, System\.Nullable\<CloudyWing\.SpreadsheetExporter\.CellStyle\>\)\.columnSpan') must be greater than 0\.
+
+[System\.ArgumentOutOfRangeException](https://learn.microsoft.com/en-us/dotnet/api/system.argumentoutofrangeexception 'System\.ArgumentOutOfRangeException')  
+[rowSpan](CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.md#CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(System.Action_CloudyWing.SpreadsheetExporter.Cell_,int,int,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_).rowSpan 'CloudyWing\.SpreadsheetExporter\.Templates\.Grid\.GridTemplate\.CreateCell\(System\.Action\<CloudyWing\.SpreadsheetExporter\.Cell\>, int, int, System\.Nullable\<CloudyWing\.SpreadsheetExporter\.CellStyle\>\)\.rowSpan') must be greater than 0\.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(System.Func_int,int,string_,int,int,System.Nullable_CloudyWing.SpreadsheetExporter.CellStyle_)'></a>
 
 ## GridTemplate\.CreateCell\(Func\<int,int,string\>, int, int, Nullable\<CellStyle\>\) Method
