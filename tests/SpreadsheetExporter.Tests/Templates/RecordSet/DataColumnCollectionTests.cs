@@ -17,7 +17,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void ColumnSpan_EmptyColumns_ShouldReturnZero() {
-            columns!.ColumnSpan.Should().Be(0);
+            Assert.That(columns!.ColumnSpan, Is.EqualTo(0));
         }
 
         [Test]
@@ -25,12 +25,12 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             columns!.Add("Column1");
             columns!.Add("Column2");
 
-            columns!.ColumnSpan.Should().Be(2);
+            Assert.That(columns!.ColumnSpan, Is.EqualTo(2));
         }
 
         [Test]
         public void RowSpan_EmptyColumns_ShouldReturnZero() {
-            columns!.RowSpan.Should().Be(0);
+            Assert.That(columns!.RowSpan, Is.EqualTo(0));
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
             DataColumnCollection<Record> childColumns = columns.Last().ChildColumns;
 
-            childColumns.RootColumns.Should().BeSameAs(columns);
+            Assert.That(childColumns.RootColumns, Is.SameAs(columns));
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             columns!.Add("Column1");
             columns.AddChildToLast("Column2");
 
-            columns.RowSpan.Should().Be(2);
+            Assert.That(columns.RowSpan, Is.EqualTo(2));
         }
 
         [Test]
@@ -55,21 +55,21 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             RecordDataColumn<Record> column = new();
             columns!.Add(column);
 
-            columns.Should().Contain(column);
+            Assert.That(columns, Does.Contain(column));
         }
 
         [Test]
         public void Add_ByHeaderText_ShouldAddToColumns() {
             columns!.Add(HeaderText, headerStyle, fieldStyleGenerator);
 
-            columns.Should().HaveCount(1);
+            Assert.That(columns, Has.Count.EqualTo(1));
 
             RecordDataColumn<Record>? column = columns.Single() as RecordDataColumn<Record>;
 
-            column.Should().NotBeNull();
-            column!.HeaderText.Should().Be(HeaderText);
-            column.HeaderStyle.Should().Be(headerStyle);
-            column.FieldStyleGenerator.Should().Be(fieldStyleGenerator);
+            Assert.That(column, Is.Not.Null);
+            Assert.That(column!.HeaderText, Is.EqualTo(HeaderText));
+            Assert.That(column.HeaderStyle, Is.EqualTo(headerStyle));
+            Assert.That(column.FieldStyleGenerator, Is.EqualTo(fieldStyleGenerator));
         }
 
         [Test]
@@ -78,14 +78,14 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
             columns!.Add(HeaderText, x => x.UseValue(fieldValueGenerator), headerStyle, fieldStyleGenerator);
 
-            columns.Should().HaveCount(1);
+            Assert.That(columns, Has.Count.EqualTo(1));
             RecordDataColumn<Record>? column = columns.Single() as RecordDataColumn<Record>;
 
-            column.Should().NotBeNull();
-            column!.HeaderText.Should().Be(HeaderText);
-            column.FieldValueGenerator.Should().Be(fieldValueGenerator);
-            column.HeaderStyle.Should().Be(headerStyle);
-            column.FieldStyleGenerator.Should().Be(fieldStyleGenerator);
+            Assert.That(column, Is.Not.Null);
+            Assert.That(column!.HeaderText, Is.EqualTo(HeaderText));
+            Assert.That(column.FieldValueGenerator, Is.EqualTo(fieldValueGenerator));
+            Assert.That(column.HeaderStyle, Is.EqualTo(headerStyle));
+            Assert.That(column.FieldStyleGenerator, Is.EqualTo(fieldStyleGenerator));
         }
 
         [Test]
@@ -94,28 +94,28 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
             columns!.Add(HeaderText, x => x.UseFormula(fieldFormulaGenerator), headerStyle, fieldStyleGenerator);
 
-            columns.Should().HaveCount(1);
+            Assert.That(columns, Has.Count.EqualTo(1));
             RecordDataColumn<Record>? column = columns.Single() as RecordDataColumn<Record>;
 
-            column.Should().NotBeNull();
-            column!.HeaderText.Should().Be(HeaderText);
-            column.FieldFormulaGenerator.Should().Be(fieldFormulaGenerator);
-            column.HeaderStyle.Should().Be(headerStyle);
-            column.FieldStyleGenerator.Should().Be(fieldStyleGenerator);
+            Assert.That(column, Is.Not.Null);
+            Assert.That(column!.HeaderText, Is.EqualTo(HeaderText));
+            Assert.That(column.FieldFormulaGenerator, Is.EqualTo(fieldFormulaGenerator));
+            Assert.That(column.HeaderStyle, Is.EqualTo(headerStyle));
+            Assert.That(column.FieldStyleGenerator, Is.EqualTo(fieldStyleGenerator));
         }
 
         [Test]
         public void Add_ByFieldKey_ShouldAddToColumns() {
             columns!.Add<int>(HeaderText, "Id", headerStyle, fieldStyleGenerator);
 
-            columns.Should().HaveCount(1);
+            Assert.That(columns, Has.Count.EqualTo(1));
             DataColumn<Record, int>? column = columns.Single() as DataColumn<Record, int>;
 
-            column.Should().NotBeNull();
-            column!.HeaderText.Should().Be(HeaderText);
-            column.FieldKey.Should().Be("Id");
-            column.HeaderStyle.Should().Be(headerStyle);
-            column.FieldStyleGenerator.Should().Be(fieldStyleGenerator);
+            Assert.That(column, Is.Not.Null);
+            Assert.That(column!.HeaderText, Is.EqualTo(HeaderText));
+            Assert.That(column.FieldKey, Is.EqualTo("Id"));
+            Assert.That(column.HeaderStyle, Is.EqualTo(headerStyle));
+            Assert.That(column.FieldStyleGenerator, Is.EqualTo(fieldStyleGenerator));
         }
 
         [Test]
@@ -124,14 +124,14 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
             columns!.Add(HeaderText, x => x.Id, headerStyle, fieldStyleGenerator);
 
-            columns.Should().HaveCount(1);
+            Assert.That(columns, Has.Count.EqualTo(1));
             DataColumn<Record, int>? column = columns.Single() as DataColumn<Record, int>;
 
-            column.Should().NotBeNull();
-            column!.HeaderText.Should().Be(HeaderText);
-            column.FieldKey.Should().Be("Id");
-            column.HeaderStyle.Should().Be(headerStyle);
-            column.FieldStyleGenerator.Should().Be(fieldStyleGenerator);
+            Assert.That(column, Is.Not.Null);
+            Assert.That(column!.HeaderText, Is.EqualTo(HeaderText));
+            Assert.That(column.FieldKey, Is.EqualTo("Id"));
+            Assert.That(column.HeaderStyle, Is.EqualTo(headerStyle));
+            Assert.That(column.FieldStyleGenerator, Is.EqualTo(fieldStyleGenerator));
         }
 
         [Test]
@@ -140,15 +140,15 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
             columns!.Add(HeaderText, x => x.Id, x => x.UseValue(fieldValueGenerator), headerStyle, fieldStyleGenerator);
 
-            columns.Should().HaveCount(1);
+            Assert.That(columns, Has.Count.EqualTo(1));
             DataColumn<Record, int>? column = columns.Single() as DataColumn<Record, int>;
 
-            column.Should().NotBeNull();
-            column!.HeaderText.Should().Be(HeaderText);
-            column.FieldKey.Should().Be("Id");
-            column.FieldValueGenerator.Should().Be(fieldValueGenerator);
-            column.HeaderStyle.Should().Be(headerStyle);
-            column.FieldStyleGenerator.Should().Be(fieldStyleGenerator);
+            Assert.That(column, Is.Not.Null);
+            Assert.That(column!.HeaderText, Is.EqualTo(HeaderText));
+            Assert.That(column.FieldKey, Is.EqualTo("Id"));
+            Assert.That(column.FieldValueGenerator, Is.EqualTo(fieldValueGenerator));
+            Assert.That(column.HeaderStyle, Is.EqualTo(headerStyle));
+            Assert.That(column.FieldStyleGenerator, Is.EqualTo(fieldStyleGenerator));
         }
 
         [Test]
@@ -157,7 +157,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             columns!.Add(HeaderText);
             columns.AddChildToLast(column);
 
-            columns.Last().ChildColumns.Should().Contain(column);
+            Assert.That(columns.Last().ChildColumns, Does.Contain(column));
         }
 
         [Test]
@@ -165,17 +165,17 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             columns!.Add(HeaderText);
             columns.AddChildToLast(HeaderText, headerStyle, fieldStyleGenerator);
 
-            columns.Should().HaveCount(1);
+            Assert.That(columns, Has.Count.EqualTo(1));
 
             DataColumnCollection<Record> lastChildColumns = columns.Last().ChildColumns;
-            lastChildColumns.Should().HaveCount(1);
+            Assert.That(lastChildColumns, Has.Count.EqualTo(1));
 
             RecordDataColumn<Record>? column = lastChildColumns.Single() as RecordDataColumn<Record>;
 
-            column.Should().NotBeNull();
-            column!.HeaderText.Should().Be(HeaderText);
-            column.HeaderStyle.Should().Be(headerStyle);
-            column.FieldStyleGenerator.Should().Be(fieldStyleGenerator);
+            Assert.That(column, Is.Not.Null);
+            Assert.That(column!.HeaderText, Is.EqualTo(HeaderText));
+            Assert.That(column.HeaderStyle, Is.EqualTo(headerStyle));
+            Assert.That(column.FieldStyleGenerator, Is.EqualTo(fieldStyleGenerator));
         }
 
         [Test]
@@ -185,18 +185,18 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             columns!.Add(HeaderText);
             columns.AddChildToLast(HeaderText, x => x.UseValue(fieldValueGenerator), headerStyle, fieldStyleGenerator);
 
-            columns.Should().HaveCount(1);
+            Assert.That(columns, Has.Count.EqualTo(1));
 
             DataColumnCollection<Record> lastChildColumns = columns.Last().ChildColumns;
-            lastChildColumns.Should().HaveCount(1);
+            Assert.That(lastChildColumns, Has.Count.EqualTo(1));
 
             RecordDataColumn<Record>? column = lastChildColumns.Single() as RecordDataColumn<Record>;
 
-            column.Should().NotBeNull();
-            column!.HeaderText.Should().Be(HeaderText);
-            column.FieldValueGenerator.Should().Be(fieldValueGenerator);
-            column.HeaderStyle.Should().Be(headerStyle);
-            column.FieldStyleGenerator.Should().Be(fieldStyleGenerator);
+            Assert.That(column, Is.Not.Null);
+            Assert.That(column!.HeaderText, Is.EqualTo(HeaderText));
+            Assert.That(column.FieldValueGenerator, Is.EqualTo(fieldValueGenerator));
+            Assert.That(column.HeaderStyle, Is.EqualTo(headerStyle));
+            Assert.That(column.FieldStyleGenerator, Is.EqualTo(fieldStyleGenerator));
         }
 
         [Test]
@@ -206,18 +206,18 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             columns!.Add(HeaderText);
             columns.AddChildToLast(HeaderText, x => x.UseFormula(fieldFormulaGenerator), headerStyle, fieldStyleGenerator);
 
-            columns.Should().HaveCount(1);
+            Assert.That(columns, Has.Count.EqualTo(1));
 
             DataColumnCollection<Record> lastChildColumns = columns.Last().ChildColumns;
-            lastChildColumns.Should().HaveCount(1);
+            Assert.That(lastChildColumns, Has.Count.EqualTo(1));
 
             RecordDataColumn<Record>? column = lastChildColumns.Single() as RecordDataColumn<Record>;
 
-            column.Should().NotBeNull();
-            column!.HeaderText.Should().Be(HeaderText);
-            column.FieldFormulaGenerator.Should().Be(fieldFormulaGenerator);
-            column.HeaderStyle.Should().Be(headerStyle);
-            column.FieldStyleGenerator.Should().Be(fieldStyleGenerator);
+            Assert.That(column, Is.Not.Null);
+            Assert.That(column!.HeaderText, Is.EqualTo(HeaderText));
+            Assert.That(column.FieldFormulaGenerator, Is.EqualTo(fieldFormulaGenerator));
+            Assert.That(column.HeaderStyle, Is.EqualTo(headerStyle));
+            Assert.That(column.FieldStyleGenerator, Is.EqualTo(fieldStyleGenerator));
         }
 
         [Test]
@@ -225,18 +225,18 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             columns!.Add(HeaderText);
             columns.AddChildToLast<int>(HeaderText, "Id", headerStyle, fieldStyleGenerator);
 
-            columns.Should().HaveCount(1);
+            Assert.That(columns, Has.Count.EqualTo(1));
 
             DataColumnCollection<Record> lastChildColumns = columns.Last().ChildColumns;
-            lastChildColumns.Should().HaveCount(1);
+            Assert.That(lastChildColumns, Has.Count.EqualTo(1));
 
             DataColumn<Record, int>? column = lastChildColumns.Single() as DataColumn<Record, int>;
 
-            column.Should().NotBeNull();
-            column!.HeaderText.Should().Be(HeaderText);
-            column.FieldKey.Should().Be("Id");
-            column.HeaderStyle.Should().Be(headerStyle);
-            column.FieldStyleGenerator.Should().Be(fieldStyleGenerator);
+            Assert.That(column, Is.Not.Null);
+            Assert.That(column!.HeaderText, Is.EqualTo(HeaderText));
+            Assert.That(column.FieldKey, Is.EqualTo("Id"));
+            Assert.That(column.HeaderStyle, Is.EqualTo(headerStyle));
+            Assert.That(column.FieldStyleGenerator, Is.EqualTo(fieldStyleGenerator));
         }
 
         [Test]
@@ -246,18 +246,18 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             columns!.Add(HeaderText);
             columns.AddChildToLast(HeaderText, x => x.Id, headerStyle, fieldStyleGenerator);
 
-            columns.Should().HaveCount(1);
+            Assert.That(columns, Has.Count.EqualTo(1));
 
             DataColumnCollection<Record> lastChildColumns = columns.Last().ChildColumns;
-            lastChildColumns.Should().HaveCount(1);
+            Assert.That(lastChildColumns, Has.Count.EqualTo(1));
 
             DataColumn<Record, int>? column = lastChildColumns.Single() as DataColumn<Record, int>;
 
-            column.Should().NotBeNull();
-            column!.HeaderText.Should().Be(HeaderText);
-            column.FieldKey.Should().Be("Id");
-            column.HeaderStyle.Should().Be(headerStyle);
-            column.FieldStyleGenerator.Should().Be(fieldStyleGenerator);
+            Assert.That(column, Is.Not.Null);
+            Assert.That(column!.HeaderText, Is.EqualTo(HeaderText));
+            Assert.That(column.FieldKey, Is.EqualTo("Id"));
+            Assert.That(column.HeaderStyle, Is.EqualTo(headerStyle));
+            Assert.That(column.FieldStyleGenerator, Is.EqualTo(fieldStyleGenerator));
         }
 
         [Test]
@@ -267,19 +267,19 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             columns!.Add(HeaderText);
             columns.AddChildToLast(HeaderText, x => x.Id, x => x.UseValue(fieldValueGenerator), headerStyle, fieldStyleGenerator);
 
-            columns.Should().HaveCount(1);
+            Assert.That(columns, Has.Count.EqualTo(1));
 
             DataColumnCollection<Record> lastChildColumns = columns.Last().ChildColumns;
-            lastChildColumns.Should().HaveCount(1);
+            Assert.That(lastChildColumns, Has.Count.EqualTo(1));
 
             DataColumn<Record, int>? column = lastChildColumns.Single() as DataColumn<Record, int>;
 
-            column.Should().NotBeNull();
-            column!.HeaderText.Should().Be(HeaderText);
-            column.FieldKey.Should().Be("Id");
-            column.FieldValueGenerator.Should().Be(fieldValueGenerator);
-            column.HeaderStyle.Should().Be(headerStyle);
-            column.FieldStyleGenerator.Should().Be(fieldStyleGenerator);
+            Assert.That(column, Is.Not.Null);
+            Assert.That(column!.HeaderText, Is.EqualTo(HeaderText));
+            Assert.That(column.FieldKey, Is.EqualTo("Id"));
+            Assert.That(column.FieldValueGenerator, Is.EqualTo(fieldValueGenerator));
+            Assert.That(column.HeaderStyle, Is.EqualTo(headerStyle));
+            Assert.That(column.FieldStyleGenerator, Is.EqualTo(fieldStyleGenerator));
         }
 
         private class Record {

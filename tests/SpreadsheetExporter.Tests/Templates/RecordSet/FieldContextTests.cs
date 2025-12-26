@@ -9,7 +9,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
             Action action = () => new FieldContext<object, object?>(recordContext, null, null);
 
-            action.Should().Throw<ArgumentNullException>().WithMessage("*key*");
+            Assert.That(action, Throws.TypeOf<ArgumentNullException>().And.Message.Contains("key"));
         }
 
         [Test]
@@ -26,11 +26,11 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             string fieldKey = fieldContext.Key;
             object fieldValue = fieldContext.Value;
 
-            cellIndex.Should().Be(1);
-            rowIndex.Should().Be(2);
-            fieldRecord.Should().Be(record);
-            fieldKey.Should().Be(key);
-            fieldValue.Should().Be(value);
+            Assert.That(cellIndex, Is.EqualTo(1));
+            Assert.That(rowIndex, Is.EqualTo(2));
+            Assert.That(fieldRecord, Is.EqualTo(record));
+            Assert.That(fieldKey, Is.EqualTo(key));
+            Assert.That(fieldValue, Is.EqualTo(value));
         }
     }
 }

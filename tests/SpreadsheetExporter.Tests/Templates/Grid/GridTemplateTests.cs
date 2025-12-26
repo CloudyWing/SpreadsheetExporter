@@ -10,7 +10,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             GridTemplate template = new();
             template.CreateRow();
 
-            template.RowSpan.Should().Be(1);
+            Assert.That(template.RowSpan, Is.EqualTo(1));
         }
 
         [Test]
@@ -18,7 +18,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             GridTemplate template = new();
             template.CreateRow(10);
 
-            template.GetContext().RowHeights[0].Should().Be(10);
+            Assert.That(template.GetContext().RowHeights[0], Is.EqualTo(10));
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             template.CreateRow()
                 .CreateCell("A1");
 
-            template.GetContext().Cells.Count.Should().Be(1);
+            Assert.That(template.GetContext().Cells.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -36,7 +36,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             template.CreateRow()
                 .CreateCell("A1");
 
-            template.GetContext().Cells.Single().GetValue().Should().Be("A1");
+            Assert.That(template.GetContext().Cells.Single().GetValue(), Is.EqualTo("A1"));
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             template.CreateRow()
                 .CreateCell("A1", 2);
 
-            template.GetContext().Cells.Single().Size.Width.Should().Be(2);
+            Assert.That(template.GetContext().Cells.Single().Size.Width, Is.EqualTo(2));
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             template.CreateRow()
                 .CreateCell("A1", rowSpan: 2);
 
-            template.GetContext().Cells.Single().Size.Height.Should().Be(2);
+            Assert.That(template.GetContext().Cells.Single().Size.Height, Is.EqualTo(2));
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             template.CreateRow()
                 .CreateCell("A1", cellStyle: cellStyle);
 
-            template.GetContext().Cells.Single().GetCellStyle().Should().BeEquivalentTo(cellStyle);
+            Assert.That(template.GetContext().Cells.Single().GetCellStyle(), Is.EqualTo(cellStyle));
         }
 
         [Test]
@@ -76,9 +76,9 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
 
             TemplateContext context = template.GetContext();
             Cell cell = context.Cells.Single();
-            cell.GetFormula().Should().Be("A1 + B1");
-            cell.GetCellStyle().Should().Be(SpreadsheetManager.DefaultCellStyles.GridCellStyle);
-            cell.Size.Should().Be(new Size(2, 2));
+            Assert.That(cell.GetFormula(), Is.EqualTo("A1 + B1"));
+            Assert.That(cell.GetCellStyle(), Is.EqualTo(SpreadsheetManager.DefaultCellStyles.GridCellStyle));
+            Assert.That(cell.Size, Is.EqualTo(new Size(2, 2)));
         }
 
         [Test]
@@ -91,17 +91,17 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
 
             TemplateContext context = template.GetContext();
 
-            context.Cells.Count.Should().Be(2);
-            context.Cells[0].Point.Should().Be(new Point(0, 0));
-            context.Cells[0].Size.Should().Be(new Size(2, 2));
-            context.Cells[0].GetValue().Should().Be("A1");
-            context.Cells[1].Point.Should().Be(new Point(2, 1));
-            context.Cells[1].Size.Should().Be(new Size(2, 2));
-            context.Cells[1].GetValue().Should().Be("B1");
-            context.RowSpan.Should().Be(3);
-            context.RowHeights.Count.Should().Be(2);
-            context.RowHeights[0].Should().Be(20);
-            context.RowHeights[1].Should().Be(null);
+            Assert.That(context.Cells.Count, Is.EqualTo(2));
+            Assert.That(context.Cells[0].Point, Is.EqualTo(new Point(0, 0)));
+            Assert.That(context.Cells[0].Size, Is.EqualTo(new Size(2, 2)));
+            Assert.That(context.Cells[0].GetValue(), Is.EqualTo("A1"));
+            Assert.That(context.Cells[1].Point, Is.EqualTo(new Point(2, 1)));
+            Assert.That(context.Cells[1].Size, Is.EqualTo(new Size(2, 2)));
+            Assert.That(context.Cells[1].GetValue(), Is.EqualTo("B1"));
+            Assert.That(context.RowSpan, Is.EqualTo(3));
+            Assert.That(context.RowHeights.Count, Is.EqualTo(2));
+            Assert.That(context.RowHeights[0], Is.EqualTo(20));
+            Assert.That(context.RowHeights[1], Is.EqualTo(null));
         }
     }
 }

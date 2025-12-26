@@ -20,7 +20,7 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
 
             string contentType = exporter!.ContentType;
 
-            contentType.Should().Be(expected);
+            Assert.That(contentType, Is.EqualTo(expected));
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
             string fileNameExtension = exporter!.FileNameExtension;
 
 
-            fileNameExtension.Should().Be(expected);
+            Assert.That(fileNameExtension, Is.EqualTo(expected));
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
             exporter!.Password = expected;
 
 
-            exporter!.Password.Should().Be(expected);
+            Assert.That(exporter!.Password, Is.EqualTo(expected));
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
 
             bool hasPassword = exporter!.HasPassword;
 
-            hasPassword.Should().BeTrue();
+            Assert.That(hasPassword, Is.True);
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
             exporter!.Password = "";
             bool hasPassword = exporter!.HasPassword;
 
-            hasPassword.Should().BeFalse();
+            Assert.That(hasPassword, Is.False);
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
             string expected = "工作表1";
             exporter!.DefaultBasicSheetName = expected;
 
-            exporter!.DefaultBasicSheetName.Should().Be(expected);
+            Assert.That(exporter!.DefaultBasicSheetName, Is.EqualTo(expected));
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
 
             Sheeter lastSheeter = exporter!.LastSheeter;
 
-            lastSheeter.Should().Be(sheeter);
+            Assert.That(lastSheeter, Is.EqualTo(sheeter));
         }
 
         [Test]
@@ -83,8 +83,8 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
 
             Sheeter newSheeter = exporter!.CreateSheeter(sheetName, rowHeight);
 
-            newSheeter.SheetName.Should().Be(sheetName);
-            newSheeter.DefaultRowHeight.Should().Be(rowHeight);
+            Assert.That(newSheeter.SheetName, Is.EqualTo(sheetName));
+            Assert.That(newSheeter.DefaultRowHeight, Is.EqualTo(rowHeight));
         }
 
         [Test]
@@ -94,13 +94,13 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
 
             Sheeter returnedSheeter = exporter!.GetSheeter(1);
 
-            returnedSheeter.Should().Be(sheeter);
+            Assert.That(returnedSheeter, Is.EqualTo(sheeter));
         }
 
         [Test]
         public void Export_WhenThereAreNoSheeters_ShouldThrowSheeterNotFoundException() {
             Action action = () => exporter!.Export();
-            action.Should().Throw<SheeterNotFoundException>();
+            Assert.Throws<SheeterNotFoundException>(() => action());
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
 
             exporter!.Export();
 
-            spreadsheetExportingEventInvoked.Should().BeTrue();
+            Assert.That(spreadsheetExportingEventInvoked, Is.True);
         }
 
         [Test]
@@ -122,7 +122,7 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
 
             exporter!.Export();
 
-            spreadsheetExportedEventInvoked.Should().BeTrue();
+            Assert.That(spreadsheetExportedEventInvoked, Is.True);
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
 
             exporter!.ExportFile(FilePath, fileMode);
 
-            File.Exists(FilePath).Should().BeTrue();
+            Assert.That(File.Exists(FilePath), Is.True);
         }
 
         [Test]
@@ -142,7 +142,7 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
 
             exporter!.ExportFile(FilePath, fileMode);
 
-            File.Exists(FilePath).Should().BeTrue();
+            Assert.That(File.Exists(FilePath), Is.True);
         }
 
         [Test]
@@ -154,7 +154,7 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
 
             Action action = () => exporter!.ExportFile(FilePath, fileMode);
 
-            action.Should().Throw<IOException>();
+            Assert.Throws<IOException>(() => action());
         }
 
         [Test]
@@ -167,7 +167,7 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
             using FileStream fileStream = File.OpenRead(FilePath);
             byte[] fileBytes = new byte[fileStream.Length];
             fileStream.Read(fileBytes, 0, fileBytes.Length);
-            fileBytes.Should().BeEquivalentTo(fakeExportResult);
+            Assert.That(fileBytes, Is.EqualTo(fakeExportResult));
         }
 
         [TearDown]

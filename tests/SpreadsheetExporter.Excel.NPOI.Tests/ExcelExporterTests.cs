@@ -1,4 +1,4 @@
-using CloudyWing.SpreadsheetExporter.Templates.Grid;
+﻿using CloudyWing.SpreadsheetExporter.Templates.Grid;
 using NPOI.SS.UserModel;
 
 namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
@@ -9,7 +9,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
         public void ContentType_ShouldReturnExpectedValue(ExcelFormat format, string contentType) {
             ExcelExporter exporter = new(format);
 
-            exporter.ContentType.Should().Be(contentType);
+            Assert.That(exporter.ContentType, Is.EqualTo(contentType));
         }
 
         [Test]
@@ -18,7 +18,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
         public void FileNameExtension_ShouldReturnExpectedValue(ExcelFormat format, string fileNameExtension) {
             ExcelExporter exporter = new(format);
 
-            exporter.FileNameExtension.Should().Be(fileNameExtension);
+            Assert.That(exporter.FileNameExtension, Is.EqualTo(fileNameExtension));
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
         public void IsOfficeOpenXmlDocument_ShouldReturnExpectedValue(ExcelFormat format, bool isXlsx) {
             ExcelExporter exporter = new(format);
 
-            exporter.IsOfficeOpenXmlDocument.Should().Be(isXlsx);
+            Assert.That(exporter.IsOfficeOpenXmlDocument, Is.EqualTo(isXlsx));
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
             ExcelExporter exporter = new();
             exporter.CreateSheeter();
 
-            exporter.Export().Should().NotBeEmpty();
+            Assert.That(exporter.Export(), Is.Not.Empty);
         }
 
         [Test]
@@ -54,10 +54,10 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
             Action act = () => exporter.Export();
 
             if (format == ExcelFormat.ExcelBinaryFileFormat || isClosedNotImplementedException) {
-                act.Should().NotThrow<NotImplementedException>();
+                Assert.DoesNotThrow(() => act());
             } else {
-                act.Should().Throw<NotImplementedException>()
-                    .WithMessage("If no other packages are installed, NPOI currently does not support the output of xlsx file with passwords.");
+                var ex = Assert.Throws<NotImplementedException>(() => act());
+                Assert.That(ex.Message, Is.EqualTo("If no other packages are installed, NPOI currently does not support the output of xlsx file with passwords."));
             }
         }
 
@@ -75,11 +75,12 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
                 ISheet? sheet = args.SheetObject as ISheet;
                 SheeterContext sheeterContext = args.SheeterContext;
 
-                sheeterContext.Should().BeEquivalentTo(new SheeterContext(sheeter), "SheeterContext should match.");
-                sheet.Should().NotBeNull("Sheet should be created.");
-                sheet!.SheetName.Should().Be(sheeter.SheetName, "Sheet name should match.");
-                sheet.GetColumnWidth(0).Should().Be((short)(sheeter.ColumnWidths[0] * 256), "Column width should match.");
-                sheet.GetRow(0).GetCell(0).StringCellValue.Should().Be(cellValue, "Cell value should match.");
+                Assert.That(sheeterContext.SheetName, Is.EqualTo(sheeter.SheetName), "SheeterContext sheet name should match.");
+                Assert.That(sheeterContext.DefaultRowHeight, Is.EqualTo(sheeter.DefaultRowHeight), "SheeterContext default row height should match.");
+                Assert.That(sheet, Is.Not.Null, "Sheet should be created.");
+                Assert.That(sheet!.SheetName, Is.EqualTo(sheeter.SheetName), "Sheet name should match.");
+                Assert.That(sheet.GetColumnWidth(0), Is.EqualTo((short)(sheeter.ColumnWidths[0] * 256)), "Column width should match.");
+                Assert.That(sheet.GetRow(0).GetCell(0).StringCellValue, Is.EqualTo(cellValue), "Cell value should match.");
             };
 
             exporter.Export();

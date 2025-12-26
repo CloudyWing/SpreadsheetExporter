@@ -18,12 +18,12 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             SheeterContext sut = new(sheeter);
 
-            sut.SheetName.Should().Be(sheeter.SheetName);
-            sut.Cells.Should().BeEmpty();
-            sut.ColumnWidths.Should().Equal(sheeter.ColumnWidths);
-            sut.Password.Should().Be(sheeter.Password);
-            sut.IsProtected.Should().BeTrue();
-            sut.PageSettings.Should().Be(sheeter.PageSettings);
+            Assert.That(sut.SheetName, Is.EqualTo(sheeter.SheetName));
+            Assert.That(sut.Cells, Is.Empty);
+            Assert.That(sut.ColumnWidths, Is.EqualTo(sheeter.ColumnWidths));
+            Assert.That(sut.Password, Is.EqualTo(sheeter.Password));
+            Assert.That(sut.IsProtected, Is.True);
+            Assert.That(sut.PageSettings, Is.EqualTo(sheeter.PageSettings));
         }
     }
 }

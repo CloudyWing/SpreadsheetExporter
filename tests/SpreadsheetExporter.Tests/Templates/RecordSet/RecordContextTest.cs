@@ -11,9 +11,9 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
             RecordContext<int> sut = new(cellIndex, rowIndex, record);
 
-            sut.CellIndex.Should().Be(cellIndex);
-            sut.RowIndex.Should().Be(rowIndex);
-            sut.Record.Should().Be(record);
+            Assert.That(sut.CellIndex, Is.EqualTo(cellIndex));
+            Assert.That(sut.RowIndex, Is.EqualTo(rowIndex));
+            Assert.That(sut.Record, Is.EqualTo(record));
         }
     }
 }

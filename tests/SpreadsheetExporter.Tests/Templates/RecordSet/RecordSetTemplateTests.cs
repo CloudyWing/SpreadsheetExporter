@@ -21,7 +21,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
         public void GetContext_NoColumns_ShouldReturnContextWithEmptyCells() {
             TemplateContext context = template!.GetContext();
 
-            context.Cells.Should().HaveCount(0);
+            Assert.That(context.Cells, Has.Count.EqualTo(0));
         }
 
         [Test]
@@ -31,8 +31,8 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
             TemplateContext context = template.GetContext();
 
-            context.Cells.Should().HaveCount(records.Count() + template.Columns.RowSpan);
-            context.Cells.Should().OnlyContain(x => x.ValueGenerator != null);
+            Assert.That(context.Cells, Has.Count.EqualTo(records.Count() + template.Columns.RowSpan));
+            Assert.That(context.Cells.All(x => x.ValueGenerator != null), Is.True);
         }
 
         [Test]
@@ -91,15 +91,14 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
             TemplateContext context = template.GetContext();
 
-            context.Cells.Select(x => new { x.Point, x.Size }).ToList()
-                .Should().BeEquivalentTo(expectedCells);
-            context.Cells.Should().OnlyContain(x => x.CellStyleGenerator != null);
-            context.Cells.Should().OnlyContain(x => x.ValueGenerator != null);
+            Assert.That(context.Cells.Select(x => new { x.Point, x.Size }).ToList(), Is.EqualTo(expectedCells));
+            Assert.That(context.Cells.All(x => x.CellStyleGenerator != null), Is.True);
+            Assert.That(context.Cells.All(x => x.ValueGenerator != null), Is.True);
         }
 
         [Test]
         public void GetContext_SetDataSource_ShouldReturnTemplateContextWithCorrectRowSpan() {
-            template!.GetContext().RowSpan.Should().Be(records.Count());
+            Assert.That(template!.GetContext().RowSpan, Is.EqualTo(records.Count()));
         }
 
         [Test]
@@ -110,10 +109,10 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
             TemplateContext context = template.GetContext();
 
-            context.RowHeights[0].Should().Be(template.HeaderHeight);
+            Assert.That(context.RowHeights[0], Is.EqualTo(template.HeaderHeight));
 
             for (int i = 1; i < context.RowHeights.Count; i++) {
-                context.RowHeights[i].Should().Be(template.RecordHeight);
+                Assert.That(context.RowHeights[i], Is.EqualTo(template.RecordHeight));
             }
         }
 
@@ -124,8 +123,8 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
             template!.Columns.Add(headerText, headerStyle);
 
-            template.Columns[0].HeaderText.Should().Be(headerText);
-            template.Columns[0].HeaderStyle.Should().Be(headerStyle);
+            Assert.That(template.Columns[0].HeaderText, Is.EqualTo(headerText));
+            Assert.That(template.Columns[0].HeaderStyle, Is.EqualTo(headerStyle));
         }
 
         [Test]
@@ -134,7 +133,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
                 .AddChildToLast("Child Column1")
                 .AddChildToLast("Child Column2");
 
-            template.ColumnSpan.Should().Be(2);
+            Assert.That(template.ColumnSpan, Is.EqualTo(2));
         }
 
         [Test]
@@ -143,7 +142,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
                 .AddChildToLast("Child Column1")
                 .AddChildToLast("Child Column2");
 
-            template.RowSpan.Should().Be(2 + records.Count());
+            Assert.That(template.RowSpan, Is.EqualTo(2 + records.Count()));
         }
 
         private class Record {

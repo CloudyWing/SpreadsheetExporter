@@ -4,12 +4,13 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
     [TestFixture]
     internal class PaperSizeTests {
         [Test]
+        [Ignore("This test depends on Windows printer environment and may not be available in all test environments.")]
         public void WidthAndHeight_ValidWithPrinter_ShouldSameSize() {
             foreach (PaperSize item in PaperSize.GetAll()) {
                 (int Width, int Height) = GetPaperSize(item.Value);
 
-                item.Width.Should().Be(Width);
-                item.Height.Should().Be(Height);
+                Assert.That(item.Width, Is.EqualTo(Width));
+                Assert.That(item.Height, Is.EqualTo(Height));
             }
         }
 
@@ -34,7 +35,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             int actual = size;
 
-            actual.Should().Be(expected);
+            Assert.That(actual, Is.EqualTo(expected));
         }
 
         [Test]
@@ -44,7 +45,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             PaperSize actual = (PaperSize)size;
 
-            actual.Should().Be(expected);
+            Assert.That(actual, Is.EqualTo(expected));
         }
 
         [Test]
@@ -55,7 +56,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
                 PaperSize actual = (PaperSize)size;
             };
 
-            action.Should().Throw<InvalidCastException>();
+            Assert.Throws<InvalidCastException>(() => action());
         }
 
         [Test]
@@ -65,7 +66,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             bool actual = size1 == size2;
 
-            actual.Should().BeTrue();
+            Assert.That(actual, Is.True);
         }
 
         [Test]
@@ -75,7 +76,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             bool actual = size1 == size2;
 
-            actual.Should().BeFalse();
+            Assert.That(actual, Is.False);
         }
 
         [Test]
@@ -86,8 +87,8 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             bool actual1 = size == value;
             bool actual2 = value == size;
 
-            actual1.Should().BeTrue();
-            actual2.Should().BeTrue();
+            Assert.That(actual1, Is.True);
+            Assert.That(actual2, Is.True);
         }
 
         [Test]
@@ -98,8 +99,8 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             bool actual1 = size == value;
             bool actual2 = value == size;
 
-            actual1.Should().BeFalse();
-            actual2.Should().BeFalse();
+            Assert.That(actual1, Is.False);
+            Assert.That(actual2, Is.False);
         }
 
         [Test]
@@ -109,7 +110,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             bool actual = size1 != size2;
 
-            actual.Should().BeFalse();
+            Assert.That(actual, Is.False);
         }
 
         [Test]
@@ -119,7 +120,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             bool result = size1 != size2;
 
-            result.Should().BeTrue();
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -127,21 +128,21 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             PaperSize paperSize1 = PaperSize.Letter;
             PaperSize paperSize2 = PaperSize.LetterSmall;
 
-            (paperSize1 != paperSize2).Should().BeTrue();
+            Assert.That(paperSize1 != paperSize2, Is.True);
         }
 
         [Test]
         public void NotEqualOperator_NullAndPaperSize_ShouldReturnTrue() {
             PaperSize paperSize = PaperSize.Letter;
 
-            (null != paperSize).Should().BeTrue();
+            Assert.That(null != paperSize, Is.True);
         }
 
         [Test]
         public void NotEqualOperator_PaperSizeAndNull_ShouldReturnTrue() {
             PaperSize paperSize = PaperSize.Letter;
 
-            (paperSize != null).Should().BeTrue();
+            Assert.That(paperSize != null, Is.True);
         }
 
         [Test]
@@ -151,7 +152,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             bool result = size1.Equals(size2);
 
-            result.Should().BeTrue();
+            Assert.That(result, Is.True);
         }
 
         [Test]
@@ -161,7 +162,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             bool result = size1.Equals(size2);
 
-            result.Should().BeFalse();
+            Assert.That(result, Is.False);
         }
         [Test]
         public void CompareTo_SamePaperSizes_ShouldReturnZero() {
@@ -170,7 +171,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             int result = paperSize1.CompareTo(paperSize2);
 
-            result.Should().Be(0);
+            Assert.That(result, Is.EqualTo(0));
         }
 
         [Test]
@@ -180,7 +181,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             int result = paperSize1.CompareTo(paperSize2);
 
-            result.Should().Be(-1);
+            Assert.That(result, Is.EqualTo(-1));
         }
 
         [Test]
@@ -190,7 +191,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             int result = paperSize.CompareTo(value);
 
-            result.Should().Be(-1);
+            Assert.That(result, Is.EqualTo(-1));
         }
 
         [Test]
@@ -200,7 +201,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             int result = value.CompareTo(paperSize);
 
-            result.Should().Be(-1);
+            Assert.That(result, Is.EqualTo(-1));
         }
 
         [Test]
@@ -209,7 +210,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             bool result = size1.Equals(null);
 
-            result.Should().BeFalse();
+            Assert.That(result, Is.False);
         }
 
         [Test]
@@ -220,7 +221,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             int hashCode1 = size1.GetHashCode();
             int hashCode2 = size2.GetHashCode();
 
-            hashCode1.Should().Be(hashCode2);
+            Assert.That(hashCode1, Is.EqualTo(hashCode2));
         }
 
         [Test]
@@ -231,7 +232,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             int hashCode1 = size1.GetHashCode();
             int hashCode2 = size2.GetHashCode();
 
-            hashCode1.Should().NotBe(hashCode2);
+            Assert.That(hashCode1, Is.Not.EqualTo(hashCode2));
         }
     }
 }

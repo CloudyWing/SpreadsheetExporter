@@ -8,7 +8,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             CellFont defaultFont = new();
             CellFont emptyFont = CellFont.Empty;
 
-            defaultFont.Should().Be(emptyFont);
+            Assert.That(defaultFont, Is.EqualTo(emptyFont));
         }
 
         [Test]
@@ -20,20 +20,20 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             CellFont font = new(name, size, color, style);
 
-            font.Name.Should().Be(name);
-            font.Size.Should().Be(size);
-            font.Color.Should().Be(color);
-            font.Style.Should().Be(style);
+            Assert.That(font.Name, Is.EqualTo(name));
+            Assert.That(font.Size, Is.EqualTo(size));
+            Assert.That(font.Color, Is.EqualTo(color));
+            Assert.That(font.Style, Is.EqualTo(style));
         }
 
         [Test]
         public void Empty_ShouldReturnDefaultFont() {
             CellFont emptyFont = CellFont.Empty;
 
-            emptyFont.Name.Should().BeNull();
-            emptyFont.Size.Should().Be(0);
-            emptyFont.Color.Should().Be(default(Color));
-            emptyFont.Style.Should().Be(FontStyles.None);
+            Assert.That(emptyFont.Name, Is.Null);
+            Assert.That(emptyFont.Size, Is.EqualTo(0));
+            Assert.That(emptyFont.Color, Is.EqualTo(default(Color)));
+            Assert.That(emptyFont.Style, Is.EqualTo(FontStyles.None));
         }
     }
 }

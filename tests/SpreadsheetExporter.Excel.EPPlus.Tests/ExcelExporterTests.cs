@@ -1,4 +1,4 @@
-using CloudyWing.SpreadsheetExporter.Templates.Grid;
+﻿using CloudyWing.SpreadsheetExporter.Templates.Grid;
 using OfficeOpenXml;
 
 namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus.Tests {
@@ -7,14 +7,14 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus.Tests {
         public void ContentType_ShouldReturnExpectedContentType() {
             ExcelExporter exporter = new();
 
-            exporter.ContentType.Should().Be("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            Assert.That(exporter.ContentType, Is.EqualTo("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
         }
 
         [Test]
         public void FileNameExtension_ShouldReturnExpectedFileNameExtension() {
             ExcelExporter exporter = new();
 
-            exporter.FileNameExtension.Should().Be(".xlsx");
+            Assert.That(exporter.FileNameExtension, Is.EqualTo(".xlsx"));
         }
 
         [Test]
@@ -22,7 +22,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus.Tests {
             ExcelExporter exporter = new();
             exporter.CreateSheeter();
 
-            exporter.Export().Should().NotBeEmpty();
+            Assert.That(exporter.Export(), Is.Not.Empty);
         }
 
         [Test]
@@ -39,11 +39,12 @@ namespace CloudyWing.SpreadsheetExporter.Excel.EPPlus.Tests {
                 ExcelWorksheet? sheet = args.SheetObject as ExcelWorksheet;
                 SheeterContext sheeterContext = args.SheeterContext;
 
-                sheeterContext.Should().BeEquivalentTo(new SheeterContext(sheeter));
-                sheet.Should().NotBeNull("sheet should be created.");
-                sheet!.Name.Should().Be(sheeter.SheetName, "sheet name should match.");
-                sheet.Column(1).Width.Should().Be((short)sheeter.ColumnWidths[0], "column width should match.");
-                sheet.GetValue(1, 1).Should().Be(cellValue, "cell value should match.");
+                Assert.That(sheeterContext.SheetName, Is.EqualTo(sheeter.SheetName), "SheeterContext sheet name should match.");
+                Assert.That(sheeterContext.DefaultRowHeight, Is.EqualTo(sheeter.DefaultRowHeight), "SheeterContext default row height should match.");
+                Assert.That(sheet, Is.Not.Null, "sheet should be created.");
+                Assert.That(sheet!.Name, Is.EqualTo(sheeter.SheetName), "sheet name should match.");
+                Assert.That(sheet.Column(1).Width, Is.EqualTo((short)sheeter.ColumnWidths[0]), "column width should match.");
+                Assert.That(sheet.GetValue(1, 1), Is.EqualTo(cellValue), "cell value should match.");
             };
 
             exporter.Export();

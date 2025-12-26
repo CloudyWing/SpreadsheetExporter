@@ -13,7 +13,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void GetFieldValue_FieldValueGeneratorIsNull_ShouldReturnNull() {
-            column!.GetFieldValue(context).Should().BeNull();
+            Assert.That(column!.GetFieldValue(context), Is.Null);
         }
 
         [Test]
@@ -21,12 +21,12 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             string expected = "test";
             column!.FieldValueGenerator = (x) => expected;
 
-            column!.GetFieldValue(context).Should().Be(expected);
+            Assert.That(column!.GetFieldValue(context), Is.EqualTo(expected));
         }
 
         [Test]
         public void GetFieldStyle_FieldFormulaGeneratorIsNull_ShouldReturnDefaultStyle() {
-            column!.GetFieldStyle(context).Should().Be(SpreadsheetManager.DefaultCellStyles.FieldStyle);
+            Assert.That(column!.GetFieldStyle(context), Is.EqualTo(SpreadsheetManager.DefaultCellStyles.FieldStyle));
         }
 
         [Test]
@@ -34,12 +34,12 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             CellStyle cellStyle = new();
             column!.FieldStyleGenerator = (x) => cellStyle;
 
-            column!.GetFieldStyle(context).Should().Be(cellStyle);
+            Assert.That(column!.GetFieldStyle(context), Is.EqualTo(cellStyle));
         }
 
         [Test]
         public void GetFieldFormula_FieldFormulaGeneratorIsNull_ShouldReturnNull() {
-            column!.GetFieldFormula(context).Should().BeNull();
+            Assert.That(column!.GetFieldFormula(context), Is.Null);
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             string expected = "SUM(A1:A5)";
             column!.FieldFormulaGenerator = x => expected;
 
-            column.GetFieldFormula(context).Should().Be(expected);
+            Assert.That(column.GetFieldFormula(context), Is.EqualTo(expected));
         }
 
         private class Record {

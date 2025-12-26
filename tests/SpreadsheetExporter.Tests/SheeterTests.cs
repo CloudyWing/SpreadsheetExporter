@@ -8,9 +8,9 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             string sheetName = "Sheet1";
             Sheeter sheeter = new(sheetName);
 
-            sheeter.SheetName.Should().Be(sheetName);
-            sheeter.Password.Should().BeNull();
-            sheeter.PageSettings.Should().BeEquivalentTo(new PageSettings());
+            Assert.That(sheeter.SheetName, Is.EqualTo(sheetName));
+            Assert.That(sheeter.Password, Is.Null);
+            Assert.That(sheeter.PageSettings, Is.Not.Null);
         }
 
         [Test]
@@ -21,7 +21,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             sheeter.SetColumnWidth(columnIndex, columnWidth);
 
-            sheeter.ColumnWidths[columnIndex].Should().Be(columnWidth);
+            Assert.That(sheeter.ColumnWidths[columnIndex], Is.EqualTo(columnWidth));
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
 
             sheeter.AddTemplate(template);
 
-            sheeter.Templates.Should().Contain(template);
+            Assert.That(sheeter.Templates, Does.Contain(template));
         }
     }
 
