@@ -111,6 +111,36 @@ public System.Nullable<double> HeaderHeight { get; set; }
 [System\.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')[System\.Double](https://learn.microsoft.com/en-us/dotnet/api/system.double 'System\.Double')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')  
 The height of the header\.
 
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.IsAutoFilterEnabled'></a>
+
+## RecordSetTemplate<T>.IsAutoFilterEnabled Property
+
+Gets or sets a value indicating whether to enable auto filter for the data range.  
+Auto filter is applied to the header row and data rows.
+
+```csharp
+public bool IsAutoFilterEnabled { get; set; }
+```
+
+#### Property Value
+[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
+`true` to enable auto filter; otherwise, `false`. Default is `false`.
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.IsFreezeHeader'></a>
+
+## RecordSetTemplate<T>.IsFreezeHeader Property
+
+Gets or sets a value indicating whether to freeze header rows.  
+When enabled, freezes all header rows (determined by [RowSpan](CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection_T_.RowSpan 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.RowSpan')).
+
+```csharp
+public bool IsFreezeHeader { get; set; }
+```
+
+#### Property Value
+[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
+`true` to freeze header rows; otherwise, `false`. Default is `false`.
+
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.RecordHeight'></a>
 
 ## RecordSetTemplate\<T\>\.RecordHeight Property

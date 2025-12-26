@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using CloudyWing.SpreadsheetExporter.Extensions;
 
@@ -37,6 +38,24 @@ public class TemplateContext(
     /// The height of rows.
     /// </value>
     public IReadOnlyDictionary<int, double?> RowHeights { get; } = rowHeights.AsReadOnly();
+
+    /// <summary>
+    /// Gets or sets the freeze panes position. The column and row at this position will be the first unfrozen cell.
+    /// For example, (1, 1) freezes the first column and first row (A1 becomes the frozen pane).
+    /// </summary>
+    /// <value>
+    /// The freeze panes position. Null means no freeze panes.
+    /// </value>
+    public Point? FreezePanes { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to enable auto filter for the data range.
+    /// Auto filter is typically applied to header rows in data tables.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> if auto filter is enabled; otherwise, <c>false</c>. Default is <c>false</c>.
+    /// </value>
+    public bool IsAutoFilterEnabled { get; set; }
 
     internal static TemplateContext Create(IEnumerable<ITemplate> templates) {
         List<ITemplate> templatesList = templates.ToList();

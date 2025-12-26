@@ -155,6 +155,29 @@ public sealed class ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOp
         SetSheetColumnWidths(sheet, context.ColumnWidths);
         SetSheetRowHeights(sheet, context.RowHeights);
 
+        if (context.FreezePanes.HasValue) {
+            // NPOI CreateFreezePane: colSplit and rowSplit specify the first unfrozen column/row
+            sheet.CreateFreezePane(context.FreezePanes.Value.X, context.FreezePanes.Value.Y);
+        }
+
+        if (context.IsAutoFilterEnabled && context.Cells.Count > 0) {
+            // Calculate the range for auto filter based on all cells
+            int maxRow = 0;
+            int maxCol = 0;
+            foreach (Cell cell in context.Cells) {
+                int endRow = cell.Point.Y + cell.Size.Height - 1;
+                int endCol = cell.Point.X + cell.Size.Width - 1;
+                if (endRow > maxRow) {
+                    maxRow = endRow;
+                }
+                if (endCol > maxCol) {
+                    maxCol = endCol;
+                }
+            }
+            // NPOI uses 0-based index for SetAutoFilter
+            sheet.SetAutoFilter(new CellRangeAddress(0, maxRow, 0, maxCol));
+        }
+
         if (context.IsProtected) {
             sheet.ProtectSheet(context.Password);
         }

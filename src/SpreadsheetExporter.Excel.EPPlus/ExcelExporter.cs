@@ -79,6 +79,25 @@ public class ExcelExporter : ExporterBase {
         SetSheetColumnWidths(sheet, context.ColumnWidths);
         SetSheetRowHeights(sheet, context.RowHeights);
 
+        if (context.FreezePanes.HasValue) {
+            // EPPlus uses 1-based index, FreezePanes specifies the first unfrozen cell
+            sheet.View.FreezePanes(context.FreezePanes.Value.Y + 1, context.FreezePanes.Value.X + 1);
+        }
+
+        if (context.IsAutoFilterEnabled && context.Cells.Count > 0) {
+            // Calculate the range for auto filter based on all cells
+            int maxRow = 0;
+            int maxCol = 0;
+            foreach (Cell cell in context.Cells) {
+                int endRow = cell.Point.Y + cell.Size.Height - 1;
+                int endCol = cell.Point.X + cell.Size.Width - 1;
+                if (endRow > maxRow) maxRow = endRow;
+                if (endCol > maxCol) maxCol = endCol;
+            }
+            // EPPlus uses 1-based index
+            sheet.Cells[1, 1, maxRow + 1, maxCol + 1].AutoFilter = true;
+        }
+
         if (context.IsProtected) {
             sheet.Protection.SetPassword(context.Password);
         }

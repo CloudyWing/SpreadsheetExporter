@@ -145,6 +145,50 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             Assert.That(template.RowSpan, Is.EqualTo(2 + records.Count()));
         }
 
+        [Test]
+        public void GetContext_IsFreezeHeaderIsTrue_ShouldSetFreezePanesToHeaderRowCount() {
+            template!.Columns.Add("Column 1")
+                .AddChildToLast("Child Column1")
+                .AddChildToLast("Child Column2");
+            template.IsFreezeHeader = true;
+
+            TemplateContext context = template.GetContext();
+
+            Assert.That(context.FreezePanes, Is.Not.Null);
+            Assert.That(context.FreezePanes!.Value.X, Is.EqualTo(0));
+            Assert.That(context.FreezePanes.Value.Y, Is.EqualTo(template.Columns.RowSpan));
+        }
+
+        [Test]
+        public void GetContext_IsFreezeHeaderIsFalse_ShouldNotSetFreezePanes() {
+            template!.Columns.Add("Column 1");
+            template.IsFreezeHeader = false;
+
+            TemplateContext context = template.GetContext();
+
+            Assert.That(context.FreezePanes, Is.Null);
+        }
+
+        [Test]
+        public void GetContext_IsAutoFilterEnabledIsTrue_ShouldSetAutoFilterEnabled() {
+            template!.Columns.Add("Column 1");
+            template.IsAutoFilterEnabled = true;
+
+            TemplateContext context = template.GetContext();
+
+            Assert.That(context.IsAutoFilterEnabled, Is.True);
+        }
+
+        [Test]
+        public void GetContext_IsAutoFilterEnabledIsFalse_ShouldNotSetAutoFilterEnabled() {
+            template!.Columns.Add("Column 1");
+            template.IsAutoFilterEnabled = false;
+
+            TemplateContext context = template.GetContext();
+
+            Assert.That(context.IsAutoFilterEnabled, Is.False);
+        }
+
         private class Record {
             public int Id { get; set; }
         }

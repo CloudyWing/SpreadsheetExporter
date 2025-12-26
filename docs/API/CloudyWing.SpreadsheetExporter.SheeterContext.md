@@ -72,6 +72,35 @@ public System.Nullable<double> DefaultRowHeight { get; }
 [System\.Nullable&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')[System\.Double](https://learn.microsoft.com/en-us/dotnet/api/system.double 'System\.Double')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.nullable-1 'System\.Nullable\`1')  
 The default height of the row\.
 
+<a name='CloudyWing.SpreadsheetExporter.SheeterContext.FreezePanes'></a>
+
+## SheeterContext.FreezePanes Property
+
+Gets the freeze panes position. The column and row at this position will be the first unfrozen cell.  
+For example, (1, 1) freezes the first column and first row (A1 becomes the frozen pane).
+
+```csharp
+public System.Nullable<System.Drawing.Point> FreezePanes { get; }
+```
+
+#### Property Value
+[System.Nullable&lt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')[System.Drawing.Point](https://docs.microsoft.com/en-us/dotnet/api/System.Drawing.Point 'System.Drawing.Point')[&gt;](https://docs.microsoft.com/en-us/dotnet/api/System.Nullable-1 'System.Nullable`1')  
+The freeze panes position. Null means no freeze panes.
+
+<a name='CloudyWing.SpreadsheetExporter.SheeterContext.IsAutoFilterEnabled'></a>
+
+## SheeterContext.IsAutoFilterEnabled Property
+
+Gets a value indicating whether auto filter is enabled for the data range.
+
+```csharp
+public bool IsAutoFilterEnabled { get; }
+```
+
+#### Property Value
+[System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
+`true` if auto filter is enabled; otherwise, `false`.
+
 <a name='CloudyWing.SpreadsheetExporter.SheeterContext.IsProtected'></a>
 
 ## SheeterContext\.IsProtected Property

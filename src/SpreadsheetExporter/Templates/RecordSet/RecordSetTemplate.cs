@@ -46,6 +46,24 @@ public class RecordSetTemplate<T>(IEnumerable<T> dataSource) : ITemplate {
     public double? RecordHeight { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether to freeze header rows.
+    /// When enabled, freezes all header rows (determined by <see cref="DataColumnCollection{T}.RowSpan"/>).
+    /// </summary>
+    /// <value>
+    /// <c>true</c> to freeze header rows; otherwise, <c>false</c>. Default is <c>false</c>.
+    /// </value>
+    public bool IsFreezeHeader { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to enable auto filter for the data range.
+    /// Auto filter is applied to the header row and data rows.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> to enable auto filter; otherwise, <c>false</c>. Default is <c>false</c>.
+    /// </value>
+    public bool IsAutoFilterEnabled { get; set; }
+
+    /// <summary>
     /// Gets the column span.
     /// </summary>
     /// <value>
@@ -96,7 +114,15 @@ public class RecordSetTemplate<T>(IEnumerable<T> dataSource) : ITemplate {
     /// <inheritdoc/>
     public TemplateContext GetContext() {
         Columns.CalculatePoints(Point.Empty);
-        return new TemplateContext(GetCells(), RowSpan, GetRowHeights());
+        TemplateContext context = new(GetCells(), RowSpan, GetRowHeights());
+
+        if (IsFreezeHeader) {
+            context.FreezePanes = new Point(0, Columns.RowSpan);
+        }
+
+        context.IsAutoFilterEnabled = IsAutoFilterEnabled;
+
+        return context;
     }
 
     private IEnumerable<Cell> GetCells() {

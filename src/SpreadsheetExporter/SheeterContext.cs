@@ -21,6 +21,8 @@ public class SheeterContext {
         ColumnWidths = sheeter.ColumnWidths.AsReadOnly();
         Password = sheeter.Password;
         PageSettings = sheeter.PageSettings;
+        FreezePanes = templateContext.FreezePanes;
+        IsAutoFilterEnabled = templateContext.IsAutoFilterEnabled;
     }
 
     /// <summary>
@@ -85,4 +87,21 @@ public class SheeterContext {
     /// The page settings.
     /// </value>
     public PageSettings PageSettings { get; }
+
+    /// <summary>
+    /// Gets the freeze panes position. The column and row at this position will be the first unfrozen cell.
+    /// For example, (1, 1) freezes the first column and first row (A1 becomes the frozen pane).
+    /// </summary>
+    /// <value>
+    /// The freeze panes position. Null means no freeze panes.
+    /// </value>
+    public System.Drawing.Point? FreezePanes { get; }
+
+    /// <summary>
+    /// Gets a value indicating whether auto filter is enabled for the data range.
+    /// </summary>
+    /// <value>
+    /// <c>true</c> if auto filter is enabled; otherwise, <c>false</c>.
+    /// </value>
+    public bool IsAutoFilterEnabled { get; }
 }

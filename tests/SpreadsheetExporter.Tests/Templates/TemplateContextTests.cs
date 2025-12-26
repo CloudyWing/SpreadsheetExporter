@@ -54,5 +54,54 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates {
             Assert.That(context.RowHeights[0], Is.EqualTo(10));
             Assert.That(context.RowHeights[2], Is.EqualTo(20));
         }
+
+        [Test]
+        public void FreezePanes_SetValue_ShouldReturnSameValue() {
+            Point freezePoint = new(2, 3);
+            TemplateContext context = new(
+                Array.Empty<Cell>(),
+                0,
+                new Dictionary<int, double?>()
+            ) {
+                FreezePanes = freezePoint
+            };
+
+            Assert.That(context.FreezePanes, Is.EqualTo(freezePoint));
+        }
+
+        [Test]
+        public void FreezePanes_DefaultValue_ShouldBeNull() {
+            TemplateContext context = new(
+                Array.Empty<Cell>(),
+                0,
+                new Dictionary<int, double?>()
+            );
+
+            Assert.That(context.FreezePanes, Is.Null);
+        }
+
+        [Test]
+        public void IsAutoFilterEnabled_SetTrue_ShouldReturnTrue() {
+            TemplateContext context = new(
+                Array.Empty<Cell>(),
+                0,
+                new Dictionary<int, double?>()
+            ) {
+                IsAutoFilterEnabled = true
+            };
+
+            Assert.That(context.IsAutoFilterEnabled, Is.True);
+        }
+
+        [Test]
+        public void IsAutoFilterEnabled_DefaultValue_ShouldBeFalse() {
+            TemplateContext context = new(
+                Array.Empty<Cell>(),
+                0,
+                new Dictionary<int, double?>()
+            );
+
+            Assert.That(context.IsAutoFilterEnabled, Is.False);
+        }
     }
 }
