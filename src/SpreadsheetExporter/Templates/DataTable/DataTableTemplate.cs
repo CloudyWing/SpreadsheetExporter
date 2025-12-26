@@ -40,6 +40,7 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ITemplate {
         return columns;
     }
 
+
     /// <summary>
     /// Gets or sets the height of the header.
     /// </summary>
