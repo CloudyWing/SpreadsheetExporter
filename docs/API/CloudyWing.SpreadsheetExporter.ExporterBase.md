@@ -223,6 +223,17 @@ The file mode\.
 
 Implements [ExportFile\(string, SpreadsheetFileMode\)](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.ExportFile(string,CloudyWing.SpreadsheetExporter.SpreadsheetFileMode) 'CloudyWing\.SpreadsheetExporter\.ISpreadsheetExporter\.ExportFile\(string, CloudyWing\.SpreadsheetExporter\.SpreadsheetFileMode\)')
 
+#### Exceptions
+
+[SheeterNotFoundException](CloudyWing.SpreadsheetExporter.Exceptions.SheeterNotFoundException.md 'CloudyWing\.SpreadsheetExporter\.Exceptions\.SheeterNotFoundException')  
+No sheeters have been created\.
+
+[System\.IO\.IOException](https://learn.microsoft.com/en-us/dotnet/api/system.io.ioexception 'System\.IO\.IOException')  
+An I/O error occurred while creating the file\.
+
+[System\.UnauthorizedAccessException](https://learn.microsoft.com/en-us/dotnet/api/system.unauthorizedaccessexception 'System\.UnauthorizedAccessException')  
+The caller does not have the required permission\.
+
 <a name='CloudyWing.SpreadsheetExporter.ExporterBase.GetSheeter(int)'></a>
 
 ## ExporterBase\.GetSheeter\(int\) Method
@@ -245,6 +256,11 @@ Implements [GetSheeter\(int\)](CloudyWing.SpreadsheetExporter.ISpreadsheetExport
 #### Returns
 [Sheeter](CloudyWing.SpreadsheetExporter.Sheeter.md 'CloudyWing\.SpreadsheetExporter\.Sheeter')  
 The sheeter\.
+
+#### Exceptions
+
+[System\.ArgumentOutOfRangeException](https://learn.microsoft.com/en-us/dotnet/api/system.argumentoutofrangeexception 'System\.ArgumentOutOfRangeException')  
+[index](CloudyWing.SpreadsheetExporter.ExporterBase.md#CloudyWing.SpreadsheetExporter.ExporterBase.GetSheeter(int).index 'CloudyWing\.SpreadsheetExporter\.ExporterBase\.GetSheeter\(int\)\.index') is less than 0 or greater than or equal to the number of sheeters\.
 
 <a name='CloudyWing.SpreadsheetExporter.ExporterBase.OnSheetCreated(CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs)'></a>
 

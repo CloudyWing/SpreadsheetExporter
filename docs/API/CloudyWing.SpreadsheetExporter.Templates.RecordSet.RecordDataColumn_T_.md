@@ -60,3 +60,67 @@ public System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordCont
 #### Property Value
 [System\.Func&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.func-2 'System\.Func\`2')[CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.T 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordDataColumn\<T\>\.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>')[,](https://learn.microsoft.com/en-us/dotnet/api/system.func-2 'System\.Func\`2')[System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.func-2 'System\.Func\`2')  
 The field value generator\.
+### Methods
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.GetFieldFormula(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_)'></a>
+
+## RecordDataColumn\<T\>\.GetFieldFormula\(RecordContext\<T\>\) Method
+
+Gets the field formula\.
+
+```csharp
+public override string GetFieldFormula(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T> context);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.GetFieldFormula(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_).context'></a>
+
+`context` [CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.T 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordDataColumn\<T\>\.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>')
+
+The context\.
+
+#### Returns
+[System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')  
+Returns the field formula\.
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.GetFieldStyle(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_)'></a>
+
+## RecordDataColumn\<T\>\.GetFieldStyle\(RecordContext\<T\>\) Method
+
+Gets the field style\.
+
+```csharp
+public override CloudyWing.SpreadsheetExporter.CellStyle GetFieldStyle(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T> context);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.GetFieldStyle(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_).context'></a>
+
+`context` [CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.T 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordDataColumn\<T\>\.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>')
+
+The context\.
+
+#### Returns
+[CellStyle](CloudyWing.SpreadsheetExporter.CellStyle.md 'CloudyWing\.SpreadsheetExporter\.CellStyle')  
+Returns the field style\.
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.GetFieldValue(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_)'></a>
+
+## RecordDataColumn\<T\>\.GetFieldValue\(RecordContext\<T\>\) Method
+
+Gets the field value\.
+
+```csharp
+public override object GetFieldValue(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T> context);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.GetFieldValue(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_).context'></a>
+
+`context` [CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext&lt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>')[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordDataColumn_T_.T 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordDataColumn\<T\>\.T')[&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>')
+
+The context\.
+
+#### Returns
+[System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object')  
+Returns the field value\.

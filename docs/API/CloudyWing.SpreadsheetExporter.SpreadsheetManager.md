@@ -43,7 +43,7 @@ The exporter\.
 
 #### Exceptions
 
-[System\.NullReferenceException](https://learn.microsoft.com/en-us/dotnet/api/system.nullreferenceexception 'System\.NullReferenceException')  
+[System\.InvalidOperationException](https://learn.microsoft.com/en-us/dotnet/api/system.invalidoperationexception 'System\.InvalidOperationException')  
 Exporter factory is not set\.
 
 <a name='CloudyWing.SpreadsheetExporter.SpreadsheetManager.SetExporter(System.Func_CloudyWing.SpreadsheetExporter.ISpreadsheetExporter_)'></a>

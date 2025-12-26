@@ -1177,7 +1177,8 @@ The result of the conversion\.
 
 #### Exceptions
 
-[System\.InvalidCastException](https://learn.microsoft.com/en-us/dotnet/api/system.invalidcastexception 'System\.InvalidCastException')
+[System\.InvalidCastException](https://learn.microsoft.com/en-us/dotnet/api/system.invalidcastexception 'System\.InvalidCastException')  
+[value](CloudyWing.SpreadsheetExporter.PaperSize.md#CloudyWing.SpreadsheetExporter.PaperSize.op_ExplicitCloudyWing.SpreadsheetExporter.PaperSize(int).value 'CloudyWing\.SpreadsheetExporter\.PaperSize\.op\_Explicit CloudyWing\.SpreadsheetExporter\.PaperSize\(int\)\.value') does not correspond to any valid PaperSize\.
 
 <a name='CloudyWing.SpreadsheetExporter.PaperSize.op_Implicitint(CloudyWing.SpreadsheetExporter.PaperSize)'></a>
 

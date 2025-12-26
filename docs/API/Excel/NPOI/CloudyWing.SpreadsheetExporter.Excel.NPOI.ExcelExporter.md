@@ -33,6 +33,20 @@ The excel format\.
 
 ### See Also
 - [CloudyWing\.SpreadsheetExporter\.ExporterBase](https://learn.microsoft.com/en-us/dotnet/api/cloudywing.spreadsheetexporter.exporterbase 'CloudyWing\.SpreadsheetExporter\.ExporterBase')
+### Fields
+
+<a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.ExcelColumnWidthUnit'></a>
+
+## ExcelExporter\.ExcelColumnWidthUnit Field
+
+Excel uses a unit of 1/256th of a character width for column width\.
+
+```csharp
+private const int ExcelColumnWidthUnit = 256;
+```
+
+#### Field Value
+[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')
 ### Properties
 
 <a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.ContentType'></a>

@@ -73,6 +73,33 @@ public CellStyleConfiguration(System.Action<CloudyWing.SpreadsheetExporter.Confi
 `loader` [System\.Action&lt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')[CellStyleSetuper](CloudyWing.SpreadsheetExporter.Config.CellStyleSetuper.md 'CloudyWing\.SpreadsheetExporter\.Config\.CellStyleSetuper')[&gt;](https://learn.microsoft.com/en-us/dotnet/api/system.action-1 'System\.Action\`1')
 
 The loader\.
+### Fields
+
+<a name='CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.DefaultFontName'></a>
+
+## CellStyleConfiguration\.DefaultFontName Field
+
+Default font name used for cell styles\.
+
+```csharp
+private const string DefaultFontName = "新細明體";
+```
+
+#### Field Value
+[System\.String](https://learn.microsoft.com/en-us/dotnet/api/system.string 'System\.String')
+
+<a name='CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.DefaultFontSize'></a>
+
+## CellStyleConfiguration\.DefaultFontSize Field
+
+Default font size used for cell styles\.
+
+```csharp
+private const short DefaultFontSize = 10;
+```
+
+#### Field Value
+[System\.Int16](https://learn.microsoft.com/en-us/dotnet/api/system.int16 'System\.Int16')
 ### Properties
 
 <a name='CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.CellStyle'></a>

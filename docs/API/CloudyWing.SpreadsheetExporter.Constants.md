@@ -29,10 +29,23 @@ public const int AutoFitColumnWidth = -1;
 
 ## Constants\.AutoFiteRowHeight Field
 
-The automatic fite row height\.
+The automatic fit row height\.
 
 ```csharp
 public const int AutoFiteRowHeight = -1;
+```
+
+#### Field Value
+[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')
+
+<a name='CloudyWing.SpreadsheetExporter.Constants.AutoFitRowHeight'></a>
+
+## Constants\.AutoFitRowHeight Field
+
+The automatic fit row height\.
+
+```csharp
+public const int AutoFitRowHeight = -1;
 ```
 
 #### Field Value

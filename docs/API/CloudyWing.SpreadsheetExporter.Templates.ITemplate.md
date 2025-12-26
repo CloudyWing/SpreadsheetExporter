@@ -10,6 +10,7 @@ public interface ITemplate
 ```
 
 Derived  
+&#8627; [DataTableTemplate](CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.md 'CloudyWing\.SpreadsheetExporter\.Templates\.DataTable\.DataTableTemplate')  
 &#8627; [GridTemplate](CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.md 'CloudyWing\.SpreadsheetExporter\.Templates\.Grid\.GridTemplate')  
 &#8627; [MergedTemplate](CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.md 'CloudyWing\.SpreadsheetExporter\.Templates\.MergedTemplate')  
 &#8627; [RecordSetTemplate&lt;T&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate_T_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordSetTemplate\<T\>')

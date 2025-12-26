@@ -163,10 +163,13 @@ public void SetColumnWidth(int index, double width);
 
 `index` [System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')
 
-The index\.
+The zero\-based column index\.
 
 <a name='CloudyWing.SpreadsheetExporter.Sheeter.SetColumnWidth(int,double).width'></a>
 
 `width` [System\.Double](https://learn.microsoft.com/en-us/dotnet/api/system.double 'System\.Double')
 
-The width\. If width is `0`, hide width\. if the width is `-1`, the column width will be adjusted automatically\.
+The column width in characters\.
+            Use [HiddenColumn](CloudyWing.SpreadsheetExporter.Constants.md#CloudyWing.SpreadsheetExporter.Constants.HiddenColumn 'CloudyWing\.SpreadsheetExporter\.Constants\.HiddenColumn') \(0\) to hide the column\.
+            Use [AutoFitColumnWidth](CloudyWing.SpreadsheetExporter.Constants.md#CloudyWing.SpreadsheetExporter.Constants.AutoFitColumnWidth 'CloudyWing\.SpreadsheetExporter\.Constants\.AutoFitColumnWidth') \(\-1\) to auto\-fit the column width\.
+            Positive values specify the exact width in character units\.

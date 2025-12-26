@@ -153,6 +153,11 @@ byte[] Export();
 [System\.Byte](https://learn.microsoft.com/en-us/dotnet/api/system.byte 'System\.Byte')[\[\]](https://learn.microsoft.com/en-us/dotnet/api/system.array 'System\.Array')  
 The bytes of spreadsheet\.
 
+#### Exceptions
+
+[SheeterNotFoundException](CloudyWing.SpreadsheetExporter.Exceptions.SheeterNotFoundException.md 'CloudyWing\.SpreadsheetExporter\.Exceptions\.SheeterNotFoundException')  
+No sheeters have been created\.
+
 <a name='CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.ExportFile(string,CloudyWing.SpreadsheetExporter.SpreadsheetFileMode)'></a>
 
 ## ISpreadsheetExporter\.ExportFile\(string, SpreadsheetFileMode\) Method
@@ -196,6 +201,11 @@ The index\.
 #### Returns
 [Sheeter](CloudyWing.SpreadsheetExporter.Sheeter.md 'CloudyWing\.SpreadsheetExporter\.Sheeter')  
 The sheeter\.
+
+#### Exceptions
+
+[System\.ArgumentOutOfRangeException](https://learn.microsoft.com/en-us/dotnet/api/system.argumentoutofrangeexception 'System\.ArgumentOutOfRangeException')  
+[index](CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.md#CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.GetSheeter(int).index 'CloudyWing\.SpreadsheetExporter\.ISpreadsheetExporter\.GetSheeter\(int\)\.index') is less than 0 or greater than or equal to the number of sheeters\.
 ### Events
 
 <a name='CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.SheetCreatedEvent'></a>
