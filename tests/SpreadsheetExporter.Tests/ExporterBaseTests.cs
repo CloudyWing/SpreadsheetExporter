@@ -98,6 +98,68 @@ namespace CloudyWing.Spreadsheetexporter.Tests {
         }
 
         [Test]
+        public void GetSheeter_WhenIndexIsNegative_ShouldThrowArgumentOutOfRangeException() {
+            exporter!.CreateSheeter("Sheet1");
+
+            Action action = () => exporter!.GetSheeter(-1);
+
+            ArgumentOutOfRangeException? ex = Assert.Throws<ArgumentOutOfRangeException>(() => action());
+            Assert.That(ex!.ParamName, Is.EqualTo("index"));
+            Assert.That(ex.ActualValue, Is.EqualTo(-1));
+        }
+
+        [Test]
+        public void GetSheeter_WhenIndexIsOutOfRange_ShouldThrowArgumentOutOfRangeException() {
+            exporter!.CreateSheeter("Sheet1");
+
+            Action action = () => exporter!.GetSheeter(1);
+
+            ArgumentOutOfRangeException? ex = Assert.Throws<ArgumentOutOfRangeException>(() => action());
+            Assert.That(ex!.ParamName, Is.EqualTo("index"));
+            Assert.That(ex.ActualValue, Is.EqualTo(1));
+            Assert.That(ex.Message, Does.Contain("Index must be between 0 and 0"));
+        }
+
+        [Test]
+        public void TryGetSheeter_WhenIndexIsValid_ShouldReturnTrueAndSheeter() {
+            exporter!.CreateSheeter("Sheet1");
+            Sheeter expectedSheeter = exporter!.CreateSheeter("Sheet2");
+
+            bool result = exporter!.TryGetSheeter(1, out Sheeter sheeter);
+
+            Assert.That(result, Is.True);
+            Assert.That(sheeter, Is.EqualTo(expectedSheeter));
+        }
+
+        [Test]
+        public void TryGetSheeter_WhenIndexIsNegative_ShouldReturnFalseAndNullSheeter() {
+            exporter!.CreateSheeter("Sheet1");
+
+            bool result = exporter!.TryGetSheeter(-1, out Sheeter sheeter);
+
+            Assert.That(result, Is.False);
+            Assert.That(sheeter, Is.Null);
+        }
+
+        [Test]
+        public void TryGetSheeter_WhenIndexIsOutOfRange_ShouldReturnFalseAndNullSheeter() {
+            exporter!.CreateSheeter("Sheet1");
+
+            bool result = exporter!.TryGetSheeter(1, out Sheeter sheeter);
+
+            Assert.That(result, Is.False);
+            Assert.That(sheeter, Is.Null);
+        }
+
+        [Test]
+        public void TryGetSheeter_WhenNoSheetersExist_ShouldReturnFalseAndNullSheeter() {
+            bool result = exporter!.TryGetSheeter(0, out Sheeter sheeter);
+
+            Assert.That(result, Is.False);
+            Assert.That(sheeter, Is.Null);
+        }
+
+        [Test]
         public void Export_WhenThereAreNoSheeters_ShouldThrowSheeterNotFoundException() {
             Action action = () => exporter!.Export();
             Assert.Throws<SheeterNotFoundException>(() => action());

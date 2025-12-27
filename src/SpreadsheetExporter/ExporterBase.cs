@@ -151,6 +151,27 @@ public abstract class ExporterBase : ISpreadsheetExporter {
     }
 
     /// <summary>
+    /// Tries to get the sheeter at the specified index.
+    /// </summary>
+    /// <param name="index">The zero-based index of the sheeter to get.</param>
+    /// <param name="sheeter">
+    /// When this method returns, contains the sheeter at the specified index if the index is valid;
+    /// otherwise, <c>null</c>. This parameter is passed uninitialized.
+    /// </param>
+    /// <returns>
+    /// <c>true</c> if the index is valid and the sheeter was retrieved; otherwise, <c>false</c>.
+    /// </returns>
+    public bool TryGetSheeter(int index, out Sheeter sheeter) {
+        if (index >= 0 && index < sheeters.Count) {
+            sheeter = sheeters[index];
+            return true;
+        }
+
+        sheeter = null;
+        return false;
+    }
+
+    /// <summary>
     /// Exports bytes of spreadsheet.
     /// </summary>
     /// <returns>The bytes of spreadsheet.</returns>

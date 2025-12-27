@@ -312,6 +312,34 @@ protected virtual void OnSpreadsheetExporting(CloudyWing.SpreadsheetExporter.Spr
 `args` [SpreadsheetExportingEventArgs](CloudyWing.SpreadsheetExporter.SpreadsheetExportingEventArgs.md 'CloudyWing\.SpreadsheetExporter\.SpreadsheetExportingEventArgs')
 
 The [SpreadsheetExportingEventArgs](CloudyWing.SpreadsheetExporter.SpreadsheetExportingEventArgs.md 'CloudyWing\.SpreadsheetExporter\.SpreadsheetExportingEventArgs') instance containing the event data\.
+
+<a name='CloudyWing.SpreadsheetExporter.ExporterBase.TryGetSheeter(int,CloudyWing.SpreadsheetExporter.Sheeter)'></a>
+
+## ExporterBase\.TryGetSheeter\(int, Sheeter\) Method
+
+Tries to get the sheeter at the specified index\.
+
+```csharp
+public bool TryGetSheeter(int index, out CloudyWing.SpreadsheetExporter.Sheeter sheeter);
+```
+#### Parameters
+
+<a name='CloudyWing.SpreadsheetExporter.ExporterBase.TryGetSheeter(int,CloudyWing.SpreadsheetExporter.Sheeter).index'></a>
+
+`index` [System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')
+
+The zero\-based index of the sheeter to get\.
+
+<a name='CloudyWing.SpreadsheetExporter.ExporterBase.TryGetSheeter(int,CloudyWing.SpreadsheetExporter.Sheeter).sheeter'></a>
+
+`sheeter` [Sheeter](CloudyWing.SpreadsheetExporter.Sheeter.md 'CloudyWing\.SpreadsheetExporter\.Sheeter')
+
+When this method returns, contains the sheeter at the specified index if the index is valid;
+otherwise, `null`\. This parameter is passed uninitialized\.
+
+#### Returns
+[System\.Boolean](https://learn.microsoft.com/en-us/dotnet/api/system.boolean 'System\.Boolean')  
+`true` if the index is valid and the sheeter was retrieved; otherwise, `false`\.
 ### Events
 
 <a name='CloudyWing.SpreadsheetExporter.ExporterBase.SheetCreatedEvent'></a>

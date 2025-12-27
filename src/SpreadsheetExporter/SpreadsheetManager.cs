@@ -21,11 +21,7 @@ public static class SpreadsheetManager {
     /// The configuration.
     /// </value>
     public static CellStyleConfiguration DefaultCellStyles {
-        get {
-            lock (cellStyleLock) {
-                return userCellStyles ?? defaultCellStyles.Value;
-            }
-        }
+        get => userCellStyles ?? defaultCellStyles.Value;
         set {
             lock (cellStyleLock) {
                 userCellStyles = value;
@@ -44,11 +40,11 @@ public static class SpreadsheetManager {
             throw new ArgumentNullException(nameof(exporterFactory));
         }
 
-        if (exporterFactory() is null) {
-            throw new ArgumentException("Factory return value cannot be null.", nameof(exporterFactory));
-        }
-
         lock (exporterFactoryLock) {
+            if (exporterFactory() is null) {
+                throw new ArgumentException("Factory return value cannot be null.", nameof(exporterFactory));
+            }
+
             SpreadsheetManager.exporterFactory = exporterFactory;
         }
     }

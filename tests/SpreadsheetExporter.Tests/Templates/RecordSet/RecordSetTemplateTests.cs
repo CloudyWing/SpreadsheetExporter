@@ -189,6 +189,55 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             Assert.That(context.IsAutoFilterEnabled, Is.False);
         }
 
+        [Test]
+        public void DataSource_WhenEnumeratedMultipleTimes_ShouldNotReEnumerateOriginalSource() {
+            int enumerationCount = 0;
+            IEnumerable<Record> trackingEnumerable = GetTrackingEnumerable();
+
+            template = new RecordSetTemplate<Record>(trackingEnumerable);
+            template.Columns.Add("Column 1");
+
+            template.GetContext();
+
+            Assert.That(enumerationCount, Is.EqualTo(1), "DataSource should only be enumerated once due to caching");
+
+            IEnumerable<Record> GetTrackingEnumerable() {
+                enumerationCount++;
+                foreach (Record record in records) {
+                    yield return record;
+                }
+            }
+        }
+
+        [Test]
+        public void DataSource_WhenSetToReadOnlyList_ShouldUseDirectlyWithoutConversion() {
+            IReadOnlyList<Record> readOnlyList = records.ToList().AsReadOnly();
+
+            template = new RecordSetTemplate<Record>(readOnlyList);
+            template.Columns.Add("Column 1");
+
+            TemplateContext context = template.GetContext();
+
+            Assert.That(context.RowSpan, Is.EqualTo(readOnlyList.Count + template.Columns.RowSpan));
+        }
+
+        [Test]
+        public void DataSource_WhenChangedAfterCaching_ShouldReEnumerateNewSource() {
+            List<Record> firstSource = [new Record { Id = 1 }];
+            List<Record> secondSource = [new Record { Id = 2 }, new Record { Id = 3 }];
+
+            template = new RecordSetTemplate<Record>(firstSource);
+            template.Columns.Add("Column 1");
+
+            TemplateContext context1 = template.GetContext();
+            Assert.That(context1.RowSpan, Is.EqualTo(firstSource.Count + template.Columns.RowSpan));
+
+            template.DataSource = secondSource;
+
+            TemplateContext context2 = template.GetContext();
+            Assert.That(context2.RowSpan, Is.EqualTo(secondSource.Count + template.Columns.RowSpan));
+        }
+
         private class Record {
             public int Id { get; set; }
         }

@@ -13,13 +13,35 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet;
 /// <param name="dataSource">The data source.</param>
 /// <exception cref="ArgumentNullException">dataSource</exception>
 public class RecordSetTemplate<T>(IEnumerable<T> dataSource) : ITemplate {
+    private IReadOnlyList<T> cachedDataSource;
+
+    private IEnumerable<T> dataSourceField = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
+
     /// <summary>
     /// Gets or sets the data source.
     /// </summary>
     /// <value>
     /// The data source.
     /// </value>
-    public IEnumerable<T> DataSource { get; set; } = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
+    public IEnumerable<T> DataSource {
+        get => dataSourceField;
+        set {
+            dataSourceField = value;
+            cachedDataSource = null;
+        }
+    }
+
+    private IReadOnlyList<T> CachedDataSource {
+        get {
+            if (cachedDataSource is null) {
+                cachedDataSource = DataSource is IReadOnlyList<T> readOnlyList
+                    ? readOnlyList
+                    : DataSource.ToList().AsReadOnly();
+            }
+
+            return cachedDataSource;
+        }
+    }
 
     /// <summary>
     /// Gets the columns.
@@ -77,7 +99,7 @@ public class RecordSetTemplate<T>(IEnumerable<T> dataSource) : ITemplate {
     /// <value>
     /// The row span.
     /// </value>
-    public int RowSpan => DataSource.Count() + Columns.RowSpan;
+    public int RowSpan => CachedDataSource.Count + Columns.RowSpan;
 
     private IEnumerable<Cell> GetHearderCells(DataColumnCollection<T> columns) {
         foreach (DataColumnBase<T> column in columns) {
@@ -96,14 +118,15 @@ public class RecordSetTemplate<T>(IEnumerable<T> dataSource) : ITemplate {
 
     private IEnumerable<Cell> GetRecordCells() {
         Point point = new(0, Columns.RowSpan);
-        foreach (T record in DataSource) {
+        foreach (T record in CachedDataSource) {
             foreach (DataColumnBase<T> column in Columns.DataSourceColumns) {
                 yield return new Cell {
                     ValueGenerator = (cellIndex, rowIndex) => column.GetFieldValue(new RecordContext<T>(cellIndex, rowIndex, record)),
                     CellStyleGenerator = (cellIndex, rowIndex) => column.GetFieldStyle(new RecordContext<T>(cellIndex, rowIndex, record)),
                     Point = point,
                     Size = new Size(column.ColumnSpan, 1),
-                    FormulaGenerator = (cellIndex, rowIndex) => column.GetFieldFormula(new RecordContext<T>(cellIndex, rowIndex, record))
+                    FormulaGenerator = (cellIndex, rowIndex) => column.GetFieldFormula(new RecordContext<T>(cellIndex, rowIndex, record)),
+                    DataValidationGenerator = (cellIndex, rowIndex) => column.GetFieldDataValidation(new RecordContext<T>(cellIndex, rowIndex, record))
                 };
                 point.X += column.ColumnSpan;
             }
@@ -135,7 +158,7 @@ public class RecordSetTemplate<T>(IEnumerable<T> dataSource) : ITemplate {
         for (i = 0; i < Columns.RowSpan; i++) {
             dic[i] = HeaderHeight;
         }
-        foreach (T _ in DataSource) {
+        foreach (T _ in CachedDataSource) {
             dic[i++] = RecordHeight;
         }
         return dic;
