@@ -119,7 +119,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
                 });
 
             Cell resultCell = template.GetContext().Cells.Single();
-            DataValidation? resultValidation = resultCell.GetDataValidation();
+            DataValidation resultValidation = resultCell.GetDataValidation();
 
             Assert.That(resultValidation, Is.Not.Null);
             Assert.That(resultValidation.ValidationType, Is.EqualTo(DataValidationType.List));
@@ -141,7 +141,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
                     };
                 });
 
-            DataValidation? validation = template.GetContext().Cells.Single().GetDataValidation();
+            DataValidation validation = template.GetContext().Cells.Single().GetDataValidation();
 
             Assert.Multiple(() => {
                 Assert.That(validation, Is.Not.Null);
@@ -167,7 +167,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
                     };
                 });
 
-            DataValidation? validation = template.GetContext().Cells.Single().GetDataValidation();
+            DataValidation validation = template.GetContext().Cells.Single().GetDataValidation();
 
             Assert.Multiple(() => {
                 Assert.That(validation, Is.Not.Null);
@@ -195,7 +195,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
                     };
                 });
 
-            DataValidation? validation = template.GetContext().Cells.Single().GetDataValidation();
+            DataValidation validation = template.GetContext().Cells.Single().GetDataValidation();
 
             Assert.Multiple(() => {
                 Assert.That(validation, Is.Not.Null);
@@ -218,7 +218,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
                     };
                 });
 
-            DataValidation? validation = template.GetContext().Cells.Single().GetDataValidation();
+            DataValidation validation = template.GetContext().Cells.Single().GetDataValidation();
 
             Assert.Multiple(() => {
                 Assert.That(validation, Is.Not.Null);

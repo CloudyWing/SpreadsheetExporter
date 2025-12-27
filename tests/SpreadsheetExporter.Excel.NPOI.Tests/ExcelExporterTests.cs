@@ -72,13 +72,13 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI.Tests {
             sheeter.SetColumnWidth(0, 100);
 
             exporter.SheetCreatedEvent += (sender, args) => {
-                ISheet? sheet = args.SheetObject as ISheet;
+                ISheet sheet = args.SheetObject as ISheet;
                 SheeterContext sheeterContext = args.SheeterContext;
 
                 Assert.That(sheeterContext.SheetName, Is.EqualTo(sheeter.SheetName), "SheeterContext sheet name should match.");
                 Assert.That(sheeterContext.DefaultRowHeight, Is.EqualTo(sheeter.DefaultRowHeight), "SheeterContext default row height should match.");
                 Assert.That(sheet, Is.Not.Null, "Sheet should be created.");
-                Assert.That(sheet!.SheetName, Is.EqualTo(sheeter.SheetName), "Sheet name should match.");
+                Assert.That(sheet.SheetName, Is.EqualTo(sheeter.SheetName), "Sheet name should match.");
                 Assert.That(sheet.GetColumnWidth(0), Is.EqualTo((short)(sheeter.ColumnWidths[0] * 256)), "Column width should match.");
                 Assert.That(sheet.GetRow(0).GetCell(0).StringCellValue, Is.EqualTo(cellValue), "Cell value should match.");
             };

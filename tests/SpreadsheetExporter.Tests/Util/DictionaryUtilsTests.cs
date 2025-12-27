@@ -46,14 +46,14 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Util {
 
         private class TestRecord {
             public int Id { get; set; }
-            public string? Name { get; set; }
-            public Address? Address { get; set; }
+            public string Name { get; set; }
+            public Address Address { get; set; }
         }
 
         private class Address {
-            public string? Street { get; set; }
-            public string? City { get; set; }
-            public string? Country { get; set; }
+            public string Street { get; set; }
+            public string City { get; set; }
+            public string Country { get; set; }
         }
     }
 }

@@ -7,7 +7,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
         public void Constructor_KeyIsNull_ShouldThrowArgumentNullException() {
             RecordContext<object> recordContext = Substitute.For<RecordContext<object>>(0, 0, null);
 
-            Action action = () => new FieldContext<object, object?>(recordContext, null, null);
+            Action action = () => new FieldContext<object, object>(recordContext, null, null);
 
             Assert.That(action, Throws.TypeOf<ArgumentNullException>().And.Message.Contains("key"));
         }

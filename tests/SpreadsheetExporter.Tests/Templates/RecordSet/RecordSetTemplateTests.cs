@@ -10,7 +10,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             new() { Id = 1 },
             new() { Id = 2 },
         };
-        private RecordSetTemplate<Record>? template;
+        private RecordSetTemplate<Record> template;
 
         [SetUp]
         public void SetUp() {
@@ -19,15 +19,15 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void GetContext_NoColumns_ShouldReturnContextWithEmptyCells() {
-            TemplateContext context = template!.GetContext();
+            TemplateContext context = template.GetContext();
 
             Assert.That(context.Cells, Has.Count.EqualTo(0));
         }
 
         [Test]
         public void GetContext_AddTwoRowsWithOnlyColumnEach_ShouldReturnContextWithCells() {
-            template!.Columns.Add("Column 1");
-            template!.Columns.AddChildToLast("Child Column 1");
+            template.Columns.Add("Column 1");
+            template.Columns.AddChildToLast("Child Column 1");
 
             TemplateContext context = template.GetContext();
 
@@ -37,7 +37,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void GetContext_AfterAddingMultipleColumns_ShouldReturnContextWithCorrectCells() {
-            template!.Columns.Add("個人資料")
+            template.Columns.Add("個人資料")
                 .AddChildToLast("姓名")
                 .AddChildToLast("年齡")
                 .Add("聯絡資訊")
@@ -98,12 +98,12 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void GetContext_SetDataSource_ShouldReturnTemplateContextWithCorrectRowSpan() {
-            Assert.That(template!.GetContext().RowSpan, Is.EqualTo(records.Count()));
+            Assert.That(template.GetContext().RowSpan, Is.EqualTo(records.Count()));
         }
 
         [Test]
         public void GetContext_SetHeight_ShouldReturnTemplateContextWithCorrectRowHeights() {
-            template!.HeaderHeight = 10d;
+            template.HeaderHeight = 10d;
             template.RecordHeight = 11d;
             template.Columns.Add("Header Text");
 
@@ -121,7 +121,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             string headerText = "Column 1";
             CellStyle headerStyle = new();
 
-            template!.Columns.Add(headerText, headerStyle);
+            template.Columns.Add(headerText, headerStyle);
 
             Assert.That(template.Columns[0].HeaderText, Is.EqualTo(headerText));
             Assert.That(template.Columns[0].HeaderStyle, Is.EqualTo(headerStyle));
@@ -129,7 +129,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void ColumnSpan_AddTwoRowsButOneHasColumnLayersTwo_ShouldReturnTwo() {
-            template!.Columns.Add("Column 1")
+            template.Columns.Add("Column 1")
                 .AddChildToLast("Child Column1")
                 .AddChildToLast("Child Column2");
 
@@ -138,7 +138,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void RowSpan_AddTwoRowsButOneHasColumnLayersTwo_ShouldReturnTwo() {
-            template!.Columns.Add("Column 1")
+            template.Columns.Add("Column 1")
                 .AddChildToLast("Child Column1")
                 .AddChildToLast("Child Column2");
 
@@ -147,7 +147,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void GetContext_IsFreezeHeaderIsTrue_ShouldSetFreezePanesToHeaderRowCount() {
-            template!.Columns.Add("Column 1")
+            template.Columns.Add("Column 1")
                 .AddChildToLast("Child Column1")
                 .AddChildToLast("Child Column2");
             template.IsFreezeHeader = true;
@@ -155,13 +155,13 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             TemplateContext context = template.GetContext();
 
             Assert.That(context.FreezePanes, Is.Not.Null);
-            Assert.That(context.FreezePanes!.Value.X, Is.EqualTo(0));
+            Assert.That(context.FreezePanes.Value.X, Is.EqualTo(0));
             Assert.That(context.FreezePanes.Value.Y, Is.EqualTo(template.Columns.RowSpan));
         }
 
         [Test]
         public void GetContext_IsFreezeHeaderIsFalse_ShouldNotSetFreezePanes() {
-            template!.Columns.Add("Column 1");
+            template.Columns.Add("Column 1");
             template.IsFreezeHeader = false;
 
             TemplateContext context = template.GetContext();
@@ -171,7 +171,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void GetContext_IsAutoFilterEnabledIsTrue_ShouldSetAutoFilterEnabled() {
-            template!.Columns.Add("Column 1");
+            template.Columns.Add("Column 1");
             template.IsAutoFilterEnabled = true;
 
             TemplateContext context = template.GetContext();
@@ -181,7 +181,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void GetContext_IsAutoFilterEnabledIsFalse_ShouldNotSetAutoFilterEnabled() {
-            template!.Columns.Add("Column 1");
+            template.Columns.Add("Column 1");
             template.IsAutoFilterEnabled = false;
 
             TemplateContext context = template.GetContext();
