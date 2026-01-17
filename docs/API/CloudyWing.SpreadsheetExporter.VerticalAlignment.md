@@ -1,29 +1,29 @@
-#### [CloudyWing.SpreadsheetExporter](index.md 'index')
-### [CloudyWing.SpreadsheetExporter](CloudyWing.SpreadsheetExporter.md 'CloudyWing.SpreadsheetExporter')
+#### [CloudyWing\.SpreadsheetExporter](index.md 'index')
+### [CloudyWing\.SpreadsheetExporter](CloudyWing.SpreadsheetExporter.md 'CloudyWing\.SpreadsheetExporter')
 
 ## VerticalAlignment Enum
 
-The vertical text alignment.
+The vertical text alignment\.
 
 ```csharp
 public enum VerticalAlignment
 ```
 ### Fields
 
-<a name='CloudyWing.SpreadsheetExporter.VerticalAlignment.Bottom'></a>
+<a name='CloudyWing.SpreadsheetExporter.VerticalAlignment.Top'></a>
 
-`Bottom` 2
+`Top` 0
 
-The bottom.
+The top\.
 
 <a name='CloudyWing.SpreadsheetExporter.VerticalAlignment.Middle'></a>
 
 `Middle` 1
 
-The middle.
+The middle\.
 
-<a name='CloudyWing.SpreadsheetExporter.VerticalAlignment.Top'></a>
+<a name='CloudyWing.SpreadsheetExporter.VerticalAlignment.Bottom'></a>
 
-`Top` 0
+`Bottom` 2
 
-The top.
+The bottom\.

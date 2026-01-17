@@ -1,8 +1,8 @@
-### [CloudyWing.SpreadsheetExporter.Excel.NPOI](CloudyWing.SpreadsheetExporter.Excel.NPOI.md 'CloudyWing.SpreadsheetExporter.Excel.NPOI')
+### [CloudyWing\.SpreadsheetExporter\.Excel\.NPOI](CloudyWing.SpreadsheetExporter.Excel.NPOI.md 'CloudyWing\.SpreadsheetExporter\.Excel\.NPOI')
 
 ## ExcelFormat Enum
 
-The excel format.
+The excel format\.
 
 ```csharp
 public enum ExcelFormat
@@ -13,10 +13,10 @@ public enum ExcelFormat
 
 `ExcelBinaryFileFormat` 0
 
-The filename extension is `.xls`.
+The filename extension is `.xls`\.
 
 <a name='CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelFormat.OfficeOpenXmlDocument'></a>
 
 `OfficeOpenXmlDocument` 1
 
-The filename extension is `.xlsx`.
+The filename extension is `.xlsx`\.
