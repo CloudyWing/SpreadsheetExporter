@@ -136,7 +136,16 @@ namespace CloudyWing.SpreadsheetExporter {
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns>The sheeter.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="index"/> is less than 0 or greater than or equal to the number of sheeters.
+        /// </exception>
         public Sheeter GetSheeter(int index) {
+            if (index < 0 || index >= sheeters.Count) {
+                throw new ArgumentOutOfRangeException(
+                    nameof(index), index, $"Index must be between 0 and {sheeters.Count - 1}."
+                );
+            }
+
             return sheeters[index];
         }
 
@@ -195,6 +204,9 @@ namespace CloudyWing.SpreadsheetExporter {
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="fileMode">The file mode.</param>
+        /// <exception cref="SheeterNotFoundException">No sheeters have been created.</exception>
+        /// <exception cref="IOException">An I/O error occurred while creating the file.</exception>
+        /// <exception cref="UnauthorizedAccessException">The caller does not have the required permission.</exception>
         public void ExportFile(string path, SpreadsheetFileMode fileMode = SpreadsheetFileMode.Create) {
             byte[] bytes = Export();
             FileMode mode = fileMode == SpreadsheetFileMode.Create

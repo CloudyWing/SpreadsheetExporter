@@ -9,7 +9,9 @@ namespace CloudyWing.SpreadsheetExporter {
         private static readonly object exporterFactoryLock = new();
         private static readonly object cellStyleLock = new();
         private static Func<ISpreadsheetExporter> exporterFactory;
-        private static CellStyleConfiguration defaultCellStyles;
+        private static readonly Lazy<CellStyleConfiguration> defaultCellStyles =
+            new(() => new CellStyleConfiguration());
+        private static CellStyleConfiguration userCellStyles;
 
         /// <summary>
         /// Gets or sets the configuration.
@@ -19,16 +21,13 @@ namespace CloudyWing.SpreadsheetExporter {
         /// </value>
         public static CellStyleConfiguration DefaultCellStyles {
             get {
-                if (defaultCellStyles is null) {
-                    lock (cellStyleLock) {
-                        defaultCellStyles ??= new CellStyleConfiguration();
-                    }
+                lock (cellStyleLock) {
+                    return userCellStyles ?? defaultCellStyles.Value;
                 }
-                return defaultCellStyles;
             }
             set {
                 lock (cellStyleLock) {
-                    defaultCellStyles = value;
+                    userCellStyles = value;
                 }
             }
         }
@@ -57,7 +56,7 @@ namespace CloudyWing.SpreadsheetExporter {
         /// Creates the exporter.
         /// </summary>
         /// <returns>The exporter.</returns>
-        /// <exception cref="NullReferenceException">Exporter factory is not set.</exception>
+        /// <exception cref="InvalidOperationException">Exporter factory is not set.</exception>
         public static ISpreadsheetExporter CreateExporter() {
             return exporterFactory is null
                 ? throw new InvalidOperationException("Exporter factory is not set.")

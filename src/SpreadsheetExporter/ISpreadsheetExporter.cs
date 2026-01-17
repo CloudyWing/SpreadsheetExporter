@@ -74,6 +74,7 @@ namespace CloudyWing.SpreadsheetExporter {
         /// Exports bytes of spreadsheet.
         /// </summary>
         /// <returns>The bytes of spreadsheet.</returns>
+        /// <exception cref="Exceptions.SheeterNotFoundException">No sheeters have been created.</exception>
         byte[] Export();
 
         /// <summary>
@@ -88,6 +89,9 @@ namespace CloudyWing.SpreadsheetExporter {
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns>The sheeter.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="index"/> is less than 0 or greater than or equal to the number of sheeters.
+        /// </exception>
         Sheeter GetSheeter(int index);
     }
 }

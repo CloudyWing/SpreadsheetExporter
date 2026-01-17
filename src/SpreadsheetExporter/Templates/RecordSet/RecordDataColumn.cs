@@ -30,14 +30,17 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         /// </value>
         public Func<RecordContext<T>, CellStyle> FieldStyleGenerator { get; set; }
 
+        /// <inheritdoc/>
         public override object GetFieldValue(RecordContext<T> context) {
             return GetInternal(FieldValueGenerator, null, context);
         }
 
+        /// <inheritdoc/>
         public override string GetFieldFormula(RecordContext<T> context) {
             return GetInternal(FieldFormulaGenerator, null, context);
         }
 
+        /// <inheritdoc/>
         public override CellStyle GetFieldStyle(RecordContext<T> context) {
             return GetInternal(FieldStyleGenerator, SpreadsheetManager.DefaultCellStyles.FieldStyle, context);
         }

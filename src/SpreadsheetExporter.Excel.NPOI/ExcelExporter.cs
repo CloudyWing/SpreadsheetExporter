@@ -37,6 +37,11 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
             [HorizontalAlignment.Justify] = global::NPOI.SS.UserModel.HorizontalAlignment.Justify
         };
 
+        /// <summary>
+        /// Excel uses a unit of 1/256th of a character width for column width.
+        /// </summary>
+        private const int ExcelColumnWidthUnit = 256;
+
         private readonly Dictionary<VerticalAlignment, global::NPOI.SS.UserModel.VerticalAlignment> verticalAlignmentMaps = new() {
             [VerticalAlignment.Top] = global::NPOI.SS.UserModel.VerticalAlignment.Top,
             [VerticalAlignment.Middle] = global::NPOI.SS.UserModel.VerticalAlignment.Center,
@@ -105,7 +110,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
 
                 workbook.Write(ms);
 
-                workbook?.Close();
+                workbook.Close();
                 cellStyles.Clear();
                 fonts.Clear();
                 workbook = null;
@@ -305,7 +310,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
         }
 
         private void SetValueToCell(ICell cell, object value) {
-            if (value == null) {
+            if (value is null) {
                 cell.SetCellValue("");
             } else if (value is bool _bool) {
                 cell.SetCellValue(_bool);
@@ -317,7 +322,11 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
                 if (value is not string and IConvertible) {
                     try {
                         cell.SetCellValue(Convert.ToDouble(value));
-                    } catch {
+                    } catch (FormatException) {
+                        cell.SetCellValue(value.ToString());
+                    } catch (InvalidCastException) {
+                        cell.SetCellValue(value.ToString());
+                    } catch (OverflowException) {
                         cell.SetCellValue(value.ToString());
                     }
                 } else {
@@ -333,7 +342,7 @@ namespace CloudyWing.SpreadsheetExporter.Excel.NPOI {
                 } else if (pair.Value == Constants.HiddenColumn) {
                     sheet.SetColumnHidden(pair.Key, true);
                 } else {
-                    sheet.SetColumnWidth(pair.Key, (short)(pair.Value * 256));
+                    sheet.SetColumnWidth(pair.Key, (short)(pair.Value * ExcelColumnWidthUnit));
                 }
             }
         }

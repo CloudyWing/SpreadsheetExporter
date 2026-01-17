@@ -42,7 +42,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         public DataColumnCollection<T> RootColumns {
             get {
                 DataColumnCollection<T> items = this;
-                while (items.parentItem?.ParentColumns != null) {
+                while (items.parentItem?.ParentColumns is not null) {
                     items = items.parentItem.ParentColumns;
                 }
                 return items;
@@ -231,7 +231,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
         /// </summary>
         /// <param name="childColumn">The child data column.</param>
         /// <returns>The self.</returns>
-        /// <exception cref="NullReferenceException"></exception>
+        /// <exception cref="InvalidOperationException">No columns available to add child to.</exception>
         public DataColumnCollection<T> AddChildToLast(DataColumnBase<T> childColumn) {
             if (Count == 0) {
                 throw new InvalidOperationException("No columns available to add child to.");
@@ -386,8 +386,12 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
 
         /// <inheritdoc/>
         protected override void InsertItem(int index, DataColumnBase<T> item) {
-            if (item.ParentColumns != null) {
-                throw new ArgumentException($"{nameof(DataColumnBase<T>)} is already contained by another {nameof(DataColumnCollection<T>)}.", nameof(item));
+            if (item.ParentColumns is not null) {
+                throw new ArgumentException(
+                    $"DataColumnBase<{typeof(T).Name}> with HeaderText '{item.HeaderText}' is already contained by another DataColumnCollection. " +
+                    $"A column can only belong to one collection at a time.",
+                    nameof(item)
+                );
             }
 
             base.InsertItem(index, item);
@@ -402,8 +406,12 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
 
         /// <inheritdoc/>
         protected override void SetItem(int index, DataColumnBase<T> item) {
-            if (item.ParentColumns != null) {
-                throw new ArgumentException($"{nameof(DataColumnBase<T>)} is already contained by another {nameof(DataColumnCollection<T>)}.", nameof(item));
+            if (item.ParentColumns is not null) {
+                throw new ArgumentException(
+                    $"DataColumnBase<{typeof(T).Name}> with HeaderText '{item.HeaderText}' is already contained by another DataColumnCollection. " +
+                    $"A column can only belong to one collection at a time.",
+                    nameof(item)
+                );
             }
 
             base.SetItem(index, item);
@@ -477,7 +485,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
                         dataColumn.FieldFormulaGenerator = ConvertGenerator<Func<RecordContext<TRecord>, string>>(formulaGenerator);
                         break;
                     default:
-                        throw new ArgumentException("Invalid provider type.");
+                        throw new ArgumentException($"Invalid provider type: {type}. Expected Value or Formula.");
                 }
             }
 
@@ -490,7 +498,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
                         dataColumn.FieldFormulaGenerator = ConvertGenerator<Func<FieldContext<TRecord, TField>, string>>(formulaGenerator);
                         break;
                     default:
-                        throw new ArgumentException("Invalid provider type.");
+                        throw new ArgumentException($"Invalid provider type: {type}. Expected Value or Formula.");
                 }
             }
 

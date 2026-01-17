@@ -53,9 +53,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         /// <param name="cellStyle">The cell style. The default is <c>SpreadsheetManager.DefaultCellStyles.GridCellStyle</c>.</param>
         /// <returns>The self.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// columnSpan - Must be greater than 0.
-        /// or
-        /// rowSpan - Must be greater than 0.
+        /// <paramref name="columnSpan"/> must be greater than 0.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="rowSpan"/> must be greater than 0.
         /// </exception>
         public GridTemplate CreateCell(
             object value, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
@@ -84,9 +85,12 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
         /// <param name="rowSpan">The row span.</param>
         /// <param name="cellStyle">The cell style. The default is <c>SpreadsheetManager.DefaultCellStyles.GridCellStyle</c>.</param>
         /// <returns>The self.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">columnSpan - Must be greater than 0.
-        /// or
-        /// rowSpan - Must be greater than 0.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="columnSpan"/> must be greater than 0.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="rowSpan"/> must be greater than 0.
+        /// </exception>
         public GridTemplate CreateCell(
             Func<int, int, string> formulaGenerator, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
         ) {
@@ -161,7 +165,12 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid {
                         }
                         Point point = item.Point + new Size(colOffset, rowOffset);
                         if (!grid.points.Add(point)) {
-                            throw new ArgumentException($"The point ({colOffset}, {rowOffset}) already exists.");
+                            int actualX = item.Point.X + colOffset;
+                            int actualY = item.Point.Y + rowOffset;
+                            throw new ArgumentException(
+                                $"Cell merge conflict: The point ({actualX}, {actualY}) is already occupied. " +
+                                $"Current cell at ({item.Point.X}, {item.Point.Y}) with size ({item.Size.Width}, {item.Size.Height}) overlaps with existing cells."
+                            );
                         }
                     }
                 }

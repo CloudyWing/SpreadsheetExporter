@@ -65,8 +65,11 @@ namespace CloudyWing.SpreadsheetExporter {
         /// <summary>
         /// Sets the width of the column.
         /// </summary>
-        /// <param name="index">The index.</param>
-        /// <param name="width">The width. If width is <c>0</c>, hide width. if the width is <c>-1</c>, the column width will be adjusted automatically.</param>
+        /// <param name="index">The zero-based column index.</param>
+        /// <param name="width">The column width in characters.
+        /// Use <see cref="Constants.HiddenColumn"/> (0) to hide the column.
+        /// Use <see cref="Constants.AutoFitColumnWidth"/> (-1) to auto-fit the column width.
+        /// Positive values specify the exact width in character units.</param>
         public void SetColumnWidth(int index, double width) {
             columnWidths[index] = width;
         }

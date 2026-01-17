@@ -1,4 +1,6 @@
-﻿namespace CloudyWing.SpreadsheetExporter {
+﻿using System;
+
+namespace CloudyWing.SpreadsheetExporter {
     /// <summary>
     /// The constants.
     /// </summary>
@@ -14,9 +16,15 @@
         public const int HiddenColumn = 0;
 
         /// <summary>
-        /// The automatic fite row height.
+        /// The automatic fit row height.
         /// </summary>
-        public const int AutoFiteRowHeight = AutoFitColumnWidth;
+        public const int AutoFitRowHeight = AutoFitColumnWidth;
+
+        /// <summary>
+        /// The automatic fit row height.
+        /// </summary>
+        [Obsolete("Use AutoFitRowHeight instead. This property will be removed in a future version.")]
+        public const int AutoFiteRowHeight = AutoFitRowHeight;
 
         /// <summary>
         /// The hidden row.

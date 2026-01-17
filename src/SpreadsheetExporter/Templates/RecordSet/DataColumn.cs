@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using CloudyWing.SpreadsheetExporter.Util;
 
@@ -69,7 +70,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
                 MemberExpression memberExpression = GetMemberExpression(expression)
                     ?? throw new ArgumentException("Invalid expression.", nameof(expression));
 
-                while (memberExpression != null) {
+                while (memberExpression is not null) {
                     memberExpressions.Push(memberExpression.Member.Name);
                     memberExpression = GetMemberExpression(memberExpression.Expression);
                 }
@@ -119,7 +120,11 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet {
                 IDictionary<string, object> maps = DictionaryUtils.ConvertFrom(recordContext.Record, maxNestedLevel);
 
                 if (!maps.ContainsKey(FieldKey)) {
-                    throw new ArgumentException($"Data source does not contain property '{FieldKey}'.");
+                    string availableProperties = string.Join(", ", maps.Keys.OrderBy(k => k));
+                    throw new ArgumentException(
+                        $"Data source does not contain property '{FieldKey}'. "
+                        + $"Available properties: {availableProperties}"
+                    );
                 }
 
                 TField value = ChangeFieldValueType(maps[FieldKey]);

@@ -6,6 +6,15 @@ namespace CloudyWing.SpreadsheetExporter.Config {
     /// </summary>
     public class CellStyleConfiguration {
         /// <summary>
+        /// Default font name used for cell styles.
+        /// </summary>
+        private const string DefaultFontName = "新細明體";
+
+        /// <summary>
+        /// Default font size used for cell styles.
+        /// </summary>
+        private const short DefaultFontSize = 10;
+        /// <summary>
         /// Initializes a new instance of the <see cref="CellStyleConfiguration" /> class.
         /// </summary>
         /// <param name="loader">The loader.</param>
@@ -57,7 +66,7 @@ namespace CloudyWing.SpreadsheetExporter.Config {
                 VerticalAlignment.Middle,
                 false, false,
                 default,
-                new CellFont("新細明體", 10, default, FontStyles.None),
+                new CellFont(DefaultFontName, DefaultFontSize, default, FontStyles.None),
                 null,
                 false
             );

@@ -94,10 +94,21 @@ namespace CloudyWing.SpreadsheetExporter {
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>The result of the conversion.</returns>
-        /// <exception cref="InvalidCastException"></exception>
+        /// <exception cref="InvalidCastException">
+        /// <paramref name="value"/> does not correspond to any valid PaperSize.
+        /// </exception>
         public static explicit operator PaperSize(int value) {
-            return GetAll().SingleOrDefault(x => x.Value == value)
-                ?? throw new InvalidCastException();
+            foreach (PaperSize paperSize in GetAll()) {
+                if (paperSize.Value == value) {
+                    return paperSize;
+                }
+            }
+
+            string validValues = string.Join(", ", GetAll().Select(x => $"{x.Value} ({x.Name})"));
+            throw new InvalidCastException(
+                $"Cannot convert value '{value}' to PaperSize. " +
+                $"Valid values are: {validValues}"
+            );
         }
 
         /// <summary>
@@ -807,11 +818,19 @@ namespace CloudyWing.SpreadsheetExporter {
 
         /// <inheritdoc/>
         public int CompareTo(object obj) {
+            if (obj is null) {
+                return 1;
+            }
+
             return obj is int i ? Value.CompareTo(i) : Value.CompareTo(((PaperSize)obj).Value);
         }
 
         /// <inheritdoc/>
         public int CompareTo(PaperSize other) {
+            if (other is null) {
+                return 1;
+            }
+
             return Value.CompareTo(other.Value);
         }
 
