@@ -97,38 +97,40 @@ public sealed class ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOp
             // 因為 ParseCellStyle 和 ParseFont 會用到，所以用 field 處理
             workbook = IsOfficeOpenXmlDocument ? new XSSFWorkbook() : new HSSFWorkbook();
 
-            if (DefaultFont.HasValue) {
-                SetDefaultFont(workbook, DefaultFont.Value);
-            }
-
-            foreach (SheeterContext context in contexts) {
-                CreateSheet(context);
-            }
-
-            using MemoryStream ms = new();
-
-            if (HasPassword) {
-                // NPOI 目前不支援在 xlsx 格式使用密碼保護 Workbook
-                if (IsOfficeOpenXmlDocument) {
-                    if (!IsClosedNotImplementedException) {
-                        throw new NotImplementedException("If no other packages are installed, NPOI currently does not support the output of xlsx file with passwords.");
-                    }
-                } else {
-                    HSSFWorkbook wb = (HSSFWorkbook)workbook;
-                    // 因為 NPOI 的 Bug，在 2.5.5 版以前要先 call InternalWorkbook.WriteAccess 才可以正常，後續不知是否有修正
-                    _ = wb.InternalWorkbook.WriteAccess;
-                    wb.WriteProtectWorkbook(Password, "");
+            try {
+                if (DefaultFont.HasValue) {
+                    SetDefaultFont(workbook, DefaultFont.Value);
                 }
+
+                foreach (SheeterContext context in contexts) {
+                    CreateSheet(context);
+                }
+
+                using MemoryStream ms = new();
+
+                if (HasPassword) {
+                    // NPOI 目前不支援在 xlsx 格式使用密碼保護 Workbook
+                    if (IsOfficeOpenXmlDocument) {
+                        if (!IsClosedNotImplementedException) {
+                            throw new NotImplementedException("If no other packages are installed, NPOI currently does not support the output of xlsx file with passwords.");
+                        }
+                    } else {
+                        HSSFWorkbook wb = (HSSFWorkbook)workbook;
+                        // 因為 NPOI 的 Bug，在 2.5.5 版以前要先 call InternalWorkbook.WriteAccess 才可以正常，後續不知是否有修正
+                        _ = wb.InternalWorkbook.WriteAccess;
+                        wb.WriteProtectWorkbook(Password, "");
+                    }
+                }
+
+                workbook.Write(ms);
+
+                return ms.ToArray();
+            } finally {
+                workbook.Close();
+                cellStyles.Clear();
+                fonts.Clear();
+                workbook = null;
             }
-
-            workbook.Write(ms);
-
-            workbook.Close();
-            cellStyles.Clear();
-            fonts.Clear();
-            workbook = null;
-
-            return ms.ToArray();
         }
     }
 
@@ -380,11 +382,7 @@ public sealed class ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOp
             if (value is not string and IConvertible) {
                 try {
                     cell.SetCellValue(Convert.ToDouble(value));
-                } catch (FormatException) {
-                    cell.SetCellValue(value.ToString());
-                } catch (InvalidCastException) {
-                    cell.SetCellValue(value.ToString());
-                } catch (OverflowException) {
+                } catch (Exception ex) when (ex is FormatException or InvalidCastException or OverflowException) {
                     cell.SetCellValue(value.ToString());
                 }
             } else {
@@ -408,7 +406,7 @@ public sealed class ExcelExporter(ExcelFormat excelFormat = ExcelFormat.OfficeOp
     private void SetSheetRowHeights(ISheet sheet, IReadOnlyDictionary<int, double?> rowHeights) {
         foreach (KeyValuePair<int, double?> pair in rowHeights) {
             IRow row = sheet.GetRow(pair.Key) ?? sheet.CreateRow(pair.Key);
-            if (pair.Value <= Constants.AutoFiteRowHeight) {
+            if (pair.Value <= Constants.AutoFitRowHeight) {
                 row.Height = -1;
             } else if (pair.Value == Constants.HiddenRow) {
                 row.ZeroHeight = true;

@@ -228,7 +228,7 @@ public class ExcelExporter : ExporterBase {
         foreach (KeyValuePair<int, double?> pair in rowHeights) {
             // EPPlus 從 1 開始算
             ExcelRow row = sheet.Row(pair.Key + 1);
-            if (pair.Value <= Constants.AutoFiteRowHeight) {
+            if (pair.Value <= Constants.AutoFitRowHeight) {
                 row.CustomHeight = false;
             } else if (pair.Value == Constants.HiddenRow) {
                 row.Hidden = true;
