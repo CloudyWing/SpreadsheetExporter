@@ -3,6 +3,7 @@
 用來建立儲存格內容資訊的範本。
 
 ## GridTemplate
+
 使用 `CreateRow()` 和 `CreateCell()` 來建立儲存格資訊，可以用 HTML 的 `tr` 和 `td` 來理解會比較懂此 Template 的概念，可使用 Method Chaining 來簡化操作。
 
 使用 `CreateRow()` 建立新列，並指定列高。
@@ -46,7 +47,40 @@ template.CreateRow()
 */
 ```
 
+## DataTableTemplate
+
+使用 `System.Data.DataTable` 作為資料來源來建立儲存格資訊。
+
+```csharp
+// 建立 DataTable
+System.Data.DataTable dataTable = new System.Data.DataTable();
+dataTable.Columns.Add("Name", typeof(string));
+dataTable.Columns.Add("Age", typeof(int));
+
+dataTable.Rows.Add("John", 30);
+dataTable.Rows.Add("Mary", 25);
+
+// 建立 Template
+DataTableTemplate template = new DataTableTemplate(dataTable);
+
+// 可設定 Header 和 Record 的高度
+template.HeaderHeight = 25;
+template.RecordHeight = 20;
+
+/*
+產出
+| ---- | --- |
+| Name | Age |
+| ---- | --- |
+| John | 30  |
+| ---- | --- |
+| Mary | 25  |
+| ---- | --- |
+*/
+```
+
 ## RecordSetTemplate
+
 使用設定 Data Source 和 Data Columns 來建立儲存格資訊，可使用 Method Chaining 來簡化操作。
 
 ```csharp
@@ -160,10 +194,65 @@ template.Columns.Add("Formula", x => x.UseFormula(y => $"{y.CellIndex} + {y.RowI
 */
 ```
 
+### 凍結窗格與自動篩選
+```csharp
+RecordSetTemplate<Record> template = new RecordSetTemplate<Record>(source);
+// ... 設定欄位 ...
+
+// 凍結標題列 (會自動依據 Header 的列數進行凍結)
+template.IsFreezeHeader = true;
+
+// 啟用自動篩選 (範圍包含標題列和資料列)
+template.IsAutoFilterEnabled = true;
+
+// 設定 Header 與 Record 高度
+template.HeaderHeight = 30;
+template.RecordHeight = 25;
+```
+
+## Data Validation (資料驗證)
+
+可針對儲存格設定資料驗證規則，例如限制輸入整數、日期、清單選項等。
+
+### 在 RecordSetTemplate 中使用
+
+在定義 Column 時，透過 `GetFieldDataValidation` 設定驗證規則。
+
+```csharp
+template.Columns.Add("Age", x => x.Age, provider => provider.UseDataValidation(x => new DataValidation {
+    ValidationType = DataValidationType.Integer,
+    Operator = DataValidationOperator.Between,
+    Value1 = 18,
+    Value2 = 65,
+    ErrorTitle = "輸入錯誤",
+    ErrorMessage = "年齡必須在 18 到 65 歲之間",
+    IsErrorAlertShown = true
+}));
+```
+
+### 在 GridTemplate 中使用
+
+使用 `CreateCell` 的 Configurator Action 來設定 `DataValidationGenerator`。
+
+```csharp
+GridTemplate template = new GridTemplate();
+template.CreateRow();
+template.CreateCell(cell => {
+    cell.ValueGenerator = (c, r) => "請選擇";
+    cell.DataValidationGenerator = (c, r) => new DataValidation {
+        ValidationType = DataValidationType.List,
+        ListItems = new[] { "Option A", "Option B", "Option C" },
+        IsDropdownShown = true
+    };
+});
+```
+
 ## MergedTemplate
+
 可合併多個 Template，自訂複雜的 Template 時，可用來在內部合併多個 Template 使 用。
 
 ## 自訂 Template
+
 內部使用 GridTemplate 來建立可產生報表資訊列的 Template。
 ```csharp
 public class ReportInfoTemplate : ITemplate {

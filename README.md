@@ -1,19 +1,56 @@
 ﻿# SpreadsheetExporter
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE.md)
+
 **SpreadsheetExporter** 為 [SpreadsheetExport](https://github.com/CloudyWing/SpreadsheetExport) 的 .NET Standard 版本。
 
-套件本身並無 Excel 匯出功能，而是針對 Excel 的匯出的部分，提供一個 Facade 專案，在使用上仍需要搭配 NPOI 或 EPPlus 之類的 Excel 套件使用。
+本套件專注於 **建立匯出 Excel 所需的資料結構與邏輯**，並不直接依賴特定的 Excel 函式庫（如 NPOI 或 EPPlus）。而是透過 Facade 模式，將資料準備與 Excel 產生這兩個責任分離。
 
-此套件目的在於如果未來有需要更換 Excel 套件，只需要在繼承 `ExporterBase` 的 Exporter 來裡變更 Excel 套件即可，而不會動到操作介面的部分，因此目前雖然有提供一個具體實作的 `NPOI.Exporter`，但長期性的專案仍不建議直接使用，而是另寫一個 Exporter 來繼承它以處理邊界問題。
+這意味著：
+
+- **解耦**：您的業務邏輯與操作介面不需要綁死在 NPOI 或 EPPlus 上。
+- **彈性**：未來若需更換 Excel 底層套件（例如從 NPOI 遷移至 EPPlus），只需更換 Exporter 實作，完全無需修改報表產生的邏輯。
+- **維護性**：長期專案建議繼承 `ExporterBase` 實作自己的 Exporter 來處理特定邊界情況，而非直接依賴套件提供的預設實作。
 
 ## Projects
- * [SpreadsheetExporter](./SpreadsheetExporter/)：建立匯出 Excel 所需要的資訊。
- * [SpreadsheetExporter.Excel.NPOI](./SpreadsheetExporter.Excel.NPOI/)： 是負責將 SpreadsheetExporter 的介面所建立的資訊，透過 NPOI 來匯出 Excel。
- * [SpreadsheetExporter.Excel.EPPlus](./SpreadsheetExporter.Excel.EPPlus/)： 是負責將 SpreadsheetExporter 的介面所建立的資訊，透過 EPPlus 來匯出 Excel。
 
-## 參考文件
-* [入門教學](./docs/Guide/%E5%85%A5%E9%96%80%E6%95%99%E5%AD%B8.md)。
-* [API 文件](./docs/API/index.md)。
+本解決方案包含以下專案：
+
+- **[SpreadsheetExporter](./SpreadsheetExporter/)**
+  核心專案，負責定義介面與建立匯出所需的資料結構（Templates、Schemas 等）。
+
+- **[SpreadsheetExporter.Excel.NPOI](./SpreadsheetExporter.Excel.NPOI/)**
+  實作專案，使用 **NPOI** 將 `SpreadsheetExporter` 定義的結構轉換為 Excel 檔案。
+
+- **[SpreadsheetExporter.Excel.EPPlus](./SpreadsheetExporter.Excel.EPPlus/)**
+  實作專案，使用 **EPPlus** 將 `SpreadsheetExporter` 定義的結構轉換為 Excel 檔案。
+
+> [!WARNING]
+> **關於 .NET 6+ 支援**
+>
+> 由於 NPOI 與 EPPlus 在升級至 .NET 6+ 後可能面臨 `System.Drawing.Common` 的圖形跨平台相容性問題，且本解決方案中的 `SpreadsheetExporter.Excel.NPOI` 與 `SpreadsheetExporter.Excel.EPPlus` 僅作為 **參考範本** 存在。
+>
+> 因此，這兩個實作套件 **不會提供支援 .NET 6 以上的版本**。建議您參考這些範本的程式碼，自行繼承 `ExporterBase` 實作符合您專案需求的 Exporter。
+
+## Installation
+
+透過 NuGet Package Manager 安裝核心與對應的實作套件：
+
+### .NET CLI
+
+```bash
+dotnet add package CloudyWing.SpreadsheetExporter
+# 選擇您需要的實作：
+dotnet add package CloudyWing.SpreadsheetExporter.Excel.NPOI
+# 或
+dotnet add package CloudyWing.SpreadsheetExporter.Excel.EPPlus
+```
+
+## Documentation
+
+- **[入門教學](./docs/guides/%E5%85%A5%E9%96%80%E6%95%99%E5%AD%B8.md)**：快速上手指南。
+- **[API 文件](./docs/api/index.md)**：詳細 API 參考。
 
 ## License
+
 This project is MIT [licensed](./LICENSE.md).
