@@ -1,12 +1,12 @@
-﻿namespace CloudyWing.SpreadsheetExporter.Templates {
+﻿namespace CloudyWing.SpreadsheetExporter.Templates;
+
+/// <summary>
+/// The template interface.
+/// </summary>
+public interface ITemplate {
     /// <summary>
-    /// The template interface.
+    /// Gets the context.
     /// </summary>
-    public interface ITemplate {
-        /// <summary>
-        /// Gets the context.
-        /// </summary>
-        /// <returns>The template context.</returns>
-        TemplateContext GetContext();
-    }
+    /// <returns>The template context.</returns>
+    TemplateContext GetContext();
 }

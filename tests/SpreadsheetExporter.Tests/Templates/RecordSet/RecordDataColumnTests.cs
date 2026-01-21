@@ -4,7 +4,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
     [TestFixture]
     internal class RecordDataColumnTests {
         private readonly RecordContext<Record> context = new(0, 0, new Record { Id = 0 });
-        private RecordDataColumn<Record>? column;
+        private RecordDataColumn<Record> column;
 
         [SetUp]
         public void SetUp() {
@@ -13,41 +13,41 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void GetFieldValue_FieldValueGeneratorIsNull_ShouldReturnNull() {
-            column!.GetFieldValue(context).Should().BeNull();
+            Assert.That(column.GetFieldValue(context), Is.Null);
         }
 
         [Test]
         public void GetFieldValue_FieldValueGeneratorIsNotNull_ShouldReturnGeneratedValue() {
             string expected = "test";
-            column!.FieldValueGenerator = (x) => expected;
+            column.FieldValueGenerator = (x) => expected;
 
-            column!.GetFieldValue(context).Should().Be(expected);
+            Assert.That(column.GetFieldValue(context), Is.EqualTo(expected));
         }
 
         [Test]
         public void GetFieldStyle_FieldFormulaGeneratorIsNull_ShouldReturnDefaultStyle() {
-            column!.GetFieldStyle(context).Should().Be(SpreadsheetManager.DefaultCellStyles.FieldStyle);
+            Assert.That(column.GetFieldStyle(context), Is.EqualTo(SpreadsheetManager.DefaultCellStyles.FieldStyle));
         }
 
         [Test]
         public void GetFieldStyle_FieldFormulaGeneratorIsNotNull_ShouldReturnGeneratedStyle() {
             CellStyle cellStyle = new();
-            column!.FieldStyleGenerator = (x) => cellStyle;
+            column.FieldStyleGenerator = (x) => cellStyle;
 
-            column!.GetFieldStyle(context).Should().Be(cellStyle);
+            Assert.That(column.GetFieldStyle(context), Is.EqualTo(cellStyle));
         }
 
         [Test]
         public void GetFieldFormula_FieldFormulaGeneratorIsNull_ShouldReturnNull() {
-            column!.GetFieldFormula(context).Should().BeNull();
+            Assert.That(column.GetFieldFormula(context), Is.Null);
         }
 
         [Test]
         public void GetFieldFormula_FieldFormulaGeneratorIsNotNull_ShouldReturnGeneratedFormula() {
             string expected = "SUM(A1:A5)";
-            column!.FieldFormulaGenerator = x => expected;
+            column.FieldFormulaGenerator = x => expected;
 
-            column.GetFieldFormula(context).Should().Be(expected);
+            Assert.That(column.GetFieldFormula(context), Is.EqualTo(expected));
         }
 
         private class Record {

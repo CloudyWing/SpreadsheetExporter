@@ -1,9 +1,9 @@
-#### [CloudyWing.SpreadsheetExporter](index.md 'index')
-### [CloudyWing.SpreadsheetExporter.Templates.RecordSet](CloudyWing.SpreadsheetExporter.Templates.RecordSet.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet')
+#### [CloudyWing\.SpreadsheetExporter](index.md 'index')
+### [CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet](CloudyWing.SpreadsheetExporter.Templates.RecordSet.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet')
 
-## RecordContext<T> Class
+## RecordContext\<T\> Class
 
-The record context.
+The record context\.
 
 ```csharp
 public class RecordContext<T>
@@ -14,19 +14,19 @@ public class RecordContext<T>
 
 `T`
 
-The type of the record.
+The type of the record\.
 
-Inheritance [System.Object](https://docs.microsoft.com/en-us/dotnet/api/System.Object 'System.Object') &#129106; RecordContext<T>
+Inheritance [System\.Object](https://learn.microsoft.com/en-us/dotnet/api/system.object 'System\.Object') &#129106; RecordContext\<T\>
 
 Derived  
-&#8627; [FieldContext&lt;TRecord,TField&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecord,TField_.md 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TRecord,TField>')
+&#8627; [FieldContext&lt;TRecord,TField&gt;](CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext_TRecord,TField_.md 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.FieldContext\<TRecord,TField\>')
 ### Constructors
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.RecordContext(int,int,T)'></a>
 
-## RecordContext(int, int, T) Constructor
+## RecordContext\(int, int, T\) Constructor
 
-The record context.
+The record context\.
 
 ```csharp
 public RecordContext(int cellIndex, int rowIndex, T record);
@@ -35,61 +35,61 @@ public RecordContext(int cellIndex, int rowIndex, T record);
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.RecordContext(int,int,T).cellIndex'></a>
 
-`cellIndex` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+`cellIndex` [System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')
 
-Index of the cell.
+Index of the cell\.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.RecordContext(int,int,T).rowIndex'></a>
 
-`rowIndex` [System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')
+`rowIndex` [System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')
 
-Index of the row.
+Index of the row\.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.RecordContext(int,int,T).record'></a>
 
-`record` [T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>.T')
+`record` [T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.T 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>\.T')
 
-The record.
+The record\.
 ### Properties
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.CellIndex'></a>
 
-## RecordContext<T>.CellIndex Property
+## RecordContext\<T\>\.CellIndex Property
 
-Gets the index of the cell. The index start at 0.
+Gets the index of the cell\. The index start at 0\.
 
 ```csharp
 public int CellIndex { get; }
 ```
 
 #### Property Value
-[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')  
-The index of the cell.
+[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')  
+The index of the cell\.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.Record'></a>
 
-## RecordContext<T>.Record Property
+## RecordContext\<T\>\.Record Property
 
-Gets the record.
+Gets the record\.
 
 ```csharp
 public T Record { get; }
 ```
 
 #### Property Value
-[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.T 'CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>.T')  
-The record.
+[T](CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.md#CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.T 'CloudyWing\.SpreadsheetExporter\.Templates\.RecordSet\.RecordContext\<T\>\.T')  
+The record\.
 
 <a name='CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext_T_.RowIndex'></a>
 
-## RecordContext<T>.RowIndex Property
+## RecordContext\<T\>\.RowIndex Property
 
-Gets the index of the row. The index start at 0.
+Gets the index of the row\. The index start at 0\.
 
 ```csharp
 public int RowIndex { get; }
 ```
 
 #### Property Value
-[System.Int32](https://docs.microsoft.com/en-us/dotnet/api/System.Int32 'System.Int32')  
-The index of the row.
+[System\.Int32](https://learn.microsoft.com/en-us/dotnet/api/system.int32 'System\.Int32')  
+The index of the row\.

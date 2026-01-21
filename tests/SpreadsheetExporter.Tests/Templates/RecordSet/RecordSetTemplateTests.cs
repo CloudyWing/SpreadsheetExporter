@@ -10,7 +10,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             new() { Id = 1 },
             new() { Id = 2 },
         };
-        private RecordSetTemplate<Record>? template;
+        private RecordSetTemplate<Record> template;
 
         [SetUp]
         public void SetUp() {
@@ -19,25 +19,25 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void GetContext_NoColumns_ShouldReturnContextWithEmptyCells() {
-            TemplateContext context = template!.GetContext();
+            TemplateContext context = template.GetContext();
 
-            context.Cells.Should().HaveCount(0);
+            Assert.That(context.Cells, Has.Count.EqualTo(0));
         }
 
         [Test]
         public void GetContext_AddTwoRowsWithOnlyColumnEach_ShouldReturnContextWithCells() {
-            template!.Columns.Add("Column 1");
-            template!.Columns.AddChildToLast("Child Column 1");
+            template.Columns.Add("Column 1");
+            template.Columns.AddChildToLast("Child Column 1");
 
             TemplateContext context = template.GetContext();
 
-            context.Cells.Should().HaveCount(records.Count() + template.Columns.RowSpan);
-            context.Cells.Should().OnlyContain(x => x.ValueGenerator != null);
+            Assert.That(context.Cells, Has.Count.EqualTo(records.Count() + template.Columns.RowSpan));
+            Assert.That(context.Cells.All(x => x.ValueGenerator != null), Is.True);
         }
 
         [Test]
         public void GetContext_AfterAddingMultipleColumns_ShouldReturnContextWithCorrectCells() {
-            template!.Columns.Add("個人資料")
+            template.Columns.Add("個人資料")
                 .AddChildToLast("姓名")
                 .AddChildToLast("年齡")
                 .Add("聯絡資訊")
@@ -91,29 +91,28 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
             TemplateContext context = template.GetContext();
 
-            context.Cells.Select(x => new { x.Point, x.Size }).ToList()
-                .Should().BeEquivalentTo(expectedCells);
-            context.Cells.Should().OnlyContain(x => x.CellStyleGenerator != null);
-            context.Cells.Should().OnlyContain(x => x.ValueGenerator != null);
+            Assert.That(context.Cells.Select(x => new { x.Point, x.Size }).ToList(), Is.EqualTo(expectedCells));
+            Assert.That(context.Cells.All(x => x.CellStyleGenerator != null), Is.True);
+            Assert.That(context.Cells.All(x => x.ValueGenerator != null), Is.True);
         }
 
         [Test]
         public void GetContext_SetDataSource_ShouldReturnTemplateContextWithCorrectRowSpan() {
-            template!.GetContext().RowSpan.Should().Be(records.Count());
+            Assert.That(template.GetContext().RowSpan, Is.EqualTo(records.Count()));
         }
 
         [Test]
         public void GetContext_SetHeight_ShouldReturnTemplateContextWithCorrectRowHeights() {
-            template!.HeaderHeight = 10d;
+            template.HeaderHeight = 10d;
             template.RecordHeight = 11d;
             template.Columns.Add("Header Text");
 
             TemplateContext context = template.GetContext();
 
-            context.RowHeights[0].Should().Be(template.HeaderHeight);
+            Assert.That(context.RowHeights[0], Is.EqualTo(template.HeaderHeight));
 
             for (int i = 1; i < context.RowHeights.Count; i++) {
-                context.RowHeights[i].Should().Be(template.RecordHeight);
+                Assert.That(context.RowHeights[i], Is.EqualTo(template.RecordHeight));
             }
         }
 
@@ -122,28 +121,121 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             string headerText = "Column 1";
             CellStyle headerStyle = new();
 
-            template!.Columns.Add(headerText, headerStyle);
+            template.Columns.Add(headerText, headerStyle);
 
-            template.Columns[0].HeaderText.Should().Be(headerText);
-            template.Columns[0].HeaderStyle.Should().Be(headerStyle);
+            Assert.That(template.Columns[0].HeaderText, Is.EqualTo(headerText));
+            Assert.That(template.Columns[0].HeaderStyle, Is.EqualTo(headerStyle));
         }
 
         [Test]
         public void ColumnSpan_AddTwoRowsButOneHasColumnLayersTwo_ShouldReturnTwo() {
-            template!.Columns.Add("Column 1")
+            template.Columns.Add("Column 1")
                 .AddChildToLast("Child Column1")
                 .AddChildToLast("Child Column2");
 
-            template.ColumnSpan.Should().Be(2);
+            Assert.That(template.ColumnSpan, Is.EqualTo(2));
         }
 
         [Test]
         public void RowSpan_AddTwoRowsButOneHasColumnLayersTwo_ShouldReturnTwo() {
-            template!.Columns.Add("Column 1")
+            template.Columns.Add("Column 1")
                 .AddChildToLast("Child Column1")
                 .AddChildToLast("Child Column2");
 
-            template.RowSpan.Should().Be(2 + records.Count());
+            Assert.That(template.RowSpan, Is.EqualTo(2 + records.Count()));
+        }
+
+        [Test]
+        public void GetContext_IsFreezeHeaderIsTrue_ShouldSetFreezePanesToHeaderRowCount() {
+            template.Columns.Add("Column 1")
+                .AddChildToLast("Child Column1")
+                .AddChildToLast("Child Column2");
+            template.IsFreezeHeader = true;
+
+            TemplateContext context = template.GetContext();
+
+            Assert.That(context.FreezePanes, Is.Not.Null);
+            Assert.That(context.FreezePanes.Value.X, Is.EqualTo(0));
+            Assert.That(context.FreezePanes.Value.Y, Is.EqualTo(template.Columns.RowSpan));
+        }
+
+        [Test]
+        public void GetContext_IsFreezeHeaderIsFalse_ShouldNotSetFreezePanes() {
+            template.Columns.Add("Column 1");
+            template.IsFreezeHeader = false;
+
+            TemplateContext context = template.GetContext();
+
+            Assert.That(context.FreezePanes, Is.Null);
+        }
+
+        [Test]
+        public void GetContext_IsAutoFilterEnabledIsTrue_ShouldSetAutoFilterEnabled() {
+            template.Columns.Add("Column 1");
+            template.IsAutoFilterEnabled = true;
+
+            TemplateContext context = template.GetContext();
+
+            Assert.That(context.IsAutoFilterEnabled, Is.True);
+        }
+
+        [Test]
+        public void GetContext_IsAutoFilterEnabledIsFalse_ShouldNotSetAutoFilterEnabled() {
+            template.Columns.Add("Column 1");
+            template.IsAutoFilterEnabled = false;
+
+            TemplateContext context = template.GetContext();
+
+            Assert.That(context.IsAutoFilterEnabled, Is.False);
+        }
+
+        [Test]
+        public void DataSource_WhenEnumeratedMultipleTimes_ShouldNotReEnumerateOriginalSource() {
+            int enumerationCount = 0;
+            IEnumerable<Record> trackingEnumerable = GetTrackingEnumerable();
+
+            template = new RecordSetTemplate<Record>(trackingEnumerable);
+            template.Columns.Add("Column 1");
+
+            template.GetContext();
+
+            Assert.That(enumerationCount, Is.EqualTo(1), "DataSource should only be enumerated once due to caching");
+
+            IEnumerable<Record> GetTrackingEnumerable() {
+                enumerationCount++;
+                foreach (Record record in records) {
+                    yield return record;
+                }
+            }
+        }
+
+        [Test]
+        public void DataSource_WhenSetToReadOnlyList_ShouldUseDirectlyWithoutConversion() {
+            IReadOnlyList<Record> readOnlyList = records.ToList().AsReadOnly();
+
+            template = new RecordSetTemplate<Record>(readOnlyList);
+            template.Columns.Add("Column 1");
+
+            TemplateContext context = template.GetContext();
+
+            Assert.That(context.RowSpan, Is.EqualTo(readOnlyList.Count + template.Columns.RowSpan));
+        }
+
+        [Test]
+        public void DataSource_WhenChangedAfterCaching_ShouldReEnumerateNewSource() {
+            List<Record> firstSource = [new Record { Id = 1 }];
+            List<Record> secondSource = [new Record { Id = 2 }, new Record { Id = 3 }];
+
+            template = new RecordSetTemplate<Record>(firstSource);
+            template.Columns.Add("Column 1");
+
+            TemplateContext context1 = template.GetContext();
+            Assert.That(context1.RowSpan, Is.EqualTo(firstSource.Count + template.Columns.RowSpan));
+
+            template.DataSource = secondSource;
+
+            TemplateContext context2 = template.GetContext();
+            Assert.That(context2.RowSpan, Is.EqualTo(secondSource.Count + template.Columns.RowSpan));
         }
 
         private class Record {

@@ -42,15 +42,19 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates {
             Cell fixedCell22 = cell22.ShallowCopy();
             fixedCell22.Point = Point.Add(cell22.Point, new Size(0, template1RowSpan));
 
-            context.Cells.Count.Should().Be(4);
-            context.Cells[0].Should().BeEquivalentTo(cell11);
-            context.Cells[1].Should().BeEquivalentTo(cell12);
-            context.Cells[2].Should().BeEquivalentTo(fixedCell21);
-            context.Cells[3].Should().BeEquivalentTo(fixedCell22);
-            context.RowSpan.Should().Be(5);
-            context.RowHeights.Count.Should().Be(2);
-            context.RowHeights[0].Should().Be(10);
-            context.RowHeights[2].Should().Be(20);
+            Assert.That(context.Cells.Count, Is.EqualTo(4));
+            Assert.That(context.Cells[0].Point, Is.EqualTo(cell11.Point));
+            Assert.That(context.Cells[0].Size, Is.EqualTo(cell11.Size));
+            Assert.That(context.Cells[1].Point, Is.EqualTo(cell12.Point));
+            Assert.That(context.Cells[1].Size, Is.EqualTo(cell12.Size));
+            Assert.That(context.Cells[2].Point, Is.EqualTo(fixedCell21.Point));
+            Assert.That(context.Cells[2].Size, Is.EqualTo(fixedCell21.Size));
+            Assert.That(context.Cells[3].Point, Is.EqualTo(fixedCell22.Point));
+            Assert.That(context.Cells[3].Size, Is.EqualTo(fixedCell22.Size));
+            Assert.That(context.RowSpan, Is.EqualTo(5));
+            Assert.That(context.RowHeights.Count, Is.EqualTo(2));
+            Assert.That(context.RowHeights[0], Is.EqualTo(10));
+            Assert.That(context.RowHeights[2], Is.EqualTo(20));
         }
     }
 }

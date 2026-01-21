@@ -34,9 +34,9 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Config {
                 x.FieldStyle = fieldStyle;
             });
 
-            actual.CellStyle.Should().Be(cellStyle);
-            actual.HeaderStyle.Should().Be(headerStyle);
-            actual.FieldStyle.Should().Be(fieldStyle);
+            Assert.That(actual.CellStyle, Is.EqualTo(cellStyle));
+            Assert.That(actual.HeaderStyle, Is.EqualTo(headerStyle));
+            Assert.That(actual.FieldStyle, Is.EqualTo(fieldStyle));
         }
     }
 }

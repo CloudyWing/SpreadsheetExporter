@@ -7,7 +7,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
         public void DefaultConstructor_ShouldInitializeToEmpty() {
             CellStyle defaultStyle = new();
 
-            defaultStyle.Should().Be(CellStyle.Empty);
+            Assert.That(defaultStyle, Is.EqualTo(CellStyle.Empty));
         }
 
         [Test]
@@ -24,28 +24,28 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
                 true
             );
 
-            cellStyle.HorizontalAlignment.Should().Be(HorizontalAlignment.Center);
-            cellStyle.VerticalAlignment.Should().Be(VerticalAlignment.Middle);
-            cellStyle.HasBorder.Should().Be(true);
-            cellStyle.WrapText.Should().Be(true);
-            cellStyle.BackgroundColor.Should().Be(Color.Blue);
-            cellStyle.Font.Should().Be(font);
-            cellStyle.DataFormat.Should().Be("dd/MM/yyyy");
-            cellStyle.IsLocked.Should().Be(true);
+            Assert.That(cellStyle.HorizontalAlignment, Is.EqualTo(HorizontalAlignment.Center));
+            Assert.That(cellStyle.VerticalAlignment, Is.EqualTo(VerticalAlignment.Middle));
+            Assert.That(cellStyle.HasBorder, Is.EqualTo(true));
+            Assert.That(cellStyle.WrapText, Is.EqualTo(true));
+            Assert.That(cellStyle.BackgroundColor, Is.EqualTo(Color.Blue));
+            Assert.That(cellStyle.Font, Is.EqualTo(font));
+            Assert.That(cellStyle.DataFormat, Is.EqualTo("dd/MM/yyyy"));
+            Assert.That(cellStyle.IsLocked, Is.EqualTo(true));
         }
 
         [Test]
         public void Empty_ShouldReturnDefaultStyle() {
             CellStyle emptyStyle = CellStyle.Empty;
 
-            emptyStyle.HorizontalAlignment.Should().Be(HorizontalAlignment.General);
-            emptyStyle.VerticalAlignment.Should().Be(VerticalAlignment.Top);
-            emptyStyle.HasBorder.Should().Be(false);
-            emptyStyle.WrapText.Should().Be(false);
-            emptyStyle.BackgroundColor.Should().Be(default(Color));
-            emptyStyle.Font.Should().Be(default(CellFont));
-            emptyStyle.DataFormat.Should().BeNull();
-            emptyStyle.IsLocked.Should().Be(false);
+            Assert.That(emptyStyle.HorizontalAlignment, Is.EqualTo(HorizontalAlignment.General));
+            Assert.That(emptyStyle.VerticalAlignment, Is.EqualTo(VerticalAlignment.Top));
+            Assert.That(emptyStyle.HasBorder, Is.EqualTo(false));
+            Assert.That(emptyStyle.WrapText, Is.EqualTo(false));
+            Assert.That(emptyStyle.BackgroundColor, Is.EqualTo(default(Color)));
+            Assert.That(emptyStyle.Font, Is.EqualTo(default(CellFont)));
+            Assert.That(emptyStyle.DataFormat, Is.Null);
+            Assert.That(emptyStyle.IsLocked, Is.EqualTo(false));
         }
     }
 }
