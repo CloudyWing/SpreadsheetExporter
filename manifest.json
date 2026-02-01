@@ -1,0 +1,828 @@
+{
+  "source_base_path": "D:/a/SpreadsheetExporter/SpreadsheetExporter/docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Cell.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Cell.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Cell",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Cell.yml\" sourcestartlinenumber=\"1\">The spreadsheet cell.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.CellFont.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.CellFont.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.CellFont",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.CellFont.yml\" sourcestartlinenumber=\"1\">The cell font.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.CellStyle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.CellStyle.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.CellStyle",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.CellStyle.yml\" sourcestartlinenumber=\"1\">The cell style.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.yml\" sourcestartlinenumber=\"1\">The spreadsheet default style.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Config.CellStyleSetuper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Config.CellStyleSetuper.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Config.CellStyleSetuper",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Config.CellStyleSetuper.yml\" sourcestartlinenumber=\"1\">The cell style setuper.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Config.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Config.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Config",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Constants.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Constants.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Constants",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Constants.yml\" sourcestartlinenumber=\"1\">The constants.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.DataValidation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.DataValidation.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.DataValidation",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.DataValidation.yml\" sourcestartlinenumber=\"1\">Represents data validation rules that can be applied to spreadsheet cells.\nData validation restricts the type of data or values that users can enter into a cell.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.DataValidationOperator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.DataValidationOperator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.DataValidationOperator",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.DataValidationOperator.yml\" sourcestartlinenumber=\"1\">Defines the comparison operators used in data validation.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.DataValidationType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.DataValidationType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.DataValidationType",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.DataValidationType.yml\" sourcestartlinenumber=\"1\">Defines the types of data validation that can be applied to cells.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Excel.EPPlus.ExcelExporter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Excel.EPPlus.ExcelExporter.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Excel.EPPlus.ExcelExporter",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Excel.EPPlus.ExcelExporter.yml\" sourcestartlinenumber=\"1\">The excel exporter, using epplus.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Excel.EPPlus.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Excel.EPPlus.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Excel.EPPlus",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelExporter.yml\" sourcestartlinenumber=\"1\">The excel exporter, using npoi.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelFormat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelFormat.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelFormat",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Excel.NPOI.ExcelFormat.yml\" sourcestartlinenumber=\"1\">The excel format.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Excel.NPOI.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Excel.NPOI.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Excel.NPOI",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Exceptions.SheeterNotFoundException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Exceptions.SheeterNotFoundException.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Exceptions.SheeterNotFoundException",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Exceptions.SheeterNotFoundException.yml\" sourcestartlinenumber=\"1\">The exception for sheeter not found.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Exceptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Exceptions.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Exceptions",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.ExporterBase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.ExporterBase.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.ExporterBase",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.ExporterBase.yml\" sourcestartlinenumber=\"1\">The exporter base.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.FontStyles.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.FontStyles.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.FontStyles",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.FontStyles.yml\" sourcestartlinenumber=\"1\">The font styles.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.HorizontalAlignment.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.HorizontalAlignment.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.HorizontalAlignment",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.HorizontalAlignment.yml\" sourcestartlinenumber=\"1\">The horizontal text alignment.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.ISpreadsheetExporter",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.ISpreadsheetExporter.yml\" sourcestartlinenumber=\"1\">Interface for spreadsheet exporters.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.PageOrientation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.PageOrientation.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.PageOrientation",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.PageOrientation.yml\" sourcestartlinenumber=\"1\">The page orientation.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.PageSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.PageSettings.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.PageSettings",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.PageSettings.yml\" sourcestartlinenumber=\"1\">The page settings.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.PaperSize.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.PaperSize.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.PaperSize",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.PaperSize.yml\" sourcestartlinenumber=\"1\">The paper size.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.SheetCreatedEventArgs.yml\" sourcestartlinenumber=\"1\">Event arguments after sheet create.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Sheeter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Sheeter.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Sheeter",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Sheeter.yml\" sourcestartlinenumber=\"1\">The sheeter.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.SheeterContext.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.SheeterContext.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.SheeterContext",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.SheeterContext.yml\" sourcestartlinenumber=\"1\">The sheeter context.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.SpreadsheetExportedEventArgs.yml\" sourcestartlinenumber=\"1\">Event arguments after spreadsheet export.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.SpreadsheetExportingEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.SpreadsheetExportingEventArgs.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.SpreadsheetExportingEventArgs",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.SpreadsheetExportingEventArgs.yml\" sourcestartlinenumber=\"1\">Event arguments before spreadsheet export.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.SpreadsheetFileMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.SpreadsheetFileMode.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.SpreadsheetFileMode",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.SpreadsheetFileMode.yml\" sourcestartlinenumber=\"1\">The file mode of spreadsheet</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.SpreadsheetManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.SpreadsheetManager.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.SpreadsheetManager",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.SpreadsheetManager.yml\" sourcestartlinenumber=\"1\">The spreadsheet manager.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.yml\" sourcestartlinenumber=\"1\">The DataTable column.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumnCollection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumnCollection.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumnCollection",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumnCollection.yml\" sourcestartlinenumber=\"1\">The DataTable column collection.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.yml\" sourcestartlinenumber=\"1\">The DataTable template. Create cell information using DataTable as data source.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.DataTable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.DataTable.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.DataTable",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.yml\" sourcestartlinenumber=\"1\">The grid template. Create cell information using <code>CreateRow()</code> and <code>CreateCell()</code>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.Grid.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.Grid.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.Grid",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.ITemplate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.ITemplate.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.ITemplate",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Templates.ITemplate.yml\" sourcestartlinenumber=\"1\">The template interface.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.MergedTemplate",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.yml\" sourcestartlinenumber=\"1\">The merged template. Merge templates into new template.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase<T>",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnBase-1.yml\" sourcestartlinenumber=\"1\">The data column base.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection-1.GeneratorProvider-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection-1.GeneratorProvider-2.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>.GeneratorProvider<TRecord, TContext>",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection-1.GeneratorProvider-2.yml\" sourcestartlinenumber=\"1\">The generator provider.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection<T>",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.DataColumnCollection-1.yml\" sourcestartlinenumber=\"1\">The data column collection.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext-2.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TRecord, TField>",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext-2.yml\" sourcestartlinenumber=\"1\">The field context.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext-1.yml\" sourcestartlinenumber=\"1\">The record context.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate-1.yml\" sourcestartlinenumber=\"1\">The recordset template. Create cell information using set data source and data column.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.RecordSet.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.RecordSet",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.TemplateContext.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.TemplateContext.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates.TemplateContext",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.Templates.TemplateContext.yml\" sourcestartlinenumber=\"1\">The template context.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.Templates.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.Templates",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.VerticalAlignment.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.VerticalAlignment.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter.VerticalAlignment",
+      "Summary": "<p sourcefile=\"api/CloudyWing.SpreadsheetExporter.VerticalAlignment.yml\" sourcestartlinenumber=\"1\">The vertical text alignment.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/CloudyWing.SpreadsheetExporter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/CloudyWing.SpreadsheetExporter.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "CloudyWing.SpreadsheetExporter",
+      "Summary": null
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/customization.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/customization.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/exporters.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/exporters.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/getting-started.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/getting-started.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/sheeters.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/sheeters.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/templates.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/templates.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html"
+        },
+        ".json": {
+          "relative_path": "articles/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/logo.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/logo.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

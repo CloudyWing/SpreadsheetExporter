@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class Sheeter | SpreadsheetExporter Docs </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class Sheeter | SpreadsheetExporter Docs ">
+      
+      <meta name="description" content="The sheeter.">
+      <link rel="icon" href="../images/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CloudyWing/SpreadsheetExporter/new/main/apiSpec/new?filename=CloudyWing_SpreadsheetExporter_Sheeter.md&amp;value=---%0Auid%3A%20CloudyWing.SpreadsheetExporter.Sheeter%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="SpreadsheetExporter Docs">
+            SpreadsheetExporter Docs
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="CloudyWing.SpreadsheetExporter.Sheeter">
+
+
+
+  <h1 id="CloudyWing_SpreadsheetExporter_Sheeter" data-uid="CloudyWing.SpreadsheetExporter.Sheeter" class="text-break">
+Class Sheeter  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/Sheeter.cs/#L10"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="CloudyWing.html">CloudyWing</a>.<a class="xref" href="CloudyWing.SpreadsheetExporter.html">SpreadsheetExporter</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>CloudyWing.SpreadsheetExporter.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>The sheeter.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Sheeter</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">Sheeter</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="CloudyWing_SpreadsheetExporter_Sheeter_ColumnWidths_" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.ColumnWidths*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_Sheeter_ColumnWidths" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.ColumnWidths">
+  ColumnWidths
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/Sheeter.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the width of the columns.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyDictionary&lt;int, double&gt; ColumnWidths { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</dt>
+    <dd><p>The width of columns.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_Sheeter_DefaultRowHeight_" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.DefaultRowHeight*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_Sheeter_DefaultRowHeight" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.DefaultRowHeight">
+  DefaultRowHeight
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/Sheeter.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the default height of the row.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double? DefaultRowHeight { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>?</dt>
+    <dd><p>The default height of the row.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_Sheeter_PageSettings_" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.PageSettings*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_Sheeter_PageSettings" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.PageSettings">
+  PageSettings
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/Sheeter.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the page settings.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PageSettings PageSettings { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.PageSettings.html">PageSettings</a></dt>
+    <dd><p>The page settings.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_Sheeter_Password_" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.Password*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_Sheeter_Password" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.Password">
+  Password
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/Sheeter.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the password.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Password { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The password.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_Sheeter_SheetName_" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.SheetName*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_Sheeter_SheetName" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.SheetName">
+  SheetName
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/Sheeter.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the name of the sheet.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string SheetName { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The name of the sheet.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_Sheeter_Templates_" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.Templates*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_Sheeter_Templates" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.Templates">
+  Templates
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/Sheeter.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the templates.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;ITemplate&gt; Templates { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="CloudyWing.SpreadsheetExporter.Templates.ITemplate.html">ITemplate</a>&gt;</dt>
+    <dd><p>The templates.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="CloudyWing_SpreadsheetExporter_Sheeter_AddTemplate_" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.AddTemplate*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_Sheeter_AddTemplate_CloudyWing_SpreadsheetExporter_Templates_ITemplate_" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.AddTemplate(CloudyWing.SpreadsheetExporter.Templates.ITemplate)">
+  AddTemplate(ITemplate)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/Sheeter.cs/#L82"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds the template.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddTemplate(ITemplate template)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>template</code> <a class="xref" href="CloudyWing.SpreadsheetExporter.Templates.ITemplate.html">ITemplate</a></dt>
+    <dd><p>The template.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_Sheeter_AddTemplates_" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.AddTemplates*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_Sheeter_AddTemplates_CloudyWing_SpreadsheetExporter_Templates_ITemplate___" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.AddTemplates(CloudyWing.SpreadsheetExporter.Templates.ITemplate[])">
+  AddTemplates(params ITemplate[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/Sheeter.cs/#L100"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds the templates.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddTemplates(params ITemplate[] templates)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>templates</code> <a class="xref" href="CloudyWing.SpreadsheetExporter.Templates.ITemplate.html">ITemplate</a>[]</dt>
+    <dd><p>The templates.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_Sheeter_AddTemplates_" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.AddTemplates*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_Sheeter_AddTemplates_System_Collections_Generic_IEnumerable_CloudyWing_SpreadsheetExporter_Templates_ITemplate__" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.AddTemplates(System.Collections.Generic.IEnumerable{CloudyWing.SpreadsheetExporter.Templates.ITemplate})">
+  AddTemplates(IEnumerable&lt;ITemplate&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/Sheeter.cs/#L90"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds the templates.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddTemplates(IEnumerable&lt;ITemplate&gt; templates)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>templates</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="CloudyWing.SpreadsheetExporter.Templates.ITemplate.html">ITemplate</a>&gt;</dt>
+    <dd><p>The templates.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_Sheeter_SetColumnWidth_" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.SetColumnWidth*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_Sheeter_SetColumnWidth_System_Int32_System_Double_" data-uid="CloudyWing.SpreadsheetExporter.Sheeter.SetColumnWidth(System.Int32,System.Double)">
+  SetColumnWidth(int, double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/Sheeter.cs/#L74"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets the width of the column.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetColumnWidth(int index, double width)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The zero-based column index.</p>
+</dd>
+    <dt><code>width</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>The column width in characters.
+Use <a class="xref" href="CloudyWing.SpreadsheetExporter.Constants.html#CloudyWing_SpreadsheetExporter_Constants_HiddenColumn">HiddenColumn</a> (0) to hide the column.
+Use <a class="xref" href="CloudyWing.SpreadsheetExporter.Constants.html#CloudyWing_SpreadsheetExporter_Constants_AutoFitColumnWidth">AutoFitColumnWidth</a> (-1) to auto-fit the column width.
+Positive values specify the exact width in character units.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/Sheeter.cs/#L10" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

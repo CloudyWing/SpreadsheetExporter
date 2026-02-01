@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Templates | SpreadsheetExporter Docs </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Templates | SpreadsheetExporter Docs ">
+      
+      
+      <link rel="icon" href="../images/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/docs/articles/templates.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="SpreadsheetExporter Docs">
+            SpreadsheetExporter Docs
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="templates">Templates</h1>
+
+<p>Templates 定義工作表儲存格的結構與內容。SpreadsheetExporter 提供多種 Template 類型以滿足不同使用情境。</p>
+<h2 id="本文內容">本文內容</h2>
+<ul>
+<li><a href="#gridtemplate">GridTemplate</a> - 手動逐格配置</li>
+<li><a href="#datatabletemplate">DataTableTemplate</a> - 基於 DataTable 的匯出</li>
+<li><a href="#recordsettemplate">RecordSetTemplate</a> - 強型別集合</li>
+<li><a href="#mergedtemplate">MergedTemplate</a> - 合併多個 Templates</li>
+<li><a href="#%E8%87%AA%E8%A8%82-templates">自訂 Templates</a> - 建立您自己的 Template</li>
+</ul>
+<h2 id="gridtemplate">GridTemplate</h2>
+<p><code>GridTemplate</code> 提供精細的儲存格配置控制，類似於 HTML 的 <code>&lt;table&gt;</code>、<code>&lt;tr&gt;</code> 與 <code>&lt;td&gt;</code>。支援方法鏈（Method Chaining）以簡化程式碼。</p>
+<h3 id="建立列">建立列</h3>
+<pre><code class="lang-csharp">GridTemplate template = new GridTemplate();
+
+// 預設列高
+template.CreateRow();
+
+// 指定列高
+template.CreateRow(20d);
+
+// 隱藏列
+template.CreateRow(Constants.HiddenRow);
+
+// 自動調整列高
+template.CreateRow(Constants.AutoFitRowHeight);
+</code></pre>
+<h3 id="建立儲存格">建立儲存格</h3>
+<pre><code class="lang-csharp">GridTemplate template = new GridTemplate();
+template.CreateRow();
+
+// 簡單儲存格
+template.CreateCell(&quot;Value1_1&quot;);
+
+// 合併儲存格（RowSpan=3, ColumnSpan=2）
+template.CreateCell(&quot;Value1_2&quot;, 3, 2);
+
+// 自訂樣式的儲存格
+template.CreateCell(&quot;Value1_3&quot;, 1, 1, new CellStyle());
+
+// 使用方法鏈與公式
+template.CreateRow()
+    .CreateCell(&quot;Value2_1&quot;)
+    .CreateCell((cell, row) =&gt; $&quot;{cell} + {row}&quot;); // 公式（索引從 0 開始）
+
+/*
+輸出：
+| -------- | -------- | -------- | -------- | -------- | 
+| Value1_1 | Value1_2                       | Value1_3 |
+| -------- |                                | -------- |
+| Value2_1 |                                | =1 + 1   |
+| -------- | -------- | -------- | -------- | -------- |
+*/
+</code></pre>
+<h2 id="datatabletemplate">DataTableTemplate</h2>
+<p>直接將 <code>System.Data.DataTable</code> 匯出至 Excel，並自動對應欄位。</p>
+<pre><code class="lang-csharp">// 建立 DataTable
+System.Data.DataTable dataTable = new System.Data.DataTable();
+dataTable.Columns.Add(&quot;Name&quot;, typeof(string));
+dataTable.Columns.Add(&quot;Age&quot;, typeof(int));
+
+dataTable.Rows.Add(&quot;John&quot;, 30);
+dataTable.Rows.Add(&quot;Mary&quot;, 25);
+
+// 建立 Template
+DataTableTemplate template = new DataTableTemplate(dataTable);
+
+// 設定列高
+template.HeaderHeight = 25;
+template.RecordHeight = 20;
+
+/*
+輸出：
+| ---- | --- |
+| Name | Age |
+| ---- | --- |
+| John | 30  |
+| ---- | --- |
+| Mary | 25  |
+| ---- | --- |
+*/
+</code></pre>
+<h2 id="recordsettemplate">RecordSetTemplate</h2>
+<p>最強大的 Template，適用於強型別資料集合。提供完整的欄位設定、資料轉換與樣式控制。</p>
+<h3 id="基本用法">基本用法</h3>
+<pre><code class="lang-csharp">public class Record {
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+
+List&lt;Record&gt; source = new List&lt;Record&gt; {
+    new Record { Id = 0, Name = &quot;Marry&quot; },
+    new Record { Id = 1, Name = &quot;Terry&quot; }
+};
+
+RecordSetTemplate&lt;Record&gt; template = new RecordSetTemplate&lt;Record&gt;(source);
+template.Columns.Add(&quot;編號&quot;, x =&gt; x.Id);
+template.Columns.Add(&quot;姓名&quot;, x =&gt; x.Name);
+
+/*
+輸出：
+| ---- | ---- | 
+| 編號 | 姓名 |
+| ---- | ---- |
+| 0    | Marry |
+| ---- | ---- |
+| 1    | Terry |
+| ---- | ---- |
+*/
+</code></pre>
+<h3 id="資料轉換">資料轉換</h3>
+<p>在匯出過程中轉換值：</p>
+<pre><code class="lang-csharp">// 轉換屬性值
+template.Columns.Add(&quot;大寫姓名&quot;, x =&gt; x.Name, x =&gt; x.UseValue(y =&gt; y.Value.ToUpper()));
+
+// 合併多個屬性
+template.Columns.Add(&quot;合併資料&quot;, x =&gt; x.UseValue(y =&gt; y.Record.Id + y.Record.Name));
+
+/*
+輸出：
+| -------- | -------- | 
+| 大寫姓名 | 合併資料 |
+| -------- | -------- |
+| MARRY    | 0Marry   |
+| -------- | -------- |
+| TERRY    | 1Terry   |
+| -------- | -------- |
+*/
+</code></pre>
+<h3 id="自訂儲存格樣式">自訂儲存格樣式</h3>
+<p>套用條件樣式：</p>
+<pre><code class="lang-csharp">CellStyleConfiguration cellStyles = SpreadsheetManager.DefaultCellStyles;
+
+template.Columns.Add(
+    &quot;狀態&quot;, 
+    x =&gt; x.Id,
+    // 標題樣式：紅色背景
+    cellStyles.HeaderStyle with {
+        BackgroundColor = Color.Red
+    },
+    // 條件式欄位樣式
+    x =&gt; x.Value == 0
+        ? cellStyles.FieldStyle with { BackgroundColor = Color.Blue }
+        : cellStyles.FieldStyle with { BackgroundColor = Color.Yellow }
+);
+</code></pre>
+<h3 id="多層標題">多層標題</h3>
+<p>建立分組欄位標題：</p>
+<pre><code class="lang-csharp">template.Columns.Add(&quot;群組1&quot;)
+    .AddChildToLast(&quot;編號&quot;, x =&gt; x.Id)
+    .AddChildToLast(&quot;姓名&quot;, x =&gt; x.Name)
+    .Add(&quot;群組2&quot;)
+    .AddChildToLast(&quot;子群組1&quot;);
+
+DataColumnCollection&lt;Record&gt; lastChildColumns = template.Columns.Last().ChildColumns;
+lastChildColumns.AddChildToLast(&quot;編號&quot;, x =&gt; x.Id)
+    .AddChildToLast(&quot;姓名&quot;, x =&gt; x.Name);
+
+template.Columns.AddChildToLast(&quot;子群組2&quot;);
+lastChildColumns = template.Columns.Last().ChildColumns
+    .AddChildToLast(&quot;編號&quot;, x =&gt; x.Id)
+    .AddChildToLast(&quot;姓名&quot;, x =&gt; x.Name);
+
+/*
+輸出：
+| ---- | ---- | ---- | ---- | ---- | ---- |
+|              |          群組2              |
+|    群組1     | -------- | -------- |
+|              | 子群組1  | 子群組2  |
+| ---- | ---- | ---- | ---- | ---- | ---- |
+| 編號 | 姓名 | 編號 | 姓名 | 編號 | 姓名 |
+| ---- | ---- | ---- | ---- | ---- | ---- |
+*/
+</code></pre>
+<h3 id="公式">公式</h3>
+<p>在儲存格中使用 Excel 公式：</p>
+<pre><code class="lang-csharp">template.Columns.Add(&quot;公式&quot;, x =&gt; x.UseFormula(y =&gt; $&quot;{y.CellIndex} + {y.RowIndex}&quot;));
+
+/*
+輸出（第一筆資料在索引 1）：
+| ---- |
+| 公式 |
+| ---- |
+| =0+1 |
+| ---- |
+| =0+2 |
+| ---- |
+*/
+</code></pre>
+<h3 id="凍結窗格與自動篩選">凍結窗格與自動篩選</h3>
+<pre><code class="lang-csharp">RecordSetTemplate&lt;Record&gt; template = new RecordSetTemplate&lt;Record&gt;(source);
+// ... 加入欄位 ...
+
+// 凍結標題列（依據標題層數自動決定）
+template.IsFreezeHeader = true;
+
+// 啟用自動篩選（包含標題與資料範圍）
+template.IsAutoFilterEnabled = true;
+
+// 設定列高
+template.HeaderHeight = 30;
+template.RecordHeight = 25;
+</code></pre>
+<h2 id="資料驗證">資料驗證</h2>
+<p>為儲存格加入資料驗證規則以限制輸入。</p>
+<h3 id="在-recordsettemplate-中使用">在 RecordSetTemplate 中使用</h3>
+<pre><code class="lang-csharp">template.Columns.Add(&quot;年齡&quot;, x =&gt; x.Age, provider =&gt; provider.UseDataValidation(x =&gt; new DataValidation {
+    ValidationType = DataValidationType.Integer,
+    Operator = DataValidationOperator.Between,
+    Value1 = 18,
+    Value2 = 65,
+    ErrorTitle = &quot;輸入錯誤&quot;,
+    ErrorMessage = &quot;年齡必須在 18 到 65 歲之間&quot;,
+    IsErrorAlertShown = true
+}));
+</code></pre>
+<h3 id="在-gridtemplate-中使用">在 GridTemplate 中使用</h3>
+<pre><code class="lang-csharp">GridTemplate template = new GridTemplate();
+template.CreateRow();
+template.CreateCell(cell =&gt; {
+    cell.ValueGenerator = (c, r) =&gt; &quot;請選擇&quot;;
+    cell.DataValidationGenerator = (c, r) =&gt; new DataValidation {
+        ValidationType = DataValidationType.List,
+        ListItems = new[] { &quot;選項 A&quot;, &quot;選項 B&quot;, &quot;選項 C&quot; },
+        IsDropdownShown = true
+    };
+});
+</code></pre>
+<h2 id="mergedtemplate">MergedTemplate</h2>
+<p>合併多個 Templates。適用於建立複雜版面配置。</p>
+<pre><code class="lang-csharp">MergedTemplate merged = new MergedTemplate();
+merged.AddTemplate(headerTemplate);
+merged.AddTemplate(dataTemplate);
+merged.AddTemplate(footerTemplate);
+
+sheeter.AddTemplate(merged);
+</code></pre>
+<h2 id="自訂-templates">自訂 Templates</h2>
+<p>實作 <code>ITemplate</code> 介面以建立可重複使用的自訂 Template：</p>
+<pre><code class="lang-csharp">public class ReportInfoTemplate : ITemplate {
+    private readonly GridTemplate gridTemplate = new GridTemplate();
+
+    public ReportInfoTemplate(string title, string user, int colSpan) {
+        CellStyleConfiguration cellStyles = SpreadsheetManager.DefaultCellStyles;
+        CellStyle titleStyle = cellStyles.CellStyle with {
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Font = cellStyles.CellStyle.Font with { Size = 14 }
+        };
+
+        // 標題列
+        gridTemplate.CreateRow();
+        gridTemplate.CreateCell(title, colSpan, cellStyle: titleStyle);
+
+        // 資訊列
+        int leftColSpan = colSpan / 2;
+        gridTemplate.CreateRow();
+        gridTemplate.CreateCell($&quot;使用者：{user}&quot;, leftColSpan, cellStyle: cellStyles.CellStyle);
+        gridTemplate.CreateCell(
+            $&quot;產生時間：{DateTime.Now:yyyy-MM-dd HH:mm:ss}&quot;, 
+            colSpan - leftColSpan, 
+            cellStyle: cellStyles.CellStyle
+        );
+    }
+
+    public TemplateContext GetContext() {
+        return gridTemplate.GetContext();
+    }
+}
+</code></pre>
+<h2 id="相關主題">相關主題</h2>
+<ul>
+<li><a href="getting-started.html">入門指南</a> - 了解如何在專案中開始使用 Templates</li>
+<li><a href="exporters.html">Exporters</a> - 學習 Template 與 Exporter 的整體協作流程</li>
+<li><a href="sheeters.html">Sheeters</a> - 了解如何將 Templates 加入 Sheeter</li>
+<li><a href="customization.html">自訂樣式</a> - 為 Template 中的儲存格套用自訂樣式</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/docs/articles/templates.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

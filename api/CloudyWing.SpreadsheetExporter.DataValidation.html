@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class DataValidation | SpreadsheetExporter Docs </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class DataValidation | SpreadsheetExporter Docs ">
+      
+      <meta name="description" content="Represents data validation rules that can be applied to spreadsheet cells. Data validation restricts the type of data or values that users can enter into a cell.">
+      <link rel="icon" href="../images/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CloudyWing/SpreadsheetExporter/new/main/apiSpec/new?filename=CloudyWing_SpreadsheetExporter_DataValidation.md&amp;value=---%0Auid%3A%20CloudyWing.SpreadsheetExporter.DataValidation%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="SpreadsheetExporter Docs">
+            SpreadsheetExporter Docs
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="CloudyWing.SpreadsheetExporter.DataValidation">
+
+
+
+  <h1 id="CloudyWing_SpreadsheetExporter_DataValidation" data-uid="CloudyWing.SpreadsheetExporter.DataValidation" class="text-break">
+Class DataValidation  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L9"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="CloudyWing.html">CloudyWing</a>.<a class="xref" href="CloudyWing.SpreadsheetExporter.html">SpreadsheetExporter</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>CloudyWing.SpreadsheetExporter.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Represents data validation rules that can be applied to spreadsheet cells.
+Data validation restricts the type of data or values that users can enter into a cell.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class DataValidation</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">DataValidation</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_ErrorMessage_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.ErrorMessage*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_ErrorMessage" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.ErrorMessage">
+  ErrorMessage
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L96"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the error message shown when invalid data is entered.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string ErrorMessage { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The error message.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_ErrorTitle_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.ErrorTitle*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_ErrorTitle" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.ErrorTitle">
+  ErrorTitle
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L88"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the title of the error message shown when invalid data is entered.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string ErrorTitle { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The error title.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_Formula_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.Formula*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_Formula" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.Formula">
+  Formula
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L63"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the formula for validation.
+Used with Custom validation type (required), and can also be used with Date, Time, Integer, Decimal, and TextLength validation types as an alternative to Value1/Value2.
+When using formulas with Date/Time/Numeric validations, the formula will be automatically prefixed with '=' if not already present.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Formula { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The validation formula (e.g., &quot;TODAY()&quot;, &quot;=A1+10&quot;).</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_IsBlankAllowed_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.IsBlankAllowed*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_IsBlankAllowed" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.IsBlankAllowed">
+  IsBlankAllowed
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets a value indicating whether blank/empty values are allowed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsBlankAllowed { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if blank values are allowed; otherwise, <code>false</code>. Default is <code>true</code>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_IsDropdownShown_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.IsDropdownShown*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_IsDropdownShown" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.IsDropdownShown">
+  IsDropdownShown
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L72"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets a value indicating whether the dropdown button is shown for list validation.
+Only applicable when ValidationType is List.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsDropdownShown { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if dropdown is shown; otherwise, <code>false</code>. Default is <code>true</code>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_IsErrorAlertShown_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.IsErrorAlertShown*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_IsErrorAlertShown" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.IsErrorAlertShown">
+  IsErrorAlertShown
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets a value indicating whether the error alert is shown when invalid data is entered.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsErrorAlertShown { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if error alert is shown; otherwise, <code>false</code>. Default is <code>true</code>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_IsInputPromptShown_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.IsInputPromptShown*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_IsInputPromptShown" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.IsInputPromptShown">
+  IsInputPromptShown
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L128"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets a value indicating whether the input prompt is shown when the cell is selected.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsInputPromptShown { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if input prompt is shown; otherwise, <code>false</code>. Default is <code>false</code>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_ListItems_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.ListItems*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_ListItems" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.ListItems">
+  ListItems
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L53"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the list of valid items for List validation type.
+Only used when ValidationType is List.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;string&gt; ListItems { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</dt>
+    <dd><p>The list items.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_Operator_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.Operator*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_Operator" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.Operator">
+  Operator
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L25"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the comparison operator for the validation.
+Not required for List or Custom validation types.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DataValidationOperator? Operator { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.DataValidationOperator.html">DataValidationOperator</a>?</dt>
+    <dd><p>The operator, or <code>null</code> if not applicable.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_PromptMessage_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.PromptMessage*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_PromptMessage" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.PromptMessage">
+  PromptMessage
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L120"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the input prompt message shown when the cell is selected.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string PromptMessage { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The prompt message.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_PromptTitle_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.PromptTitle*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_PromptTitle" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.PromptTitle">
+  PromptTitle
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L112"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the title of the input prompt message.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string PromptTitle { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The prompt title.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_ValidationType_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.ValidationType*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_ValidationType" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.ValidationType">
+  ValidationType
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L16"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the type of validation to apply.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DataValidationType ValidationType { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.DataValidationType.html">DataValidationType</a></dt>
+    <dd><p>The validation type.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_Value1_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.Value1*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_Value1" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.Value1">
+  Value1
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the first value for comparison.
+For Between/NotBetween operators, this is the minimum value.
+For other operators, this is the value to compare against.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Value1 { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd><p>The first comparison value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_DataValidation_Value2_" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.Value2*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_DataValidation_Value2" data-uid="CloudyWing.SpreadsheetExporter.DataValidation.Value2">
+  Value2
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the second value for comparison.
+Only used with Between and NotBetween operators (represents the maximum value).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Value2 { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></dt>
+    <dd><p>The second comparison value, or <code>null</code> if not applicable.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/DataValidation.cs/#L9" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

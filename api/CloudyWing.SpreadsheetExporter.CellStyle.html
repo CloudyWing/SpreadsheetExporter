@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Struct CellStyle | SpreadsheetExporter Docs </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Struct CellStyle | SpreadsheetExporter Docs ">
+      
+      <meta name="description" content="The cell style.">
+      <link rel="icon" href="../images/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CloudyWing/SpreadsheetExporter/new/main/apiSpec/new?filename=CloudyWing_SpreadsheetExporter_CellStyle.md&amp;value=---%0Auid%3A%20CloudyWing.SpreadsheetExporter.CellStyle%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="SpreadsheetExporter Docs">
+            SpreadsheetExporter Docs
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="CloudyWing.SpreadsheetExporter.CellStyle">
+
+
+
+  <h1 id="CloudyWing_SpreadsheetExporter_CellStyle" data-uid="CloudyWing.SpreadsheetExporter.CellStyle" class="text-break">
+Struct CellStyle  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/CellStyle.cs/#L16"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="CloudyWing.html">CloudyWing</a>.<a class="xref" href="CloudyWing.SpreadsheetExporter.html">SpreadsheetExporter</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>CloudyWing.SpreadsheetExporter.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>The cell style.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public record struct CellStyle : IEquatable&lt;CellStyle&gt;</code></pre>
+  </div>
+
+
+
+
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="CloudyWing.SpreadsheetExporter.CellStyle.html">CellStyle</a>&gt;</div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.equals">ValueType.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.gethashcode">ValueType.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.tostring">ValueType.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="CloudyWing_SpreadsheetExporter_CellStyle__ctor_" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.#ctor*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_CellStyle__ctor_CloudyWing_SpreadsheetExporter_HorizontalAlignment_CloudyWing_SpreadsheetExporter_VerticalAlignment_System_Boolean_System_Boolean_System_Drawing_Color_CloudyWing_SpreadsheetExporter_CellFont_System_String_System_Boolean_" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.#ctor(CloudyWing.SpreadsheetExporter.HorizontalAlignment,CloudyWing.SpreadsheetExporter.VerticalAlignment,System.Boolean,System.Boolean,System.Drawing.Color,CloudyWing.SpreadsheetExporter.CellFont,System.String,System.Boolean)">
+  CellStyle(HorizontalAlignment, VerticalAlignment, bool, bool, Color, CellFont, string, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/CellStyle.cs/#L16"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The cell style.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CellStyle(HorizontalAlignment HorizontalAlignment = HorizontalAlignment.General, VerticalAlignment VerticalAlignment = VerticalAlignment.Top, bool HasBorder = false, bool WrapText = false, Color BackgroundColor = default, CellFont Font = default, string DataFormat = null, bool IsLocked = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>HorizontalAlignment</code> <a class="xref" href="CloudyWing.SpreadsheetExporter.HorizontalAlignment.html">HorizontalAlignment</a></dt>
+    <dd><p>Gets the horizontal alignment.</p>
+</dd>
+    <dt><code>VerticalAlignment</code> <a class="xref" href="CloudyWing.SpreadsheetExporter.VerticalAlignment.html">VerticalAlignment</a></dt>
+    <dd><p>Gets the vertical alignment.</p>
+</dd>
+    <dt><code>HasBorder</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Gets a value indicating whether this instance has border.</p>
+</dd>
+    <dt><code>WrapText</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Gets a value indicating whether [wrap text].</p>
+</dd>
+    <dt><code>BackgroundColor</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.drawing.color">Color</a></dt>
+    <dd><p>Gets the color of the background.</p>
+</dd>
+    <dt><code>Font</code> <a class="xref" href="CloudyWing.SpreadsheetExporter.CellFont.html">CellFont</a></dt>
+    <dd><p>Gets the font.</p>
+</dd>
+    <dt><code>DataFormat</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>Gets the data format.</p>
+</dd>
+    <dt><code>IsLocked</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Gets a value indicating whether this instance is locked.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="CloudyWing_SpreadsheetExporter_CellStyle_BackgroundColor_" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.BackgroundColor*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_CellStyle_BackgroundColor" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.BackgroundColor">
+  BackgroundColor
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/CellStyle.cs/#L20"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the color of the background.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Color BackgroundColor { readonly get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.drawing.color">Color</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_CellStyle_DataFormat_" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.DataFormat*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_CellStyle_DataFormat" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.DataFormat">
+  DataFormat
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/CellStyle.cs/#L21"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the data format.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string DataFormat { readonly get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_CellStyle_Empty_" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.Empty*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_CellStyle_Empty" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.Empty">
+  Empty
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/CellStyle.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The cell style equals to <code>new CellStyle()</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static CellStyle Empty { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.CellStyle.html">CellStyle</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_CellStyle_Font_" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.Font*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_CellStyle_Font" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.Font">
+  Font
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/CellStyle.cs/#L20"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the font.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CellFont Font { readonly get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.CellFont.html">CellFont</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_CellStyle_HasBorder_" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.HasBorder*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_CellStyle_HasBorder" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.HasBorder">
+  HasBorder
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/CellStyle.cs/#L19"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether this instance has border.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasBorder { readonly get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_CellStyle_HorizontalAlignment_" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.HorizontalAlignment*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_CellStyle_HorizontalAlignment" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.HorizontalAlignment">
+  HorizontalAlignment
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/CellStyle.cs/#L17"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the horizontal alignment.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public HorizontalAlignment HorizontalAlignment { readonly get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.HorizontalAlignment.html">HorizontalAlignment</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_CellStyle_IsLocked_" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.IsLocked*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_CellStyle_IsLocked" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.IsLocked">
+  IsLocked
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/CellStyle.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether this instance is locked.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsLocked { readonly get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_CellStyle_VerticalAlignment_" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.VerticalAlignment*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_CellStyle_VerticalAlignment" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.VerticalAlignment">
+  VerticalAlignment
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/CellStyle.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the vertical alignment.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public VerticalAlignment VerticalAlignment { readonly get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.VerticalAlignment.html">VerticalAlignment</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_CellStyle_WrapText_" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.WrapText*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_CellStyle_WrapText" data-uid="CloudyWing.SpreadsheetExporter.CellStyle.WrapText">
+  WrapText
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/CellStyle.cs/#L19"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether [wrap text].</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool WrapText { readonly get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/CellStyle.cs/#L16" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
