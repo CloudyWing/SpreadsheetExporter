@@ -48,8 +48,15 @@ dotnet add package CloudyWing.SpreadsheetExporter.Excel.EPPlus
 
 ## Documentation
 
-- **[入門教學](./docs/guides/%E5%85%A5%E9%96%80%E6%95%99%E5%AD%B8.md)**：快速上手指南。
-- **[API 文件](./docs/api/index.md)**：詳細 API 參考。
+完整文檔請參考：<https://cloudywing.github.io/SpreadsheetExporter/>
+
+或查看以下主要文章：
+
+- **[入門指南](./docs/articles/getting-started.md)**
+- **[Exporters（匯出器）](./docs/articles/exporters.md)**
+- **[Sheeters（工作表）](./docs/articles/sheeters.md)**
+- **[Templates（範本）](./docs/articles/templates.md)**
+- **[自訂樣式](./docs/articles/customization.md)**
 
 ## License
 

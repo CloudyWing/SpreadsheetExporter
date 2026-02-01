@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net10.0;netstandard2.0</TargetFrameworks>
     <langversion>preview</langversion>
     <AssemblyName>CloudyWing.SpreadsheetExporter</AssemblyName>
     <RootNamespace>CloudyWing.SpreadsheetExporter</RootNamespace>
@@ -15,8 +15,6 @@
     <Company />
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DefaultDocumentationGeneratedPages>Namespaces,Types</DefaultDocumentationGeneratedPages>
-    <DefaultDocumentationFolder>../../docs/api</DefaultDocumentationFolder>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <MinVerTagPrefix>v</MinVerTagPrefix>
@@ -27,10 +25,6 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DefaultDocumentation" Version="1.2.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="MinVer" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
