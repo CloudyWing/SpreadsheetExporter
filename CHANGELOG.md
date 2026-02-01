@@ -1,6 +1,25 @@
-# v2.2.0 (2026-01-21)
+# Changelog
 
-## New Features
+## v2.3.0 (2026-02-01)
+
+### New Features
+
+- 升級目標框架至 .NET 10 並重構文檔系統：
+  - 將目標框架更新為 `net10.0` 和 `netstandard2.0`。
+  - 遷移文檔系統從 DefaultDocumentation 至 DocFX。
+  - 重構文檔結構，檔名英文化，內容保持繁體中文。
+  - 優化文檔內容品質，套用 DocFX 最佳實踐（alerts、表格、改進章節層級）。
+  - 更新導航結構並修正跨文件引用。
+
+### BREAKING CHANGES
+
+- 目標框架從 `net6.0` 升級至 `net10.0`。需要 .NET 10 SDK 才能建置專案。
+
+> 注意：此次更新與之前版本不相容，請在升級前謹慎考慮。
+
+## v2.2.0 (2026-01-21)
+
+### New Features
 
 - 新增 Sample 專案展示所有 SpreadsheetExporter 功能。
 - 新增 Data Validation 功能支援。
@@ -27,7 +46,7 @@
   - 每次新增儲存格後更新 nextAvailableX 為當前儲存格結束位置。
   - 減少 HashSet 查找次數，預期可減少 20-50% 位置查找時間。
 
-## Bug Fixes
+### Bug Fixes
 
 - 改善 NPOI ExcelExporter 資源管理和例外處理。
 - 重構 DataColumnCollection 減少程式碼重複：
