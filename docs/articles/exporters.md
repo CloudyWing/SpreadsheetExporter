@@ -19,7 +19,7 @@ SpreadsheetManager.SetExporter(() => {
 ### 可用屬性
 
 | 屬性 | 說明 |
-| --- -| --- |
+| --- | --- |
 | `Password` | 設定活頁簿密碼保護 |
 | `DefaultBasicSheetName` | 工作表名稱預設前綴（預設值：「工作表」）。自動產生的工作表名稱格式為 `{前綴}{編號}` |
 | `ContentType` | 匯出格式的 MIME 類型（例如：`application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`） |
