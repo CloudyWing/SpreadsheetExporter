@@ -1,62 +1,72 @@
-﻿using System;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using CloudyWing.SpreadsheetExporter.Config;
 
 namespace CloudyWing.SpreadsheetExporter;
 
 /// <summary>
-/// The spreadsheet manager.
+/// Provides global configuration and factory methods for creating spreadsheet documents.
 /// </summary>
 public static class SpreadsheetManager {
-    private static readonly object exporterFactoryLock = new();
-    private static readonly object cellStyleLock = new();
-    private static Func<ISpreadsheetExporter> exporterFactory;
-    private static readonly Lazy<CellStyleConfiguration> defaultCellStyles =
-        new(() => new CellStyleConfiguration());
-    private static CellStyleConfiguration userCellStyles;
+#if NET10_0_OR_GREATER
+    private static readonly Lock RendererFactoryLock = new();
+    private static readonly Lock CellStyleLock = new();
+#else
+    private static readonly object RendererFactoryLock = new();
+    private static readonly object CellStyleLock = new();
+#endif
+    private static Func<ISpreadsheetRenderer>? rendererFactory;
 
     /// <summary>
-    /// Gets or sets the configuration.
+    /// Gets or sets the default cell styles configuration.
+    /// Setting this overrides the built-in defaults.
     /// </summary>
-    /// <value>
-    /// The configuration.
-    /// </value>
+    [AllowNull]
     public static CellStyleConfiguration DefaultCellStyles {
-        get => userCellStyles ?? defaultCellStyles.Value;
+        get {
+            if (field is null) {
+                lock (CellStyleLock) {
+                    field ??= new CellStyleConfiguration();
+                }
+            }
+            return field;
+        }
         set {
-            lock (cellStyleLock) {
-                userCellStyles = value;
+            lock (CellStyleLock) {
+                field = value;
             }
         }
     }
 
     /// <summary>
-    /// Sets the exporter.
+    /// Sets the renderer factory used to create renderer instances.
     /// </summary>
-    /// <param name="exporterFactory">The exporter factory.</param>
-    /// <exception cref="ArgumentNullException">exporterFactory</exception>
-    /// <exception cref="ArgumentException">Factory return value cannot be null. - exporterFactory</exception>
-    public static void SetExporter(Func<ISpreadsheetExporter> exporterFactory) {
-        if (exporterFactory is null) {
-            throw new ArgumentNullException(nameof(exporterFactory));
-        }
+    /// <param name="rendererFactory">The factory function that returns a new <see cref="ISpreadsheetRenderer"/>.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="rendererFactory"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">The factory returns <see langword="null"/>.</exception>
+    public static void SetRenderer(Func<ISpreadsheetRenderer> rendererFactory) {
+        ArgumentNullException.ThrowIfNull(rendererFactory);
 
-        lock (exporterFactoryLock) {
-            if (exporterFactory() is null) {
-                throw new ArgumentException("Factory return value cannot be null.", nameof(exporterFactory));
+        lock (RendererFactoryLock) {
+            if (rendererFactory() is null) {
+                throw new ArgumentException(
+                    "Factory return value cannot be null.", nameof(rendererFactory)
+                );
             }
 
-            SpreadsheetManager.exporterFactory = exporterFactory;
+            SpreadsheetManager.rendererFactory = rendererFactory;
         }
     }
 
     /// <summary>
-    /// Creates the exporter.
+    /// Creates a new <see cref="SpreadsheetDocument"/> using the registered renderer factory.
     /// </summary>
-    /// <returns>The exporter.</returns>
-    /// <exception cref="InvalidOperationException">Exporter factory is not set.</exception>
-    public static ISpreadsheetExporter CreateExporter() {
-        return exporterFactory is null
-            ? throw new InvalidOperationException("Exporter factory is not set.")
-            : exporterFactory();
+    /// <returns>A new <see cref="SpreadsheetDocument"/> instance.</returns>
+    /// <exception cref="InvalidOperationException">The renderer factory has not been set via <see cref="SetRenderer"/>.</exception>
+    public static SpreadsheetDocument CreateDocument() {
+        return rendererFactory is null
+            ? throw new InvalidOperationException("Renderer factory is not set. Call SetRenderer first.")
+            : new SpreadsheetDocument(rendererFactory());
     }
 }

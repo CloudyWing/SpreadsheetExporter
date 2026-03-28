@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net10.0;netstandard2.0</TargetFrameworks>
-    <langversion>preview</langversion>
-    <AssemblyName>CloudyWing.SpreadsheetExporter</AssemblyName>
-    <RootNamespace>CloudyWing.SpreadsheetExporter</RootNamespace>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>CloudyWing.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>CloudyWing.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <Authors>周尚緯</Authors>
     <Product>SpreadsheetExporter</Product>
-    <Description>用來提供封裝匯出Excel套件的基底專案。</Description>
+    <Description>SpreadsheetExporter 核心函式庫，提供試算表匯出的基底架構。</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/CloudyWing/SpreadsheetExporter</RepositoryUrl>
@@ -25,6 +26,7 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CloudyWing.Enumeration" Version="0.2.0" />
     <PackageReference Include="MinVer" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

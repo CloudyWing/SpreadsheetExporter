@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +10,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Grid;
 /// <summary>
 /// The grid template. Create cell information using <c>CreateRow()</c> and <c>CreateCell()</c>.
 /// </summary>
-public class GridTemplate : ITemplate {
+public class GridTemplate : ISheetTemplate {
     private readonly List<CellCollection> rows = [];
     private readonly HashSet<Point> points = [];
     private readonly Dictionary<int, double?> rowHeights = [];
@@ -63,17 +63,15 @@ public class GridTemplate : ITemplate {
         object value, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
     ) {
         return CreateCell(
-            cell => {
-                cell.ValueGenerator = (cellIndex, rowIndex) => value;
-            },
+            cell => cell.ValueGenerator = (cellIndex, rowIndex) => value,
             columnSpan, rowSpan, cellStyle
         );
     }
 
     /// <summary>
-    /// Create cell that contain formula.
+    /// Creates a cell that contains a formula.
     /// </summary>
-    /// <param name="formulaGenerator">The formula generator. Pass the cell index and row index to the generator. The  index start at 0.</param>
+    /// <param name="formulaGenerator">The <see cref="CellGenerator{T}"/> that produces the formula string. Passes the cell index and row index; indices start at 0.</param>
     /// <param name="columnSpan">The column span.</param>
     /// <param name="rowSpan">The row span.</param>
     /// <param name="cellStyle">The cell style. The default is <c>SpreadsheetManager.DefaultCellStyles.GridCellStyle</c>.</param>
@@ -85,12 +83,10 @@ public class GridTemplate : ITemplate {
     /// <paramref name="rowSpan"/> must be greater than 0.
     /// </exception>
     public GridTemplate CreateCell(
-        Func<int, int, string> formulaGenerator, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
+        CellGenerator<string?> formulaGenerator, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
     ) {
         return CreateCell(
-            cell => {
-                cell.FormulaGenerator = formulaGenerator;
-            },
+            cell => cell.FormulaGenerator = formulaGenerator,
             columnSpan, rowSpan, cellStyle
         );
     }
@@ -120,7 +116,7 @@ public class GridTemplate : ITemplate {
             CreateRow();
         }
 
-        Cell cell = new Cell {
+        Cell cell = new() {
             Size = new Size(columnSpan, rowSpan),
             CellStyleGenerator = (cellIndex, rowIndex) => (CellStyle)cellStyle
         };
@@ -143,8 +139,8 @@ public class GridTemplate : ITemplate {
     }
 
     /// <inheritdoc/>
-    public TemplateContext GetContext() {
-        return new TemplateContext(
+    public TemplateLayout GetLayout() {
+        return new TemplateLayout(
             GetCells(), RowSpan, new ReadOnlyDictionary<int, double?>(rowHeights)
         );
     }

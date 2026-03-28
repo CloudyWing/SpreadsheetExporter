@@ -7,15 +7,15 @@ public enum VerticalAlignment {
     /// <summary>
     /// The top.
     /// </summary>
-    Top = 0,
+    Top,
 
     /// <summary>
     /// The middle.
     /// </summary>
-    Middle = 1,
+    Middle,
 
     /// <summary>
     /// The bottom.
     /// </summary>
-    Bottom = 2
+    Bottom
 }

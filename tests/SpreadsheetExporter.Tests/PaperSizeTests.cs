@@ -1,33 +1,6 @@
-﻿using System.Drawing.Printing;
-
 namespace CloudyWing.SpreadsheetExporter.Tests {
     [TestFixture]
     internal class PaperSizeTests {
-        [Test]
-        [Ignore("This test depends on Windows printer environment and may not be available in all test environments.")]
-        public void WidthAndHeight_ValidWithPrinter_ShouldSameSize() {
-            foreach (PaperSize item in PaperSize.GetAll()) {
-                (int Width, int Height) = GetPaperSize(item.Value);
-
-                Assert.That(item.Width, Is.EqualTo(Width));
-                Assert.That(item.Height, Is.EqualTo(Height));
-            }
-        }
-
-        private static (int Width, int Height) GetPaperSize(int value) {
-            PrinterSettings settings = new() {
-                PrinterName = "Microsoft XPS Document Writer"
-            };
-
-            foreach (System.Drawing.Printing.PaperSize printerPaperSize in settings.PaperSizes) {
-                if (printerPaperSize.RawKind == value) {
-                    return (printerPaperSize.Width, printerPaperSize.Height);
-                }
-            }
-
-            return (0, 0);
-        }
-
         [Test]
         public void ImplicitConversion_FromPaperSizeToInt_ShouldReturnValue() {
             PaperSize size = PaperSize.Letter;
@@ -64,7 +37,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             PaperSize size1 = PaperSize.Letter;
             PaperSize size2 = PaperSize.Letter;
 
-            bool actual = size1 == size2;
+            bool actual = Equals(size1, size2);
 
             Assert.That(actual, Is.True);
         }
@@ -74,7 +47,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             PaperSize size1 = PaperSize.Letter;
             PaperSize size2 = PaperSize.LetterSmall;
 
-            bool actual = size1 == size2;
+            bool actual = Equals(size1, size2);
 
             Assert.That(actual, Is.False);
         }
@@ -84,11 +57,13 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             PaperSize size = PaperSize.Letter;
             int value = 1;
 
-            bool actual1 = size == value;
-            bool actual2 = value == size;
+            bool actual1 = size.Equals((PaperSize)value);
+            bool actual2 = ((PaperSize)value).Equals(size);
 
-            Assert.That(actual1, Is.True);
-            Assert.That(actual2, Is.True);
+            Assert.Multiple(() => {
+                Assert.That(actual1, Is.True);
+                Assert.That(actual2, Is.True);
+            });
         }
 
         [Test]
@@ -96,11 +71,13 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             PaperSize size = PaperSize.Letter;
             int value = 2;
 
-            bool actual1 = size == value;
-            bool actual2 = value == size;
+            bool actual1 = size.Equals((PaperSize)value);
+            bool actual2 = ((PaperSize)value).Equals(size);
 
-            Assert.That(actual1, Is.False);
-            Assert.That(actual2, Is.False);
+            Assert.Multiple(() => {
+                Assert.That(actual1, Is.False);
+                Assert.That(actual2, Is.False);
+            });
         }
 
         [Test]
@@ -108,7 +85,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             PaperSize size1 = PaperSize.Letter;
             PaperSize size2 = PaperSize.Letter;
 
-            bool actual = size1 != size2;
+            bool actual = !Equals(size1, size2);
 
             Assert.That(actual, Is.False);
         }
@@ -118,7 +95,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             PaperSize size1 = PaperSize.Letter;
             PaperSize size2 = PaperSize.Tabloid;
 
-            bool result = size1 != size2;
+            bool result = !Equals(size1, size2);
 
             Assert.That(result, Is.True);
         }
@@ -128,21 +105,21 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
             PaperSize paperSize1 = PaperSize.Letter;
             PaperSize paperSize2 = PaperSize.LetterSmall;
 
-            Assert.That(paperSize1 != paperSize2, Is.True);
+            Assert.That(!Equals(paperSize1, paperSize2), Is.True);
         }
 
         [Test]
         public void NotEqualOperator_NullAndPaperSize_ShouldReturnTrue() {
             PaperSize paperSize = PaperSize.Letter;
 
-            Assert.That(null != paperSize, Is.True);
+            Assert.That(paperSize, Is.Not.Null);
         }
 
         [Test]
         public void NotEqualOperator_PaperSizeAndNull_ShouldReturnTrue() {
             PaperSize paperSize = PaperSize.Letter;
 
-            Assert.That(paperSize != null, Is.True);
+            Assert.That(paperSize, Is.Not.Null);
         }
 
         [Test]

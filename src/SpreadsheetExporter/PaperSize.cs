@@ -1,855 +1,361 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using CloudyWing.Enumeration.Abstractions;
 
 namespace CloudyWing.SpreadsheetExporter;
 
 /// <summary>
-/// The paper size.
+/// Represents a standard paper size with its numeric identifier and dimensions.
 /// </summary>
-public class PaperSize : IEquatable<PaperSize>, IEquatable<int>, IComparable<PaperSize>, IComparable<int>, IComparable {
-    private static readonly Lazy<PaperSize> letter = new(() => new PaperSize(1, "Letter", 850, 1100));
-    private static readonly Lazy<PaperSize> letterSmall = new(() => new PaperSize(2, "Letter Small", 850, 1100));
-    private static readonly Lazy<PaperSize> tabloid = new(() => new PaperSize(3, "Tabloid", 1100, 1700));
-    private static readonly Lazy<PaperSize> ledger = new(() => new PaperSize(4, "Ledger", 1700, 1100));
-    private static readonly Lazy<PaperSize> legal = new(() => new PaperSize(5, "Legal", 850, 1400));
-    private static readonly Lazy<PaperSize> statement = new(() => new PaperSize(6, "Statement", 550, 850));
-    private static readonly Lazy<PaperSize> executive = new(() => new PaperSize(7, "Executive", 725, 1050));
-    private static readonly Lazy<PaperSize> a3 = new(() => new PaperSize(8, "A3", 1169, 1654));
-    private static readonly Lazy<PaperSize> a4 = new(() => new PaperSize(9, "A4", 827, 1169));
-    private static readonly Lazy<PaperSize> a4Small = new(() => new PaperSize(10, "A4 Small", 827, 1169));
-    private static readonly Lazy<PaperSize> a5 = new(() => new PaperSize(11, "A5", 583, 827));
-    private static readonly Lazy<PaperSize> b4 = new(() => new PaperSize(12, "B4 (JIS)", 1012, 1433));
-    private static readonly Lazy<PaperSize> b5 = new(() => new PaperSize(13, "B5 (JIS)", 717, 1012));
-    private static readonly Lazy<PaperSize> folio = new(() => new PaperSize(14, "Folio", 850, 1300));
-    private static readonly Lazy<PaperSize> quarto = new(() => new PaperSize(15, "Quarto", 846, 1083));
-    private static readonly Lazy<PaperSize> standard10x14 = new(() => new PaperSize(16, "10×14", 1000, 1400));
-    private static readonly Lazy<PaperSize> standard11x17 = new(() => new PaperSize(17, "11×17", 1100, 1700));
-    private static readonly Lazy<PaperSize> note = new(() => new PaperSize(18, "Note", 850, 1100));
-    private static readonly Lazy<PaperSize> number9Envelope = new(() => new PaperSize(19, "Envelope #9", 387, 887));
-    private static readonly Lazy<PaperSize> number10Envelope = new(() => new PaperSize(20, "Envelope #10", 412, 950));
-    private static readonly Lazy<PaperSize> number11Envelope = new(() => new PaperSize(21, "Envelope #11", 450, 1037));
-    private static readonly Lazy<PaperSize> number12Envelope = new(() => new PaperSize(22, "Envelope #12", 475, 1100));
-    private static readonly Lazy<PaperSize> number14Envelope = new(() => new PaperSize(23, "Envelope #14", 500, 1150));
-    private static readonly Lazy<PaperSize> cSheet = new(() => new PaperSize(24, "C size sheet", 1700, 2200));
-    private static readonly Lazy<PaperSize> dSheet = new(() => new PaperSize(25, "D size sheet", 2200, 3400));
-    private static readonly Lazy<PaperSize> eSheet = new(() => new PaperSize(26, "E size sheet", 3400, 4400));
-    private static readonly Lazy<PaperSize> dLEnvelope = new(() => new PaperSize(27, "Envelope DL", 433, 866));
-    private static readonly Lazy<PaperSize> c5Envelope = new(() => new PaperSize(28, "Envelope C5", 638, 902));
-    private static readonly Lazy<PaperSize> c3Envelope = new(() => new PaperSize(29, "Envelope C3", 1276, 1803));
-    private static readonly Lazy<PaperSize> c4Envelope = new(() => new PaperSize(30, "Envelope C4", 902, 1276));
-    private static readonly Lazy<PaperSize> c6Envelope = new(() => new PaperSize(31, "Envelope C6", 449, 638));
-    private static readonly Lazy<PaperSize> c65Envelope = new(() => new PaperSize(32, "Envelope C65", 449, 902));
-    private static readonly Lazy<PaperSize> b4Envelope = new(() => new PaperSize(33, "Envelope B4", 984, 1390));
-    private static readonly Lazy<PaperSize> b5Envelope = new(() => new PaperSize(34, "Envelope B5", 693, 984));
-    private static readonly Lazy<PaperSize> b6Envelope = new(() => new PaperSize(35, "Envelope B6", 693, 492));
-    private static readonly Lazy<PaperSize> italyEnvelope = new(() => new PaperSize(36, "Envelope", 433, 906));
-    private static readonly Lazy<PaperSize> monarchEnvelope = new(() => new PaperSize(37, "Envelope Monarch", 387, 750));
-    private static readonly Lazy<PaperSize> personalEnvelope = new(() => new PaperSize(38, "6 3/4 Envelope", 362, 650));
-    private static readonly Lazy<PaperSize> uSStandardFanfold = new(() => new PaperSize(39, "US Std Fanfold", 1487, 1100));
-    private static readonly Lazy<PaperSize> germanStandardFanfold = new(() => new PaperSize(40, "German Std Fanfold", 850, 1200));
-    private static readonly Lazy<PaperSize> germanLegalFanfold = new(() => new PaperSize(41, "German Legal Fanfold", 850, 1300));
-    private static readonly Lazy<PaperSize> isoB4 = new(() => new PaperSize(42, "B4 (ISO)", 984, 1390));
-    private static readonly Lazy<PaperSize> japanesePostcard = new(() => new PaperSize(43, "Japanese Postcard", 394, 583));
-    private static readonly Lazy<PaperSize> standard9x11 = new(() => new PaperSize(44, "9×11", 900, 1100));
-    private static readonly Lazy<PaperSize> standard10x11 = new(() => new PaperSize(45, "10×11", 1000, 1100));
-    private static readonly Lazy<PaperSize> standard15x11 = new(() => new PaperSize(46, "15×11", 1500, 1100));
-    private static readonly Lazy<PaperSize> inviteEnvelope = new(() => new PaperSize(47, "Envelope Invite", 866, 866));
-    private static readonly Lazy<PaperSize> letterExtra = new(() => new PaperSize(50, "Letter Extra", 950, 1200));
-    private static readonly Lazy<PaperSize> legalExtra = new(() => new PaperSize(51, "Legal Extra", 950, 1500));
-    private static readonly Lazy<PaperSize> a4Extra = new(() => new PaperSize(53, "A4 Extra", 927, 1269));
-    private static readonly Lazy<PaperSize> letterTransverse = new(() => new PaperSize(54, "Letter Transverse", 850, 1100));
-    private static readonly Lazy<PaperSize> a4Transverse = new(() => new PaperSize(55, "A4 Transverse", 827, 1169));
-    private static readonly Lazy<PaperSize> letterExtraTransverse = new(() => new PaperSize(56, "Letter Extra Transverse", 950, 1200));
-    private static readonly Lazy<PaperSize> aPlus = new(() => new PaperSize(57, "Super A", 894, 1402));
-    private static readonly Lazy<PaperSize> bPlus = new(() => new PaperSize(58, "Super B", 1201, 1917));
-    private static readonly Lazy<PaperSize> letterPlus = new(() => new PaperSize(59, "Letter Plus", 850, 1269));
-    private static readonly Lazy<PaperSize> a4Plus = new(() => new PaperSize(60, "A4 Plus", 827, 1299));
-    private static readonly Lazy<PaperSize> a5Transverse = new(() => new PaperSize(61, "A5 Transverse", 583, 827));
-    private static readonly Lazy<PaperSize> b5Transverse = new(() => new PaperSize(62, "B5 (JIS) Transverse", 717, 1012));
-    private static readonly Lazy<PaperSize> a3Extra = new(() => new PaperSize(63, "A3 Extra", 1268, 1752));
-    private static readonly Lazy<PaperSize> a5Extra = new(() => new PaperSize(64, "A5 Extra", 685, 925));
-    private static readonly Lazy<PaperSize> b5Extra = new(() => new PaperSize(65, "B5 (ISO) Extra", 791, 1087));
-    private static readonly Lazy<PaperSize> a2 = new(() => new PaperSize(66, "A2", 1654, 2339));
-    private static readonly Lazy<PaperSize> a3Transverse = new(() => new PaperSize(67, "A3 Transverse", 1169, 1654));
-    private static readonly Lazy<PaperSize> a3ExtraTransverse = new(() => new PaperSize(68, "A3 Extra Transverse", 1268, 1752));
+public sealed class PaperSize : IntEnumeration<PaperSize> {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PaperSize"/> class with a value only.
+    /// </summary>
+    /// <param name="value">The numeric paper size identifier.</param>
+    public PaperSize(int value) : base(value) { }
 
-    private PaperSize(int value, string name, int width, int height) {
-        Value = value;
-        Name = name ?? throw new ArgumentNullException(nameof(name));
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PaperSize"/> class with a value and display name.
+    /// </summary>
+    /// <param name="value">The numeric paper size identifier.</param>
+    /// <param name="name">The display name.</param>
+    public PaperSize(int value, string name) : base(value, name) { }
+
+    private PaperSize(int value, string name, int width, int height) : base(value, name) {
         Width = width;
         Height = height;
     }
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="PaperSize" /> to <see cref="int" />.
+    /// Gets the width in hundredths of an inch.
     /// </summary>
-    /// <param name="value">The value.</param>
-    /// <returns>The result of the conversion.</returns>
-    public static implicit operator int(PaperSize value) {
-        return value.Value;
-    }
-
-    /// <summary>
-    /// Performs an explicit conversion from <see cref="int" /> to <see cref="PaperSize" />.
-    /// </summary>
-    /// <param name="value">The value.</param>
-    /// <returns>The result of the conversion.</returns>
-    /// <exception cref="InvalidCastException">
-    /// <paramref name="value"/> does not correspond to any valid PaperSize.
-    /// </exception>
-    public static explicit operator PaperSize(int value) {
-        foreach (PaperSize paperSize in GetAll()) {
-            if (paperSize.Value == value) {
-                return paperSize;
-            }
-        }
-
-        string validValues = string.Join(", ", GetAll().Select(x => $"{x.Value} ({x.Name})"));
-        throw new InvalidCastException(
-            $"Cannot convert value '{value}' to PaperSize. " +
-            $"Valid values are: {validValues}"
-        );
-    }
-
-    /// <summary>
-    /// Implements the operator ==.
-    /// </summary>
-    /// <param name="left">The left.</param>
-    /// <param name="right">The right.</param>
-    /// <returns>The result of the operator.</returns>
-    public static bool operator ==(PaperSize left, PaperSize right) {
-        return (left is null && right is null) || left?.Equals(right) == true;
-    }
-
-    /// <summary>
-    /// Implements the operator ==.
-    /// </summary>
-    /// <param name="left">The left.</param>
-    /// <param name="right">The right.</param>
-    /// <returns>The result of the operator.</returns>
-    public static bool operator ==(PaperSize left, int right) {
-        return left?.Value == right;
-    }
-
-    /// <summary>
-    /// Implements the operator ==.
-    /// </summary>
-    /// <param name="left">The left.</param>
-    /// <param name="right">The right.</param>
-    /// <returns>The result of the operator.</returns>
-    public static bool operator ==(int left, PaperSize right) {
-        return right?.Value == left;
-    }
-
-    /// <summary>
-    /// Implements the operator !=.
-    /// </summary>
-    /// <param name="left">The left.</param>
-    /// <param name="right">The right.</param>
-    /// <returns>The result of the operator.</returns>
-    public static bool operator !=(PaperSize left, PaperSize right) {
-        return !(left == right);
-    }
-
-    /// <summary>
-    /// Implements the operator !=.
-    /// </summary>
-    /// <param name="left">The left.</param>
-    /// <param name="right">The right.</param>
-    /// <returns>The result of the operator.</returns>
-    public static bool operator !=(PaperSize left, int right) {
-        return !(left == right);
-    }
-
-    /// <summary>
-    /// Implements the operator !=.
-    /// </summary>
-    /// <param name="left">The left.</param>
-    /// <param name="right">The right.</param>
-    /// <returns>The result of the operator.</returns>
-    public static bool operator !=(int left, PaperSize right) {
-        return !(left == right);
-    }
-
-    /// <summary>
-    /// Gets the letter paper (8.5 in. by 11 in.).
-    /// </summary>
-    /// <value>
-    /// 1
-    /// </value>
-    public static PaperSize Letter => letter.Value;
-
-    /// <summary>
-    /// Gets the letter small paper (8.5 in. by 11 in.).
-    /// </summary>
-    /// <value>
-    /// 2
-    /// </value>
-    public static PaperSize LetterSmall => letterSmall.Value;
-
-    /// <summary>
-    /// Gets the tabloid paper (11 in. by 17 in.).
-    /// </summary>
-    /// <value>
-    /// 3
-    /// </value>
-    public static PaperSize Tabloid => tabloid.Value;
-
-    /// <summary>
-    /// Gets the ledger paper (17 in. by 11 in.).
-    /// </summary>
-    /// <value>
-    /// 4
-    /// </value>
-    public static PaperSize Ledger => ledger.Value;
-
-    /// <summary>
-    /// Gets the legal paper (8.5 in. by 14 in.).
-    /// </summary>
-    /// <value>
-    /// 5
-    /// </value>
-    public static PaperSize Legal => legal.Value;
-
-    /// <summary>
-    /// Gets the statement paper (5.5 in. by 8.5 in.).
-    /// </summary>
-    /// <value>
-    /// 6
-    /// </value>
-    public static PaperSize Statement => statement.Value;
-
-    /// <summary>
-    /// Gets the executive paper (7.25 in. by 10.5 in.).
-    /// </summary>
-    /// <value>
-    /// 7
-    /// </value>
-    public static PaperSize Executive => executive.Value;
-
-    /// <summary>
-    /// Gets the A3 paper (297 mm by 420 mm).
-    /// </summary>
-    /// <value>
-    /// 8
-    /// </value>
-    public static PaperSize A3 => a3.Value;
-
-    /// <summary>
-    /// Gets the A4 paper (210 mm by 297 mm).
-    /// </summary>
-    /// <value>
-    /// 9
-    /// </value>
-    public static PaperSize A4 => a4.Value;
-
-    /// <summary>
-    /// Gets the A4 small paper (210 mm by 297 mm).
-    /// </summary>
-    /// <value>
-    /// 10
-    /// </value>
-    public static PaperSize A4Small => a4Small.Value;
-
-    /// <summary>
-    /// Gets the A5 paper (148 mm by 210 mm).
-    /// </summary>
-    /// <value>
-    /// 11
-    /// </value>
-    public static PaperSize A5 => a5.Value;
-
-    /// <summary>
-    /// Gets the B4 paper (250 mm by 353 mm).
-    /// </summary>
-    /// <value>
-    /// 12
-    /// </value>
-    public static PaperSize B4 => b4.Value;
-
-    /// <summary>
-    /// Gets the B5 paper (176 mm by 250 mm).
-    /// </summary>
-    /// <value>
-    /// 13
-    /// </value>
-    public static PaperSize B5 => b5.Value;
-
-    /// <summary>
-    /// Gets the folio paper (8.5 in. by 13 in.).
-    /// </summary>
-    /// <value>
-    /// 14
-    /// </value>
-    public static PaperSize Folio => folio.Value;
-
-    /// <summary>
-    /// Gets the quarto paper (215 mm by 275 mm).
-    /// </summary>
-    /// <value>
-    /// 15
-    /// </value>
-    public static PaperSize Quarto => quarto.Value;
-
-    /// <summary>
-    /// Gets the standard paper (10 in. by 14 in.)
-    /// </summary>
-    /// <value>
-    /// 16
-    /// </value>
-    public static PaperSize Standard10x14 => standard10x14.Value;
-
-    /// <summary>
-    /// Gets the standard paper (11 in. by 17 in.).
-    /// </summary>
-    /// <value>
-    /// 17
-    /// </value>
-    public static PaperSize Standard11x17 => standard11x17.Value;
-
-    /// <summary>
-    /// Gets the note paper (8.5 in. by 11 in.).
-    /// </summary>
-    /// <value>
-    /// 18
-    /// </value>
-    public static PaperSize Note => note.Value;
-
-    /// <summary>
-    /// Gets the #9 envelope (3.875 in. by 8.875 in.).
-    /// </summary>
-    /// <value>
-    /// 19
-    /// </value>
-    public static PaperSize Number9Envelope => number9Envelope.Value;
-
-    /// <summary>
-    /// Gets the #10 envelope (4.125 in. by 9.5 in.).
-    /// </summary>
-    /// <value>
-    /// 20
-    /// </value>
-    public static PaperSize Number10Envelope => number10Envelope.Value;
-
-    /// <summary>
-    /// Gets the #11 envelope (4.5 in. by 10.375 in.).
-    /// </summary>
-    /// <value>
-    /// 21
-    /// </value>
-    public static PaperSize Number11Envelope => number11Envelope.Value;
-
-    /// <summary>
-    /// Gets the #12 envelope (4.75 in. by 11 in.).
-    /// </summary>
-    /// <value>
-    /// 22
-    /// </value>
-    public static PaperSize Number12Envelope => number12Envelope.Value;
-
-    /// <summary>
-    /// Gets the #14 envelope (5 in. by 11.5 in.).
-    /// </summary>
-    /// <value>
-    /// 23
-    /// </value>
-    public static PaperSize Number14Envelope => number14Envelope.Value;
-
-    /// <summary>
-    /// Gets the C sheet paper (17 in. by 22 in.).
-    /// </summary>
-    /// <value>
-    /// 24
-    /// </value>
-    public static PaperSize CSheet => cSheet.Value;
-
-    /// <summary>
-    /// Gets the D sheet paper (22 in. by 34 in.).
-    /// </summary>
-    /// <value>
-    /// 25
-    /// </value>
-    public static PaperSize DSheet => dSheet.Value;
-
-    /// <summary>
-    /// Gets the E sheet paper (34 in. by 44 in.).
-    /// </summary>
-    /// <value>
-    /// 26
-    /// </value>
-    public static PaperSize ESheet => eSheet.Value;
-
-    /// <summary>
-    /// Gets the DL envelope (110 mm by 220 mm).
-    /// </summary>
-    /// <value>
-    /// 27
-    /// </value>
-    public static PaperSize DLEnvelope => dLEnvelope.Value;
-
-    /// <summary>
-    /// Gets the C5 envelope (162 mm by 229 mm).
-    /// </summary>
-    /// <value>
-    /// 28
-    /// </value>
-    public static PaperSize C5Envelope => c5Envelope.Value;
-
-    /// <summary>
-    /// Gets the C3 envelope (324 mm by 458 mm).
-    /// </summary>
-    /// <value>
-    /// 29
-    /// </value>
-    public static PaperSize C3Envelope => c3Envelope.Value;
-
-    /// <summary>
-    /// Gets the C4 envelope (229 mm by 324 mm).
-    /// </summary>
-    /// <value>
-    /// 30
-    /// </value>
-    public static PaperSize C4Envelope => c4Envelope.Value;
-
-    /// <summary>
-    /// Gets the C6 envelope (114 mm by 162 mm).
-    /// </summary>
-    /// <value>
-    /// 31
-    /// </value>
-    public static PaperSize C6Envelope => c6Envelope.Value;
-
-    /// <summary>
-    /// Gets the C65 envelope (114 mm by 229 mm).
-    /// </summary>
-    /// <value>
-    /// 32
-    /// </value>
-    public static PaperSize C65Envelope => c65Envelope.Value;
-
-    /// <summary>
-    /// Gets the B4 envelope (250 mm by 353 mm).
-    /// </summary>
-    /// <value>
-    /// 33.
-    /// </value>
-    public static PaperSize B4Envelope => b4Envelope.Value;
-
-    /// <summary>
-    /// Gets the B5 envelope (176 mm by 250 mm).
-    /// </summary>
-    /// <value>
-    /// 34
-    /// </value>
-    public static PaperSize B5Envelope => b5Envelope.Value;
-
-    /// <summary>
-    /// Gets the B6 envelope (176 mm by 125 mm).
-    /// </summary>
-    /// <value>
-    /// 35
-    /// </value>
-    public static PaperSize B6Envelope => b6Envelope.Value;
-
-    /// <summary>
-    /// Gets the italy envelope (110 mm by 230 mm).
-    /// </summary>
-    /// <value>
-    /// 36
-    /// </value>
-    public static PaperSize ItalyEnvelope => italyEnvelope.Value;
-
-    /// <summary>
-    /// Gets the monarch envelope (3.875 in. by 7.5 in.).
-    /// </summary>
-    /// <value>
-    /// 37
-    /// </value>
-    public static PaperSize MonarchEnvelope => monarchEnvelope.Value;
-
-    /// <summary>
-    /// Gets the personal (6 3/4) envelope (3.625 in. by 6.5 in.).
-    /// </summary>
-    /// <value>
-    /// 38
-    /// </value>
-    public static PaperSize PersonalEnvelope => personalEnvelope.Value;
-
-    /// <summary>
-    /// Gets the us standard fanfold (14.875 in. by 11 in.).
-    /// </summary>
-    /// <value>
-    /// 39
-    /// </value>
-    public static PaperSize USStandardFanfold => uSStandardFanfold.Value;
-
-    /// <summary>
-    /// Gets the german standard fanfold (8.5 in. by 12 in.).
-    /// </summary>
-    /// <value>
-    /// 40
-    /// </value>
-    public static PaperSize GermanStandardFanfold => germanStandardFanfold.Value;
-
-    /// <summary>
-    /// Gets the german legal fanfold (8.5 in. by 13 in.).
-    /// </summary>
-    /// <value>
-    /// 41
-    /// </value>
-    public static PaperSize GermanLegalFanfold => germanLegalFanfold.Value;
-
-    /// <summary>
-    /// Gets the ISO B4 (250 mm by 353 mm).
-    /// </summary>
-    /// <value>
-    /// 42
-    /// </value>
-    public static PaperSize IsoB4 => isoB4.Value;
-
-    /// <summary>
-    /// Gets the japanese postcard (200 mm by 148 mm).
-    /// </summary>
-    /// <value>
-    /// 43
-    /// </value>
-    public static PaperSize JapanesePostcard => japanesePostcard.Value;
-
-    /// <summary>
-    /// Gets the standard paper (9 in. by 11 in.).
-    /// </summary>
-    /// <value>
-    /// 44
-    /// </value>
-    public static PaperSize Standard9x11 => standard9x11.Value;
-
-    /// <summary>
-    /// Gets the standard paper (10 in. by 11 in.).
-    /// </summary>
-    /// <value>
-    /// 45
-    /// </value>
-    public static PaperSize Standard10x11 => standard10x11.Value;
-
-    /// <summary>
-    /// Gets the standard paper (15 in. by 11 in.).
-    /// </summary>
-    /// <value>
-    /// 46
-    /// </value>
-    public static PaperSize Standard15x11 => standard15x11.Value;
-
-    /// <summary>
-    /// Gets the invite envelope (220 mm by 220 mm).
-    /// </summary>
-    /// <value>
-    /// 47
-    /// </value>
-    public static PaperSize InviteEnvelope => inviteEnvelope.Value;
-
-    /// <summary>
-    /// Gets the letter extra paper (9.275 in. by 12 in.).
-    /// </summary>
-    /// <value>
-    /// 50
-    /// </value>
-    public static PaperSize LetterExtra => letterExtra.Value;
-
-    /// <summary>
-    /// Gets the legal extra paper (9.275 in. by 15 in.).
-    /// </summary>
-    /// <value>
-    /// 51
-    /// </value>
-    public static PaperSize LegalExtra => legalExtra.Value;
-
-    /// <summary>
-    /// Gets the a4 extra paper (236 mm by 322 mm).
-    /// </summary>
-    /// <value>
-    /// 53
-    /// </value>
-    public static PaperSize A4Extra => a4Extra.Value;
-
-    /// <summary>
-    /// Gets the letter transverse (8.275 in. by 11 in.).
-    /// </summary>
-    /// <value>
-    /// 54
-    /// </value>
-    public static PaperSize LetterTransverse => letterTransverse.Value;
-
-    /// <summary>
-    /// Gets the a4 transverse (210 mm by 297 mm).
-    /// </summary>
-    /// <value>
-    /// 55
-    /// </value>
-    public static PaperSize A4Transverse => a4Transverse.Value;
-
-    /// <summary>
-    /// Gets the letter extra transverse (9.275 in. by 12 in.).
-    /// </summary>
-    /// <value>
-    /// 56
-    /// </value>
-    public static PaperSize LetterExtraTransverse => letterExtraTransverse.Value;
-
-    /// <summary>
-    /// Gets a plus paper (227 mm by 356 mm).
-    /// </summary>
-    /// <value>
-    /// 57
-    /// </value>
-    public static PaperSize APlus => aPlus.Value;
-
-    /// <summary>
-    /// Gets the b plus paper (305 mm by 487 mm).
-    /// </summary>
-    /// <value>
-    /// 58
-    /// </value>
-    public static PaperSize BPlus => bPlus.Value;
-
-    /// <summary>
-    /// Gets the letter plus paper (8.5 in. by 12.69 in.).
-    /// </summary>
-    /// <value>
-    /// 59
-    /// </value>
-    public static PaperSize LetterPlus => letterPlus.Value;
-
-    /// <summary>
-    /// Gets the A4 plus paper (210 mm by 330 mm).
-    /// </summary>
-    /// <value>
-    /// 60
-    /// </value>
-    public static PaperSize A4Plus => a4Plus.Value;
-
-    /// <summary>
-    /// Gets the A5 transverse paper (148 mm by 210 mm).
-    /// </summary>
-    /// <value>
-    /// 61
-    /// </value>
-    public static PaperSize A5Transverse => a5Transverse.Value;
-
-    /// <summary>
-    /// Gets the JIS B5 transverse paper (182 mm by 257 mm).
-    /// </summary>
-    /// <value>
-    /// 62
-    /// </value>
-    public static PaperSize B5Transverse => b5Transverse.Value;
-
-    /// <summary>
-    /// Gets the A3 extra paper (322 mm by 445 mm).
-    /// </summary>
-    /// <value>
-    /// 63
-    /// </value>
-    public static PaperSize A3Extra => a3Extra.Value;
-
-    /// <summary>
-    /// Gets the A5 extra paper (174 mm by 235 mm).
-    /// </summary>
-    /// <value>
-    /// 64
-    /// </value>
-    public static PaperSize A5Extra => a5Extra.Value;
-
-    /// <summary>
-    /// Gets the ISO B5 extra paper (201 mm by 276 mm).
-    /// </summary>
-    /// <value>
-    /// 65
-    /// </value>
-    public static PaperSize B5Extra => b5Extra.Value;
-
-    /// <summary>
-    /// Gets the A2 paper (420 mm by 594 mm).
-    /// </summary>
-    /// <value>
-    /// 66
-    /// </value>
-    public static PaperSize A2 => a2.Value;
-
-    /// <summary>
-    /// Gets the A3 transverse paper (297 mm by 420 mm).
-    /// </summary>
-    /// <value>
-    /// 67
-    /// </value>
-    public static PaperSize A3Transverse => a3Transverse.Value;
-
-    /// <summary>
-    /// Gets the A3 extra transverse paper (322 mm by 445 mm).
-    /// </summary>
-    /// <value>
-    /// 68
-    /// </value>
-    public static PaperSize A3ExtraTransverse => a3ExtraTransverse.Value;
-
-    /// <summary>
-    /// Gets the value.
-    /// </summary>
-    /// <value>
-    /// The value.
-    /// </value>
-    public int Value { get; }
-
-    /// <summary>
-    /// Gets the name.
-    /// </summary>
-    /// <value>
-    /// The display name.
-    /// </value>
-    public string Name { get; }
-
-    /// <summary>
-    /// Gets the width.
-    /// </summary>
-    /// <value>
-    /// The width.
-    /// </value>
     public int Width { get; }
 
     /// <summary>
-    /// Gets the height.
+    /// Gets the height in hundredths of an inch.
     /// </summary>
-    /// <value>
-    /// The height.
-    /// </value>
     public int Height { get; }
 
     /// <summary>
-    /// Gets the items.
+    /// Gets the Letter paper size (8.5 in. by 11 in.). Value: 1.
     /// </summary>
-    /// <returns>The all paper sizes.</returns>
-    public static IEnumerable<PaperSize> GetAll() {
-        yield return Letter;
-        yield return LetterSmall;
-        yield return Tabloid;
-        yield return Ledger;
-        yield return Legal;
-        yield return Statement;
-        yield return Executive;
-        yield return A3;
-        yield return A4;
-        yield return A4Small;
-        yield return A5;
-        yield return B4;
-        yield return B5;
-        yield return Folio;
-        yield return Quarto;
-        yield return Standard10x14;
-        yield return Standard11x17;
-        yield return Note;
-        yield return Number9Envelope;
-        yield return Number10Envelope;
-        yield return Number11Envelope;
-        yield return Number12Envelope;
-        yield return Number14Envelope;
-        yield return CSheet;
-        yield return DSheet;
-        yield return ESheet;
-        yield return DLEnvelope;
-        yield return C5Envelope;
-        yield return C3Envelope;
-        yield return C4Envelope;
-        yield return C6Envelope;
-        yield return C65Envelope;
-        yield return B4Envelope;
-        yield return B5Envelope;
-        yield return B6Envelope;
-        yield return ItalyEnvelope;
-        yield return MonarchEnvelope;
-        yield return PersonalEnvelope;
-        yield return USStandardFanfold;
-        yield return GermanStandardFanfold;
-        yield return GermanLegalFanfold;
-        yield return IsoB4;
-        yield return JapanesePostcard;
-        yield return Standard9x11;
-        yield return Standard10x11;
-        yield return Standard15x11;
-        yield return InviteEnvelope;
-        yield return LetterExtra;
-        yield return LegalExtra;
-        yield return A4Extra;
-        yield return LetterTransverse;
-        yield return A4Transverse;
-        yield return LetterExtraTransverse;
-        yield return APlus;
-        yield return BPlus;
-        yield return LetterPlus;
-        yield return A4Plus;
-        yield return A5Transverse;
-        yield return B5Transverse;
-        yield return A3Extra;
-        yield return A5Extra;
-        yield return B5Extra;
-        yield return A2;
-        yield return A3Transverse;
-        yield return A3ExtraTransverse;
-    }
-
-    /// <inheritdoc/>
-    public override bool Equals(object obj) {
-        if (obj is PaperSize paperSize) {
-            return Equals(paperSize);
-        } else if (obj is int i) {
-            return Equals(i);
-        }
-
-        return base.Equals(obj);
-    }
-
-    /// <inheritdoc/>
-    public bool Equals(PaperSize other) {
-        return Value == other?.Value;
-    }
-
-    /// <inheritdoc/>
-    public bool Equals(int other) {
-        return Value == other;
-    }
-
-    /// <inheritdoc/>
-    public int CompareTo(object obj) {
-        if (obj is null) {
-            return 1;
-        }
-
-        return obj is int i ? Value.CompareTo(i) : Value.CompareTo(((PaperSize)obj).Value);
-    }
-
-    /// <inheritdoc/>
-    public int CompareTo(PaperSize other) {
-        if (other is null) {
-            return 1;
-        }
-
-        return Value.CompareTo(other.Value);
-    }
-
-    /// <inheritdoc/>
-    public int CompareTo(int other) {
-        return Value.CompareTo(other);
-    }
-
-    /// <inheritdoc/>
-    public override int GetHashCode() {
-        return Value.GetHashCode();
-    }
+    public static PaperSize Letter { get; } = new(1, "Letter", 850, 1100);
 
     /// <summary>
-    /// Converts to string.
+    /// Gets the Letter Small paper size (8.5 in. by 11 in.). Value: 2.
     /// </summary>
-    /// <returns>The name.</returns>
-    public override string ToString() {
-        return Name;
-    }
+    public static PaperSize LetterSmall { get; } = new(2, "Letter Small", 850, 1100);
+
+    /// <summary>
+    /// Gets the Tabloid paper (11 in. by 17 in.). Value: 3.
+    /// </summary>
+    public static PaperSize Tabloid { get; } = new(3, "Tabloid", 1100, 1700);
+
+    /// <summary>
+    /// Gets the Ledger paper (17 in. by 11 in.). Value: 4.
+    /// </summary>
+    public static PaperSize Ledger { get; } = new(4, "Ledger", 1700, 1100);
+
+    /// <summary>
+    /// Gets the Legal paper (8.5 in. by 14 in.). Value: 5
+    /// </summary>
+    public static PaperSize Legal { get; } = new(5, "Legal", 850, 1400);
+
+    /// <summary>
+    /// Gets the Statement paper (5.5 in. by 8.5 in.). Value: 6
+    /// </summary>
+    public static PaperSize Statement { get; } = new(6, "Statement", 550, 850);
+
+    /// <summary>
+    /// Gets the Executive paper (7.25 in. by 10.5 in.). Value: 7
+    /// </summary>
+    public static PaperSize Executive { get; } = new(7, "Executive", 725, 1050);
+
+    /// <summary>
+    /// Gets the A3 paper (297 mm by 420 mm). Value: 8
+    /// </summary>
+    public static PaperSize A3 { get; } = new(8, "A3", 1169, 1654);
+
+    /// <summary>
+    /// Gets the A4 paper (210 mm by 297 mm). Value: 9
+    /// </summary>
+    public static PaperSize A4 { get; } = new(9, "A4", 827, 1169);
+
+    /// <summary>
+    /// Gets the A4 Small paper (210 mm by 297 mm). Value: 10
+    /// </summary>
+    public static PaperSize A4Small { get; } = new(10, "A4 Small", 827, 1169);
+
+    /// <summary>
+    /// Gets the A5 paper (148 mm by 210 mm). Value: 11
+    /// </summary>
+    public static PaperSize A5 { get; } = new(11, "A5", 583, 827);
+
+    /// <summary>
+    /// Gets the B4 (JIS) paper (250 mm by 353 mm). Value: 12
+    /// </summary>
+    public static PaperSize B4 { get; } = new(12, "B4 (JIS)", 1012, 1433);
+
+    /// <summary>
+    /// Gets the B5 (JIS) paper (176 mm by 250 mm). Value: 13
+    /// </summary>
+    public static PaperSize B5 { get; } = new(13, "B5 (JIS)", 717, 1012);
+
+    /// <summary>
+    /// Gets the Folio paper (8.5 in. by 13 in.). Value: 14
+    /// </summary>
+    public static PaperSize Folio { get; } = new(14, "Folio", 850, 1300);
+
+    /// <summary>
+    /// Gets the Quarto paper (215 mm by 275 mm). Value: 15
+    /// </summary>
+    public static PaperSize Quarto { get; } = new(15, "Quarto", 846, 1083);
+
+    /// <summary>
+    /// Gets the standard 10×14 paper. Value: 16
+    /// </summary>
+    public static PaperSize Standard10x14 { get; } = new(16, "10×14", 1000, 1400);
+
+    /// <summary>
+    /// Gets the standard 11×17 paper. Value: 17
+    /// </summary>
+    public static PaperSize Standard11x17 { get; } = new(17, "11×17", 1100, 1700);
+
+    /// <summary>
+    /// Gets the Note paper (8.5 in. by 11 in.). Value: 18
+    /// </summary>
+    public static PaperSize Note { get; } = new(18, "Note", 850, 1100);
+
+    /// <summary>
+    /// Gets Envelope #9 (3.875 in. by 8.875 in.). Value: 19
+    /// </summary>
+    public static PaperSize Number9Envelope { get; } = new(19, "Envelope #9", 387, 887);
+
+    /// <summary>
+    /// Gets Envelope #10 (4.125 in. by 9.5 in.). Value: 20
+    /// </summary>
+    public static PaperSize Number10Envelope { get; } = new(20, "Envelope #10", 412, 950);
+
+    /// <summary>
+    /// Gets Envelope #11 (4.5 in. by 10.375 in.). Value: 21
+    /// </summary>
+    public static PaperSize Number11Envelope { get; } = new(21, "Envelope #11", 450, 1037);
+
+    /// <summary>
+    /// Gets Envelope #12 (4.75 in. by 11 in.). Value: 22
+    /// </summary>
+    public static PaperSize Number12Envelope { get; } = new(22, "Envelope #12", 475, 1100);
+
+    /// <summary>
+    /// Gets Envelope #14 (5 in. by 11.5 in.). Value: 23
+    /// </summary>
+    public static PaperSize Number14Envelope { get; } = new(23, "Envelope #14", 500, 1150);
+
+    /// <summary>
+    /// Gets C sheet paper (17 in. by 22 in.). Value: 24
+    /// </summary>
+    public static PaperSize CSheet { get; } = new(24, "C size sheet", 1700, 2200);
+
+    /// <summary>
+    /// Gets D sheet paper (22 in. by 34 in.). Value: 25
+    /// </summary>
+    public static PaperSize DSheet { get; } = new(25, "D size sheet", 2200, 3400);
+
+    /// <summary>
+    /// Gets E sheet paper (34 in. by 44 in.). Value: 26
+    /// </summary>
+    public static PaperSize ESheet { get; } = new(26, "E size sheet", 3400, 4400);
+
+    /// <summary>
+    /// Gets DL Envelope (110 mm by 220 mm). Value: 27
+    /// </summary>
+    public static PaperSize DLEnvelope { get; } = new(27, "Envelope DL", 433, 866);
+
+    /// <summary>
+    /// Gets C5 Envelope (162 mm by 229 mm). Value: 28
+    /// </summary>
+    public static PaperSize C5Envelope { get; } = new(28, "Envelope C5", 638, 902);
+
+    /// <summary>
+    /// Gets C3 Envelope (324 mm by 458 mm). Value: 29
+    /// </summary>
+    public static PaperSize C3Envelope { get; } = new(29, "Envelope C3", 1276, 1803);
+
+    /// <summary>
+    /// Gets C4 Envelope (229 mm by 324 mm). Value: 30
+    /// </summary>
+    public static PaperSize C4Envelope { get; } = new(30, "Envelope C4", 902, 1276);
+
+    /// <summary>
+    /// Gets C6 Envelope (114 mm by 162 mm). Value: 31
+    /// </summary>
+    public static PaperSize C6Envelope { get; } = new(31, "Envelope C6", 449, 638);
+
+    /// <summary>
+    /// Gets C65 Envelope (114 mm by 229 mm). Value: 32
+    /// </summary>
+    public static PaperSize C65Envelope { get; } = new(32, "Envelope C65", 449, 902);
+
+    /// <summary>
+    /// Gets B4 Envelope (250 mm by 353 mm). Value: 33
+    /// </summary>
+    public static PaperSize B4Envelope { get; } = new(33, "Envelope B4", 984, 1390);
+
+    /// <summary>
+    /// Gets B5 Envelope (176 mm by 250 mm). Value: 34
+    /// </summary>
+    public static PaperSize B5Envelope { get; } = new(34, "Envelope B5", 693, 984);
+
+    /// <summary>
+    /// Gets B6 Envelope (176 mm by 125 mm). Value: 35
+    /// </summary>
+    public static PaperSize B6Envelope { get; } = new(35, "Envelope B6", 693, 492);
+
+    /// <summary>
+    /// Gets Italy Envelope (110 mm by 230 mm). Value: 36
+    /// </summary>
+    public static PaperSize ItalyEnvelope { get; } = new(36, "Envelope", 433, 906);
+
+    /// <summary>
+    /// Gets Monarch Envelope (3.875 in. by 7.5 in.). Value: 37
+    /// </summary>
+    public static PaperSize MonarchEnvelope { get; } = new(37, "Envelope Monarch", 387, 750);
+
+    /// <summary>
+    /// Gets 6¾ Envelope (3.625 in. by 6.5 in.). Value: 38
+    /// </summary>
+    public static PaperSize PersonalEnvelope { get; } = new(38, "6 3/4 Envelope", 362, 650);
+
+    /// <summary>
+    /// Gets US Standard Fanfold (14.875 in. by 11 in.). Value: 39
+    /// </summary>
+    public static PaperSize USStandardFanfold { get; } = new(39, "US Std Fanfold", 1487, 1100);
+
+    /// <summary>
+    /// Gets German Standard Fanfold (8.5 in. by 12 in.). Value: 40
+    /// </summary>
+    public static PaperSize GermanStandardFanfold { get; } = new(40, "German Std Fanfold", 850, 1200);
+
+    /// <summary>
+    /// Gets German Legal Fanfold (8.5 in. by 13 in.). Value: 41
+    /// </summary>
+    public static PaperSize GermanLegalFanfold { get; } = new(41, "German Legal Fanfold", 850, 1300);
+
+    /// <summary>
+    /// Gets ISO B4 (250 mm by 353 mm). Value: 42
+    /// </summary>
+    public static PaperSize IsoB4 { get; } = new(42, "B4 (ISO)", 984, 1390);
+
+    /// <summary>
+    /// Gets Japanese Postcard (200 mm by 148 mm). Value: 43
+    /// </summary>
+    public static PaperSize JapanesePostcard { get; } = new(43, "Japanese Postcard", 394, 583);
+
+    /// <summary>
+    /// Gets standard 9×11 paper. Value: 44
+    /// </summary>
+    public static PaperSize Standard9x11 { get; } = new(44, "9×11", 900, 1100);
+
+    /// <summary>
+    /// Gets standard 10×11 paper. Value: 45
+    /// </summary>
+    public static PaperSize Standard10x11 { get; } = new(45, "10×11", 1000, 1100);
+
+    /// <summary>
+    /// Gets standard 15×11 paper. Value: 46
+    /// </summary>
+    public static PaperSize Standard15x11 { get; } = new(46, "15×11", 1500, 1100);
+
+    /// <summary>
+    /// Gets Invite Envelope (220 mm by 220 mm). Value: 47
+    /// </summary>
+    public static PaperSize InviteEnvelope { get; } = new(47, "Envelope Invite", 866, 866);
+
+    /// <summary>
+    /// Gets Letter Extra paper (9.275 in. by 12 in.). Value: 50
+    /// </summary>
+    public static PaperSize LetterExtra { get; } = new(50, "Letter Extra", 950, 1200);
+
+    /// <summary>
+    /// Gets Legal Extra paper (9.275 in. by 15 in.). Value: 51
+    /// </summary>
+    public static PaperSize LegalExtra { get; } = new(51, "Legal Extra", 950, 1500);
+
+    /// <summary>
+    /// Gets A4 Extra paper (236 mm by 322 mm). Value: 53
+    /// </summary>
+    public static PaperSize A4Extra { get; } = new(53, "A4 Extra", 927, 1269);
+
+    /// <summary>
+    /// Gets Letter Transverse paper (8.275 in. by 11 in.). Value: 54
+    /// </summary>
+    public static PaperSize LetterTransverse { get; } = new(54, "Letter Transverse", 850, 1100);
+
+    /// <summary>
+    /// Gets A4 Transverse paper (210 mm by 297 mm). Value: 55
+    /// </summary>
+    public static PaperSize A4Transverse { get; } = new(55, "A4 Transverse", 827, 1169);
+
+    /// <summary>
+    /// Gets Letter Extra Transverse paper (9.275 in. by 12 in.). Value: 56
+    /// </summary>
+    public static PaperSize LetterExtraTransverse { get; } = new(56, "Letter Extra Transverse", 950, 1200);
+
+    /// <summary>
+    /// Gets Super A paper (227 mm by 356 mm). Value: 57
+    /// </summary>
+    public static PaperSize APlus { get; } = new(57, "Super A", 894, 1402);
+
+    /// <summary>
+    /// Gets Super B paper (305 mm by 487 mm). Value: 58
+    /// </summary>
+    public static PaperSize BPlus { get; } = new(58, "Super B", 1201, 1917);
+
+    /// <summary>
+    /// Gets Letter Plus paper (8.5 in. by 12.69 in.). Value: 59
+    /// </summary>
+    public static PaperSize LetterPlus { get; } = new(59, "Letter Plus", 850, 1269);
+
+    /// <summary>
+    /// Gets A4 Plus paper (210 mm by 330 mm). Value: 60
+    /// </summary>
+    public static PaperSize A4Plus { get; } = new(60, "A4 Plus", 827, 1299);
+
+    /// <summary>
+    /// Gets A5 Transverse paper (148 mm by 210 mm). Value: 61
+    /// </summary>
+    public static PaperSize A5Transverse { get; } = new(61, "A5 Transverse", 583, 827);
+
+    /// <summary>
+    /// Gets B5 (JIS) Transverse paper (182 mm by 257 mm). Value: 62
+    /// </summary>
+    public static PaperSize B5Transverse { get; } = new(62, "B5 (JIS) Transverse", 717, 1012);
+
+    /// <summary>
+    /// Gets A3 Extra paper (322 mm by 445 mm). Value: 63
+    /// </summary>
+    public static PaperSize A3Extra { get; } = new(63, "A3 Extra", 1268, 1752);
+
+    /// <summary>
+    /// Gets A5 Extra paper (174 mm by 235 mm). Value: 64
+    /// </summary>
+    public static PaperSize A5Extra { get; } = new(64, "A5 Extra", 685, 925);
+
+    /// <summary>
+    /// Gets ISO B5 Extra paper (201 mm by 276 mm). Value: 65
+    /// </summary>
+    public static PaperSize B5Extra { get; } = new(65, "B5 (ISO) Extra", 791, 1087);
+
+    /// <summary>
+    /// Gets A2 paper (420 mm by 594 mm). Value: 66
+    /// </summary>
+    public static PaperSize A2 { get; } = new(66, "A2", 1654, 2339);
+
+    /// <summary>
+    /// Gets A3 Transverse paper (297 mm by 420 mm). Value: 67
+    /// </summary>
+    public static PaperSize A3Transverse { get; } = new(67, "A3 Transverse", 1169, 1654);
+
+    /// <summary>
+    /// Gets A3 Extra Transverse paper (322 mm by 445 mm). Value: 68
+    /// </summary>
+    public static PaperSize A3ExtraTransverse { get; } = new(68, "A3 Extra Transverse", 1268, 1752);
 }

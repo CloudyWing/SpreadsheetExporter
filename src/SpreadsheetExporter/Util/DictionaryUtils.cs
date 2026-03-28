@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,14 +6,14 @@ using System.Reflection;
 namespace CloudyWing.SpreadsheetExporter.Util;
 
 internal static class DictionaryUtils {
-    internal static IDictionary<string, object> ConvertFrom<T>(T record, int maxNestedLevel) {
-        Dictionary<string, object> dictionary = new(StringComparer.OrdinalIgnoreCase);
+    internal static IDictionary<string, object?> ConvertFrom<T>(T record, int maxNestedLevel) {
+        Dictionary<string, object?> dictionary = new(StringComparer.OrdinalIgnoreCase);
         AddPropertyToDictionary(dictionary, "", record, 1, maxNestedLevel);
         return dictionary;
     }
 
     private static void AddPropertyToDictionary(
-        IDictionary<string, object> dictionary, string fullName, object value, int level, int maxNestedLevel) {
+        IDictionary<string, object?> dictionary, string fullName, object? value, int level, int maxNestedLevel) {
         if (value is null) {
             dictionary.Add(fullName, null);
             return;
@@ -36,7 +36,7 @@ internal static class DictionaryUtils {
             .Where(p => p.CanRead);
 
         foreach (PropertyInfo prop in properties) {
-            object propValue = prop.GetValue(value);
+            object? propValue = prop.GetValue(value);
 
             string propFullName = string.IsNullOrEmpty(fullName)
                 ? prop.Name

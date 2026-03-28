@@ -9,10 +9,10 @@ namespace CloudyWing.SpreadsheetExporter.Templates.DataTable;
 /// <summary>
 /// The DataTable template. Create cell information using DataTable as data source.
 /// </summary>
-/// <seealso cref="ITemplate" />
+/// <seealso cref="ISheetTemplate" />
 /// <param name="dataTable">The data table.</param>
 /// <exception cref="ArgumentNullException">dataTable</exception>
-public class DataTableTemplate(System.Data.DataTable dataTable) : ITemplate {
+public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate {
     /// <summary>
     /// Gets or sets the data table.
     /// </summary>
@@ -37,6 +37,7 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ITemplate {
                 HeaderText = column.ColumnName
             });
         }
+
         return columns;
     }
 
@@ -90,7 +91,7 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ITemplate {
         foreach (DataRow row in DataTable.Rows) {
             for (int colIndex = 0; colIndex < Columns.Count; colIndex++) {
                 DataTableColumn column = Columns[colIndex];
-                object value = row[column.ColumnName];
+                object? value = row[column.ColumnName!];
 
                 if (value == DBNull.Value) {
                     value = null;
@@ -109,8 +110,8 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ITemplate {
     }
 
     /// <inheritdoc/>
-    public TemplateContext GetContext() {
-        return new TemplateContext(GetCells(), RowSpan, GetRowHeights());
+    public TemplateLayout GetLayout() {
+        return new TemplateLayout(GetCells(), RowSpan, GetRowHeights());
     }
 
     private IEnumerable<Cell> GetCells() {

@@ -7,25 +7,25 @@ public enum HorizontalAlignment {
     /// <summary>
     /// The general.
     /// </summary>
-    General = 0,
+    General,
 
     /// <summary>
     /// The left.
     /// </summary>
-    Left = 1,
+    Left,
 
     /// <summary>
     /// The center.
     /// </summary>
-    Center = 2,
+    Center,
 
     /// <summary>
     /// The right.
     /// </summary>
-    Right = 3,
+    Right,
 
     /// <summary>
     /// The justify.
     /// </summary>
-    Justify = 4
+    Justify
 }

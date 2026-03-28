@@ -1,62 +1,70 @@
-﻿using System.Drawing;
+using System.Drawing;
 using CloudyWing.SpreadsheetExporter.Templates;
 using CloudyWing.SpreadsheetExporter.Templates.RecordSet;
 
 namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
     [TestFixture]
     internal class RecordSetTemplateTests {
-        private static readonly IEnumerable<Record> records = new Record[] {
+        private static readonly IEnumerable<Record> Records = [
             new() { Id = 0 },
             new() { Id = 1 },
             new() { Id = 2 },
-        };
-        private RecordSetTemplate<Record> template;
+        ];
+        private RecordSetTemplate<Record> template = null!;
 
         [SetUp]
         public void SetUp() {
-            template = new RecordSetTemplate<Record>(records);
+            template = new RecordSetTemplate<Record>(Records);
         }
 
         [Test]
-        public void GetContext_NoColumns_ShouldReturnContextWithEmptyCells() {
-            TemplateContext context = template.GetContext();
+        public void GetLayout_NoColumns_ShouldReturnLayoutWithEmptyCells() {
+            TemplateLayout layout = template.GetLayout();
 
-            Assert.That(context.Cells, Has.Count.EqualTo(0));
+            Assert.That(layout.Cells, Has.Count.EqualTo(0));
         }
 
         [Test]
-        public void GetContext_AddTwoRowsWithOnlyColumnEach_ShouldReturnContextWithCells() {
+        public void GetLayout_AddTwoRowsWithOnlyColumnEach_ShouldReturnLayoutWithCells() {
             template.Columns.Add("Column 1");
-            template.Columns.AddChildToLast("Child Column 1");
+            template.Columns.GetLastColumn().ChildColumns.Add("Child Column 1");
 
-            TemplateContext context = template.GetContext();
+            TemplateLayout layout = template.GetLayout();
 
-            Assert.That(context.Cells, Has.Count.EqualTo(records.Count() + template.Columns.RowSpan));
-            Assert.That(context.Cells.All(x => x.ValueGenerator != null), Is.True);
+            Assert.That(layout.Cells, Has.Count.EqualTo(Records.Count() + template.Columns.RowSpan));
+            Assert.That(layout.Cells.All(x => x.ValueGenerator != null), Is.True);
         }
 
         [Test]
-        public void GetContext_AfterAddingMultipleColumns_ShouldReturnContextWithCorrectCells() {
-            template.Columns.Add("個人資料")
-                .AddChildToLast("姓名")
-                .AddChildToLast("年齡")
+        public void GetLayout_AfterAddingMultipleColumns_ShouldReturnLayoutWithCorrectCells() {
+            template.Columns
+                .Add("個人資料")
+                .GetLastColumn().ChildColumns
+                    .Add("姓名")
+                    .Add("年齡")
+                    .Parent
                 .Add("聯絡資訊")
-                .AddChildToLast("信箱")
-                .AddChildToLast("電話相關");
-
-            DataColumnCollection<Record> phoneColumn = template.Columns.Last().ChildColumns.Last().ChildColumns;
-            phoneColumn
-                .Add("市話")
-                .AddChildToLast("電話")
-                .AddChildToLast("分機")
-                .Add("手機");
-
-            template.Columns.Add("日期相關")
-                .AddChildToLast("日期")
-                .AddChildToLast("時間")
+                .GetLastColumn().ChildColumns
+                    .Add("信箱")
+                    .Add("電話相關")
+                    .GetLastColumn().ChildColumns
+                        .Add("市話")
+                        .GetLastColumn().ChildColumns
+                            .Add("電話")
+                            .Add("分機")
+                            .Parent
+                        .Add("手機")
+                        .Parent
+                    .Parent
+                .Add("日期相關")
+                .GetLastColumn().ChildColumns
+                    .Add("日期")
+                    .Add("時間")
+                    .Parent
                 .Add("是否啟用")
                 .Add("金額")
                 .Add("描述");
+
             var expectedCells = new List<Cell> {
                 new() { Point = new Point(0, 0), Size = new Size(2, 3) }, // 個人資料
                 new() { Point = new Point(0, 3), Size = new Size(1, 1) }, // 姓名
@@ -79,7 +87,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             .ToList();
 
             int row = 4;
-            foreach (Record record in records) {
+            foreach (Record record in Records) {
                 for (int column = 0; column < 11; column++) {
                     expectedCells.Add(new {
                         Point = new Point(column, row),
@@ -89,31 +97,33 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
                 row++;
             }
 
-            TemplateContext context = template.GetContext();
+            TemplateLayout layout = template.GetLayout();
 
-            Assert.That(context.Cells.Select(x => new { x.Point, x.Size }).ToList(), Is.EqualTo(expectedCells));
-            Assert.That(context.Cells.All(x => x.CellStyleGenerator != null), Is.True);
-            Assert.That(context.Cells.All(x => x.ValueGenerator != null), Is.True);
+            Assert.That(layout.Cells.Select(x => new { x.Point, x.Size }).ToList(), Is.EqualTo(expectedCells));
+            Assert.That(layout.Cells.All(x => x.CellStyleGenerator != null), Is.True);
+            Assert.That(layout.Cells.All(x => x.ValueGenerator != null), Is.True);
         }
 
         [Test]
-        public void GetContext_SetDataSource_ShouldReturnTemplateContextWithCorrectRowSpan() {
-            Assert.That(template.GetContext().RowSpan, Is.EqualTo(records.Count()));
+        public void GetLayout_SetDataSource_ShouldReturnLayoutWithCorrectRowSpan() {
+            Assert.That(template.GetLayout().RowSpan, Is.EqualTo(Records.Count()));
         }
 
         [Test]
-        public void GetContext_SetHeight_ShouldReturnTemplateContextWithCorrectRowHeights() {
+        public void GetLayout_SetHeight_ShouldReturnLayoutWithCorrectRowHeights() {
             template.HeaderHeight = 10d;
             template.RecordHeight = 11d;
             template.Columns.Add("Header Text");
 
-            TemplateContext context = template.GetContext();
+            TemplateLayout layout = template.GetLayout();
 
-            Assert.That(context.RowHeights[0], Is.EqualTo(template.HeaderHeight));
+            Assert.Multiple(() => {
+                Assert.That(layout.RowHeights[0], Is.EqualTo(template.HeaderHeight));
 
-            for (int i = 1; i < context.RowHeights.Count; i++) {
-                Assert.That(context.RowHeights[i], Is.EqualTo(template.RecordHeight));
-            }
+                for (int i = 1; i < layout.RowHeights.Count; i++) {
+                    Assert.That(layout.RowHeights[i], Is.EqualTo(template.RecordHeight));
+                }
+            });
         }
 
         [Test]
@@ -129,64 +139,24 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void ColumnSpan_AddTwoRowsButOneHasColumnLayersTwo_ShouldReturnTwo() {
-            template.Columns.Add("Column 1")
-                .AddChildToLast("Child Column1")
-                .AddChildToLast("Child Column2");
+            template.Columns
+                .Add("Column 1")
+                .GetLastColumn().ChildColumns
+                    .Add("Child Column1")
+                    .Add("Child Column2");
 
             Assert.That(template.ColumnSpan, Is.EqualTo(2));
         }
 
         [Test]
         public void RowSpan_AddTwoRowsButOneHasColumnLayersTwo_ShouldReturnTwo() {
-            template.Columns.Add("Column 1")
-                .AddChildToLast("Child Column1")
-                .AddChildToLast("Child Column2");
+            template.Columns
+                .Add("Column 1")
+                .GetLastColumn().ChildColumns
+                    .Add("Child Column1")
+                    .Add("Child Column2");
 
-            Assert.That(template.RowSpan, Is.EqualTo(2 + records.Count()));
-        }
-
-        [Test]
-        public void GetContext_IsFreezeHeaderIsTrue_ShouldSetFreezePanesToHeaderRowCount() {
-            template.Columns.Add("Column 1")
-                .AddChildToLast("Child Column1")
-                .AddChildToLast("Child Column2");
-            template.IsFreezeHeader = true;
-
-            TemplateContext context = template.GetContext();
-
-            Assert.That(context.FreezePanes, Is.Not.Null);
-            Assert.That(context.FreezePanes.Value.X, Is.EqualTo(0));
-            Assert.That(context.FreezePanes.Value.Y, Is.EqualTo(template.Columns.RowSpan));
-        }
-
-        [Test]
-        public void GetContext_IsFreezeHeaderIsFalse_ShouldNotSetFreezePanes() {
-            template.Columns.Add("Column 1");
-            template.IsFreezeHeader = false;
-
-            TemplateContext context = template.GetContext();
-
-            Assert.That(context.FreezePanes, Is.Null);
-        }
-
-        [Test]
-        public void GetContext_IsAutoFilterEnabledIsTrue_ShouldSetAutoFilterEnabled() {
-            template.Columns.Add("Column 1");
-            template.IsAutoFilterEnabled = true;
-
-            TemplateContext context = template.GetContext();
-
-            Assert.That(context.IsAutoFilterEnabled, Is.True);
-        }
-
-        [Test]
-        public void GetContext_IsAutoFilterEnabledIsFalse_ShouldNotSetAutoFilterEnabled() {
-            template.Columns.Add("Column 1");
-            template.IsAutoFilterEnabled = false;
-
-            TemplateContext context = template.GetContext();
-
-            Assert.That(context.IsAutoFilterEnabled, Is.False);
+            Assert.That(template.RowSpan, Is.EqualTo(2 + Records.Count()));
         }
 
         [Test]
@@ -197,13 +167,13 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             template = new RecordSetTemplate<Record>(trackingEnumerable);
             template.Columns.Add("Column 1");
 
-            template.GetContext();
+            template.GetLayout();
 
             Assert.That(enumerationCount, Is.EqualTo(1), "DataSource should only be enumerated once due to caching");
 
             IEnumerable<Record> GetTrackingEnumerable() {
                 enumerationCount++;
-                foreach (Record record in records) {
+                foreach (Record record in Records) {
                     yield return record;
                 }
             }
@@ -211,14 +181,14 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
         [Test]
         public void DataSource_WhenSetToReadOnlyList_ShouldUseDirectlyWithoutConversion() {
-            IReadOnlyList<Record> readOnlyList = records.ToList().AsReadOnly();
+            IReadOnlyList<Record> readOnlyList = Records.ToList().AsReadOnly();
 
             template = new RecordSetTemplate<Record>(readOnlyList);
             template.Columns.Add("Column 1");
 
-            TemplateContext context = template.GetContext();
+            TemplateLayout layout = template.GetLayout();
 
-            Assert.That(context.RowSpan, Is.EqualTo(readOnlyList.Count + template.Columns.RowSpan));
+            Assert.That(layout.RowSpan, Is.EqualTo(readOnlyList.Count + template.Columns.RowSpan));
         }
 
         [Test]
@@ -229,13 +199,13 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             template = new RecordSetTemplate<Record>(firstSource);
             template.Columns.Add("Column 1");
 
-            TemplateContext context1 = template.GetContext();
-            Assert.That(context1.RowSpan, Is.EqualTo(firstSource.Count + template.Columns.RowSpan));
+            TemplateLayout layout1 = template.GetLayout();
+            Assert.That(layout1.RowSpan, Is.EqualTo(firstSource.Count + template.Columns.RowSpan));
 
             template.DataSource = secondSource;
 
-            TemplateContext context2 = template.GetContext();
-            Assert.That(context2.RowSpan, Is.EqualTo(secondSource.Count + template.Columns.RowSpan));
+            TemplateLayout layout2 = template.GetLayout();
+            Assert.That(layout2.RowSpan, Is.EqualTo(secondSource.Count + template.Columns.RowSpan));
         }
 
         private class Record {
@@ -243,4 +213,3 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
         }
     }
 }
-

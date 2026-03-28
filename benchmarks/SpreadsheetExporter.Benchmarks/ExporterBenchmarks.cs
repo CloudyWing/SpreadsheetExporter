@@ -1,127 +1,156 @@
 using System.Drawing;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Order;
+using CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
 using CloudyWing.SpreadsheetExporter.Templates.Grid;
+using CloudyWing.SpreadsheetExporter.Templates.RecordSet;
 
 namespace CloudyWing.SpreadsheetExporter.Benchmarks;
 
+/// <summary>
+/// Measures end-to-end workbook rendering performance for the ClosedXML pipeline.
+/// </summary>
 [MemoryDiagnoser]
 [Orderer(SummaryOrderPolicy.FastestToSlowest)]
 [RankColumn]
 public class ExporterBenchmarks {
-    private GridTemplate template = null!;
-    private readonly string tempDirectory = Path.Combine(Path.GetTempPath(), "SpreadsheetExporter.Benchmarks");
+    private IReadOnlyList<BenchmarkOrder> orders = [];
 
-    [Params(100, 1000, 10000)]
-    public int RowCount;
+    /// <summary>
+    /// Gets or sets the number of records rendered into the benchmark workbook.
+    /// </summary>
+    [Params(100, 1_000, 5_000)]
+    public int RecordCount { get; set; }
 
+    /// <summary>
+    /// Prepares deterministic benchmark data and registers the ClosedXML renderer.
+    /// </summary>
     [GlobalSetup]
     public void Setup() {
-        Directory.CreateDirectory(tempDirectory);
-
-        template = new GridTemplate();
-
-        template.CreateRow()
-            .CreateCell("編號")
-            .CreateCell("姓名")
-            .CreateCell("年齡")
-            .CreateCell("電子郵件")
-            .CreateCell("薪資");
-
-        for (int i = 0; i < RowCount; i++) {
-            template.CreateRow()
-                .CreateCell(i)
-                .CreateCell($"Person{i}")
-                .CreateCell(20 + (i % 50))
-                .CreateCell($"person{i}@example.com")
-                .CreateCell(30000 + (i * 100));
-        }
+        SpreadsheetManager.SetRenderer(static () => new ExcelRenderer());
+        orders = Enumerable.Range(1, RecordCount)
+            .Select(index => new BenchmarkOrder(
+                index,
+                $"Customer {index:0000}",
+                Regions[index % Regions.Length],
+                Math.Round(250m + (index * 1.37m), 2)
+            ))
+            .ToList()
+            .AsReadOnly();
     }
 
-    [GlobalCleanup]
-    public void Cleanup() {
-        if (Directory.Exists(tempDirectory)) {
-            Directory.Delete(tempDirectory, true);
-        }
+    /// <summary>
+    /// Renders a workbook using the defaults with minimal styling overhead.
+    /// </summary>
+    /// <returns>The generated workbook bytes.</returns>
+    [Benchmark(Baseline = true)]
+    public byte[] RenderBasicWorkbook() {
+        return CreateWorkbook(includeStyles: false).Export();
     }
 
+    /// <summary>
+    /// Renders a workbook that exercises styles, data validation, freeze panes, auto filter, and formulas.
+    /// </summary>
+    /// <returns>The generated workbook bytes.</returns>
     [Benchmark]
-    public void NPOI_Export() {
-        Excel.NPOI.ExcelExporter exporter = new();
-        Sheeter sheeter = exporter.CreateSheeter("測試");
-        sheeter.AddTemplate(template);
-
-        byte[] bytes = exporter.Export();
-        string filePath = Path.Combine(tempDirectory, $"npoi_{RowCount}.xlsx");
-        File.WriteAllBytes(filePath, bytes);
+    public byte[] RenderStyledWorkbook() {
+        return CreateWorkbook(includeStyles: true).Export();
     }
 
-    [Benchmark]
-    public void EPPlus_Export() {
-        Excel.EPPlus.ExcelExporter exporter = new();
-        Sheeter sheeter = exporter.CreateSheeter("測試");
-        sheeter.AddTemplate(template);
+    private SpreadsheetDocument CreateWorkbook(bool includeStyles) {
+        SpreadsheetDocument document = SpreadsheetManager.CreateDocument();
+        document.DefaultFont = new CellFont("Calibri", 11);
 
-        byte[] bytes = exporter.Export();
-        string filePath = Path.Combine(tempDirectory, $"epplus_{RowCount}.xlsx");
-        File.WriteAllBytes(filePath, bytes);
+        SheetDefinition overviewSheet = document
+            .CreateSheet("Overview", defaultRowHeight: 20)
+            .SetColumnWidth(0, 18)
+            .SetColumnWidth(1, 22)
+            .AddTemplate(CreateOverviewTemplate(includeStyles));
+
+        SheetDefinition ordersSheet = document
+            .CreateSheet("Orders", defaultRowHeight: 20)
+            .ConfigurePageSettings(x => x.PageOrientation = PageOrientation.Landscape)
+            .SetColumnWidth(0, 12)
+            .SetColumnWidth(1, 22)
+            .SetColumnWidth(2, 14)
+            .SetColumnWidth(3, 14)
+            .SetColumnWidth(4, 14)
+            .SetFreezePanes(0, 1)
+            .SetAutoFilterEnabled()
+            .AddTemplate(CreateOrdersTemplate(includeStyles));
+
+        return document;
     }
 
-    [Benchmark]
-    public void NPOI_Export_WithStyles() {
-        Excel.NPOI.ExcelExporter exporter = new();
-        Sheeter sheeter = exporter.CreateSheeter("測試");
+    private GridTemplate CreateOverviewTemplate(bool includeStyles) {
+        CellStyle titleStyle = includeStyles
+            ? new CellStyle(
+                HorizontalAlignment: HorizontalAlignment.Center,
+                VerticalAlignment: VerticalAlignment.Middle,
+                HasBorder: true,
+                BackgroundColor: Color.FromArgb(31, 78, 121),
+                Font: new CellFont("Calibri", 13, Color.White, FontStyles.Bold)
+            )
+            : new CellStyle(HorizontalAlignment: HorizontalAlignment.Center);
+        CellStyle labelStyle = includeStyles
+            ? new CellStyle(
+                HasBorder: true,
+                BackgroundColor: Color.FromArgb(221, 235, 247),
+                Font: new CellFont("Calibri", 11, Style: FontStyles.Bold)
+            )
+            : CellStyle.Empty;
 
-        GridTemplate styledTemplate = CreateStyledTemplate();
-        sheeter.AddTemplate(styledTemplate);
-
-        byte[] bytes = exporter.Export();
-        string filePath = Path.Combine(tempDirectory, $"npoi_styled_{RowCount}.xlsx");
-        File.WriteAllBytes(filePath, bytes);
+        return new GridTemplate()
+            .CreateRow(24)
+            .CreateCell("SpreadsheetExporter benchmark", columnSpan: 2, cellStyle: titleStyle)
+            .CreateRow()
+            .CreateCell("Rows", cellStyle: labelStyle)
+            .CreateCell(RecordCount, cellStyle: includeStyles ? new CellStyle(HasBorder: true) : CellStyle.Empty)
+            .CreateRow()
+            .CreateCell("Renderer", cellStyle: labelStyle)
+            .CreateCell("ClosedXML", cellStyle: includeStyles ? new CellStyle(HasBorder: true) : CellStyle.Empty);
     }
 
-    [Benchmark]
-    public void EPPlus_Export_WithStyles() {
-        Excel.EPPlus.ExcelExporter exporter = new();
-        Sheeter sheeter = exporter.CreateSheeter("測試");
+    private RecordSetTemplate<BenchmarkOrder> CreateOrdersTemplate(bool includeStyles) {
+        CellStyle currencyStyle = includeStyles
+            ? new CellStyle(HorizontalAlignment: HorizontalAlignment.Right, DataFormat: "#,##0.00")
+            : CellStyle.Empty;
 
-        GridTemplate styledTemplate = CreateStyledTemplate();
-        sheeter.AddTemplate(styledTemplate);
-
-        byte[] bytes = exporter.Export();
-        string filePath = Path.Combine(tempDirectory, $"epplus_styled_{RowCount}.xlsx");
-        File.WriteAllBytes(filePath, bytes);
-    }
-
-    private GridTemplate CreateStyledTemplate() {
-        GridTemplate styledTemplate = new();
-
-        CellStyle headerStyle = new() {
-            BackgroundColor = Color.LightBlue,
-            Font = new CellFont(Style: FontStyles.IsBold),
-            HorizontalAlignment = HorizontalAlignment.Center
+        RecordSetTemplate<BenchmarkOrder> template = new(orders) {
+            HeaderHeight = 20,
+            RecordHeight = 18
         };
 
-        styledTemplate.CreateRow()
-            .CreateCell("編號", cellStyle: headerStyle)
-            .CreateCell("姓名", cellStyle: headerStyle)
-            .CreateCell("年齡", cellStyle: headerStyle)
-            .CreateCell("電子郵件", cellStyle: headerStyle)
-            .CreateCell("薪資", cellStyle: headerStyle);
+        template.Columns
+            .Add("Order ID", static order => order.OrderId)
+            .Add("Customer", static order => order.Customer)
+            .Add(
+                "Region",
+                static order => order.Region,
+                configureGenerators: static config => config.UseDataValidation(
+                    _ => new DataValidation {
+                        ValidationType = DataValidationType.List,
+                        ListItems = Regions
+                    }
+                )
+            )
+            .Add(
+                "Amount",
+                static order => order.Amount,
+                fieldStyleGenerator: _ => currencyStyle
+            )
+            .Add(
+                "Margin",
+                configureGenerators: static config => config.UseFormula(
+                    context => $"D{context.RowIndex + 2}*0.35"
+                ),
+                fieldStyleGenerator: _ => currencyStyle
+            );
 
-        CellStyle dataStyle = new() {
-            HorizontalAlignment = HorizontalAlignment.Left
-        };
-
-        for (int i = 0; i < RowCount; i++) {
-            styledTemplate.CreateRow()
-                .CreateCell(i, cellStyle: dataStyle)
-                .CreateCell($"Person{i}", cellStyle: dataStyle)
-                .CreateCell(20 + (i % 50), cellStyle: dataStyle)
-                .CreateCell($"person{i}@example.com", cellStyle: dataStyle)
-                .CreateCell(30000 + (i * 100), cellStyle: dataStyle);
-        }
-
-        return styledTemplate;
+        return template;
     }
+
+    private static readonly string[] Regions = ["North", "South", "East", "West"];
+
+    private sealed record BenchmarkOrder(int OrderId, string Customer, string Region, decimal Amount);
 }

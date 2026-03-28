@@ -1,4 +1,3 @@
-﻿using System;
 using System.Drawing;
 
 namespace CloudyWing.SpreadsheetExporter;
@@ -13,7 +12,7 @@ public class Cell {
     /// <value>
     /// The cell content value.
     /// </value>
-    public Func<int, int, object> ValueGenerator { get; set; }
+    public CellGenerator<object?>? ValueGenerator { get; set; }
 
     /// <summary>
     /// Gets or sets the cell style generator. Pass the cell index and row index to the generator. The  index start at 0.
@@ -21,7 +20,7 @@ public class Cell {
     /// <value>
     /// The cell style.
     /// </value>
-    public Func<int, int, CellStyle> CellStyleGenerator { get; set; }
+    public CellGenerator<CellStyle>? CellStyleGenerator { get; set; }
 
     /// <summary>
     /// Gets or sets the formula generator. Pass the cell index and row index to the generator. The  index start at 0.
@@ -29,7 +28,7 @@ public class Cell {
     /// <value>
     /// The formula generator.
     /// </value>
-    public Func<int, int, string> FormulaGenerator { get; set; }
+    public CellGenerator<string?>? FormulaGenerator { get; set; }
 
     /// <summary>
     /// Gets or sets the data validation generator. Pass the cell index and row index to the generator. The  index start at 0.
@@ -37,13 +36,13 @@ public class Cell {
     /// <value>
     /// The data validation generator.
     /// </value>
-    public Func<int, int, DataValidation> DataValidationGenerator { get; set; }
+    public CellGenerator<DataValidation?>? DataValidationGenerator { get; set; }
 
     /// <summary>
-    /// Gets or sets the point.
+    /// Gets or sets the zero-based column (X) and row (Y) position of this cell.
     /// </summary>
     /// <value>
-    /// The point.
+    /// The zero-based column and row coordinates.
     /// </value>
     public Point Point { get; set; } // 本來考慮把 setter 改成 internal，但考量有開放自訂 Template，所以還是維持 public
 
@@ -59,7 +58,7 @@ public class Cell {
     /// Gets the content value.
     /// </summary>
     /// <returns>The content value.</returns>
-    public object GetValue() {
+    public object? GetValue() {
         return ValueGenerator?.Invoke(Point.X, Point.Y);
     }
 
@@ -72,25 +71,28 @@ public class Cell {
     }
 
     /// <summary>
-    /// Gets the formula. if formula starts with <c>=</c>, automatically removed.
+    /// Gets the formula. If a formula starts with <c>=</c>, the prefix is automatically stripped.
     /// </summary>
-    /// <returns>The the formula.</returns>
-    public string GetFormula() {
-        return FormulaGenerator?.Invoke(Point.X, Point.Y)?.TrimStart(' ').TrimStart('=');
+    /// <returns>The formula string without the leading <c>=</c>, or <see langword="null"/> if no formula is set.</returns>
+    public string? GetFormula() {
+        return FormulaGenerator?
+            .Invoke(Point.X, Point.Y)?
+            .TrimStart(' ')
+            .TrimStart('=');
     }
 
     /// <summary>
     /// Gets the data validation.
     /// </summary>
     /// <returns>The data validation, or <c>null</c> if no validation is specified.</returns>
-    public DataValidation GetDataValidation() {
+    public DataValidation? GetDataValidation() {
         return DataValidationGenerator?.Invoke(Point.X, Point.Y);
     }
 
     /// <summary>
-    /// Shallows the copy.
+    /// Creates a shallow copy of this cell.
     /// </summary>
-    /// <returns>The spreadsheet cell.</returns>
+    /// <returns>A new <see cref="Cell"/> instance with the same field values.</returns>
     public Cell ShallowCopy() {
         return (Cell)MemberwiseClone();
     }

@@ -32,7 +32,7 @@ public class DataValidation {
     /// <value>
     /// The first comparison value.
     /// </value>
-    public object Value1 { get; set; }
+    public object? Value1 { get; set; }
 
     /// <summary>
     /// Gets or sets the second value for comparison.
@@ -41,7 +41,7 @@ public class DataValidation {
     /// <value>
     /// The second comparison value, or <c>null</c> if not applicable.
     /// </value>
-    public object Value2 { get; set; }
+    public object? Value2 { get; set; }
 
     /// <summary>
     /// Gets or sets the list of valid items for List validation type.
@@ -50,7 +50,7 @@ public class DataValidation {
     /// <value>
     /// The list items.
     /// </value>
-    public IEnumerable<string> ListItems { get; set; }
+    public IEnumerable<string>? ListItems { get; set; }
 
     /// <summary>
     /// Gets or sets the formula for validation.
@@ -60,7 +60,7 @@ public class DataValidation {
     /// <value>
     /// The validation formula (e.g., "TODAY()", "=A1+10").
     /// </value>
-    public string Formula { get; set; }
+    public string? Formula { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the dropdown button is shown for list validation.
@@ -85,7 +85,7 @@ public class DataValidation {
     /// <value>
     /// The error title.
     /// </value>
-    public string ErrorTitle { get; set; }
+    public string? ErrorTitle { get; set; }
 
     /// <summary>
     /// Gets or sets the error message shown when invalid data is entered.
@@ -93,7 +93,7 @@ public class DataValidation {
     /// <value>
     /// The error message.
     /// </value>
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the error alert is shown when invalid data is entered.
@@ -109,7 +109,7 @@ public class DataValidation {
     /// <value>
     /// The prompt title.
     /// </value>
-    public string PromptTitle { get; set; }
+    public string? PromptTitle { get; set; }
 
     /// <summary>
     /// Gets or sets the input prompt message shown when the cell is selected.
@@ -117,7 +117,7 @@ public class DataValidation {
     /// <value>
     /// The prompt message.
     /// </value>
-    public string PromptMessage { get; set; }
+    public string? PromptMessage { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the input prompt is shown when the cell is selected.

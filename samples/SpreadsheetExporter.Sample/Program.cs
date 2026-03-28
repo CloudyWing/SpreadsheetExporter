@@ -1,666 +1,399 @@
 using System.Data;
 using System.Drawing;
-using CloudyWing.SpreadsheetExporter.Config;
+using CloudyWing.SpreadsheetExporter;
+using CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
 using CloudyWing.SpreadsheetExporter.Templates;
 using CloudyWing.SpreadsheetExporter.Templates.DataTable;
 using CloudyWing.SpreadsheetExporter.Templates.Grid;
 using CloudyWing.SpreadsheetExporter.Templates.RecordSet;
 
-namespace CloudyWing.SpreadsheetExporter.Samples;
-
-internal class Program {
-    static void Main(string[] args) {
-        Console.WriteLine("SpreadsheetExporter 功能展示");
-        Console.WriteLine("============================\n");
-
-        string baseOutputDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Outputs");
-        Directory.CreateDirectory(baseOutputDir);
-
-        Console.WriteLine("=== 使用 NPOI 產生範例 ===\n");
-        string npoiOutputDir = Path.Combine(baseOutputDir, "NPOI");
-        Directory.CreateDirectory(npoiOutputDir);
-
-        Console.WriteLine("1. 設定 NPOI SpreadsheetManager");
-        SetupNpoiSpreadsheetManager();
-        GenerateAllExamples(npoiOutputDir);
-
-        Console.WriteLine("\n=== 使用 EPPlus 產生範例 ===\n");
-        string epplusOutputDir = Path.Combine(baseOutputDir, "EPPlus");
-        Directory.CreateDirectory(epplusOutputDir);
-
-        Console.WriteLine("1. 設定 EPPlus SpreadsheetManager");
-        SetupEpplusSpreadsheetManager();
-        GenerateAllExamples(epplusOutputDir);
-
-        Console.WriteLine($"\n所有範例檔案已建立在:");
-        Console.WriteLine($"  - NPOI: {npoiOutputDir}");
-        Console.WriteLine($"  - EPPlus: {epplusOutputDir}");
-        Console.WriteLine("\n按任意鍵結束...");
-        Console.ReadKey();
-    }
-
-    static void GenerateAllExamples(string outputDir) {
-        Console.WriteLine("\n2. 建立基本 GridTemplate 範例");
-        CreateBasicGridTemplateExample(outputDir);
-
-        Console.WriteLine("\n3. 建立進階 GridTemplate 範例");
-        CreateAdvancedGridTemplateExample(outputDir);
-
-        Console.WriteLine("\n4. 建立 RecordSetTemplate 基本範例");
-        CreateRecordSetTemplateExample(outputDir);
-
-        Console.WriteLine("\n5. 建立 RecordSetTemplate 進階範例");
-        CreateAdvancedRecordSetTemplateExample(outputDir);
-
-        Console.WriteLine("\n6. 建立 RecordSetTemplate 巢狀物件範例");
-        CreateNestedRecordSetTemplateExample(outputDir);
-
-        Console.WriteLine("\n7. 建立 DataTableTemplate 範例");
-        CreateDataTableTemplateExample(outputDir);
-
-        Console.WriteLine("\n8. 建立多個 Sheet 範例");
-        CreateMultiSheetExample(outputDir);
-
-        Console.WriteLine("\n9. 建立自訂 Template 範例");
-        CreateCustomTemplateExample(outputDir);
-
-        Console.WriteLine("\n10. 建立 Sheeter 進階功能範例");
-        CreateSheeterAdvancedExample(outputDir);
-
-        Console.WriteLine("\n11. 建立 Freeze Panes 和 AutoFilter 範例");
-        CreateFreezePanesAndAutoFilterExample(outputDir);
-
-        Console.WriteLine("\n12. 建立 Data Validation 範例");
-        CreateDataValidationExample(outputDir);
-
-        Console.WriteLine("\n13. 建立頁面設定範例");
-        CreatePageSettingsExample(outputDir);
-    }
-
-    static void SetupNpoiSpreadsheetManager() {
-        SetupSpreadsheetManager(() => new Excel.NPOI.ExcelExporter(), "NPOI");
-    }
-
-    static void SetupEpplusSpreadsheetManager() {
-        SetupSpreadsheetManager(() => new Excel.EPPlus.ExcelExporter(), "EPPlus");
-    }
-
-    static void SetupSpreadsheetManager(Func<ExporterBase> exporterFactory, string exporterName) {
-        SpreadsheetManager.SetExporter(() => {
-            ExporterBase exporter = exporterFactory();
-            exporter.DefaultBasicSheetName = "工作表";
-
-            exporter.SpreadsheetExportingEvent += (sender, e) => {
-                Console.WriteLine($"   - 正在產生 Spreadsheet...");
-            };
-
-            exporter.SpreadsheetExportedEvent += (sender, e) => {
-                Console.WriteLine($"   - Spreadsheet 產生完成！");
-            };
-
-            return exporter;
-        });
-
-        SpreadsheetManager.DefaultCellStyles = new((setuper) => {
-            CellStyleConfiguration oldCellStyles = SpreadsheetManager.DefaultCellStyles;
-            setuper.CellStyle = oldCellStyles.CellStyle;
-            setuper.GridCellStyle = oldCellStyles.GridCellStyle;
-            setuper.HeaderStyle = oldCellStyles.HeaderStyle with {
-                BackgroundColor = Color.LightBlue,
-                Font = oldCellStyles.HeaderStyle.Font with {
-                    Style = FontStyles.IsBold
-                }
-            };
-        });
-
-        Console.WriteLine($"   - 已設定 {exporterName} Exporter 和預設樣式");
-    }
-
-    static void CreateBasicGridTemplateExample(string outputDir) {
-        ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
-        Sheeter sheeter = exporter.CreateSheeter("基本範例");
-
-        GridTemplate template = new();
-        template.CreateRow()
-            .CreateCell("姓名", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle)
-            .CreateCell("年齡", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle)
-            .CreateCell("城市", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle);
-
-        template.CreateRow()
-            .CreateCell("張三")
-            .CreateCell(30)
-            .CreateCell("台北");
-
-        template.CreateRow()
-            .CreateCell("李四")
-            .CreateCell(25)
-            .CreateCell("高雄");
-
-        sheeter.AddTemplate(template);
-
-        string filePath = Path.Combine(outputDir, $"01_基本GridTemplate{exporter.FileNameExtension}");
-        exporter.ExportFile(filePath);
-        Console.WriteLine($"   - 已建立: {Path.GetFileName(filePath)}");
-    }
-
-    static void CreateAdvancedGridTemplateExample(string outputDir) {
-        ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
-        Sheeter sheeter = exporter.CreateSheeter("進階範例");
-
-        GridTemplate template = new();
-        CellStyleConfiguration cellStyles = SpreadsheetManager.DefaultCellStyles;
-
-        CellStyle titleStyle = cellStyles.CellStyle with {
-            HorizontalAlignment = HorizontalAlignment.Center,
-            Font = cellStyles.CellStyle.Font with {
-                Size = 16,
-                Style = FontStyles.IsBold
-            },
-            BackgroundColor = Color.LightGreen
-        };
-
-        template.CreateRow()
-            .CreateCell("銷售報表", columnSpan: 4, cellStyle: titleStyle);
-
-        template.CreateRow()
-            .CreateCell("產品", cellStyle: cellStyles.HeaderStyle)
-            .CreateCell("單價", cellStyle: cellStyles.HeaderStyle)
-            .CreateCell("數量", cellStyle: cellStyles.HeaderStyle)
-            .CreateCell("小計", cellStyle: cellStyles.HeaderStyle);
-
-        CellStyle dataStyle = cellStyles.CellStyle with {
-            HorizontalAlignment = HorizontalAlignment.Right
-        };
-
-        template.CreateRow()
-            .CreateCell("產品A", cellStyle: cellStyles.CellStyle)
-            .CreateCell(100, cellStyle: dataStyle)
-            .CreateCell(5, cellStyle: dataStyle)
-            .CreateCell((cell, row) => $"B{row + 1}*C{row + 1}", cellStyle: dataStyle);
-
-        template.CreateRow()
-            .CreateCell("產品B", cellStyle: cellStyles.CellStyle)
-            .CreateCell(200, cellStyle: dataStyle)
-            .CreateCell(3, cellStyle: dataStyle)
-            .CreateCell((cell, row) => $"B{row + 1}*C{row + 1}", cellStyle: dataStyle);
-
-        CellStyle totalStyle = cellStyles.HeaderStyle with {
-            HorizontalAlignment = HorizontalAlignment.Right
-        };
-
-        template.CreateRow()
-            .CreateCell("總計", columnSpan: 3, cellStyle: cellStyles.HeaderStyle)
-            .CreateCell((cell, row) => $"SUM(D3:D4)", cellStyle: totalStyle);
-
-        sheeter.AddTemplate(template);
-
-        string filePath = Path.Combine(outputDir, $"02_進階GridTemplate{exporter.FileNameExtension}");
-        exporter.ExportFile(filePath);
-        Console.WriteLine($"   - 已建立: {Path.GetFileName(filePath)}");
-    }
-
-    static void CreateRecordSetTemplateExample(string outputDir) {
-        ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
-        Sheeter sheeter = exporter.CreateSheeter("員工清單");
-
-        List<Employee> employees = [
-            new() { Id = 1, Name = "張三", Department = "業務部", Salary = 45000 },
-            new() { Id = 2, Name = "李四", Department = "研發部", Salary = 55000 },
-            new() { Id = 3, Name = "王五", Department = "業務部", Salary = 48000 },
-            new() { Id = 4, Name = "趙六", Department = "人資部", Salary = 42000 }
-        ];
-
-        RecordSetTemplate<Employee> template = new(employees);
-        template.Columns.Add("員工編號", x => x.Id);
-        template.Columns.Add("姓名", x => x.Name);
-        template.Columns.Add("部門", x => x.Department);
-        template.Columns.Add("薪資", x => x.Salary);
-
-        sheeter.AddTemplate(template);
-
-        string filePath = Path.Combine(outputDir, $"03_RecordSetTemplate{exporter.FileNameExtension}");
-        exporter.ExportFile(filePath);
-        Console.WriteLine($"   - 已建立: {Path.GetFileName(filePath)}");
-    }
-
-    static void CreateAdvancedRecordSetTemplateExample(string outputDir) {
-        ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
-        Sheeter sheeter = exporter.CreateSheeter("員工詳細資料");
-
-        List<Employee> employees = [
-            new() { Id = 1, Name = "張三", Department = "業務部", Salary = 45000 },
-            new() { Id = 2, Name = "李四", Department = "研發部", Salary = 55000 },
-            new() { Id = 3, Name = "王五", Department = "業務部", Salary = 48000 },
-            new() { Id = 4, Name = "趙六", Department = "人資部", Salary = 42000 }
-        ];
-
-        RecordSetTemplate<Employee> template = new(employees);
-
-        template.Columns.Add("員工編號", x => x.Id);
-        template.Columns.Add("姓名", x => x.Name);
-        template.Columns.Add("部門", x => x.Department);
-        template.Columns.Add("薪資", x => x.Salary, x => x.UseValue(y => $"NT$ {y.Value:N0}"));
-
-        template.Columns.Add(
-            "薪資等級",
-            x => x.Salary,
-            x => x.UseValue(y => y.Value >= 50000 ? "高" : "一般")
-        );
-
-        template.Columns.Add(
-            "完整資訊",
-            x => x.UseValue(y => $"{y.Record.Name} ({y.Record.Department})")
-        );
-
-        template.Columns.Add(
-            "備註",
-            x => x.Salary,
-            x => x.UseValue(y => y.Value >= 50000 ? "優秀" : "")
-        );
-
-        sheeter.AddTemplate(template);
-
-        string filePath = Path.Combine(outputDir, $"04_進階RecordSetTemplate{exporter.FileNameExtension}");
-        exporter.ExportFile(filePath);
-        Console.WriteLine($"   - 已建立: {Path.GetFileName(filePath)}");
-    }
-
-    static void CreateNestedRecordSetTemplateExample(string outputDir) {
-        ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
-        Sheeter sheeter = exporter.CreateSheeter("部門資訊");
-
-        List<DepartmentInfo> departments = [
-            new() {
-                DepartmentName = "研發部",
-                Location = "台北",
-                Manager = new() { Id = 101, Name = "陳經理", Department = "研發部", Salary = 80000 },
-                Employees = [
-                    new() { Id = 1, Name = "李小華", Department = "研發部", Salary = 55000 },
-                    new() { Id = 2, Name = "陳大明", Department = "研發部", Salary = 60000 },
-                    new() { Id = 3, Name = "林小美", Department = "研發部", Salary = 58000 }
-                ]
-            },
-            new() {
-                DepartmentName = "業務部",
-                Location = "台中",
-                Manager = new() { Id = 102, Name = "王經理", Department = "業務部", Salary = 75000 },
-                Employees = [
-                    new() { Id = 4, Name = "張小三", Department = "業務部", Salary = 48000 },
-                    new() { Id = 5, Name = "劉小四", Department = "業務部", Salary = 52000 }
-                ]
-            },
-            new() {
-                DepartmentName = "人資部",
-                Location = "高雄",
-                Manager = new() { Id = 103, Name = "黃經理", Department = "人資部", Salary = 70000 },
-                Employees = [
-                    new() { Id = 6, Name = "吳小五", Department = "人資部", Salary = 45000 }
-                ]
-            }
-        ];
-
-        RecordSetTemplate<DepartmentInfo> template = new(departments);
-
-        template.Columns.Add("部門基本資訊")
-            .AddChildToLast("部門名稱", x => x.DepartmentName)
-            .AddChildToLast("所在地", x => x.Location)
-            .Add("主管資訊")
-            .AddChildToLast("姓名", x => x.UseValue(y => y.Record.Manager.Name))
-            .AddChildToLast("薪資", x => x.UseValue(y => $"NT$ {y.Record.Manager.Salary:N0}"))
-            .Add("員工統計");
-
-        template.Columns.Last().ChildColumns.Add("人數", x => x.UseValue(y => y.Record.Employees.Count))
-            .AddChildToLast("平均薪資", x => x.UseValue(y => $"NT$ {y.Record.Employees.Average(e => e.Salary):N0}"))
-            .AddChildToLast("薪資總和", x => x.UseValue(y => $"NT$ {y.Record.Employees.Sum(e => e.Salary):N0}"));
-
-        sheeter.AddTemplate(template);
-
-        string filePath = Path.Combine(outputDir, $"05_巢狀RecordSetTemplate{exporter.FileNameExtension}");
-        exporter.ExportFile(filePath);
-        Console.WriteLine($"   - 已建立: {Path.GetFileName(filePath)}");
-    }
-
-    static void CreateDataTableTemplateExample(string outputDir) {
-        ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
-        Sheeter sheeter = exporter.CreateSheeter("產品資料");
-
-        DataTable dataTable = new();
-        dataTable.Columns.Add("產品編號", typeof(string));
-        dataTable.Columns.Add("產品名稱", typeof(string));
-        dataTable.Columns.Add("單價", typeof(decimal));
-        dataTable.Columns.Add("庫存", typeof(int));
-
-        dataTable.Rows.Add("P001", "滑鼠", 299, 100);
-        dataTable.Rows.Add("P002", "鍵盤", 899, 50);
-        dataTable.Rows.Add("P003", "螢幕", 5999, 30);
-        dataTable.Rows.Add("P004", "喇叭", 1299, 75);
-
-        DataTableTemplate template = new(dataTable);
-        sheeter.AddTemplate(template);
-
-        string filePath = Path.Combine(outputDir, $"06_DataTableTemplate{exporter.FileNameExtension}");
-        exporter.ExportFile(filePath);
-        Console.WriteLine($"   - 已建立: {Path.GetFileName(filePath)}");
-    }
-
-    static void CreateMultiSheetExample(string outputDir) {
-        ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
-
-        Sheeter sheet1 = exporter.CreateSheeter("銷售資料");
-        GridTemplate salesTemplate = new();
-        salesTemplate.CreateRow()
-            .CreateCell("日期", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle)
-            .CreateCell("金額", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle);
-        salesTemplate.CreateRow().CreateCell("2024-01-01").CreateCell(10000);
-        salesTemplate.CreateRow().CreateCell("2024-01-02").CreateCell(15000);
-        sheet1.AddTemplate(salesTemplate);
-
-        Sheeter sheet2 = exporter.CreateSheeter("產品資料");
-        GridTemplate productsTemplate = new();
-        productsTemplate.CreateRow()
-            .CreateCell("產品", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle)
-            .CreateCell("單價", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle);
-        productsTemplate.CreateRow().CreateCell("產品A").CreateCell(100);
-        productsTemplate.CreateRow().CreateCell("產品B").CreateCell(200);
-        sheet2.AddTemplate(productsTemplate);
-
-        Sheeter sheet3 = exporter.CreateSheeter("摘要");
-        GridTemplate summaryTemplate = new();
-        summaryTemplate.CreateRow().CreateCell("總銷售額", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle);
-        summaryTemplate.CreateRow().CreateCell(25000);
-        sheet3.AddTemplate(summaryTemplate);
-
-        string filePath = Path.Combine(outputDir, $"07_多個Sheet{exporter.FileNameExtension}");
-        exporter.ExportFile(filePath);
-        Console.WriteLine($"   - 已建立: {Path.GetFileName(filePath)} (包含 3 個 Sheet)");
-    }
-
-    static void CreateCustomTemplateExample(string outputDir) {
-        ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
-        Sheeter sheeter = exporter.CreateSheeter("自訂範本");
-
-        ReportInfoTemplate infoTemplate = new("月度銷售報表", DateTime.Now);
-        sheeter.AddTemplate(infoTemplate);
-
-        GridTemplate dataTemplate = new();
-        dataTemplate.CreateRow()
-            .CreateCell("項目", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle)
-            .CreateCell("金額", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle);
-        dataTemplate.CreateRow().CreateCell("產品銷售").CreateCell(100000);
-        dataTemplate.CreateRow().CreateCell("服務收入").CreateCell(50000);
-        sheeter.AddTemplate(dataTemplate);
-
-        string filePath = Path.Combine(outputDir, $"08_自訂Template{exporter.FileNameExtension}");
-        exporter.ExportFile(filePath);
-        Console.WriteLine($"   - 已建立: {Path.GetFileName(filePath)}");
-    }
-
-    static void CreateSheeterAdvancedExample(string outputDir) {
-        ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
-        Sheeter sheeter = exporter.CreateSheeter("進階功能");
-
-        sheeter.SetColumnWidth(0, 15);
-        sheeter.SetColumnWidth(1, 20);
-        sheeter.SetColumnWidth(2, 25);
-
-        GridTemplate template = new();
-
-        template.CreateRow(height: 30)
-            .CreateCell("欄位A", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle)
-            .CreateCell("欄位B", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle)
-            .CreateCell("欄位C", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle);
-
-        template.CreateRow(height: 20)
-            .CreateCell("資料1")
-            .CreateCell("資料2")
-            .CreateCell("資料3");
-
-        template.CreateRow(height: 20)
-            .CreateCell("資料4")
-            .CreateCell("資料5")
-            .CreateCell("資料6");
-
-        sheeter.AddTemplate(template);
-
-        sheeter.Password = "1234";
-
-        string filePath = Path.Combine(outputDir, $"09_Sheeter進階功能{exporter.FileNameExtension}");
-        exporter.ExportFile(filePath);
-        Console.WriteLine($"   - 已建立: {Path.GetFileName(filePath)} (密碼: 1234)");
-    }
-
-    static void CreateFreezePanesAndAutoFilterExample(string outputDir) {
-        ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
-        Sheeter sheeter = exporter.CreateSheeter("凍結與篩選");
-
-        List<Product> products = [];
-        for (int i = 1; i <= 20; i++) {
-            products.Add(new() {
-                ProductId = $"P{i:000}",
-                ProductName = $"產品{i}",
-                Price = 1000 + (i * 100),
-                Stock = 50 + (i * 5)
-            });
-        }
-
-        RecordSetTemplate<Product> template = new(products);
-        template.Columns.Add("產品編號", x => x.ProductId);
-        template.Columns.Add("產品名稱", x => x.ProductName);
-        template.Columns.Add("單價", x => x.Price);
-        template.Columns.Add("庫存", x => x.Stock);
-
-        template.IsFreezeHeader = true;
-        template.IsAutoFilterEnabled = true;
-
-        sheeter.AddTemplate(template);
-
-        string filePath = Path.Combine(outputDir, $"10_凍結與篩選{exporter.FileNameExtension}");
-        exporter.ExportFile(filePath);
-        Console.WriteLine($"   - 已建立: {Path.GetFileName(filePath)}");
-    }
-
-    static void CreateDataValidationExample(string outputDir) {
-        ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
-        Sheeter sheeter = exporter.CreateSheeter("資料驗證");
-
-        GridTemplate template = new();
-        CellStyleConfiguration cellStyles = SpreadsheetManager.DefaultCellStyles;
-
-        template.CreateRow()
-            .CreateCell("驗證類型", cellStyle: cellStyles.HeaderStyle)
-            .CreateCell("請輸入資料", cellStyle: cellStyles.HeaderStyle)
-            .CreateCell("說明", cellStyle: cellStyles.HeaderStyle);
-
-        template.CreateRow()
-            .CreateCell("整數 (1-100)")
-            .CreateCell(cell => {
-                cell.DataValidationGenerator = (col, row) => new() {
-                    ValidationType = DataValidationType.Integer,
-                    Operator = DataValidationOperator.Between,
-                    Value1 = 1,
-                    Value2 = 100,
-                    ErrorTitle = "輸入錯誤",
-                    ErrorMessage = "請輸入 1 到 100 之間的整數",
-                    IsErrorAlertShown = true
-                };
-            })
-            .CreateCell("請輸入 1 到 100 之間的整數");
-
-        template.CreateRow()
-            .CreateCell("小數 (0-1)")
-            .CreateCell(cell => {
-                cell.DataValidationGenerator = (col, row) => new() {
-                    ValidationType = DataValidationType.Decimal,
-                    Operator = DataValidationOperator.Between,
-                    Value1 = 0.0,
-                    Value2 = 1.0,
-                    ErrorTitle = "輸入錯誤",
-                    ErrorMessage = "請輸入 0 到 1 之間的小數",
-                    IsErrorAlertShown = true
-                };
-            })
-            .CreateCell("請輸入 0 到 1 之間的小數");
-
-        template.CreateRow()
-            .CreateCell("清單選擇")
-            .CreateCell(cell => {
-                cell.DataValidationGenerator = (col, row) => new() {
+SpreadsheetManager.SetRenderer(static () => new ExcelRenderer());
+
+string outputDirectory = Path.Combine(AppContext.BaseDirectory, "artifacts");
+Directory.CreateDirectory(outputDirectory);
+
+SpreadsheetDocument fluentDocument = CreateFluentDocument();
+string fluentPath = Path.Combine(outputDirectory, $"sales-report{fluentDocument.FileNameExtension}");
+fluentDocument.ExportFile(fluentPath);
+
+SpreadsheetDocument jsonDocument = SpreadsheetDocument.FromJson(CreateJsonTemplate());
+string jsonPath = Path.Combine(outputDirectory, $"sales-report-json{jsonDocument.FileNameExtension}");
+jsonDocument.ExportFile(jsonPath);
+
+Console.WriteLine("SpreadsheetExporter Sample (ClosedXML)");
+Console.WriteLine($"Fluent API workbook : {fluentPath}");
+Console.WriteLine($"JSON template output: {jsonPath}");
+
+// ────────────────────────────────────────────────
+// Fluent API document
+// ────────────────────────────────────────────────
+
+static SpreadsheetDocument CreateFluentDocument() {
+    SpreadsheetDocument document = SpreadsheetManager
+        .CreateDocument()
+        .SetDefaultFont(new CellFont("Calibri", 11));
+
+    document
+        .CreateSheet("Overview", defaultRowHeight: 20)
+        .SetColumnWidth(0, 20)
+        .SetColumnWidth(1, 30)
+        .SetColumnWidth(2, 20)
+        .SetColumnWidth(3, 30)
+        .AddTemplate(CreateOverviewTemplate());
+
+    document
+        .CreateSheet("Orders", defaultRowHeight: 20)
+        .ConfigurePageSettings(x => x.PageOrientation = PageOrientation.Landscape)
+        .SetColumnWidth(0, 12)
+        .SetColumnWidth(1, 22)
+        .SetColumnWidth(2, 14)
+        .SetColumnWidth(3, 16)
+        .SetColumnWidth(4, 16)
+        .SetColumnWidth(5, 16)
+        .SetFreezePanes(0, 2)
+        .SetAutoFilterEnabled()
+        .AddTemplate(CreateOrdersTemplate(GetSampleOrders()));
+
+    document
+        .CreateSheet("Products", defaultRowHeight: 20)
+        .SetColumnWidth(0, 10)
+        .SetColumnWidth(1, 28)
+        .SetColumnWidth(2, 16)
+        .SetColumnWidth(3, 14)
+        .SetColumnWidth(4, 12)
+        .AddTemplate(CreateProductsTemplate(GetSampleProducts()));
+
+    return document;
+}
+
+static GridTemplate CreateOverviewTemplate() {
+    CellStyle titleStyle = new(
+        HorizontalAlignment: HorizontalAlignment.Center,
+        VerticalAlignment: VerticalAlignment.Middle,
+        HasBorder: true,
+        BackgroundColor: Color.FromArgb(31, 78, 121),
+        Font: new CellFont("Calibri", 14, Color.White, FontStyles.Bold)
+    );
+    CellStyle labelStyle = new(
+        HasBorder: true,
+        BackgroundColor: Color.FromArgb(221, 235, 247),
+        Font: new CellFont("Calibri", 11, Style: FontStyles.Bold)
+    );
+    CellStyle valueStyle = new(HasBorder: true);
+    CellStyle wrapStyle = valueStyle with { WrapText = true };
+    CellStyle statusStyle = valueStyle with { BackgroundColor = Color.FromArgb(226, 239, 218) };
+
+    return new GridTemplate()
+        .CreateRow(28)
+        .CreateCell("SpreadsheetExporter ClosedXML — Feature Verification", columnSpan: 4, cellStyle: titleStyle)
+        .CreateRow()
+        .CreateCell("Generated", cellStyle: labelStyle)
+        .CreateCell(DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss zzz"), cellStyle: valueStyle)
+        .CreateCell("Renderer", cellStyle: labelStyle)
+        .CreateCell("ClosedXML", cellStyle: valueStyle)
+        .CreateRow()
+        .CreateCell("Template Source", cellStyle: labelStyle)
+        .CreateCell("Fluent API", cellStyle: valueStyle)
+        .CreateCell("Status", cellStyle: labelStyle)
+        .CreateCell(
+            cell => {
+                cell.ValueGenerator = static (_, _) => "Ready";
+                cell.DataValidationGenerator = static (_, _) => new DataValidation {
                     ValidationType = DataValidationType.List,
-                    ListItems = ["選項A", "選項B", "選項C"],
-                    ErrorTitle = "輸入錯誤",
-                    ErrorMessage = "請從清單中選擇",
-                    IsErrorAlertShown = true
+                    ListItems = ["Draft", "Ready", "Archived"],
+                    PromptTitle = "Workbook status",
+                    PromptMessage = "Choose one of the supported workflow states.",
+                    IsInputPromptShown = true
                 };
-            })
-            .CreateCell("請從清單選擇: 選項A, 選項B, 選項C");
-
-        template.CreateRow()
-            .CreateCell("日期")
-            .CreateCell(cell => {
-                cell.DataValidationGenerator = (col, row) => new() {
-                    ValidationType = DataValidationType.Date,
-                    Operator = DataValidationOperator.GreaterThan,
-                    Formula = "TODAY()",
-                    ErrorTitle = "輸入錯誤",
-                    ErrorMessage = "請輸入今天之後的日期",
-                    IsErrorAlertShown = true
-                };
-            })
-            .CreateCell("請輸入今天之後的日期");
-
-        template.CreateRow()
-            .CreateCell("文字長度")
-            .CreateCell(cell => {
-                cell.DataValidationGenerator = (col, row) => new() {
-                    ValidationType = DataValidationType.TextLength,
-                    Operator = DataValidationOperator.Between,
-                    Value1 = 5,
-                    Value2 = 10,
-                    ErrorTitle = "輸入錯誤",
-                    ErrorMessage = "文字長度必須在 5 到 10 之間",
-                    IsErrorAlertShown = true
-                };
-            })
-            .CreateCell("請輸入長度 5-10 的文字");
-
-        sheeter.AddTemplate(template);
-
-        string filePath = Path.Combine(outputDir, $"11_資料驗證{exporter.FileNameExtension}");
-        exporter.ExportFile(filePath);
-        Console.WriteLine($"   - 已建立: {Path.GetFileName(filePath)}");
-    }
-
-    static void CreatePageSettingsExample(string outputDir) {
-        ISpreadsheetExporter exporter = SpreadsheetManager.CreateExporter();
-        Sheeter sheeter = exporter.CreateSheeter("頁面設定");
-
-        sheeter.PageSettings.PaperSize = PaperSize.A4;
-        sheeter.PageSettings.PageOrientation = PageOrientation.Landscape;
-
-        GridTemplate template = new();
-
-        template.CreateRow();
-        for (int i = 0; i < 10; i++) {
-            template.CreateCell($"欄位{i + 1}", cellStyle: SpreadsheetManager.DefaultCellStyles.HeaderStyle);
-        }
-
-        for (int row = 0; row < 30; row++) {
-            template.CreateRow();
-            for (int col = 0; col < 10; col++) {
-                template.CreateCell($"R{row + 1}C{col + 1}");
-            }
-        }
-
-        sheeter.AddTemplate(template);
-
-        string filePath = Path.Combine(outputDir, $"12_頁面設定{exporter.FileNameExtension}");
-        exporter.ExportFile(filePath);
-        Console.WriteLine($"   - 已建立: {Path.GetFileName(filePath)} (A4橫向)");
-    }
-
-}
-
-// 範例資料類別
-class Employee {
-    public int Id { get; set; }
-
-    public string Name { get; set; }
-
-    public string Department { get; set; }
-
-    public decimal Salary { get; set; }
-}
-
-class Product {
-    public string ProductId { get; set; }
-
-    public string ProductName { get; set; }
-
-    public decimal Price { get; set; }
-
-    public int Stock { get; set; }
-}
-
-class DepartmentInfo {
-    public string DepartmentName { get; set; }
-
-    public string Location { get; set; }
-
-    public Employee Manager { get; set; }
-
-    public List<Employee> Employees { get; set; }
-}
-
-// 自訂 Template 範例
-class ReportInfoTemplate : ITemplate {
-    private readonly string title;
-    private readonly DateTime createdDate;
-
-    public ReportInfoTemplate(string title, DateTime createdDate) {
-        this.title = title;
-        this.createdDate = createdDate;
-    }
-
-    public TemplateContext GetContext() {
-        List<Cell> cells = new();
-        Dictionary<int, double?> rowHeights = new();
-
-        CellStyle titleStyle = SpreadsheetManager.DefaultCellStyles.CellStyle with {
-            Font = SpreadsheetManager.DefaultCellStyles.CellStyle.Font with {
-                Size = 18,
-                Style = FontStyles.IsBold
             },
-            HorizontalAlignment = HorizontalAlignment.Center
-        };
-
-        // 標題儲存格
-        cells.Add(new() {
-            Point = new(0, 0),
-            Size = new(3, 1),
-            ValueGenerator = (col, row) => title,
-            CellStyleGenerator = (col, row) => titleStyle
-        });
-
-        rowHeights[0] = 35;
-
-        // 日期儲存格
-        cells.Add(new() {
-            Point = new(0, 1),
-            ValueGenerator = (col, row) => "建立日期:",
-            CellStyleGenerator = (col, row) => SpreadsheetManager.DefaultCellStyles.CellStyle
-        });
-
-        cells.Add(new() {
-            Point = new(1, 1),
-            ValueGenerator = (col, row) => createdDate.ToString("yyyy-MM-dd HH:mm:ss"),
-            CellStyleGenerator = (col, row) => SpreadsheetManager.DefaultCellStyles.CellStyle
-        });
-
-        rowHeights[1] = null;
-
-        // 空白列
-        rowHeights[2] = 10;
-
-        return new TemplateContext(cells, 3, rowHeights);
-    }
+            cellStyle: statusStyle
+        )
+        .CreateRow(36)
+        .CreateCell("Notes", cellStyle: labelStyle)
+        .CreateCell(
+            "This workbook verifies: GridTemplate (merge, style, validation), " +
+            "RecordSetTemplate (hierarchy, freeze, autofilter, formula, validation), " +
+            "DataTableTemplate (auto-columns, custom columns, style generators), " +
+            "MergedTemplate (header + data combined).",
+            columnSpan: 3,
+            cellStyle: wrapStyle
+        );
 }
+
+static RecordSetTemplate<SampleOrder> CreateOrdersTemplate(IEnumerable<SampleOrder> orders) {
+    CellStyle headerStyle = SpreadsheetManager.DefaultCellStyles.HeaderStyle;
+    CellStyle currencyStyle = SpreadsheetManager.DefaultCellStyles.FieldStyle with {
+        HorizontalAlignment = HorizontalAlignment.Right,
+        DataFormat = "#,##0.00"
+    };
+    CellStyle intStyle = SpreadsheetManager.DefaultCellStyles.FieldStyle with {
+        HorizontalAlignment = HorizontalAlignment.Right
+    };
+
+    RecordSetTemplate<SampleOrder> template = new(orders) {
+        HeaderHeight = 22,
+        RecordHeight = 20
+    };
+
+    // 階層欄位：Order Info / Financial
+    template.Columns
+        .Add("Order Info")
+        .GetLastColumn().ChildColumns
+            .Add("Order ID", static o => o.OrderId, fieldStyleGenerator: _ => intStyle)
+            .Add("Customer", static o => o.Customer)
+            .Add(
+                "Region",
+                static o => o.Region,
+                configureGenerators: static cfg => cfg.UseDataValidation(
+                    _ => new DataValidation {
+                        ValidationType = DataValidationType.List,
+                        ListItems = ["North", "South", "East", "West"],
+                        ErrorTitle = "Unsupported region",
+                        ErrorMessage = "Region must be one of the configured sales territories."
+                    }
+                )
+            )
+            .Parent
+        .Add("Financial")
+        .GetLastColumn().ChildColumns
+            .Add("Amount", static o => o.Amount, fieldStyleGenerator: _ => currencyStyle)
+            .Add(
+                "Margin",
+                configureGenerators: static cfg => cfg.UseFormula(
+                    ctx => $"E{ctx.RowIndex + 3}*0.35"
+                ),
+                fieldStyleGenerator: _ => currencyStyle
+            )
+            .Add(
+                "Qty",
+                static o => o.Qty,
+                configureGenerators: static cfg => cfg.UseDataValidation(
+                    _ => new DataValidation {
+                        ValidationType = DataValidationType.Integer,
+                        Operator = DataValidationOperator.GreaterThan,
+                        Value1 = 0,
+                        ErrorTitle = "Invalid quantity",
+                        ErrorMessage = "Quantity must be a positive integer."
+                    }
+                ),
+                fieldStyleGenerator: _ => intStyle
+            );
+
+    return template;
+}
+
+static ISheetTemplate CreateProductsTemplate(DataTable products) {
+    CellStyle titleStyle = new(
+        HorizontalAlignment: HorizontalAlignment.Center,
+        HasBorder: true,
+        BackgroundColor: Color.FromArgb(84, 130, 53),
+        Font: new CellFont("Calibri", 12, Color.White, FontStyles.Bold)
+    );
+    CellStyle priceStyle = SpreadsheetManager.DefaultCellStyles.FieldStyle with {
+        HorizontalAlignment = HorizontalAlignment.Right,
+        DataFormat = "#,##0.00"
+    };
+    CellStyle intStyle = SpreadsheetManager.DefaultCellStyles.FieldStyle with {
+        HorizontalAlignment = HorizontalAlignment.Right
+    };
+    CellStyle lowStockStyle = SpreadsheetManager.DefaultCellStyles.FieldStyle with {
+        Font = new CellFont(Style: FontStyles.Bold),
+        BackgroundColor = Color.FromArgb(255, 235, 156)
+    };
+
+    GridTemplate header = new GridTemplate()
+        .CreateRow(28)
+        .CreateCell("Product Inventory — DataTableTemplate Demo", columnSpan: 5, cellStyle: titleStyle);
+
+    DataTableTemplate dataTemplate = new(products) {
+        HeaderHeight = 22,
+        RecordHeight = 20
+    };
+    dataTemplate.Columns.Clear();
+    dataTemplate.Columns.Add(new DataTableColumn {
+        ColumnName = "ProductId",
+        HeaderText = "ID",
+        FieldStyleGenerator = _ => intStyle
+    });
+    dataTemplate.Columns.Add(new DataTableColumn {
+        ColumnName = "Name",
+        HeaderText = "Product Name"
+    });
+    dataTemplate.Columns.Add(new DataTableColumn {
+        ColumnName = "Category",
+        HeaderText = "Category"
+    });
+    dataTemplate.Columns.Add(new DataTableColumn {
+        ColumnName = "UnitPrice",
+        HeaderText = "Unit Price",
+        FieldStyleGenerator = _ => priceStyle
+    });
+    dataTemplate.Columns.Add(new DataTableColumn {
+        ColumnName = "Stock",
+        HeaderText = "Stock",
+        FieldStyleGenerator = value => (int?)value < 10 ? lowStockStyle : intStyle
+    });
+
+    return new MergedTemplate(header, dataTemplate);
+}
+
+static IEnumerable<SampleOrder> GetSampleOrders() => [
+    new SampleOrder(1001, "Northwind", "North", 1250.40m, 8),
+    new SampleOrder(1002, "Adventure Works", "West", 980.00m, 5),
+    new SampleOrder(1003, "Tailspin Toys", "South", 1640.75m, 12),
+    new SampleOrder(1004, "Litware", "East", 725.20m, 3),
+    new SampleOrder(1005, "Contoso", "North", 2100.00m, 7),
+    new SampleOrder(1006, "Fabrikam", "West", 430.50m, 15)
+];
+
+static DataTable GetSampleProducts() {
+    DataTable table = new();
+    table.Columns.Add("ProductId", typeof(int));
+    table.Columns.Add("Name", typeof(string));
+    table.Columns.Add("Category", typeof(string));
+    table.Columns.Add("UnitPrice", typeof(decimal));
+    table.Columns.Add("Stock", typeof(int));
+
+    table.Rows.Add(1, "Laptop Pro 15", "Computers", 1299.00m, 24);
+    table.Rows.Add(2, "Wireless Mouse", "Accessories", 29.99m, 5);
+    table.Rows.Add(3, "Mechanical Keyboard", "Accessories", 89.00m, 8);
+    table.Rows.Add(4, "4K Monitor 27\"", "Displays", 549.00m, 3);
+    table.Rows.Add(5, "USB-C Hub", "Accessories", 49.99m, 42);
+    table.Rows.Add(6, "SSD 1TB", "Storage", 119.00m, 17);
+    table.Rows.Add(7, "Webcam HD", "Peripherals", 79.00m, 9);
+    table.Rows.Add(8, "Desk Lamp LED", "Furniture", 39.99m, 2);
+
+    return table;
+}
+
+// ────────────────────────────────────────────────
+// JSON document
+// ────────────────────────────────────────────────
+
+static string CreateJsonTemplate() => """
+    [
+      {
+        "SheetName": "Summary",
+        "DefaultRowHeight": 20,
+        "ColumnWidths": [
+          { "Index": 0, "Width": 12 },
+          { "Index": 1, "Width": 28 },
+          { "Index": 2, "Width": 16 },
+          { "Index": 3, "Width": 16 },
+          { "Index": 4, "Width": 14 }
+        ],
+        "PageSettings": {
+          "PageOrientation": "Landscape",
+          "PaperSize": "A4"
+        },
+        "FreezePanes": { "Row": 3, "Column": 0 },
+        "IsAutoFilterEnabled": true,
+        "Templates": [
+          {
+            "Type": "Grid",
+            "Rows": [
+              {
+                "Height": 28,
+                "Cells": [
+                  {
+                    "Value": "Sales Summary — Generated from SpreadsheetDocument.FromJson",
+                    "ColumnSpan": 5,
+                    "Style": {
+                      "HorizontalAlignment": "Center",
+                      "HasBorder": true,
+                      "Font": { "Size": 13, "Style": "Bold" }
+                    }
+                  }
+                ]
+              },
+              {
+                "Height": 22,
+                "Cells": [
+                  {
+                    "Value": "Region",
+                    "Style": { "HasBorder": true, "Font": { "Style": "Bold" }, "HorizontalAlignment": "Center" }
+                  },
+                  {
+                    "Value": "Description",
+                    "ColumnSpan": 2,
+                    "Style": { "HasBorder": true, "Font": { "Style": "Bold" } }
+                  },
+                  {
+                    "Value": "Target",
+                    "Style": { "HasBorder": true, "Font": { "Style": "Bold" }, "HorizontalAlignment": "Right" }
+                  },
+                  {
+                    "Value": "Achieved",
+                    "Style": { "HasBorder": true, "Font": { "Style": "Bold" }, "HorizontalAlignment": "Right" }
+                  }
+                ]
+              },
+              {
+                "Cells": [
+                  { "Value": "North", "Style": { "HasBorder": true, "HorizontalAlignment": "Center" } },
+                  { "Value": "Northwind + Contoso combined", "ColumnSpan": 2, "Style": { "HasBorder": true } },
+                  { "Value": 3000.00, "Style": { "HasBorder": true, "HorizontalAlignment": "Right", "DataFormat": "#,##0.00" } },
+                  { "Value": 3350.40, "Style": { "HasBorder": true, "HorizontalAlignment": "Right", "DataFormat": "#,##0.00" } }
+                ]
+              },
+              {
+                "Cells": [
+                  { "Value": "West",  "Style": { "HasBorder": true, "HorizontalAlignment": "Center" } },
+                  { "Value": "Adventure Works + Fabrikam", "ColumnSpan": 2, "Style": { "HasBorder": true } },
+                  { "Value": 1500.00, "Style": { "HasBorder": true, "HorizontalAlignment": "Right", "DataFormat": "#,##0.00" } },
+                  { "Value": 1410.50, "Style": { "HasBorder": true, "HorizontalAlignment": "Right", "DataFormat": "#,##0.00" } }
+                ]
+              }
+            ]
+          },
+          {
+            "Type": "RecordSet",
+            "HeaderHeight": 22,
+            "RecordHeight": 20,
+            "Columns": [
+              {
+                "HeaderText": "Order ID",
+                "FieldKey": "OrderId",
+                "HeaderStyle": { "HasBorder": true, "HorizontalAlignment": "Center", "Font": { "Style": "Bold" } },
+                "FieldStyle":  { "HasBorder": true, "HorizontalAlignment": "Right" }
+              },
+              {
+                "HeaderText": "Customer",
+                "FieldKey": "Customer",
+                "HeaderStyle": { "HasBorder": true, "HorizontalAlignment": "Center", "Font": { "Style": "Bold" } },
+                "FieldStyle":  { "HasBorder": true }
+              },
+              {
+                "HeaderText": "Region",
+                "FieldKey": "Region",
+                "HeaderStyle": { "HasBorder": true, "HorizontalAlignment": "Center", "Font": { "Style": "Bold" } },
+                "FieldStyle":  { "HasBorder": true, "HorizontalAlignment": "Center" }
+              },
+              {
+                "HeaderText": "Amount",
+                "FieldKey": "Amount",
+                "HeaderStyle": { "HasBorder": true, "HorizontalAlignment": "Center", "Font": { "Style": "Bold" } },
+                "FieldStyle":  { "HasBorder": true, "HorizontalAlignment": "Right", "DataFormat": "#,##0.00" }
+              },
+              {
+                "HeaderText": "Qty",
+                "FieldKey": "Qty",
+                "HeaderStyle": { "HasBorder": true, "HorizontalAlignment": "Center", "Font": { "Style": "Bold" } },
+                "FieldStyle":  { "HasBorder": true, "HorizontalAlignment": "Right" }
+              }
+            ],
+            "Records": [
+              { "OrderId": 1001, "Customer": "Northwind",       "Region": "North", "Amount": 1250.40, "Qty": 8 },
+              { "OrderId": 1002, "Customer": "Adventure Works", "Region": "West",  "Amount":  980.00, "Qty": 5 },
+              { "OrderId": 1003, "Customer": "Tailspin Toys",   "Region": "South", "Amount": 1640.75, "Qty": 12 },
+              { "OrderId": 1004, "Customer": "Litware",         "Region": "East",  "Amount":  725.20, "Qty": 3 },
+              { "OrderId": 1005, "Customer": "Contoso",         "Region": "North", "Amount": 2100.00, "Qty": 7 },
+              { "OrderId": 1006, "Customer": "Fabrikam",        "Region": "West",  "Amount":  430.50, "Qty": 15 }
+            ]
+          }
+        ]
+      }
+    ]
+    """;
+
+file sealed record SampleOrder(int OrderId, string Customer, string Region, decimal Amount, int Qty);

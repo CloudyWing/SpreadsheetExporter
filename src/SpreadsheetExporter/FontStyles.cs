@@ -1,34 +1,34 @@
-﻿using System;
+using System;
 
 namespace CloudyWing.SpreadsheetExporter;
 
 /// <summary>
-/// The font styles.
+/// Specifies font style flags that can be combined.
 /// </summary>
 [Flags]
 public enum FontStyles {
     /// <summary>
-    /// The none.
+    /// No font styles applied.
     /// </summary>
     None = 0,
 
     /// <summary>
-    /// The is bold.
+    /// Bold text.
     /// </summary>
-    IsBold = 1,
+    Bold = 1,
 
     /// <summary>
-    /// The is italic.
+    /// Italic text.
     /// </summary>
-    IsItalic = 2,
+    Italic = 2,
 
     /// <summary>
-    /// The has underline.
+    /// Underlined text.
     /// </summary>
-    HasUnderline = 4,
+    Underline = 4,
 
     /// <summary>
-    /// The is strikeout.
+    /// Strikeout text.
     /// </summary>
-    IsStrikeout = 8,
+    Strikeout = 8,
 }

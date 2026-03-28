@@ -18,7 +18,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             GridTemplate template = new();
             template.CreateRow(10);
 
-            Assert.That(template.GetContext().RowHeights[0], Is.EqualTo(10));
+            Assert.That(template.GetLayout().RowHeights[0], Is.EqualTo(10));
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             template.CreateRow()
                 .CreateCell("A1");
 
-            Assert.That(template.GetContext().Cells.Count, Is.EqualTo(1));
+            Assert.That(template.GetLayout().Cells.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -36,7 +36,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             template.CreateRow()
                 .CreateCell("A1");
 
-            Assert.That(template.GetContext().Cells.Single().GetValue(), Is.EqualTo("A1"));
+            Assert.That(template.GetLayout().Cells.Single().GetValue(), Is.EqualTo("A1"));
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             template.CreateRow()
                 .CreateCell("A1", 2);
 
-            Assert.That(template.GetContext().Cells.Single().Size.Width, Is.EqualTo(2));
+            Assert.That(template.GetLayout().Cells.Single().Size.Width, Is.EqualTo(2));
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             template.CreateRow()
                 .CreateCell("A1", rowSpan: 2);
 
-            Assert.That(template.GetContext().Cells.Single().Size.Height, Is.EqualTo(2));
+            Assert.That(template.GetLayout().Cells.Single().Size.Height, Is.EqualTo(2));
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             template.CreateRow()
                 .CreateCell("A1", cellStyle: cellStyle);
 
-            Assert.That(template.GetContext().Cells.Single().GetCellStyle(), Is.EqualTo(cellStyle));
+            Assert.That(template.GetLayout().Cells.Single().GetCellStyle(), Is.EqualTo(cellStyle));
         }
 
         [Test]
@@ -74,34 +74,38 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
             template.CreateRow()
                 .CreateCell((x, y) => "A1 + B1", 2, 2, SpreadsheetManager.DefaultCellStyles.GridCellStyle);
 
-            TemplateContext context = template.GetContext();
-            Cell cell = context.Cells.Single();
-            Assert.That(cell.GetFormula(), Is.EqualTo("A1 + B1"));
-            Assert.That(cell.GetCellStyle(), Is.EqualTo(SpreadsheetManager.DefaultCellStyles.GridCellStyle));
-            Assert.That(cell.Size, Is.EqualTo(new Size(2, 2)));
+            Cell cell = template.GetLayout().Cells.Single();
+
+            Assert.Multiple(() => {
+                Assert.That(cell.GetFormula(), Is.EqualTo("A1 + B1"));
+                Assert.That(cell.GetCellStyle(), Is.EqualTo(SpreadsheetManager.DefaultCellStyles.GridCellStyle));
+                Assert.That(cell.Size, Is.EqualTo(new Size(2, 2)));
+            });
         }
 
         [Test]
-        public void GetContext_ShouldReturnExpectedTemplateContext() {
+        public void GetLayout_ShouldReturnExpectedTemplateLayout() {
             GridTemplate template = new GridTemplate()
                 .CreateRow(20)
                 .CreateCell("A1", columnSpan: 2, rowSpan: 2)
                 .CreateRow()
                 .CreateCell("B1", columnSpan: 2, rowSpan: 2);
 
-            TemplateContext context = template.GetContext();
+            TemplateLayout context = template.GetLayout();
 
-            Assert.That(context.Cells.Count, Is.EqualTo(2));
-            Assert.That(context.Cells[0].Point, Is.EqualTo(new Point(0, 0)));
-            Assert.That(context.Cells[0].Size, Is.EqualTo(new Size(2, 2)));
-            Assert.That(context.Cells[0].GetValue(), Is.EqualTo("A1"));
-            Assert.That(context.Cells[1].Point, Is.EqualTo(new Point(2, 1)));
-            Assert.That(context.Cells[1].Size, Is.EqualTo(new Size(2, 2)));
-            Assert.That(context.Cells[1].GetValue(), Is.EqualTo("B1"));
-            Assert.That(context.RowSpan, Is.EqualTo(3));
-            Assert.That(context.RowHeights.Count, Is.EqualTo(2));
-            Assert.That(context.RowHeights[0], Is.EqualTo(20));
-            Assert.That(context.RowHeights[1], Is.EqualTo(null));
+            Assert.Multiple(() => {
+                Assert.That(context.Cells.Count, Is.EqualTo(2));
+                Assert.That(context.Cells[0].Point, Is.EqualTo(new Point(0, 0)));
+                Assert.That(context.Cells[0].Size, Is.EqualTo(new Size(2, 2)));
+                Assert.That(context.Cells[0].GetValue(), Is.EqualTo("A1"));
+                Assert.That(context.Cells[1].Point, Is.EqualTo(new Point(2, 1)));
+                Assert.That(context.Cells[1].Size, Is.EqualTo(new Size(2, 2)));
+                Assert.That(context.Cells[1].GetValue(), Is.EqualTo("B1"));
+                Assert.That(context.RowSpan, Is.EqualTo(3));
+                Assert.That(context.RowHeights.Count, Is.EqualTo(2));
+                Assert.That(context.RowHeights[0], Is.EqualTo(20));
+                Assert.That(context.RowHeights[1], Is.EqualTo(null));
+            });
         }
 
         [Test]
@@ -118,12 +122,13 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
                     cell.DataValidationGenerator = (x, y) => validation;
                 });
 
-            Cell resultCell = template.GetContext().Cells.Single();
-            DataValidation resultValidation = resultCell.GetDataValidation();
+            Cell resultCell = template.GetLayout().Cells.Single();
+            DataValidation? resultValidation = resultCell.GetDataValidation();
 
+            // resultValidation must be non-null before accessing its members
             Assert.That(resultValidation, Is.Not.Null);
-            Assert.That(resultValidation.ValidationType, Is.EqualTo(DataValidationType.List));
-            Assert.That(resultValidation.ListItems, Is.EqualTo(new[] { "Option1", "Option2", "Option3" }));
+            Assert.That(resultValidation!.ValidationType, Is.EqualTo(DataValidationType.List));
+            Assert.That(resultValidation!.ListItems, Is.EqualTo(new[] { "Option1", "Option2", "Option3" }));
         }
 
         [Test]
@@ -141,15 +146,15 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
                     };
                 });
 
-            DataValidation validation = template.GetContext().Cells.Single().GetDataValidation();
+            DataValidation? validation = template.GetLayout().Cells.Single().GetDataValidation();
 
             Assert.Multiple(() => {
                 Assert.That(validation, Is.Not.Null);
-                Assert.That(validation.ValidationType, Is.EqualTo(DataValidationType.List));
-                Assert.That(validation.ListItems, Is.EquivalentTo(new[] { "Red", "Green", "Blue" }));
-                Assert.That(validation.IsDropdownShown, Is.True);
-                Assert.That(validation.ErrorTitle, Is.EqualTo("Invalid Color"));
-                Assert.That(validation.ErrorMessage, Is.EqualTo("Please select a color from the list"));
+                Assert.That(validation!.ValidationType, Is.EqualTo(DataValidationType.List));
+                Assert.That(validation!.ListItems, Is.EquivalentTo(new[] { "Red", "Green", "Blue" }));
+                Assert.That(validation!.IsDropdownShown, Is.True);
+                Assert.That(validation!.ErrorTitle, Is.EqualTo("Invalid Color"));
+                Assert.That(validation!.ErrorMessage, Is.EqualTo("Please select a color from the list"));
             });
         }
 
@@ -167,14 +172,14 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
                     };
                 });
 
-            DataValidation validation = template.GetContext().Cells.Single().GetDataValidation();
+            DataValidation? validation = template.GetLayout().Cells.Single().GetDataValidation();
 
             Assert.Multiple(() => {
                 Assert.That(validation, Is.Not.Null);
-                Assert.That(validation.ValidationType, Is.EqualTo(DataValidationType.Integer));
-                Assert.That(validation.Operator, Is.EqualTo(DataValidationOperator.Between));
-                Assert.That(validation.Value1, Is.EqualTo(1));
-                Assert.That(validation.Value2, Is.EqualTo(100));
+                Assert.That(validation!.ValidationType, Is.EqualTo(DataValidationType.Integer));
+                Assert.That(validation!.Operator, Is.EqualTo(DataValidationOperator.Between));
+                Assert.That(validation!.Value1, Is.EqualTo(1));
+                Assert.That(validation!.Value2, Is.EqualTo(100));
             });
         }
 
@@ -195,13 +200,13 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
                     };
                 });
 
-            DataValidation validation = template.GetContext().Cells.Single().GetDataValidation();
+            DataValidation? validation = template.GetLayout().Cells.Single().GetDataValidation();
 
             Assert.Multiple(() => {
                 Assert.That(validation, Is.Not.Null);
-                Assert.That(validation.ValidationType, Is.EqualTo(DataValidationType.Date));
-                Assert.That(validation.Value1, Is.EqualTo(minDate));
-                Assert.That(validation.Value2, Is.EqualTo(maxDate));
+                Assert.That(validation!.ValidationType, Is.EqualTo(DataValidationType.Date));
+                Assert.That(validation!.Value1, Is.EqualTo(minDate));
+                Assert.That(validation!.Value2, Is.EqualTo(maxDate));
             });
         }
 
@@ -218,13 +223,13 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
                     };
                 });
 
-            DataValidation validation = template.GetContext().Cells.Single().GetDataValidation();
+            DataValidation? validation = template.GetLayout().Cells.Single().GetDataValidation();
 
             Assert.Multiple(() => {
                 Assert.That(validation, Is.Not.Null);
-                Assert.That(validation.ValidationType, Is.EqualTo(DataValidationType.Custom));
-                Assert.That(validation.Formula, Is.EqualTo("LEN(A1)<=10"));
-                Assert.That(validation.ErrorMessage, Is.EqualTo("Text must be 10 characters or less"));
+                Assert.That(validation!.ValidationType, Is.EqualTo(DataValidationType.Custom));
+                Assert.That(validation!.Formula, Is.EqualTo("LEN(A1)<=10"));
+                Assert.That(validation!.ErrorMessage, Is.EqualTo("Text must be 10 characters or less"));
             });
         }
     }

@@ -55,6 +55,7 @@ BenchmarkDotNet.Artifacts/
 project.lock.json
 project.fragment.lock.json
 artifacts/
+.dotnet/
 
 # StyleCop
 StyleCopReport.xml
@@ -343,3 +344,29 @@ healthchecksdb
 _site/
 docs/api/
 obj/
+
+# AI assistants
+# Claude Code
+.claude/
+!.claude/CLAUDE.md
+!.claude/skills/
+!.claude/agents/
+!.claude/commands/
+
+# Cursor
+.cursor/
+!.cursor/rules/
+
+# Gemini CLI
+.gemini/
+!.gemini/GEMINI.md
+
+# Windsurf
+.windsurfrules
+
+# Augment Code
+.augmentignore
+
+# local files
+.local/
+*.local.md

@@ -5,15 +5,16 @@ _layout: landing
 # SpreadsheetExporter
 
 用於匯出 Excel 試算表的函式庫，透過範本系統定義表格版面配置。
-支援使用 NPOI 或 EPPlus 作為底層 Excel 實作套件。
+核心負責描述 `SpreadsheetDocument`、`SheetDefinition` 與各種 template，實際 `.xlsx` 由 ClosedXML renderer 輸出。
 
 ## 文檔導航
 
 ### 使用指南
 
 - [入門指南](articles/getting-started.md)
-- [Exporters（匯出器）](articles/exporters.md)
-- [Sheeters（工作表）](articles/sheeters.md)
+- [升級指南](articles/migration-notes.md)
+- [SpreadsheetDocument（文件）](articles/spreadsheet-document.md)
+- [SheetDefinition（工作表）](articles/sheet-definition.md)
 - [Templates（範本）](articles/templates.md)
 - [自訂樣式](articles/customization.md)
 
