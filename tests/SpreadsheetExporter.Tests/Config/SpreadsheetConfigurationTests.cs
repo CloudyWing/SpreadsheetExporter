@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using CloudyWing.SpreadsheetExporter.Config;
 
 namespace CloudyWing.SpreadsheetExporter.Tests.Config {
@@ -6,7 +6,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Config {
     public class CellStyleConfigurationTests {
         private static void CreateTestCellStyle(CellStyle cellStyle, out CellStyle headerStyle, out CellStyle fieldStyle) {
             CellFont headerFont = cellStyle.Font with {
-                Style = cellStyle.Font.Style | FontStyles.IsBold
+                Style = cellStyle.Font.Style | FontStyles.Bold
             };
 
             headerStyle = cellStyle with {
@@ -28,15 +28,18 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Config {
 
             CreateTestCellStyle(cellStyle, out CellStyle headerStyle, out CellStyle fieldStyle);
 
-            CellStyleConfiguration actual = new(x => {
-                x.CellStyle = cellStyle;
-                x.HeaderStyle = headerStyle;
-                x.FieldStyle = fieldStyle;
-            });
+            CellStyleConfiguration actual = new() {
+                CellStyle = cellStyle,
+                HeaderStyle = headerStyle,
+                FieldStyle = fieldStyle,
+                GridCellStyle = cellStyle
+            };
 
-            Assert.That(actual.CellStyle, Is.EqualTo(cellStyle));
-            Assert.That(actual.HeaderStyle, Is.EqualTo(headerStyle));
-            Assert.That(actual.FieldStyle, Is.EqualTo(fieldStyle));
+            Assert.Multiple(() => {
+                Assert.That(actual.CellStyle, Is.EqualTo(cellStyle));
+                Assert.That(actual.HeaderStyle, Is.EqualTo(headerStyle));
+                Assert.That(actual.FieldStyle, Is.EqualTo(fieldStyle));
+            });
         }
     }
 }

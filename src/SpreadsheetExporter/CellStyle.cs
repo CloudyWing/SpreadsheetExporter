@@ -18,11 +18,11 @@ public record struct CellStyle(
     VerticalAlignment VerticalAlignment = VerticalAlignment.Top,
     bool HasBorder = false, bool WrapText = false,
     Color BackgroundColor = default, CellFont Font = default,
-    string DataFormat = null,
+    string? DataFormat = null,
     bool IsLocked = false
 ) {
     /// <summary>
-    /// The cell style equals to <c>new CellStyle()</c>.
+    /// Gets an empty <see cref="CellStyle"/> with all default values.
     /// </summary>
     public static CellStyle Empty { get; } = new() {
         HorizontalAlignment = HorizontalAlignment.General,

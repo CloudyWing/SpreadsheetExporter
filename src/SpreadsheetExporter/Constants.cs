@@ -1,34 +1,26 @@
-﻿using System;
-
 namespace CloudyWing.SpreadsheetExporter;
 
 /// <summary>
-/// The constants.
+/// Provides constant values used throughout the spreadsheet export process.
 /// </summary>
 public static class Constants {
     /// <summary>
-    /// The automatic fit column width.
+    /// Specifies that the column width should be automatically fitted to the content.
     /// </summary>
     public const int AutoFitColumnWidth = -1;
 
     /// <summary>
-    /// The hidden column.
+    /// Specifies that the column should be hidden.
     /// </summary>
     public const int HiddenColumn = 0;
 
     /// <summary>
-    /// The automatic fit row height.
+    /// Specifies that the row height should be automatically fitted to the content.
     /// </summary>
     public const int AutoFitRowHeight = AutoFitColumnWidth;
 
     /// <summary>
-    /// The automatic fit row height.
-    /// </summary>
-    [Obsolete("Use AutoFitRowHeight instead. This property will be removed in a future version.")]
-    public const int AutoFiteRowHeight = AutoFitRowHeight;
-
-    /// <summary>
-    /// The hidden row.
+    /// Specifies that the row should be hidden.
     /// </summary>
     public const int HiddenRow = HiddenColumn;
 }

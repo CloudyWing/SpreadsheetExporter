@@ -1,65 +1,14 @@
-﻿using System;
-
 namespace CloudyWing.SpreadsheetExporter.Config;
 
 /// <summary>
-/// The spreadsheet default style.
+/// Represents the default cell style configuration used across the spreadsheet.
 /// </summary>
-public class CellStyleConfiguration {
-    /// <summary>
-    /// Default font name used for cell styles.
-    /// </summary>
+public sealed class CellStyleConfiguration {
     private const string DefaultFontName = "新細明體";
-
-    /// <summary>
-    /// Default font size used for cell styles.
-    /// </summary>
     private const short DefaultFontSize = 10;
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CellStyleConfiguration" /> class.
-    /// </summary>
-    /// <param name="loader">The loader.</param>
-    public CellStyleConfiguration(Action<CellStyleSetuper> loader) {
-        CellStyleSetuper setuper = new(this);
-        loader(setuper);
-    }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CellStyleConfiguration"/> class.
-    /// <code>
-    /// CellStyle: {
-    ///     HorizontalAlignment: None,
-    ///     VerticalAlignment: Middle,
-    ///     HasBorder: false,
-    ///     WrapText: false,
-    ///     Font: {
-    ///         Name: "新細明體",
-    ///         Size: 10,
-    ///         IsBold: false,
-    ///         IsItalic: false,
-    ///         HasUnderline: false,
-    ///         IsStrikeout: false
-    ///     }
-    /// }
-    ///
-    /// GridCellStyle: {
-    ///     StyleBase: CellStyle
-    /// }
-    ///
-    /// HeaderStyle: {
-    ///     StyleBase: CellStyle
-    ///     HorizontalAlignment: Center,
-    ///     HasBorder: true,
-    ///     Font: {
-    ///         IsBold: true,
-    ///     }
-    /// }
-    ///
-    /// FieldStyle: {
-    ///     StyleBase: CellStyle
-    ///     HasBorder: true
-    /// }
-    /// </code>
+    /// Initializes a new instance of the <see cref="CellStyleConfiguration"/> class with default styles.
     /// </summary>
     public CellStyleConfiguration() {
         CellStyle cellStyle = new(
@@ -73,7 +22,7 @@ public class CellStyleConfiguration {
         );
 
         CellFont headerFont = cellStyle.Font with {
-            Style = cellStyle.Font.Style | FontStyles.IsBold
+            Style = cellStyle.Font.Style | FontStyles.Bold
         };
 
         CellStyle = cellStyle;
@@ -90,34 +39,22 @@ public class CellStyleConfiguration {
     }
 
     /// <summary>
-    /// Gets the cell style.
+    /// Gets the base cell style applied to general cells.
     /// </summary>
-    /// <value>
-    /// The cell style.
-    /// </value>
-    public virtual CellStyle CellStyle { get; internal set; }
+    public CellStyle CellStyle { get; init; }
 
     /// <summary>
-    /// Gets the grid cell style.
+    /// Gets the cell style applied to grid template cells.
     /// </summary>
-    /// <value>
-    /// The grid cell style.
-    /// </value>
-    public virtual CellStyle GridCellStyle { get; internal set; }
+    public CellStyle GridCellStyle { get; init; }
 
     /// <summary>
-    /// Gets the header style.
+    /// Gets the cell style applied to column headers.
     /// </summary>
-    /// <value>
-    /// The header style.
-    /// </value>
-    public virtual CellStyle HeaderStyle { get; internal set; }
+    public CellStyle HeaderStyle { get; init; }
 
     /// <summary>
-    /// Gets the field style.
+    /// Gets the cell style applied to data fields.
     /// </summary>
-    /// <value>
-    /// The field style.
-    /// </value>
-    public virtual CellStyle FieldStyle { get; internal set; }
+    public CellStyle FieldStyle { get; init; }
 }

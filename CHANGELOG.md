@@ -1,5 +1,44 @@
 # Changelog
 
+## v3.0.0 (2026-03-29)
+
+### New Features
+
+- 實作 v3 核心模型與命名：
+  - `SpreadsheetDocument` 取代舊版匯出入口。
+  - `SheetDefinition` / `SheetLayout` 取代 `Sheeter` / `SheeterContext`。
+  - `TemplateLayout` 取代 `TemplateContext`；`GetLayout()` 取代 `GetContext()`。
+  - `ISpreadsheetRenderer` 成為新的渲染抽象。
+- 新增 `SpreadsheetExporter.Renderer.ClosedXML`（取代舊版 `Excel.EPPlus` / `Excel.NPOI`）：
+  - 使用 ClosedXML 輸出 `.xlsx`。
+  - 支援樣式、合併儲存格、欄寬/列高、凍結窗格、自動篩選、資料驗證與工作表保護。
+  - 進入點：`SpreadsheetManager.SetRenderer(() => new ExcelRenderer())`。
+- 更新目標框架：
+  - 核心與 ClosedXML renderer 套件改為 `net8.0` 與 `net10.0`。
+- 新增 JSON 模板流程：
+  - `SpreadsheetDocument.FromJson(...)` 可解析 `GridTemplate` 與 `RecordSetTemplate`。
+  - 支援以 JSON 描述欄寬、頁面設定、模板與資料列。
+- 改善 `RecordSetColumnCollection<T>` 階層欄位 API：
+  - 新增 `GetLastColumn()` 方法，回傳最後一個欄位物件。
+  - 新增 `Parent` 屬性，從子集合導覽回上層集合。
+  - 新增 `RootColumns` 屬性，取得根集合。
+  - 移除舊版 `AddChildToLastColumn(...)` 系列多載。
+- 新增 `CellGenerator<out T>` delegate，取代 Cell 屬性上的 `Func<int, int, T>`，語義更明確。
+- 更新 sample 與 benchmark 專案：
+  - sample 改為展示 v3 + ClosedXML 的 Fluent API 與 JSON 基本用法。
+  - benchmarks 改為量測 v3 模板建立與 ClosedXML 匯出流程。
+
+### BREAKING CHANGES
+
+- 移除舊版 `SpreadsheetExporter.Excel.EPPlus` 與 `SpreadsheetExporter.Excel.NPOI` solution 專案。
+- `Sheeter`、`SheeterContext`、`ITemplate`、`ISpreadsheetExporter` 等 v2 API 已改為 v3 命名。
+- `TemplateContext` 已重新命名為 `TemplateLayout`；所有模板的 `GetContext()` 已改為 `GetLayout()`。
+- Renderer 套件改為 `CloudyWing.SpreadsheetExporter.Renderer.ClosedXML`，進入類別改為 `ExcelRenderer`。
+- 核心與 renderer 套件不再支援 v2 時期的舊目標框架組合。
+- `FreezePanes` 與 `IsAutoFilterEnabled` 相關設定已從 `RecordSetTemplate` 移至 `SheetDefinition` 。
+- `RecordSetColumnCollection<T>` 的 `AddChildToLastColumn(...)` 系列多載已移除，請改用 `GetLastColumn().ChildColumns.Add(...)`。
+- `Cell` 的四個 generator 屬性型別從 `Func<int, int, T>` 改為 `CellGenerator<T>`；現有 lambda 指派無需修改，但若有明確型別宣告需更新。
+
 ## v2.3.0 (2026-02-01)
 
 ### New Features

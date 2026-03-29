@@ -1,5 +1,3 @@
-using CloudyWing.SpreadsheetExporter;
-
 namespace CloudyWing.SpreadsheetExporter.Tests;
 
 [TestFixture]

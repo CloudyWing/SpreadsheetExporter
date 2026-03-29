@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -8,101 +8,79 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet;
 /// <summary>
 /// The recordset template. Create cell information using set data source and data column.
 /// </summary>
-/// <seealso cref="ITemplate" />
+/// <seealso cref="ISheetTemplate" />
 /// <typeparam name="T">The type of the record.</typeparam>
-/// <param name="dataSource">The data source.</param>
-/// <exception cref="ArgumentNullException">dataSource</exception>
-public class RecordSetTemplate<T>(IEnumerable<T> dataSource) : ITemplate {
-    private IReadOnlyList<T> cachedDataSource;
+public class RecordSetTemplate<T> : ISheetTemplate {
+    private IEnumerable<T> dataSourceField;
 
-    private IEnumerable<T> dataSourceField = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RecordSetTemplate{T}"/> class.
+    /// </summary>
+    /// <param name="dataSource">The data source.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="dataSource"/> is <see langword="null"/>.</exception>
+    public RecordSetTemplate(IEnumerable<T> dataSource) {
+        ArgumentNullException.ThrowIfNull(dataSource);
+        dataSourceField = dataSource;
+    }
+
+    internal RecordSetTemplate() : this([]) {
+    }
 
     /// <summary>
     /// Gets or sets the data source.
     /// </summary>
-    /// <value>
-    /// The data source.
-    /// </value>
+    /// <value>The data source.</value>
     public IEnumerable<T> DataSource {
         get => dataSourceField;
         set {
             dataSourceField = value;
-            cachedDataSource = null;
+            CachedDataSource = null;
         }
     }
 
-    private IReadOnlyList<T> CachedDataSource {
+    private IReadOnlyList<T>? CachedDataSource {
         get {
-            if (cachedDataSource is null) {
-                cachedDataSource = DataSource is IReadOnlyList<T> readOnlyList
+            field ??= DataSource is IReadOnlyList<T> readOnlyList
                     ? readOnlyList
                     : DataSource.ToList().AsReadOnly();
-            }
 
-            return cachedDataSource;
+            return field;
         }
+        set;
     }
 
     /// <summary>
     /// Gets the columns.
     /// </summary>
-    /// <value>
-    /// The columns.
-    /// </value>
-    public DataColumnCollection<T> Columns { get; } = new DataColumnCollection<T>(null);
+    /// <value>The columns.</value>
+    public RecordSetColumnCollection<T> Columns { get; } = new RecordSetColumnCollection<T>(null);
 
     /// <summary>
     /// Gets or sets the height of the header.
     /// </summary>
-    /// <value>
-    /// The height of the header.
-    /// </value>
+    /// <value>The height of the header.</value>
     public double? HeaderHeight { get; set; }
 
     /// <summary>
     /// Gets or sets the height of the record.
     /// </summary>
-    /// <value>
-    /// The height of the record.
-    /// </value>
+    /// <value>The height of the record.</value>
     public double? RecordHeight { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to freeze header rows.
-    /// When enabled, freezes all header rows (determined by <see cref="DataColumnCollection{T}.RowSpan"/>).
-    /// </summary>
-    /// <value>
-    /// <c>true</c> to freeze header rows; otherwise, <c>false</c>. Default is <c>false</c>.
-    /// </value>
-    public bool IsFreezeHeader { get; set; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether to enable auto filter for the data range.
-    /// Auto filter is applied to the header row and data rows.
-    /// </summary>
-    /// <value>
-    /// <c>true</c> to enable auto filter; otherwise, <c>false</c>. Default is <c>false</c>.
-    /// </value>
-    public bool IsAutoFilterEnabled { get; set; }
 
     /// <summary>
     /// Gets the column span.
     /// </summary>
-    /// <value>
-    /// The column span.
-    /// </value>
+    /// <value>The column span.</value>
     public int ColumnSpan => Columns.ColumnSpan;
 
     /// <summary>
     /// Gets the row span.
     /// </summary>
-    /// <value>
-    /// The row span.
-    /// </value>
-    public int RowSpan => CachedDataSource.Count + Columns.RowSpan;
+    /// <value>The row span.</value>
+    public int RowSpan => CachedDataSource!.Count + Columns.RowSpan;
 
-    private IEnumerable<Cell> GetHearderCells(DataColumnCollection<T> columns) {
-        foreach (DataColumnBase<T> column in columns) {
+    private static IEnumerable<Cell> GetHeaderCells(RecordSetColumnCollection<T> columns) {
+        foreach (RecordSetColumnBase<T> column in columns) {
             yield return new Cell {
                 ValueGenerator = (cellIndex, rowIndex) => column.HeaderText,
                 CellStyleGenerator = (cellIndex, rowIndex) => column.HeaderStyle,
@@ -110,7 +88,7 @@ public class RecordSetTemplate<T>(IEnumerable<T> dataSource) : ITemplate {
                 Size = new Size(column.ColumnSpan, column.RowSpan)
             };
 
-            foreach (Cell childCell in GetHearderCells(column.ChildColumns)) {
+            foreach (Cell childCell in GetHeaderCells(column.ChildColumns)) {
                 yield return childCell;
             }
         }
@@ -118,8 +96,8 @@ public class RecordSetTemplate<T>(IEnumerable<T> dataSource) : ITemplate {
 
     private IEnumerable<Cell> GetRecordCells() {
         Point point = new(0, Columns.RowSpan);
-        foreach (T record in CachedDataSource) {
-            foreach (DataColumnBase<T> column in Columns.DataSourceColumns) {
+        foreach (T record in CachedDataSource!) {
+            foreach (RecordSetColumnBase<T> column in Columns.LeafColumns) {
                 yield return new Cell {
                     ValueGenerator = (cellIndex, rowIndex) => column.GetFieldValue(new RecordContext<T>(cellIndex, rowIndex, record)),
                     CellStyleGenerator = (cellIndex, rowIndex) => column.GetFieldStyle(new RecordContext<T>(cellIndex, rowIndex, record)),
@@ -135,21 +113,13 @@ public class RecordSetTemplate<T>(IEnumerable<T> dataSource) : ITemplate {
     }
 
     /// <inheritdoc/>
-    public TemplateContext GetContext() {
+    public TemplateLayout GetLayout() {
         Columns.CalculatePoints(Point.Empty);
-        TemplateContext context = new(GetCells(), RowSpan, GetRowHeights());
-
-        if (IsFreezeHeader) {
-            context.FreezePanes = new Point(0, Columns.RowSpan);
-        }
-
-        context.IsAutoFilterEnabled = IsAutoFilterEnabled;
-
-        return context;
+        return new TemplateLayout(GetCells(), RowSpan, GetRowHeights());
     }
 
     private IEnumerable<Cell> GetCells() {
-        return GetHearderCells(Columns).Union(GetRecordCells());
+        return RecordSetTemplate<T>.GetHeaderCells(Columns).Union(GetRecordCells());
     }
 
     private Dictionary<int, double?> GetRowHeights() {
@@ -158,9 +128,10 @@ public class RecordSetTemplate<T>(IEnumerable<T> dataSource) : ITemplate {
         for (i = 0; i < Columns.RowSpan; i++) {
             dic[i] = HeaderHeight;
         }
-        foreach (T _ in CachedDataSource) {
+        foreach (T _ in CachedDataSource!) {
             dic[i++] = RecordHeight;
         }
         return dic;
     }
+
 }

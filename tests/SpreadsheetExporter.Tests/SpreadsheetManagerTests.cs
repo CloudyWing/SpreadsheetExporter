@@ -1,3 +1,4 @@
+using System.Reflection;
 using CloudyWing.SpreadsheetExporter.Config;
 
 namespace CloudyWing.SpreadsheetExporter.Tests;
@@ -6,164 +7,114 @@ namespace CloudyWing.SpreadsheetExporter.Tests;
 internal class SpreadsheetManagerTests {
     [SetUp]
     public void SetUp() {
-        // 重置靜態狀態
         SpreadsheetManager.DefaultCellStyles = null;
+        ResetRendererFactory();
     }
 
     [Test]
-    public void DefaultCellStyles_WhenNotSet_ShouldReturnDefaultConfiguration() {
+    public void DefaultCellStyles_WhenNotOverridden_ShouldReturnBuiltInConfiguration() {
         CellStyleConfiguration config = SpreadsheetManager.DefaultCellStyles;
 
-        Assert.That(config, Is.Not.Null);
-        Assert.That(config.CellStyle, Is.Not.Null);
-        Assert.That(config.CellStyle.Font.Name, Is.EqualTo("新細明體"));
-        Assert.That(config.CellStyle.Font.Size, Is.EqualTo(10));
-    }
-
-    [Test]
-    public void DefaultCellStyles_WhenSet_ShouldReturnUserConfiguration() {
-        CellStyle customCellStyle = new(
-            HorizontalAlignment.Left,
-            VerticalAlignment.Top,
-            false, false,
-            default,
-            new CellFont("Custom Font", 14, default, FontStyles.None),
-            null,
-            false
-        );
-
-        CellStyleConfiguration userConfig = new(setuper => {
-            setuper.CellStyle = customCellStyle;
+        Assert.Multiple(() => {
+            Assert.That(config, Is.Not.Null);
+            Assert.That(config.CellStyle.Font.Name, Is.EqualTo("新細明體"));
+            Assert.That(config.CellStyle.Font.Size, Is.EqualTo(10));
+            Assert.That(config.HeaderStyle.Font.Style, Is.EqualTo(FontStyles.Bold));
         });
-
-        SpreadsheetManager.DefaultCellStyles = userConfig;
-
-        CellStyleConfiguration result = SpreadsheetManager.DefaultCellStyles;
-        Assert.That(result, Is.SameAs(userConfig));
-        Assert.That(result.CellStyle.Font.Name, Is.EqualTo("Custom Font"));
-        Assert.That(result.CellStyle.Font.Size, Is.EqualTo(14));
     }
 
     [Test]
-    public void DefaultCellStyles_WhenSetToNull_ShouldReturnDefaultConfiguration() {
-        CellStyleConfiguration userConfig = new();
-        SpreadsheetManager.DefaultCellStyles = userConfig;
+    public void DefaultCellStyles_WhenSet_ShouldReturnAssignedConfiguration() {
+        CellStyleConfiguration custom = new() {
+            CellStyle = new CellStyle(Font: new CellFont("Custom", 14)),
+            GridCellStyle = new CellStyle(Font: new CellFont("Grid", 12)),
+            HeaderStyle = new CellStyle(Font: new CellFont("Header", 13, Style: FontStyles.Bold)),
+            FieldStyle = new CellStyle(Font: new CellFont("Field", 11))
+        };
+
+        SpreadsheetManager.DefaultCellStyles = custom;
+
+        Assert.That(SpreadsheetManager.DefaultCellStyles, Is.SameAs(custom));
+    }
+
+    [Test]
+    public void DefaultCellStyles_WhenResetToNull_ShouldReturnBuiltInConfigurationAgain() {
+        SpreadsheetManager.DefaultCellStyles = new CellStyleConfiguration {
+            CellStyle = new CellStyle(Font: new CellFont("Custom", 14)),
+            GridCellStyle = new CellStyle(Font: new CellFont("Custom", 14)),
+            HeaderStyle = new CellStyle(Font: new CellFont("Custom", 14)),
+            FieldStyle = new CellStyle(Font: new CellFont("Custom", 14))
+        };
 
         SpreadsheetManager.DefaultCellStyles = null;
 
-        CellStyleConfiguration result = SpreadsheetManager.DefaultCellStyles;
-        Assert.That(result, Is.Not.Null);
-        Assert.That(result.CellStyle.Font.Name, Is.EqualTo("新細明體"));
+        Assert.That(SpreadsheetManager.DefaultCellStyles.CellStyle.Font.Name, Is.EqualTo("新細明體"));
     }
 
     [Test]
-    public void SetExporter_WithValidFactory_ShouldSetFactory() {
-        FakeExporter exporter = new();
-        ISpreadsheetExporter factory() => exporter;
+    public void SetRenderer_WithNullFactory_ShouldThrowArgumentNullException() {
+        ArgumentNullException exception = Assert.Throws<ArgumentNullException>(() => SpreadsheetManager.SetRenderer(null!))!;
 
-        Assert.DoesNotThrow(() => SpreadsheetManager.SetExporter(factory));
-
-        ISpreadsheetExporter result = SpreadsheetManager.CreateExporter();
-        Assert.That(result, Is.SameAs(exporter));
+        Assert.That(exception.ParamName, Is.EqualTo("rendererFactory"));
     }
 
     [Test]
-    public void SetExporter_WithNullFactory_ShouldThrowArgumentNullException() {
-        ArgumentNullException ex = Assert.Throws<ArgumentNullException>(
-            () => SpreadsheetManager.SetExporter(null)
-        );
+    public void SetRenderer_WithFactoryReturningNull_ShouldThrowArgumentException() {
+        ArgumentException exception = Assert.Throws<ArgumentException>(() => SpreadsheetManager.SetRenderer(() => null!))!;
 
-        Assert.That(ex.ParamName, Is.EqualTo("exporterFactory"));
+        Assert.Multiple(() => {
+            Assert.That(exception.ParamName, Is.EqualTo("rendererFactory"));
+            Assert.That(exception.Message, Does.Contain("Factory return value cannot be null."));
+        });
     }
 
     [Test]
-    public void SetExporter_WithFactoryReturningNull_ShouldThrowArgumentException() {
-        ISpreadsheetExporter factory() => null;
+    public void CreateDocument_WhenRendererFactoryNotSet_ShouldThrowInvalidOperationException() {
+        InvalidOperationException exception = Assert.Throws<InvalidOperationException>(() => SpreadsheetManager.CreateDocument())!;
 
-        ArgumentException ex = Assert.Throws<ArgumentException>(
-            () => SpreadsheetManager.SetExporter(factory)
-        );
-
-        Assert.That(ex.ParamName, Is.EqualTo("exporterFactory"));
-        Assert.That(ex.Message, Does.Contain("Factory return value cannot be null"));
+        Assert.That(exception.Message, Does.Contain("Renderer factory is not set."));
     }
 
     [Test]
-    public void CreateExporter_WhenFactoryNotSet_ShouldThrowInvalidOperationException() {
-        InvalidOperationException ex = Assert.Throws<InvalidOperationException>(
-            () => SpreadsheetManager.CreateExporter()
-        );
+    public void CreateDocument_WhenRendererFactorySet_ShouldReturnNewDocumentWithRendererMetadata() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer("application/test-1", ".one"));
 
-        Assert.That(ex.Message, Does.Contain("Exporter factory is not set"));
+        SpreadsheetDocument document1 = SpreadsheetManager.CreateDocument();
+        SpreadsheetDocument document2 = SpreadsheetManager.CreateDocument();
+
+        Assert.Multiple(() => {
+            Assert.That(document1, Is.Not.SameAs(document2));
+            Assert.That(document1.ContentType, Is.EqualTo("application/test-1"));
+            Assert.That(document1.FileNameExtension, Is.EqualTo(".one"));
+            Assert.That(document2.ContentType, Is.EqualTo("application/test-1"));
+        });
     }
 
     [Test]
-    public void CreateExporter_WhenFactorySet_ShouldReturnNewExporterInstance() {
-        SpreadsheetManager.SetExporter(() => new FakeExporter());
+    public void SetRenderer_CalledMultipleTimes_ShouldUseLatestFactory() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer("application/old", ".old"));
+        SpreadsheetDocument oldDocument = SpreadsheetManager.CreateDocument();
 
-        ISpreadsheetExporter exporter1 = SpreadsheetManager.CreateExporter();
-        ISpreadsheetExporter exporter2 = SpreadsheetManager.CreateExporter();
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer("application/new", ".new"));
+        SpreadsheetDocument newDocument = SpreadsheetManager.CreateDocument();
 
-        Assert.That(exporter1, Is.Not.Null);
-        Assert.That(exporter2, Is.Not.Null);
-        Assert.That(exporter1, Is.Not.SameAs(exporter2));
+        Assert.Multiple(() => {
+            Assert.That(oldDocument.ContentType, Is.EqualTo("application/old"));
+            Assert.That(newDocument.ContentType, Is.EqualTo("application/new"));
+            Assert.That(newDocument.FileNameExtension, Is.EqualTo(".new"));
+        });
     }
 
-    [Test]
-    public void SetExporter_CalledMultipleTimes_ShouldUpdateFactory() {
-        FakeExporter exporter1 = new();
-        FakeExporter exporter2 = new();
-
-        SpreadsheetManager.SetExporter(() => exporter1);
-        ISpreadsheetExporter result1 = SpreadsheetManager.CreateExporter();
-
-        SpreadsheetManager.SetExporter(() => exporter2);
-        ISpreadsheetExporter result2 = SpreadsheetManager.CreateExporter();
-
-        Assert.That(result1, Is.SameAs(exporter1));
-        Assert.That(result2, Is.SameAs(exporter2));
-        Assert.That(result1, Is.Not.SameAs(result2));
+    private static void ResetRendererFactory() {
+        FieldInfo field = typeof(SpreadsheetManager).GetField("rendererFactory", BindingFlags.NonPublic | BindingFlags.Static)!;
+        field.SetValue(null, null);
     }
 
-    private class FakeExporter : ISpreadsheetExporter {
-        public event EventHandler<SpreadsheetExportingEventArgs> SpreadsheetExportingEvent;
+    private sealed class FakeRenderer(string contentType, string fileNameExtension) : ISpreadsheetRenderer {
+        public string ContentType { get; } = contentType;
 
-        public event EventHandler<SpreadsheetExportedEventArgs> SpreadsheetExportedEvent;
+        public string FileNameExtension { get; } = fileNameExtension;
 
-        public event EventHandler<SheetCreatedEventArgs> SheetCreatedEvent;
-
-        public string ContentType => "application/test";
-
-        public string FileNameExtension => ".test";
-
-        public string Password { get; set; } = "";
-
-        public bool HasPassword => !string.IsNullOrEmpty(Password);
-
-        public CellFont? DefaultFont { get; set; }
-
-        public string DefaultBasicSheetName { get; set; }
-
-        public Sheeter LastSheeter => throw new NotImplementedException();
-
-        public Sheeter CreateSheeter(string sheetName = null, double? defaultRowHeight = null) {
-            throw new NotImplementedException();
-        }
-
-        public Sheeter GetSheeter(int index) {
-            throw new NotImplementedException();
-        }
-
-        public bool TryGetSheeter(int index, out Sheeter sheeter) {
-            throw new NotImplementedException();
-        }
-
-        public byte[] Export() {
-            return [];
-        }
-
-        public void ExportFile(string path, SpreadsheetFileMode fileMode = SpreadsheetFileMode.Create) {
-            throw new NotImplementedException();
-        }
+        public byte[] Render(IEnumerable<SheetLayout> contexts) => [];
     }
 }

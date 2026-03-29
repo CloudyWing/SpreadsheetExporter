@@ -1,18 +1,18 @@
 # Templates
 
-Templates 定義工作表儲存格的結構與內容。SpreadsheetExporter 提供多種 Template 類型以滿足不同使用情境。
+Templates 定義工作表儲存格的結構與內容。SpreadsheetExporter 提供四種內建 template 類型，並支援自訂擴充。
 
 ## 本文內容
 
 - [GridTemplate](#gridtemplate) - 手動逐格配置
 - [DataTableTemplate](#datatabletemplate) - 基於 DataTable 的匯出
 - [RecordSetTemplate](#recordsettemplate) - 強型別集合
-- [MergedTemplate](#mergedtemplate) - 合併多個 Templates
-- [自訂 Templates](#自訂-templates) - 建立您自己的 Template
+- [MergedTemplate](#mergedtemplate) - 合併多個 templates
+- [自訂 Templates](#自訂-templates) - 建立可重複使用的自訂 template
 
 ## GridTemplate
 
-`GridTemplate` 提供精細的儲存格配置控制，類似於 HTML 的 `<table>`、`<tr>` 與 `<td>`。支援方法鏈（Method Chaining）以簡化程式碼。
+`GridTemplate` 提供精細的儲存格配置控制，類似 HTML 的 `<table>`、`<tr>` 與 `<td>`。支援方法鏈（Method Chaining）。
 
 ### 建立列
 
@@ -38,49 +38,56 @@ template.CreateRow(Constants.AutoFitRowHeight);
 GridTemplate template = new GridTemplate();
 template.CreateRow();
 
-// 簡單儲存格
-template.CreateCell("Value1_1");
+// 簡單值儲存格
+template.CreateCell("Hello");
 
-// 合併儲存格（RowSpan=3, ColumnSpan=2）
-template.CreateCell("Value1_2", 3, 2);
+// 合併儲存格（columnSpan=2, rowSpan=2）
+template.CreateCell("Merged", columnSpan: 2, rowSpan: 2);
 
-// 自訂樣式的儲存格
-template.CreateCell("Value1_3", 1, 1, new CellStyle());
+// 自訂樣式
+CellStyle style = new CellStyle(HorizontalAlignment: HorizontalAlignment.Center, HasBorder: true);
+template.CreateCell("Styled", cellStyle: style);
+```
 
-// 使用方法鏈與公式
+### 公式儲存格
+
+```csharp
+// 傳入 (cellIndex, rowIndex) 的 lambda
 template.CreateRow()
-    .CreateCell("Value2_1")
-    .CreateCell((cell, row) => $"{cell} + {row}"); // 公式（索引從 0 開始）
+    .CreateCell((cellIndex, rowIndex) => $"=SUM(A{rowIndex + 1},1)");
+```
 
-/*
-輸出：
-| -------- | -------- | -------- | -------- | -------- | 
-| Value1_1 | Value1_2                       | Value1_3 |
-| -------- |                                | -------- |
-| Value2_1 |                                | =1 + 1   |
-| -------- | -------- | -------- | -------- | -------- |
-*/
+### 完整自訂儲存格
+
+使用 `Action<Cell>` 多載可同時設定值、公式與資料驗證：
+
+```csharp
+template.CreateRow();
+template.CreateCell(cell => {
+    cell.ValueGenerator = (_, _) => "請選擇";
+    cell.DataValidationGenerator = (_, _) => new DataValidation {
+        ValidationType = DataValidationType.List,
+        ListItems = ["選項 A", "選項 B", "選項 C"],
+        IsDropdownShown = true
+    };
+});
 ```
 
 ## DataTableTemplate
 
-直接將 `System.Data.DataTable` 匯出至 Excel，並自動對應欄位。
+直接將 `System.Data.DataTable` 匯出至試算表，自動對應欄位名稱為標題列。
 
 ```csharp
-// 建立 DataTable
 System.Data.DataTable dataTable = new System.Data.DataTable();
 dataTable.Columns.Add("Name", typeof(string));
 dataTable.Columns.Add("Age", typeof(int));
-
 dataTable.Rows.Add("John", 30);
 dataTable.Rows.Add("Mary", 25);
 
-// 建立 Template
-DataTableTemplate template = new DataTableTemplate(dataTable);
-
-// 設定列高
-template.HeaderHeight = 25;
-template.RecordHeight = 20;
+DataTableTemplate template = new DataTableTemplate(dataTable) {
+    HeaderHeight = 25,
+    RecordHeight = 20
+};
 
 /*
 輸出：
@@ -96,234 +103,175 @@ template.RecordHeight = 20;
 
 ## RecordSetTemplate
 
-最強大的 Template，適用於強型別資料集合。提供完整的欄位設定、資料轉換與樣式控制。
+適用於強型別資料集合，支援欄位綁定、資料轉換、條件樣式、多層標題與資料驗證。
 
 ### 基本用法
 
 ```csharp
-public class Record {
+public class Order {
     public int Id { get; set; }
-    public string Name { get; set; }
+    public string Customer { get; set; }
+    public decimal Amount { get; set; }
 }
 
-List<Record> source = new List<Record> {
-    new Record { Id = 0, Name = "Marry" },
-    new Record { Id = 1, Name = "Terry" }
-};
+List<Order> orders = [
+    new Order { Id = 1, Customer = "Northwind", Amount = 1250.40m },
+    new Order { Id = 2, Customer = "Adventure Works", Amount = 980.00m }
+];
 
-RecordSetTemplate<Record> template = new RecordSetTemplate<Record>(source);
-template.Columns.Add("編號", x => x.Id);
-template.Columns.Add("姓名", x => x.Name);
-
-/*
-輸出：
-| ---- | ---- | 
-| 編號 | 姓名 |
-| ---- | ---- |
-| 0    | Marry |
-| ---- | ---- |
-| 1    | Terry |
-| ---- | ---- |
-*/
+RecordSetTemplate<Order> template = new RecordSetTemplate<Order>(orders);
+template.Columns.Add<int>("編號", order => order.Id);
+template.Columns.Add<string>("客戶", order => order.Customer);
+template.Columns.Add<decimal>("金額", order => order.Amount);
 ```
 
 ### 資料轉換
 
-在匯出過程中轉換值：
+使用 `configureGenerators` 參數自訂值或公式產生方式：
 
 ```csharp
-// 轉換屬性值
-template.Columns.Add("大寫姓名", x => x.Name, x => x.UseValue(y => y.Value.ToUpper()));
+// 轉換值
+template.Columns.Add<string>(
+    "大寫客戶",
+    order => order.Customer,
+    configureGenerators: config => config.UseValue(ctx => ctx.Value.ToUpper())
+);
 
-// 合併多個屬性
-template.Columns.Add("合併資料", x => x.UseValue(y => y.Record.Id + y.Record.Name));
-
-/*
-輸出：
-| -------- | -------- | 
-| 大寫姓名 | 合併資料 |
-| -------- | -------- |
-| MARRY    | 0Marry   |
-| -------- | -------- |
-| TERRY    | 1Terry   |
-| -------- | -------- |
-*/
+// 不綁定欄位，完全自訂值
+template.Columns.Add(
+    "合併資料",
+    configureGenerators: config => config.UseValue(
+        ctx => $"{ctx.Record.Id} - {ctx.Record.Customer}"
+    )
+);
 ```
 
-### 自訂儲存格樣式
-
-套用條件樣式：
+### 公式
 
 ```csharp
-CellStyleConfiguration cellStyles = SpreadsheetManager.DefaultCellStyles;
-
+// context.RowIndex 為資料列的零基索引（標題列不計入）
 template.Columns.Add(
-    "狀態", 
-    x => x.Id,
-    // 標題樣式：紅色背景
-    cellStyles.HeaderStyle with {
-        BackgroundColor = Color.Red
-    },
-    // 條件式欄位樣式
-    x => x.Value == 0
-        ? cellStyles.FieldStyle with { BackgroundColor = Color.Blue }
-        : cellStyles.FieldStyle with { BackgroundColor = Color.Yellow }
+    "含稅金額",
+    configureGenerators: config => config.UseFormula(
+        context => $"C{context.RowIndex + 2}*1.05"
+    )
+);
+```
+
+### 條件樣式
+
+```csharp
+CellStyle currencyStyle = new CellStyle(
+    HorizontalAlignment: HorizontalAlignment.Right,
+    DataFormat: "#,##0.00"
+);
+
+template.Columns.Add<decimal>(
+    "金額",
+    order => order.Amount,
+    fieldStyleGenerator: ctx => ctx.Value >= 1000
+        ? currencyStyle with { BackgroundColor = Color.LightGreen }
+        : currencyStyle
 );
 ```
 
 ### 多層標題
 
-建立分組欄位標題：
-
 ```csharp
-template.Columns.Add("群組1")
-    .AddChildToLast("編號", x => x.Id)
-    .AddChildToLast("姓名", x => x.Name)
-    .Add("群組2")
-    .AddChildToLast("子群組1");
-
-DataColumnCollection<Record> lastChildColumns = template.Columns.Last().ChildColumns;
-lastChildColumns.AddChildToLast("編號", x => x.Id)
-    .AddChildToLast("姓名", x => x.Name);
-
-template.Columns.AddChildToLast("子群組2");
-lastChildColumns = template.Columns.Last().ChildColumns
-    .AddChildToLast("編號", x => x.Id)
-    .AddChildToLast("姓名", x => x.Name);
+template.Columns
+    .Add<int>("編號", order => order.Id)
+    .Add("客戶資訊")
+    .GetLastColumn().ChildColumns
+        .Add("客戶", order => order.Customer)
+        .Add("地區", order => order.Region);
 
 /*
-輸出：
-| ---- | ---- | ---- | ---- | ---- | ---- |
-|              |          群組2              |
-|    群組1     | -------- | -------- |
-|              | 子群組1  | 子群組2  |
-| ---- | ---- | ---- | ---- | ---- | ---- |
-| 編號 | 姓名 | 編號 | 姓名 | 編號 | 姓名 |
-| ---- | ---- | ---- | ---- | ---- | ---- |
+輸出標題：
+| ---- | ------------ |
+|      |   客戶資訊   |
+| 編號 | 客戶 | 地區 |
 */
 ```
 
-### 公式
-
-在儲存格中使用 Excel 公式：
+### 搭配工作表設定凍結窗格與自動篩選
 
 ```csharp
-template.Columns.Add("公式", x => x.UseFormula(y => $"{y.CellIndex} + {y.RowIndex}"));
+RecordSetTemplate<Order> template = new RecordSetTemplate<Order>(orders);
 
-/*
-輸出（第一筆資料在索引 1）：
-| ---- |
-| 公式 |
-| ---- |
-| =0+1 |
-| ---- |
-| =0+2 |
-| ---- |
-*/
+SheetDefinition sheet = document.CreateSheet("Orders");
+sheet
+    .AddTemplate(template)
+    .SetFreezePanes(0, 1)
+    .SetAutoFilterEnabled();
 ```
 
-### 凍結窗格與自動篩選
+### 資料驗證
 
 ```csharp
-RecordSetTemplate<Record> template = new RecordSetTemplate<Record>(source);
-// ... 加入欄位 ...
-
-// 凍結標題列（依據標題層數自動決定）
-template.IsFreezeHeader = true;
-
-// 啟用自動篩選（包含標題與資料範圍）
-template.IsAutoFilterEnabled = true;
-
-// 設定列高
-template.HeaderHeight = 30;
-template.RecordHeight = 25;
-```
-
-## 資料驗證
-
-為儲存格加入資料驗證規則以限制輸入。
-
-### 在 RecordSetTemplate 中使用
-
-```csharp
-template.Columns.Add("年齡", x => x.Age, provider => provider.UseDataValidation(x => new DataValidation {
-    ValidationType = DataValidationType.Integer,
-    Operator = DataValidationOperator.Between,
-    Value1 = 18,
-    Value2 = 65,
-    ErrorTitle = "輸入錯誤",
-    ErrorMessage = "年齡必須在 18 到 65 歲之間",
-    IsErrorAlertShown = true
-}));
-```
-
-### 在 GridTemplate 中使用
-
-```csharp
-GridTemplate template = new GridTemplate();
-template.CreateRow();
-template.CreateCell(cell => {
-    cell.ValueGenerator = (c, r) => "請選擇";
-    cell.DataValidationGenerator = (c, r) => new DataValidation {
+template.Columns.Add<string>(
+    "地區",
+    order => order.Region,
+    configureGenerators: config => config.UseDataValidation(_ => new DataValidation {
         ValidationType = DataValidationType.List,
-        ListItems = new[] { "選項 A", "選項 B", "選項 C" },
-        IsDropdownShown = true
-    };
-});
+        ListItems = ["North", "South", "East", "West"],
+        ErrorTitle = "無效地區",
+        ErrorMessage = "請選擇有效的銷售地區。",
+        IsErrorAlertShown = true
+    })
+);
 ```
 
 ## MergedTemplate
 
-合併多個 Templates。適用於建立複雜版面配置。
+合併多個 templates，垂直堆疊輸出。適合將標題、資料表與頁尾組合成單一 template 傳入工作表。
 
 ```csharp
-MergedTemplate merged = new MergedTemplate();
-merged.AddTemplate(headerTemplate);
-merged.AddTemplate(dataTemplate);
-merged.AddTemplate(footerTemplate);
-
-sheeter.AddTemplate(merged);
+MergedTemplate merged = new MergedTemplate(headerTemplate, dataTemplate, footerTemplate);
+sheet.AddTemplate(merged);
 ```
 
 ## 自訂 Templates
 
-實作 `ITemplate` 介面以建立可重複使用的自訂 Template：
+實作 `ISheetTemplate` 介面可建立可重複使用的自訂 template：
 
 ```csharp
-public class ReportInfoTemplate : ITemplate {
+public class ReportHeaderTemplate : ISheetTemplate {
     private readonly GridTemplate gridTemplate = new GridTemplate();
 
-    public ReportInfoTemplate(string title, string user, int colSpan) {
-        CellStyleConfiguration cellStyles = SpreadsheetManager.DefaultCellStyles;
-        CellStyle titleStyle = cellStyles.CellStyle with {
+    public ReportHeaderTemplate(string title, int columnSpan) {
+        CellStyle titleStyle = SpreadsheetManager.DefaultCellStyles.GridCellStyle with {
             HorizontalAlignment = HorizontalAlignment.Center,
-            Font = cellStyles.CellStyle.Font with { Size = 14 }
+            Font = SpreadsheetManager.DefaultCellStyles.GridCellStyle.Font with { Size = 14 }
         };
 
-        // 標題列
-        gridTemplate.CreateRow();
-        gridTemplate.CreateCell(title, colSpan, cellStyle: titleStyle);
+        gridTemplate.CreateRow(28);
+        gridTemplate.CreateCell(title, columnSpan: columnSpan, cellStyle: titleStyle);
 
-        // 資訊列
-        int leftColSpan = colSpan / 2;
         gridTemplate.CreateRow();
-        gridTemplate.CreateCell($"使用者：{user}", leftColSpan, cellStyle: cellStyles.CellStyle);
         gridTemplate.CreateCell(
-            $"產生時間：{DateTime.Now:yyyy-MM-dd HH:mm:ss}", 
-            colSpan - leftColSpan, 
-            cellStyle: cellStyles.CellStyle
+            $"產生時間：{DateTimeOffset.Now:yyyy-MM-dd HH:mm:ss zzz}",
+            columnSpan: columnSpan
         );
     }
 
-    public TemplateContext GetContext() {
-        return gridTemplate.GetContext();
-    }
+    public int ColumnSpan => gridTemplate.ColumnSpan;
+
+    public int RowSpan => gridTemplate.RowSpan;
+
+    public TemplateLayout GetLayout() => gridTemplate.GetLayout();
 }
+```
+
+使用方式：
+
+```csharp
+sheet.AddTemplate(new ReportHeaderTemplate("Q1 銷售報表", columnSpan: 4));
+sheet.AddTemplate(dataTemplate);
 ```
 
 ## 相關主題
 
-- [入門指南](getting-started.md) - 了解如何在專案中開始使用 Templates
-- [Exporters](exporters.md) - 學習 Template 與 Exporter 的整體協作流程
-- [Sheeters](sheeters.md) - 了解如何將 Templates 加入 Sheeter
-- [自訂樣式](customization.md) - 為 Template 中的儲存格套用自訂樣式
+- [入門指南](getting-started.md) - 了解如何在專案中開始使用 templates
+- [SpreadsheetDocument](spreadsheet-document.md) - 了解 template 與文件的整體協作流程
+- [SheetDefinition](sheet-definition.md) - 了解如何將 templates 加入工作表
+- [自訂樣式](customization.md) - 為 template 中的儲存格套用自訂樣式

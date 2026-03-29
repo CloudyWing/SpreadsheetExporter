@@ -1,62 +1,142 @@
-﻿# SpreadsheetExporter
+# SpreadsheetExporter
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE.md)
 
-**SpreadsheetExporter** 為 [SpreadsheetExport](https://github.com/CloudyWing/SpreadsheetExport) 的 .NET Standard 版本。
+此專案只是我為懶得計算 Excel 座標和處理合併儲存格開發出來的套件，只有在我比較常使用 Excel 那段時間會進行維護，且可能一加功能就是破壞性變更的大改版，不建議其他人使用。
 
-本套件專注於 **建立匯出 Excel 所需的資料結構與邏輯**，並不直接依賴特定的 Excel 函式庫（如 NPOI 或 EPPlus）。而是透過 Facade 模式，將資料準備與 Excel 產生這兩個責任分離。
+## 專案內容
 
-這意味著：
+`SpreadsheetExporter` 採用了「**先描述活頁簿，再交給 Renderer 輸出**」的架構。核心專案負責建立 `SpreadsheetDocument`、`SheetDefinition` 與各種模板；實際 `.xlsx` 產出則由 `ClosedXML` Renderer 負責。
 
-- **解耦**：您的業務邏輯與操作介面不需要綁死在 NPOI 或 EPPlus 上。
-- **彈性**：未來若需更換 Excel 底層套件（例如從 NPOI 遷移至 EPPlus），只需更換 Exporter 實作，完全無需修改報表產生的邏輯。
-- **維護性**：長期專案建議繼承 `ExporterBase` 實作自己的 Exporter 來處理特定邊界情況，而非直接依賴套件提供的預設實作。
+## Solution 內容
 
-## Projects
-
-本解決方案包含以下專案：
-
-- **[SpreadsheetExporter](./SpreadsheetExporter/)**
-  核心專案，負責定義介面與建立匯出所需的資料結構（Templates、Schemas 等）。
-
-- **[SpreadsheetExporter.Excel.NPOI](./SpreadsheetExporter.Excel.NPOI/)**
-  實作專案，使用 **NPOI** 將 `SpreadsheetExporter` 定義的結構轉換為 Excel 檔案。
-
-- **[SpreadsheetExporter.Excel.EPPlus](./SpreadsheetExporter.Excel.EPPlus/)**
-  實作專案，使用 **EPPlus** 將 `SpreadsheetExporter` 定義的結構轉換為 Excel 檔案。
-
-> [!WARNING]
-> **關於 .NET 6+ 支援**
->
-> 由於 NPOI 與 EPPlus 在升級至 .NET 6+ 後可能面臨 `System.Drawing.Common` 的圖形跨平台相容性問題，且本解決方案中的 `SpreadsheetExporter.Excel.NPOI` 與 `SpreadsheetExporter.Excel.EPPlus` 僅作為 **參考範本** 存在。
->
-> 因此，這兩個實作套件 **不會提供支援 .NET 6 以上的版本**。建議您參考這些範本的程式碼，自行繼承 `ExporterBase` 實作符合您專案需求的 Exporter。
+- **[`src/SpreadsheetExporter`](./src/SpreadsheetExporter/)**
+  核心模型與模板：`SpreadsheetDocument`、`SheetDefinition`、`GridTemplate`、`RecordSetTemplate<T>` 等。
+- **[`src/SpreadsheetExporter.Renderer.ClosedXML`](./src/SpreadsheetExporter.Renderer.ClosedXML/)**
+  `ISpreadsheetRenderer` 的 ClosedXML 實作，輸出 `.xlsx` 檔案。
+- **[`samples/SpreadsheetExporter.Sample`](./samples/SpreadsheetExporter.Sample/)**
+  展示 v3 Fluent API 與 `FromJson(...)` 的基本使用方式。
+- **[`benchmarks/SpreadsheetExporter.Benchmarks`](./benchmarks/SpreadsheetExporter.Benchmarks/)**
+  BenchmarkDotNet 基準，評估模板建立與 ClosedXML 匯出成本。
 
 ## Installation
-
-透過 NuGet Package Manager 安裝核心與對應的實作套件：
 
 ### .NET CLI
 
 ```bash
 dotnet add package CloudyWing.SpreadsheetExporter
-# 選擇您需要的實作：
-dotnet add package CloudyWing.SpreadsheetExporter.Excel.NPOI
-# 或
-dotnet add package CloudyWing.SpreadsheetExporter.Excel.EPPlus
+dotnet add package CloudyWing.SpreadsheetExporter.Renderer.ClosedXML
 ```
+
+## Quick Start
+
+若是 Console、腳本或沒有導入 DI 的專案，建議直接用 `SpreadsheetManager.SetRenderer(...)` 作為最短路徑：
+
+```csharp
+using CloudyWing.SpreadsheetExporter;
+using CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
+using CloudyWing.SpreadsheetExporter.Templates;
+using CloudyWing.SpreadsheetExporter.Templates.RecordSet;
+
+SpreadsheetManager.SetRenderer(static () => new ExcelRenderer());
+
+SpreadsheetDocument document = SpreadsheetManager.CreateDocument();
+SheetDefinition sheet = document.CreateSheet("Orders", defaultRowHeight: 20);
+
+RecordSetTemplate<Order> template = new(GetOrders()) {
+    HeaderHeight = 22,
+    RecordHeight = 20
+};
+
+template.Columns
+    .Add("Order ID", order => order.OrderId)
+    .Add("Customer", order => order.Customer)
+    .Add(
+        "Amount",
+        order => order.Amount,
+        fieldStyleGenerator: _ => SpreadsheetManager.DefaultCellStyles.FieldStyle with {
+            HorizontalAlignment = HorizontalAlignment.Right,
+            DataFormat = "#,##0.00"
+        }
+    );
+
+sheet.AddTemplate(template);
+sheet
+    .SetFreezePanes(0, 1)
+    .SetAutoFilterEnabled();
+
+document.ExportFile("orders.xlsx");
+```
+
+若你偏好以設定檔描述報表，也可以使用：
+
+```csharp
+SpreadsheetManager.SetRenderer(static () => new ExcelRenderer());
+SpreadsheetDocument document = SpreadsheetDocument.FromJson(json);
+byte[] bytes = document.Export();
+```
+
+若你的專案已經使用 DI，也可以在組合根先完成初始化，再建立文件：
+
+```csharp
+using CloudyWing.SpreadsheetExporter;
+using CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
+using Microsoft.Extensions.DependencyInjection;
+
+ServiceCollection services = new();
+services.AddSingleton<ISpreadsheetRenderer>(_ => new ExcelRenderer());
+services.AddSingleton(_ => {
+    SpreadsheetManager.DefaultCellStyles = new CellStyleConfiguration {
+        FieldStyle = SpreadsheetManager.DefaultCellStyles.FieldStyle with {
+            DataFormat = "#,##0.00"
+        }
+    };
+
+    return 0;
+});
+
+ServiceProvider serviceProvider = services.BuildServiceProvider();
+ISpreadsheetRenderer renderer = serviceProvider.GetRequiredService<ISpreadsheetRenderer>();
+
+SpreadsheetDocument document = new(renderer);
+```
+
+## Sample 與 Benchmark
+
+### 執行 Sample
+
+```bash
+dotnet run --project .\samples\SpreadsheetExporter.Sample
+```
+
+Sample 會在執行輸出目錄下的 `artifacts` 目錄建立：
+
+- `sales-report.xlsx`
+- `sales-report-json.xlsx`
+
+### 執行 Benchmarks
+
+```bash
+dotnet run -c Release --project .\benchmarks\SpreadsheetExporter.Benchmarks -- --filter *
+```
+
+目前 benchmark 聚焦於兩類工作負載：
+
+- `TemplateBenchmarks`：量測模板建立與 JSON 解析成本。
+- `ExporterBenchmarks`：量測 ClosedXML 匯出基本版與含樣式版活頁簿的成本。
 
 ## Documentation
 
-完整文檔請參考：<https://cloudywing.github.io/SpreadsheetExporter/>
+完整文件請參考：<https://cloudywing.github.io/SpreadsheetExporter/>
 
-或查看以下主要文章：
+主要文件入口：
 
-- **[入門指南](./docs/articles/getting-started.md)**
-- **[Exporters（匯出器）](./docs/articles/exporters.md)**
-- **[Sheeters（工作表）](./docs/articles/sheeters.md)**
-- **[Templates（範本）](./docs/articles/templates.md)**
-- **[自訂樣式](./docs/articles/customization.md)**
+- [入門指南](./docs/articles/getting-started.md)
+- [Migration Notes](./docs/articles/migration-notes.md)
+- [SpreadsheetDocument](./docs/articles/spreadsheet-document.md)
+- [SheetDefinition](./docs/articles/sheet-definition.md)
+- [Templates](./docs/articles/templates.md)
+- [自訂樣式](./docs/articles/customization.md)
 
 ## License
 

@@ -12,7 +12,7 @@ public class DataTableColumn {
     /// <value>
     /// The name of the column.
     /// </value>
-    public string ColumnName { get; set; }
+    public string? ColumnName { get; set; }
 
     /// <summary>
     /// Gets or sets the header text.
@@ -20,7 +20,7 @@ public class DataTableColumn {
     /// <value>
     /// The header text.
     /// </value>
-    public string HeaderText { get; set; }
+    public string? HeaderText { get; set; }
 
     /// <summary>
     /// Gets or sets the header style.
@@ -36,7 +36,7 @@ public class DataTableColumn {
     /// <value>
     /// The field value generator.
     /// </value>
-    public Func<object, object> FieldValueGenerator { get; set; }
+    public Func<object?, object?>? FieldValueGenerator { get; set; }
 
     /// <summary>
     /// Gets or sets the field formula generator.
@@ -44,7 +44,7 @@ public class DataTableColumn {
     /// <value>
     /// The field formula generator.
     /// </value>
-    public Func<object, string> FieldFormulaGenerator { get; set; }
+    public Func<object?, string?>? FieldFormulaGenerator { get; set; }
 
     /// <summary>
     /// Gets or sets the field style generator.
@@ -52,5 +52,5 @@ public class DataTableColumn {
     /// <value>
     /// The field style generator.
     /// </value>
-    public Func<object, CellStyle> FieldStyleGenerator { get; set; }
+    public Func<object?, CellStyle>? FieldStyleGenerator { get; set; }
 }

@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="LICENSE.md" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/SpreadsheetExporter/SpreadsheetExporter.csproj" />
+    <Project Path="src/SpreadsheetExporter.Renderer.ClosedXML/SpreadsheetExporter.Renderer.ClosedXML.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/SpreadsheetExporter.Tests/SpreadsheetExporter.Tests.csproj" />
+    <Project Path="tests/SpreadsheetExporter.Renderer.ClosedXML.Tests/SpreadsheetExporter.Renderer.ClosedXML.Tests.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/SpreadsheetExporter.Sample/SpreadsheetExporter.Sample.csproj" />
+  </Folder>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/SpreadsheetExporter.Benchmarks/SpreadsheetExporter.Benchmarks.csproj" />
+  </Folder>
+</Solution>

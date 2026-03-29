@@ -5,7 +5,7 @@
 /// </summary>
 public class PageSettings {
     /// <summary>
-    /// Gets or sets the page orientation. The defaults is <c>Portrait</c>.
+    /// Gets or sets the page orientation. The default is <c>Portrait</c>.
     /// </summary>
     /// <value>
     /// The page orientation.
@@ -13,10 +13,10 @@ public class PageSettings {
     public PageOrientation PageOrientation { get; set; } = PageOrientation.Portrait;
 
     /// <summary>
-    /// Gets or sets the size of the pager.
+    /// Gets or sets the paper size.
     /// </summary>
     /// <value>
-    /// The size of the pager. The defaults is <c>A4</c>.
+    /// The paper size. The default is <c>A4</c>.
     /// </value>
     public PaperSize PaperSize { get; set; } = PaperSize.A4;
 }

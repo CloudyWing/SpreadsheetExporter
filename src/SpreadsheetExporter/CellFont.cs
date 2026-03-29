@@ -10,13 +10,13 @@ namespace CloudyWing.SpreadsheetExporter;
 /// <param name="Color">The color.</param>
 /// <param name="Style">The style.</param>
 public record struct CellFont(
-    string Name = null,
+    string? Name = null,
     short Size = 0,
     Color Color = default,
     FontStyles Style = FontStyles.None
 ) {
     /// <summary>
-    /// The cell font equals to <c>new CellFont()</c>.
+    /// Gets an empty <see cref="CellFont"/> with all default values.
     /// </summary>
     public static CellFont Empty { get; } = new();
 }
