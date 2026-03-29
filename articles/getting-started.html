@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>入門指南 | SpreadsheetExporter Docs </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="入門指南 | SpreadsheetExporter Docs ">
+      
+      
+      <link rel="icon" href="../images/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/docs/articles/getting-started.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="SpreadsheetExporter Docs">
+            SpreadsheetExporter Docs
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="入門指南">入門指南</h1>
+
+<p>本指南協助您在專案中設定 SpreadsheetExporter，並建立第一個 Excel 匯出功能。</p>
+<h2 id="安裝">安裝</h2>
+<p>安裝核心函式庫：</p>
+<pre><code class="lang-powershell">dotnet add package CloudyWing.SpreadsheetExporter
+</code></pre>
+<p>安裝 Excel 實作套件（ClosedXML）：</p>
+<pre><code class="lang-powershell">dotnet add package CloudyWing.SpreadsheetExporter.Renderer.ClosedXML
+</code></pre>
+<h2 id="設定">設定</h2>
+<p>SpreadsheetExporter 目前有兩種啟動方式：</p>
+<ul>
+<li>非 DI 專案：使用 <code>SpreadsheetManager.SetRenderer(...)</code>，適合 Console、腳本、單機工具與快速驗證。</li>
+<li>已使用 DI 的專案：在組合根註冊 <code>ISpreadsheetRenderer</code>，再由應用程式流程建立 <code>SpreadsheetDocument</code>。</li>
+</ul>
+<h3 id="非-di-專案">非 DI 專案</h3>
+<p>在應用程式啟動時（例如 <code>Program.cs</code>）登錄 renderer：</p>
+<pre><code class="lang-csharp">using CloudyWing.SpreadsheetExporter;
+using CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
+
+SpreadsheetManager.SetRenderer(static () =&gt; new ExcelRenderer());
+</code></pre>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>請務必透過 <code>SpreadsheetManager.CreateDocument()</code> 建立文件實例，而非直接使用 <code>new SpreadsheetDocument(new ExcelRenderer())</code>。統一透過 <code>SpreadsheetManager</code> 管理，可確保全域設定（如 <code>DefaultCellStyles</code>）正確套用。</p>
+</div>
+<h3 id="di-專案">DI 專案</h3>
+<p>若你的應用程式本來就使用 <code>Microsoft.Extensions.DependencyInjection</code>，可以直接在組合根註冊 renderer：</p>
+<pre><code class="lang-csharp">using CloudyWing.SpreadsheetExporter;
+using CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
+using Microsoft.Extensions.DependencyInjection;
+
+ServiceCollection services = new();
+services.AddSingleton&lt;ISpreadsheetRenderer&gt;(_ =&gt; new ExcelRenderer());
+
+ServiceProvider serviceProvider = services.BuildServiceProvider();
+ISpreadsheetRenderer renderer = serviceProvider.GetRequiredService&lt;ISpreadsheetRenderer&gt;();
+
+SpreadsheetDocument document = new SpreadsheetDocument(renderer);
+</code></pre>
+<p>若需要初始化預設值，也可以在組合根先設定：</p>
+<pre><code class="lang-csharp">SpreadsheetManager.DefaultCellStyles = new CellStyleConfiguration {
+    HeaderStyle = SpreadsheetManager.DefaultCellStyles.HeaderStyle with {
+        HasBorder = true
+    }
+};
+</code></pre>
+<h3 id="自訂-renderer-的生命週期選擇">自訂 renderer 的生命週期選擇</h3>
+<p>DI 專案中，<code>ISpreadsheetRenderer</code> 的生命週期取決於自訂 renderer 是否保存狀態，以及是否依賴其他 scoped 服務。</p>
+<ul>
+<li><code>Singleton</code>：適合無狀態 renderer。renderer 不保存跨呼叫狀態，也不依賴 scoped 服務時，可優先使用。</li>
+<li><code>Scoped</code>：適合 renderer 需要使用目前 request、租戶、語系或其他 scoped 資訊。</li>
+<li><code>Transient</code>：適合 renderer 內部會累積暫存狀態，或包裝的物件不適合重用。</li>
+</ul>
+<p>例如下列情境應考慮 <code>Scoped</code> 或 <code>Transient</code>，不要直接使用 <code>Singleton</code>：</p>
+<ul>
+<li>renderer 依賴 scoped 的 tenant provider、使用者資訊或資料存取服務。</li>
+<li>renderer 內部持有可變欄位，且每次匯出都會改寫。</li>
+<li>renderer 包裝的第三方物件不保證 thread-safe。</li>
+</ul>
+<p>內建 <code>ExcelRenderer</code> 本身偏向無狀態，通常可使用 <code>Singleton</code>。若自訂 renderer 的 thread-safe 或重用行為不明確，建議先從 <code>Transient</code> 或 <code>Scoped</code> 開始，再依實際需求調整。</p>
+<h2 id="第一個匯出範例">第一個匯出範例</h2>
+<pre><code class="lang-csharp">// 建立文件
+SpreadsheetDocument document = SpreadsheetManager.CreateDocument();
+
+// 建立工作表
+SheetDefinition sheet = document.CreateSheet(&quot;工作表1&quot;);
+
+// 建立 GridTemplate 並加入內容
+GridTemplate template = new GridTemplate();
+template.CreateRow();
+template.CreateCell(&quot;Hello, SpreadsheetExporter!&quot;);
+sheet.AddTemplate(template);
+
+// 匯出至檔案
+document.ExportFile($@&quot;C:\Sample{document.FileNameExtension}&quot;);
+</code></pre>
+<h2 id="下一步">下一步</h2>
+<ul>
+<li><strong><a href="spreadsheet-document.html">SpreadsheetDocument</a></strong> - 了解活頁簿層級的設定與匯出</li>
+<li><strong><a href="sheet-definition.html">SheetDefinition</a></strong> - 理解工作表管理</li>
+<li><strong><a href="templates.html">Templates</a></strong> - 探索不同的資料結構化方式</li>
+<li><strong><a href="customization.html">自訂樣式</a></strong> - 自訂儲存格樣式與格式</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/docs/articles/getting-started.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

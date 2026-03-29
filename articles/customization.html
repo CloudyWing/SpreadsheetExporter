@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>自訂樣式 | SpreadsheetExporter Docs </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="自訂樣式 | SpreadsheetExporter Docs ">
+      
+      
+      <link rel="icon" href="../images/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/docs/articles/customization.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="SpreadsheetExporter Docs">
+            SpreadsheetExporter Docs
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="自訂樣式">自訂樣式</h1>
+
+<p><code>SpreadsheetManager.DefaultCellStyles</code> 提供全域的預設儲存格樣式，各 template 類型會自動套用對應的預設值。</p>
+<h2 id="預設樣式">預設樣式</h2>
+<p><code>CellStyleConfiguration</code> 包含以下四個樣式屬性：</p>
+<table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CellStyle</code></td>
+<td>一般儲存格的基礎樣式</td>
+</tr>
+<tr>
+<td><code>GridCellStyle</code></td>
+<td><code>GridTemplate</code> 儲存格使用的預設樣式</td>
+</tr>
+<tr>
+<td><code>HeaderStyle</code></td>
+<td><code>RecordSetTemplate</code> 標題列使用的預設樣式</td>
+</tr>
+<tr>
+<td><code>FieldStyle</code></td>
+<td><code>RecordSetTemplate</code> 資料列使用的預設樣式</td>
+</tr>
+</tbody>
+</table>
+<h2 id="更改預設樣式">更改預設樣式</h2>
+<p><code>CellStyleConfiguration</code> 使用 <code>init</code> 屬性，建立時透過物件初始化器覆寫需要變更的樣式，其餘保留建構子預設值：</p>
+<h3 id="基於現有樣式修改">基於現有樣式修改</h3>
+<pre><code class="lang-csharp">CellStyleConfiguration existing = SpreadsheetManager.DefaultCellStyles;
+
+SpreadsheetManager.DefaultCellStyles = new CellStyleConfiguration {
+    CellStyle = existing.CellStyle with {
+        Font = existing.CellStyle.Font with { Size = 12 }
+    },
+    GridCellStyle = existing.GridCellStyle with {
+        Font = existing.GridCellStyle.Font with { Size = 12 }
+    },
+    HeaderStyle = existing.HeaderStyle with {
+        Font = existing.HeaderStyle.Font with { Size = 12 }
+    },
+    FieldStyle = existing.FieldStyle with {
+        Font = existing.FieldStyle.Font with { Size = 12 }
+    }
+};
+</code></pre>
+<h3 id="完整自訂">完整自訂</h3>
+<pre><code class="lang-csharp">CellFont customFont = new CellFont(
+    Name: &quot;微軟正黑體&quot;,
+    Size: 12,
+    Color: Color.Black,
+    Style: FontStyles.None
+);
+
+CellStyle baseStyle = new CellStyle(
+    HorizontalAlignment: HorizontalAlignment.Left,
+    VerticalAlignment: VerticalAlignment.Middle,
+    Font: customFont
+);
+
+SpreadsheetManager.DefaultCellStyles = new CellStyleConfiguration {
+    CellStyle = baseStyle,
+    GridCellStyle = baseStyle,
+    HeaderStyle = baseStyle with {
+        HorizontalAlignment = HorizontalAlignment.Center,
+        HasBorder = true,
+        Font = customFont with { Style = FontStyles.Bold }
+    },
+    FieldStyle = baseStyle with {
+        HasBorder = true
+    }
+};
+</code></pre>
+<h2 id="從設定檔讀取樣式">從設定檔讀取樣式</h2>
+<h3 id="設定檔結構">設定檔結構</h3>
+<p>在專案中建立 <code>spreadsheet.json</code>，並設定「複製到輸出目錄」：</p>
+<pre><code class="lang-json">{
+  &quot;Spreadsheet&quot;: {
+    &quot;FontName&quot;: &quot;新細明體&quot;,
+    &quot;FontSize&quot;: 10,
+    &quot;HorizontalAlignment&quot;: &quot;Center&quot;,
+    &quot;VerticalAlignment&quot;: &quot;Middle&quot;
+  }
+}
+</code></pre>
+<h3 id="載入設定">載入設定</h3>
+<pre><code class="lang-csharp">IConfigurationRoot config = new ConfigurationBuilder()
+    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+    .AddJsonFile(&quot;spreadsheet.json&quot;, optional: false, reloadOnChange: true)
+    .Build();
+
+void ApplyStyles() {
+    IConfigurationSection section = config.GetSection(&quot;Spreadsheet&quot;);
+
+    CellFont font = new CellFont(
+        Name: section[&quot;FontName&quot;],
+        Size: short.Parse(section[&quot;FontSize&quot;]!)
+    );
+
+    CellStyle baseStyle = new CellStyle(
+        HorizontalAlignment: Enum.Parse&lt;HorizontalAlignment&gt;(section[&quot;HorizontalAlignment&quot;]!),
+        VerticalAlignment: Enum.Parse&lt;VerticalAlignment&gt;(section[&quot;VerticalAlignment&quot;]!),
+        Font: font
+    );
+
+    SpreadsheetManager.DefaultCellStyles = new CellStyleConfiguration {
+        CellStyle = baseStyle,
+        GridCellStyle = baseStyle,
+        HeaderStyle = baseStyle with {
+            HasBorder = true,
+            Font = font with { Style = FontStyles.Bold }
+        },
+        FieldStyle = baseStyle with { HasBorder = true }
+    };
+}
+
+ChangeToken.OnChange(() =&gt; config.GetReloadToken(), ApplyStyles);
+ApplyStyles();
+</code></pre>
+<div class="TIP">
+<h5>Tip</h5>
+<p>使用 <code>ChangeToken.OnChange</code> 可在設定檔變更時自動重新載入樣式，無需重新啟動應用程式。</p>
+</div>
+<h2 id="在-template-層級覆寫樣式">在 Template 層級覆寫樣式</h2>
+<p>各 template 也可以在加入欄位時直接傳入樣式，優先於全域預設值：</p>
+<pre><code class="lang-csharp">CellStyle customHeader = SpreadsheetManager.DefaultCellStyles.HeaderStyle with {
+    BackgroundColor = Color.FromArgb(31, 78, 121),
+    Font = SpreadsheetManager.DefaultCellStyles.HeaderStyle.Font with {
+        Color = Color.White
+    }
+};
+
+template.Columns.Add&lt;string&gt;(&quot;客戶&quot;, order =&gt; order.Customer, headerStyle: customHeader);
+</code></pre>
+<h2 id="相關主題">相關主題</h2>
+<ul>
+<li><a href="getting-started.html">入門指南</a> - 了解 SpreadsheetManager 的設定時機</li>
+<li><a href="spreadsheet-document.html">SpreadsheetDocument</a> - 學習文件層級的字型設定</li>
+<li><a href="templates.html">Templates</a> - 學習在 template 中覆寫或使用自訂樣式</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/docs/articles/customization.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

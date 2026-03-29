@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class SpreadsheetDocument | SpreadsheetExporter Docs </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class SpreadsheetDocument | SpreadsheetExporter Docs ">
+      
+      <meta name="description" content="Represents a spreadsheet document that manages sheet definitions and coordinates rendering.">
+      <link rel="icon" href="../images/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CloudyWing/SpreadsheetExporter/new/main/apiSpec/new?filename=CloudyWing_SpreadsheetExporter_SpreadsheetDocument.md&amp;value=---%0Auid%3A%20CloudyWing.SpreadsheetExporter.SpreadsheetDocument%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="SpreadsheetExporter Docs">
+            SpreadsheetExporter Docs
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument">
+
+
+
+  <h1 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument" class="text-break">
+Class SpreadsheetDocument  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="CloudyWing.html">CloudyWing</a>.<a class="xref" href="CloudyWing.SpreadsheetExporter.html">SpreadsheetExporter</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>CloudyWing.SpreadsheetExporter.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Represents a spreadsheet document that manages sheet definitions and coordinates rendering.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class SpreadsheetDocument</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">SpreadsheetDocument</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument__ctor_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.#ctor*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument__ctor_CloudyWing_SpreadsheetExporter_ISpreadsheetRenderer_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.#ctor(CloudyWing.SpreadsheetExporter.ISpreadsheetRenderer)">
+  SpreadsheetDocument(ISpreadsheetRenderer)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.html">SpreadsheetDocument</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SpreadsheetDocument(ISpreadsheetRenderer renderer)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>renderer</code> <a class="xref" href="CloudyWing.SpreadsheetExporter.ISpreadsheetRenderer.html">ISpreadsheetRenderer</a></dt>
+    <dd><p>The renderer used to produce the output binary.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p><code class="paramref">renderer</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_ContentType_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.ContentType*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_ContentType" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.ContentType">
+  ContentType
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L35"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the MIME content-type from the associated renderer.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string ContentType { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_DefaultFont_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.DefaultFont*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_DefaultFont" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.DefaultFont">
+  DefaultFont
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the default font applied to all cells unless overridden at the sheet or cell level.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CellFont? DefaultFont { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.CellFont.html">CellFont</a>?</dt>
+    <dd><p>The default font, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to use the renderer default.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_DefaultSheetName_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.DefaultSheetName*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_DefaultSheetName" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.DefaultSheetName">
+  DefaultSheetName
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L46"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the default sheet name prefix used when creating sheets without an explicit name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string DefaultSheetName { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The default sheet name prefix. Default is &quot;工作表&quot;.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_FileNameExtension_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.FileNameExtension*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_FileNameExtension" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.FileNameExtension">
+  FileNameExtension
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the file name extension from the associated renderer.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string FileNameExtension { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_LastSheet_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.LastSheet*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_LastSheet" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.LastSheet">
+  LastSheet
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L77"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the last sheet definition. Creates a new sheet if none exist.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SheetDefinition LastSheet { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.SheetDefinition.html">SheetDefinition</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_CreateSheet_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.CreateSheet*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_CreateSheet_System_String_System_Nullable_System_Double__" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.CreateSheet(System.String,System.Nullable{System.Double})">
+  CreateSheet(string?, double?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L85"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a new sheet definition and adds it to this document.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SheetDefinition CreateSheet(string? sheetName = null, double? defaultRowHeight = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sheetName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The sheet name. If <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> or whitespace, a default name is generated.</p>
+</dd>
+    <dt><code>defaultRowHeight</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>?</dt>
+    <dd><p>The default row height for the sheet.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.SheetDefinition.html">SheetDefinition</a></dt>
+    <dd><p>The created sheet definition.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_Export_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.Export*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_Export" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.Export">
+  Export()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L132"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Exports this document as a byte array using the associated renderer.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte[] Export()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd><p>The rendered spreadsheet bytes.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.Exceptions.SheetDefinitionNotFoundException.html">SheetDefinitionNotFoundException</a></dt>
+    <dd><p>No sheets have been created.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_ExportFile_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.ExportFile*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_ExportFile_System_String_CloudyWing_SpreadsheetExporter_SpreadsheetFileMode_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.ExportFile(System.String,CloudyWing.SpreadsheetExporter.SpreadsheetFileMode)">
+  ExportFile(string, SpreadsheetFileMode)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L148"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Exports this document to a file at the specified path.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ExportFile(string path, SpreadsheetFileMode fileMode = SpreadsheetFileMode.Create)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>path</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The output file path.</p>
+</dd>
+    <dt><code>fileMode</code> <a class="xref" href="CloudyWing.SpreadsheetExporter.SpreadsheetFileMode.html">SpreadsheetFileMode</a></dt>
+    <dd><p>The file creation mode.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_FromJson_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.FromJson*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_FromJson_System_String_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.FromJson(System.String)">
+  FromJson(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L164"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.html">SpreadsheetDocument</a> from a JSON string using the renderer
+registered via <a class="xref" href="CloudyWing.SpreadsheetExporter.SpreadsheetManager.html#CloudyWing_SpreadsheetExporter_SpreadsheetManager_SetRenderer_System_Func_CloudyWing_SpreadsheetExporter_ISpreadsheetRenderer__">SetRenderer(Func&lt;ISpreadsheetRenderer&gt;)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static SpreadsheetDocument FromJson(string json)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>json</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The JSON string describing sheets and templates.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.html">SpreadsheetDocument</a></dt>
+    <dd><p>A configured <a class="xref" href="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.html">SpreadsheetDocument</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_GetSheet_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.GetSheet*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_GetSheet_System_Int32_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.GetSheet(System.Int32)">
+  GetSheet(int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L102"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the sheet definition at the specified zero-based index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SheetDefinition GetSheet(int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The zero-based index.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.SheetDefinition.html">SheetDefinition</a></dt>
+    <dd><p>The sheet definition.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p><code class="paramref">index</code> is less than 0 or greater than or equal to the number of sheets.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_SetDefaultFont_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.SetDefaultFont*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_SetDefaultFont_System_Nullable_CloudyWing_SpreadsheetExporter_CellFont__" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.SetDefaultFont(System.Nullable{CloudyWing.SpreadsheetExporter.CellFont})">
+  SetDefaultFont(CellFont?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L69"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets the default font applied to all cells unless overridden at the sheet or cell level.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SpreadsheetDocument SetDefaultFont(CellFont? defaultFont)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>defaultFont</code> <a class="xref" href="CloudyWing.SpreadsheetExporter.CellFont.html">CellFont</a>?</dt>
+    <dd><p>The default font, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> to use the renderer default.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.html">SpreadsheetDocument</a></dt>
+    <dd><p>The current <a class="xref" href="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.html">SpreadsheetDocument</a> instance.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_SetDefaultSheetName_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.SetDefaultSheetName*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_SetDefaultSheetName_System_String_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.SetDefaultSheetName(System.String)">
+  SetDefaultSheetName(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L59"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets the default sheet name prefix used when creating sheets without an explicit name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SpreadsheetDocument SetDefaultSheetName(string defaultSheetName)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>defaultSheetName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The default sheet name prefix.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.html">SpreadsheetDocument</a></dt>
+    <dd><p>The current <a class="xref" href="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.html">SpreadsheetDocument</a> instance.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_TryGetSheet_" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.TryGetSheet*"></a>
+
+  <h3 id="CloudyWing_SpreadsheetExporter_SpreadsheetDocument_TryGetSheet_System_Int32_CloudyWing_SpreadsheetExporter_SheetDefinition__" data-uid="CloudyWing.SpreadsheetExporter.SpreadsheetDocument.TryGetSheet(System.Int32,CloudyWing.SpreadsheetExporter.SheetDefinition@)">
+  TryGetSheet(int, out SheetDefinition?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L118"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Tries to get the sheet definition at the specified index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryGetSheet(int index, out SheetDefinition? sheet)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The zero-based index.</p>
+</dd>
+    <dt><code>sheet</code> <a class="xref" href="CloudyWing.SpreadsheetExporter.SheetDefinition.html">SheetDefinition</a></dt>
+    <dd><p>The sheet definition if found; otherwise, <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the index is valid; otherwise, <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/src/SpreadsheetExporter/SpreadsheetDocument.cs/#L18" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

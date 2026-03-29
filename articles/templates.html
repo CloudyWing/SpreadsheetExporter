@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Templates | SpreadsheetExporter Docs </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Templates | SpreadsheetExporter Docs ">
+      
+      
+      <link rel="icon" href="../images/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/docs/articles/templates.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="SpreadsheetExporter Docs">
+            SpreadsheetExporter Docs
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="templates">Templates</h1>
+
+<p>Templates 定義工作表儲存格的結構與內容。SpreadsheetExporter 提供四種內建 template 類型，並支援自訂擴充。</p>
+<h2 id="本文內容">本文內容</h2>
+<ul>
+<li><a href="#gridtemplate">GridTemplate</a> - 手動逐格配置</li>
+<li><a href="#datatabletemplate">DataTableTemplate</a> - 基於 DataTable 的匯出</li>
+<li><a href="#recordsettemplate">RecordSetTemplate</a> - 強型別集合</li>
+<li><a href="#mergedtemplate">MergedTemplate</a> - 合併多個 templates</li>
+<li><a href="#%E8%87%AA%E8%A8%82-templates">自訂 Templates</a> - 建立可重複使用的自訂 template</li>
+</ul>
+<p>若你是透過 <code>SpreadsheetDocument.FromJson(...)</code> 建立文件，目前 JSON 只支援 <code>Grid</code> 與 <code>RecordSet</code> 兩種 template 型別。完整 JSON 欄位請參考 <a href="spreadsheet-document.html">SpreadsheetDocument</a> 的 JSON 章節。</p>
+<h2 id="gridtemplate">GridTemplate</h2>
+<p><code>GridTemplate</code> 提供精細的儲存格配置控制，類似 HTML 的 <code>&lt;table&gt;</code>、<code>&lt;tr&gt;</code> 與 <code>&lt;td&gt;</code>。支援方法鏈（Method Chaining）。</p>
+<h3 id="建立列">建立列</h3>
+<pre><code class="lang-csharp">GridTemplate template = new GridTemplate();
+
+// 預設列高
+template.CreateRow();
+
+// 指定列高
+template.CreateRow(20d);
+
+// 隱藏列
+template.CreateRow(Constants.HiddenRow);
+
+// 自動調整列高
+template.CreateRow(Constants.AutoFitRowHeight);
+</code></pre>
+<h3 id="建立儲存格">建立儲存格</h3>
+<pre><code class="lang-csharp">GridTemplate template = new GridTemplate();
+template.CreateRow();
+
+// 簡單值儲存格
+template.CreateCell(&quot;Hello&quot;);
+
+// 合併儲存格（columnSpan=2, rowSpan=2）
+template.CreateCell(&quot;Merged&quot;, columnSpan: 2, rowSpan: 2);
+
+// 自訂樣式
+CellStyle style = new CellStyle(HorizontalAlignment: HorizontalAlignment.Center, HasBorder: true);
+template.CreateCell(&quot;Styled&quot;, cellStyle: style);
+</code></pre>
+<h3 id="公式儲存格">公式儲存格</h3>
+<pre><code class="lang-csharp">// 傳入 (cellIndex, rowIndex) 的 lambda
+template.CreateRow()
+    .CreateCell((cellIndex, rowIndex) =&gt; $&quot;=SUM(A{rowIndex + 1},1)&quot;);
+</code></pre>
+<h3 id="完整自訂儲存格">完整自訂儲存格</h3>
+<p>使用 <code>Action&lt;Cell&gt;</code> 多載可同時設定值、公式與資料驗證：</p>
+<pre><code class="lang-csharp">template.CreateRow();
+template.CreateCell(cell =&gt; {
+    cell.ValueGenerator = (_, _) =&gt; &quot;請選擇&quot;;
+    cell.DataValidationGenerator = (_, _) =&gt; new DataValidation {
+        ValidationType = DataValidationType.List,
+        ListItems = [&quot;選項 A&quot;, &quot;選項 B&quot;, &quot;選項 C&quot;],
+        IsDropdownShown = true
+    };
+});
+</code></pre>
+<h2 id="datatabletemplate">DataTableTemplate</h2>
+<p>直接將 <code>System.Data.DataTable</code> 匯出至試算表，自動對應欄位名稱為標題列。</p>
+<pre><code class="lang-csharp">System.Data.DataTable dataTable = new System.Data.DataTable();
+dataTable.Columns.Add(&quot;Name&quot;, typeof(string));
+dataTable.Columns.Add(&quot;Age&quot;, typeof(int));
+dataTable.Rows.Add(&quot;John&quot;, 30);
+dataTable.Rows.Add(&quot;Mary&quot;, 25);
+
+DataTableTemplate template = new DataTableTemplate(dataTable) {
+    HeaderHeight = 25,
+    RecordHeight = 20
+};
+
+/*
+輸出：
+| ---- | --- |
+| Name | Age |
+| ---- | --- |
+| John | 30  |
+| ---- | --- |
+| Mary | 25  |
+| ---- | --- |
+*/
+</code></pre>
+<h2 id="recordsettemplate">RecordSetTemplate</h2>
+<p>適用於強型別資料集合，支援欄位綁定、資料轉換、條件樣式、多層標題與資料驗證。</p>
+<h3 id="基本用法">基本用法</h3>
+<pre><code class="lang-csharp">public class Order {
+    public int Id { get; set; }
+    public string Customer { get; set; }
+    public decimal Amount { get; set; }
+}
+
+List&lt;Order&gt; orders = [
+    new Order { Id = 1, Customer = &quot;Northwind&quot;, Amount = 1250.40m },
+    new Order { Id = 2, Customer = &quot;Adventure Works&quot;, Amount = 980.00m }
+];
+
+RecordSetTemplate&lt;Order&gt; template = new RecordSetTemplate&lt;Order&gt;(orders);
+template.Columns.Add&lt;int&gt;(&quot;編號&quot;, order =&gt; order.Id);
+template.Columns.Add&lt;string&gt;(&quot;客戶&quot;, order =&gt; order.Customer);
+template.Columns.Add&lt;decimal&gt;(&quot;金額&quot;, order =&gt; order.Amount);
+</code></pre>
+<h3 id="資料轉換">資料轉換</h3>
+<p>使用 <code>configureGenerators</code> 參數自訂值或公式產生方式：</p>
+<pre><code class="lang-csharp">// 轉換值
+template.Columns.Add&lt;string&gt;(
+    &quot;大寫客戶&quot;,
+    order =&gt; order.Customer,
+    configureGenerators: config =&gt; config.UseValue(ctx =&gt; ctx.Value.ToUpper())
+);
+
+// 不綁定欄位，完全自訂值
+template.Columns.Add(
+    &quot;合併資料&quot;,
+    configureGenerators: config =&gt; config.UseValue(
+        ctx =&gt; $&quot;{ctx.Record.Id} - {ctx.Record.Customer}&quot;
+    )
+);
+</code></pre>
+<h3 id="公式">公式</h3>
+<pre><code class="lang-csharp">// context.RowIndex 為資料列的零基索引（標題列不計入）
+template.Columns.Add(
+    &quot;含稅金額&quot;,
+    configureGenerators: config =&gt; config.UseFormula(
+        context =&gt; $&quot;C{context.RowIndex + 2}*1.05&quot;
+    )
+);
+</code></pre>
+<h3 id="條件樣式">條件樣式</h3>
+<pre><code class="lang-csharp">CellStyle currencyStyle = new CellStyle(
+    HorizontalAlignment: HorizontalAlignment.Right,
+    DataFormat: &quot;#,##0.00&quot;
+);
+
+template.Columns.Add&lt;decimal&gt;(
+    &quot;金額&quot;,
+    order =&gt; order.Amount,
+    fieldStyleGenerator: ctx =&gt; ctx.Value &gt;= 1000
+        ? currencyStyle with { BackgroundColor = Color.LightGreen }
+        : currencyStyle
+);
+</code></pre>
+<h3 id="多層標題">多層標題</h3>
+<pre><code class="lang-csharp">template.Columns
+    .Add&lt;int&gt;(&quot;編號&quot;, order =&gt; order.Id)
+    .Add(&quot;客戶資訊&quot;)
+    .GetLastColumn().ChildColumns
+        .Add(&quot;客戶&quot;, order =&gt; order.Customer)
+        .Add(&quot;地區&quot;, order =&gt; order.Region);
+
+/*
+輸出標題：
+| ---- | ------------ |
+|      |   客戶資訊   |
+| 編號 | 客戶 | 地區 |
+*/
+</code></pre>
+<h3 id="搭配工作表設定凍結窗格與自動篩選">搭配工作表設定凍結窗格與自動篩選</h3>
+<pre><code class="lang-csharp">RecordSetTemplate&lt;Order&gt; template = new RecordSetTemplate&lt;Order&gt;(orders);
+
+SheetDefinition sheet = document.CreateSheet(&quot;Orders&quot;);
+sheet
+    .AddTemplate(template)
+    .SetFreezePanes(0, 1)
+    .SetAutoFilterEnabled();
+</code></pre>
+<h3 id="資料驗證">資料驗證</h3>
+<pre><code class="lang-csharp">template.Columns.Add&lt;string&gt;(
+    &quot;地區&quot;,
+    order =&gt; order.Region,
+    configureGenerators: config =&gt; config.UseDataValidation(_ =&gt; new DataValidation {
+        ValidationType = DataValidationType.List,
+        ListItems = [&quot;North&quot;, &quot;South&quot;, &quot;East&quot;, &quot;West&quot;],
+        ErrorTitle = &quot;無效地區&quot;,
+        ErrorMessage = &quot;請選擇有效的銷售地區。&quot;,
+        IsErrorAlertShown = true
+    })
+);
+</code></pre>
+<h2 id="mergedtemplate">MergedTemplate</h2>
+<p>合併多個 templates，垂直堆疊輸出。適合將標題、資料表與頁尾組合成單一 template 傳入工作表。</p>
+<pre><code class="lang-csharp">MergedTemplate merged = new MergedTemplate(headerTemplate, dataTemplate, footerTemplate);
+sheet.AddTemplate(merged);
+</code></pre>
+<h2 id="自訂-templates">自訂 Templates</h2>
+<p>實作 <code>ISheetTemplate</code> 介面可建立可重複使用的自訂 template：</p>
+<pre><code class="lang-csharp">public class ReportHeaderTemplate : ISheetTemplate {
+    private readonly GridTemplate gridTemplate = new GridTemplate();
+
+    public ReportHeaderTemplate(string title, int columnSpan) {
+        CellStyle titleStyle = SpreadsheetManager.DefaultCellStyles.GridCellStyle with {
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Font = SpreadsheetManager.DefaultCellStyles.GridCellStyle.Font with { Size = 14 }
+        };
+
+        gridTemplate.CreateRow(28);
+        gridTemplate.CreateCell(title, columnSpan: columnSpan, cellStyle: titleStyle);
+
+        gridTemplate.CreateRow();
+        gridTemplate.CreateCell(
+            $&quot;產生時間：{DateTimeOffset.Now:yyyy-MM-dd HH:mm:ss zzz}&quot;,
+            columnSpan: columnSpan
+        );
+    }
+
+    public int ColumnSpan =&gt; gridTemplate.ColumnSpan;
+
+    public int RowSpan =&gt; gridTemplate.RowSpan;
+
+    public TemplateLayout GetLayout() =&gt; gridTemplate.GetLayout();
+}
+</code></pre>
+<p>使用方式：</p>
+<pre><code class="lang-csharp">sheet.AddTemplate(new ReportHeaderTemplate(&quot;Q1 銷售報表&quot;, columnSpan: 4));
+sheet.AddTemplate(dataTemplate);
+</code></pre>
+<h2 id="相關主題">相關主題</h2>
+<ul>
+<li><a href="getting-started.html">入門指南</a> - 了解如何在專案中開始使用 templates</li>
+<li><a href="spreadsheet-document.html">SpreadsheetDocument</a> - 了解 template 與文件的整體協作流程</li>
+<li><a href="sheet-definition.html">SheetDefinition</a> - 了解如何將 templates 加入工作表</li>
+<li><a href="customization.html">自訂樣式</a> - 為 template 中的儲存格套用自訂樣式</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/docs/articles/templates.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

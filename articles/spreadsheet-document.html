@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>SpreadsheetDocument | SpreadsheetExporter Docs </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="SpreadsheetDocument | SpreadsheetExporter Docs ">
+      
+      
+      <link rel="icon" href="../images/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/docs/articles/spreadsheet-document.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="SpreadsheetExporter Docs">
+            SpreadsheetExporter Docs
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="spreadsheetdocument">SpreadsheetDocument</h1>
+
+<p><code>SpreadsheetDocument</code> 代表一份試算表文件，負責管理工作表定義並協調最終渲染輸出。</p>
+<h2 id="建立文件">建立文件</h2>
+<p>若是非 DI 專案，建議使用 <code>SpreadsheetManager</code> 作為啟動入口：</p>
+<p>透過 <code>SpreadsheetManager.CreateDocument()</code> 建立文件：</p>
+<pre><code class="lang-csharp">SpreadsheetManager.SetRenderer(static () =&gt; new ExcelRenderer());
+
+SpreadsheetDocument document = SpreadsheetManager.CreateDocument();
+</code></pre>
+<p>若你的專案已使用 DI，也可直接傳入 renderer 實例建立：</p>
+<pre><code class="lang-csharp">SpreadsheetDocument document = new SpreadsheetDocument(new ExcelRenderer());
+</code></pre>
+<p>例如在 DI 組合根解析 renderer 後建立：</p>
+<pre><code class="lang-csharp">ISpreadsheetRenderer renderer = serviceProvider.GetRequiredService&lt;ISpreadsheetRenderer&gt;();
+SpreadsheetDocument document = new SpreadsheetDocument(renderer);
+</code></pre>
+<h2 id="文件層級設定">文件層級設定</h2>
+<table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DefaultFont</code></td>
+<td>套用至整份文件的預設字型；<code>null</code> 代表使用 renderer 預設值</td>
+</tr>
+<tr>
+<td><code>DefaultSheetName</code></td>
+<td>自動產生工作表名稱時使用的前綴（預設值：「工作表」）</td>
+</tr>
+<tr>
+<td><code>ContentType</code></td>
+<td>匯出格式的 MIME 類型，來自 renderer</td>
+</tr>
+<tr>
+<td><code>FileNameExtension</code></td>
+<td>匯出格式的副檔名（含前置點），來自 renderer</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-csharp">SpreadsheetDocument document = SpreadsheetManager.CreateDocument();
+document.DefaultFont = new CellFont(&quot;Calibri&quot;, 11);
+document.DefaultSheetName = &quot;Sheet&quot;;
+</code></pre>
+<h2 id="工作表管理">工作表管理</h2>
+<h3 id="建立工作表">建立工作表</h3>
+<pre><code class="lang-csharp">// 建立指定名稱的工作表
+SheetDefinition sheet = document.CreateSheet(&quot;銷售報表&quot;);
+
+// 建立指定名稱與預設列高的工作表
+SheetDefinition sheet = document.CreateSheet(&quot;銷售報表&quot;, defaultRowHeight: 20);
+
+// 自動命名（依序產生「工作表1」、「工作表2」等）
+SheetDefinition sheet = document.CreateSheet();
+</code></pre>
+<p>若傳入重複名稱，會自動加上序號後綴（例如 <code>銷售報表(1)</code>）。</p>
+<h3 id="存取工作表">存取工作表</h3>
+<pre><code class="lang-csharp">// 取得最後一個工作表（若無則自動建立）
+SheetDefinition last = document.LastSheet;
+
+// 依零基索引取得
+SheetDefinition first = document.GetSheet(0);
+
+// 安全取得
+if (document.TryGetSheet(0, out SheetDefinition sheet)) {
+    // ...
+}
+</code></pre>
+<h2 id="匯出">匯出</h2>
+<h3 id="匯出至位元組陣列">匯出至位元組陣列</h3>
+<p>適用於網頁回應或記憶體內處理：</p>
+<pre><code class="lang-csharp">public IActionResult Download() {
+    SpreadsheetDocument document = SpreadsheetManager.CreateDocument();
+    SheetDefinition sheet = document.CreateSheet(&quot;報表&quot;);
+    sheet.AddTemplate(BuildTemplate());
+
+    return File(
+        document.Export(),
+        document.ContentType,
+        $&quot;report{document.FileNameExtension}&quot;
+    );
+}
+</code></pre>
+<h3 id="匯出至檔案">匯出至檔案</h3>
+<pre><code class="lang-csharp">// 若檔案存在則覆寫（預設）
+document.ExportFile($@&quot;C:\Reports\output{document.FileNameExtension}&quot;);
+
+// 若檔案存在則拋出 IOException
+document.ExportFile(
+    $@&quot;C:\Reports\output{document.FileNameExtension}&quot;,
+    SpreadsheetFileMode.CreateNew
+);
+</code></pre>
+<p><strong>SpreadsheetFileMode 選項：</strong></p>
+<ul>
+<li><code>Create</code> - 建立新檔案，若存在則覆寫（預設）</li>
+<li><code>CreateNew</code> - 建立新檔案，若存在則拋出例外</li>
+</ul>
+<h2 id="從-json-建立文件">從 JSON 建立文件</h2>
+<p><code>SpreadsheetDocument.FromJson</code> 可從 JSON 字串直接建立完整文件，適合將報表結構外部化配置：</p>
+<pre><code class="lang-csharp">string json = File.ReadAllText(&quot;report-template.json&quot;);
+SpreadsheetDocument document = SpreadsheetDocument.FromJson(json);
+document.ExportFile($&quot;output{document.FileNameExtension}&quot;);
+</code></pre>
+<p>JSON 格式為工作表陣列，目前支援 <code>Grid</code> 與 <code>RecordSet</code> 兩種 template 類型：</p>
+<pre><code class="lang-json">[
+  {
+    &quot;SheetName&quot;: &quot;Report&quot;,
+    &quot;DefaultRowHeight&quot;: 20,
+    &quot;ColumnWidths&quot;: [
+      { &quot;Index&quot;: 0, &quot;Width&quot;: 18 },
+      { &quot;Index&quot;: 1, &quot;Width&quot;: 24 }
+    ],
+    &quot;Templates&quot;: [
+      {
+        &quot;Type&quot;: &quot;Grid&quot;,
+        &quot;Rows&quot;: [
+          {
+            &quot;Height&quot;: 24,
+            &quot;Cells&quot;: [
+              { &quot;Value&quot;: &quot;標題&quot;, &quot;ColumnSpan&quot;: 2, &quot;Style&quot;: { &quot;HorizontalAlignment&quot;: &quot;Center&quot; } }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
+</code></pre>
+<h3 id="工作表層級支援欄位">工作表層級支援欄位</h3>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>型別</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SheetName</code></td>
+<td><code>string</code></td>
+<td>工作表名稱；省略時會自動命名</td>
+</tr>
+<tr>
+<td><code>DefaultRowHeight</code></td>
+<td><code>number</code></td>
+<td>工作表預設列高</td>
+</tr>
+<tr>
+<td><code>Password</code></td>
+<td><code>string</code></td>
+<td>工作表保護密碼</td>
+</tr>
+<tr>
+<td><code>FreezePanes</code></td>
+<td><code>object</code></td>
+<td>凍結窗格設定，需同時提供 <code>Row</code> 與 <code>Column</code></td>
+</tr>
+<tr>
+<td><code>IsAutoFilterEnabled</code></td>
+<td><code>boolean</code></td>
+<td>啟用自動篩選</td>
+</tr>
+<tr>
+<td><code>ColumnWidths</code></td>
+<td><code>object</code> / <code>array</code></td>
+<td>欄寬設定，可用索引物件或 <code>{ Index, Width }</code> 陣列</td>
+</tr>
+<tr>
+<td><code>PageSettings</code></td>
+<td><code>object</code></td>
+<td>列印設定，目前支援 <code>PageOrientation</code> 與 <code>PaperSize</code></td>
+</tr>
+<tr>
+<td><code>Metadata</code></td>
+<td><code>object</code></td>
+<td>附加自訂資料，供 renderer 或擴充邏輯讀取</td>
+</tr>
+<tr>
+<td><code>Templates</code></td>
+<td><code>array</code></td>
+<td>工作表上的 template 定義</td>
+</tr>
+</tbody>
+</table>
+<p><code>FreezePanes</code> 範例：</p>
+<pre><code class="lang-json">{
+  &quot;FreezePanes&quot;: {
+    &quot;Row&quot;: 1,
+    &quot;Column&quot;: 0
+  }
+}
+</code></pre>
+<p><code>ColumnWidths</code> 可用兩種格式：</p>
+<pre><code class="lang-json">{
+  &quot;ColumnWidths&quot;: {
+    &quot;0&quot;: 18,
+    &quot;1&quot;: 24
+  }
+}
+</code></pre>
+<pre><code class="lang-json">{
+  &quot;ColumnWidths&quot;: [
+    { &quot;Index&quot;: 0, &quot;Width&quot;: 18 },
+    { &quot;Index&quot;: 1, &quot;Width&quot;: 24 }
+  ]
+}
+</code></pre>
+<h3 id="grid-template-支援欄位">Grid template 支援欄位</h3>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>型別</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Type</code></td>
+<td><code>string</code></td>
+<td>固定為 <code>Grid</code></td>
+</tr>
+<tr>
+<td><code>Rows</code></td>
+<td><code>array</code></td>
+<td>列定義</td>
+</tr>
+<tr>
+<td><code>Rows[].Height</code></td>
+<td><code>number</code></td>
+<td>該列列高</td>
+</tr>
+<tr>
+<td><code>Rows[].Cells</code></td>
+<td><code>array</code></td>
+<td>儲存格定義</td>
+</tr>
+<tr>
+<td><code>Rows[].Cells[].Value</code></td>
+<td><code>any</code></td>
+<td>固定值</td>
+</tr>
+<tr>
+<td><code>Rows[].Cells[].Formula</code></td>
+<td><code>string</code></td>
+<td>公式字串</td>
+</tr>
+<tr>
+<td><code>Rows[].Cells[].ColumnSpan</code></td>
+<td><code>number</code></td>
+<td>欄合併數，預設 <code>1</code></td>
+</tr>
+<tr>
+<td><code>Rows[].Cells[].RowSpan</code></td>
+<td><code>number</code></td>
+<td>列合併數，預設 <code>1</code></td>
+</tr>
+<tr>
+<td><code>Rows[].Cells[].Style</code></td>
+<td><code>object</code></td>
+<td>儲存格樣式</td>
+</tr>
+</tbody>
+</table>
+<p><code>Grid</code> 的 <code>Value</code> 與 <code>Formula</code> 只能擇一設定。</p>
+<h3 id="recordset-template-支援欄位">RecordSet template 支援欄位</h3>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>型別</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Type</code></td>
+<td><code>string</code></td>
+<td>固定為 <code>RecordSet</code></td>
+</tr>
+<tr>
+<td><code>HeaderHeight</code></td>
+<td><code>number</code></td>
+<td>標題列高度</td>
+</tr>
+<tr>
+<td><code>RecordHeight</code></td>
+<td><code>number</code></td>
+<td>資料列高度</td>
+</tr>
+<tr>
+<td><code>Columns</code></td>
+<td><code>array</code></td>
+<td>欄位定義</td>
+</tr>
+<tr>
+<td><code>Records</code></td>
+<td><code>array</code></td>
+<td>資料列；每筆記錄會轉成 <code>Dictionary&lt;string, object?&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>Columns[]</code> 支援欄位：</p>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>型別</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HeaderText</code></td>
+<td><code>string</code></td>
+<td>欄位標題</td>
+</tr>
+<tr>
+<td><code>HeaderStyle</code></td>
+<td><code>object</code></td>
+<td>標題樣式</td>
+</tr>
+<tr>
+<td><code>FieldStyle</code></td>
+<td><code>object</code></td>
+<td>資料儲存格樣式</td>
+</tr>
+<tr>
+<td><code>FieldKey</code></td>
+<td><code>string</code></td>
+<td>從 <code>Records[]</code> 取值的欄位名稱</td>
+</tr>
+<tr>
+<td><code>Value</code></td>
+<td><code>any</code></td>
+<td>固定值</td>
+</tr>
+<tr>
+<td><code>Formula</code></td>
+<td><code>string</code></td>
+<td>固定公式</td>
+</tr>
+<tr>
+<td><code>Children</code></td>
+<td><code>array</code></td>
+<td>子欄位，建立多層標題</td>
+</tr>
+</tbody>
+</table>
+<p><code>RecordSet</code> 欄位的 <code>FieldKey</code>、<code>Value</code>、<code>Formula</code> 只能擇一設定。</p>
+<p><code>FieldKey</code> 支援巢狀物件路徑，例如：</p>
+<pre><code class="lang-json">{
+  &quot;HeaderText&quot;: &quot;City&quot;,
+  &quot;FieldKey&quot;: &quot;Customer.Address.City&quot;
+}
+</code></pre>
+<h3 id="style-與-font-支援欄位">Style 與 Font 支援欄位</h3>
+<p><code>Grid</code> 的 <code>Style</code>，以及 <code>RecordSet</code> 的 <code>HeaderStyle</code>、<code>FieldStyle</code>，目前支援以下欄位：</p>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>型別</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HorizontalAlignment</code></td>
+<td><code>string</code> / <code>number</code></td>
+<td>水平對齊</td>
+</tr>
+<tr>
+<td><code>VerticalAlignment</code></td>
+<td><code>string</code> / <code>number</code></td>
+<td>垂直對齊</td>
+</tr>
+<tr>
+<td><code>HasBorder</code></td>
+<td><code>boolean</code></td>
+<td>是否套用框線</td>
+</tr>
+<tr>
+<td><code>WrapText</code></td>
+<td><code>boolean</code></td>
+<td>是否自動換行</td>
+</tr>
+<tr>
+<td><code>BackgroundColor</code></td>
+<td><code>string</code> / <code>object</code></td>
+<td>背景色</td>
+</tr>
+<tr>
+<td><code>DataFormat</code></td>
+<td><code>string</code> / <code>null</code></td>
+<td>Excel 格式字串</td>
+</tr>
+<tr>
+<td><code>IsLocked</code></td>
+<td><code>boolean</code></td>
+<td>是否鎖定儲存格</td>
+</tr>
+<tr>
+<td><code>Font</code></td>
+<td><code>object</code></td>
+<td>字型設定</td>
+</tr>
+</tbody>
+</table>
+<p><code>Font</code> 支援欄位：</p>
+<table>
+<thead>
+<tr>
+<th>欄位</th>
+<th>型別</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Name</code></td>
+<td><code>string</code> / <code>null</code></td>
+<td>字型名稱</td>
+</tr>
+<tr>
+<td><code>Size</code></td>
+<td><code>number</code></td>
+<td>字型大小</td>
+</tr>
+<tr>
+<td><code>Color</code></td>
+<td><code>string</code> / <code>object</code></td>
+<td>字型顏色</td>
+</tr>
+<tr>
+<td><code>Style</code></td>
+<td><code>string</code> / <code>number</code> / <code>array</code></td>
+<td>字型樣式，可用 <code>Bold</code>、<code>Italic</code>、<code>Underline</code>、<code>Strikeout</code> 或其數值</td>
+</tr>
+</tbody>
+</table>
+<p>色彩格式支援：</p>
+<ul>
+<li>命名色彩，例如 <code>Red</code></li>
+<li>HTML 色碼，例如 <code>#FFAA00</code></li>
+<li>ARGB / RGB 物件，例如 <code>{ &quot;R&quot;: 255, &quot;G&quot;: 170, &quot;B&quot;: 0 }</code></li>
+</ul>
+<p>列舉值支援名稱或數值，且字串比對不分大小寫。</p>
+<h3 id="完整範例">完整範例</h3>
+<pre><code class="lang-json">[
+  {
+    &quot;SheetName&quot;: &quot;Orders&quot;,
+    &quot;DefaultRowHeight&quot;: 20,
+    &quot;Password&quot;: &quot;sheet-pass&quot;,
+    &quot;FreezePanes&quot;: { &quot;Row&quot;: 1, &quot;Column&quot;: 0 },
+    &quot;IsAutoFilterEnabled&quot;: true,
+    &quot;ColumnWidths&quot;: {
+      &quot;0&quot;: 12,
+      &quot;1&quot;: 24,
+      &quot;2&quot;: 18
+    },
+    &quot;PageSettings&quot;: {
+      &quot;PageOrientation&quot;: &quot;Landscape&quot;,
+      &quot;PaperSize&quot;: &quot;A4&quot;
+    },
+    &quot;Metadata&quot;: {
+      &quot;reportType&quot;: &quot;monthly&quot;,
+      &quot;generatedBy&quot;: &quot;system&quot;
+    },
+    &quot;Templates&quot;: [
+      {
+        &quot;Type&quot;: &quot;Grid&quot;,
+        &quot;Rows&quot;: [
+          {
+            &quot;Height&quot;: 28,
+            &quot;Cells&quot;: [
+              {
+                &quot;Value&quot;: &quot;Order Summary&quot;,
+                &quot;ColumnSpan&quot;: 3,
+                &quot;Style&quot;: {
+                  &quot;HorizontalAlignment&quot;: &quot;Center&quot;,
+                  &quot;HasBorder&quot;: true,
+                  &quot;BackgroundColor&quot;: &quot;#1F4E79&quot;,
+                  &quot;Font&quot;: {
+                    &quot;Name&quot;: &quot;Calibri&quot;,
+                    &quot;Size&quot;: 14,
+                    &quot;Color&quot;: &quot;White&quot;,
+                    &quot;Style&quot;: [&quot;Bold&quot;]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        &quot;Type&quot;: &quot;RecordSet&quot;,
+        &quot;HeaderHeight&quot;: 22,
+        &quot;RecordHeight&quot;: 20,
+        &quot;Columns&quot;: [
+          { &quot;HeaderText&quot;: &quot;Order ID&quot;, &quot;FieldKey&quot;: &quot;OrderId&quot; },
+          {
+            &quot;HeaderText&quot;: &quot;Customer&quot;,
+            &quot;FieldKey&quot;: &quot;Customer.Name&quot;
+          },
+          {
+            &quot;HeaderText&quot;: &quot;Amount&quot;,
+            &quot;FieldKey&quot;: &quot;Amount&quot;,
+            &quot;FieldStyle&quot;: {
+              &quot;HorizontalAlignment&quot;: &quot;Right&quot;,
+              &quot;DataFormat&quot;: &quot;#,##0.00&quot;
+            }
+          }
+        ],
+        &quot;Records&quot;: [
+          {
+            &quot;OrderId&quot;: 1001,
+            &quot;Customer&quot;: {
+              &quot;Name&quot;: &quot;Northwind&quot;
+            },
+            &quot;Amount&quot;: 1250.40
+          },
+          {
+            &quot;OrderId&quot;: 1002,
+            &quot;Customer&quot;: {
+              &quot;Name&quot;: &quot;Adventure Works&quot;
+            },
+            &quot;Amount&quot;: 980.00
+          }
+        ]
+      }
+    ]
+  }
+]
+</code></pre>
+<h3 id="目前未支援的-json-功能">目前未支援的 JSON 功能</h3>
+<ul>
+<li><code>DataTableTemplate</code>。</li>
+<li><code>MergedTemplate</code>。</li>
+<li>Grid / RecordSet 的 <code>DataValidation</code>。</li>
+<li>需要以程式碼動態計算的 generator 邏輯。</li>
+<li>自訂 template 型別，除非先自行註冊對應的 JSON parser。</li>
+</ul>
+<h3 id="註冊自訂-json-parser">註冊自訂 JSON parser</h3>
+<p><code>SpreadsheetDocument.FromJson(...)</code> 會透過 <code>JsonTemplateRegistry</code> 依 <code>Type</code> 欄位尋找對應的 parser。</p>
+<p>內建已註冊的型別有：</p>
+<ul>
+<li><code>Grid</code></li>
+<li><code>RecordSet</code></li>
+</ul>
+<p>若要支援自訂 template，可實作 <code>ITemplateJsonParser</code>，再於呼叫 <code>FromJson(...)</code> 前註冊：</p>
+<pre><code class="lang-csharp">using System.Text.Json;
+using CloudyWing.SpreadsheetExporter;
+using CloudyWing.SpreadsheetExporter.Templates;
+using CloudyWing.SpreadsheetExporter.Templates.Json;
+
+public class ReportHeaderTemplateJsonParser : ITemplateJsonParser {
+    public string TypeName =&gt; &quot;ReportHeader&quot;;
+
+    public ISheetTemplate Parse(JsonElement element) {
+        string title = element.GetProperty(&quot;Title&quot;).GetString()!;
+        int columnSpan = element.GetProperty(&quot;ColumnSpan&quot;).GetInt32();
+        return new ReportHeaderTemplate(title, columnSpan);
+    }
+}
+
+JsonTemplateRegistry.Register(new ReportHeaderTemplateJsonParser());
+
+SpreadsheetManager.SetRenderer(static () =&gt; new ExcelRenderer());
+SpreadsheetDocument document = SpreadsheetDocument.FromJson(json);
+</code></pre>
+<p>對應 JSON：</p>
+<pre><code class="lang-json">{
+  &quot;Type&quot;: &quot;ReportHeader&quot;,
+  &quot;Title&quot;: &quot;Q1 Sales Report&quot;,
+  &quot;ColumnSpan&quot;: 4
+}
+</code></pre>
+<p>若需要完全重設註冊內容，可先呼叫 <code>JsonTemplateRegistry.Clear()</code>，再視需要呼叫 <code>JsonTemplateRegistry.RegisterBuiltins()</code> 與自訂 parser 註冊。</p>
+<h2 id="自訂-renderer-行為">自訂 renderer 行為</h2>
+<p><code>ExcelRenderer</code> 提供 <code>OnSheetCreated</code> 虛擬方法，可在工作表建立後透過 ClosedXML API 進行額外設定：</p>
+<pre><code class="lang-csharp">using ClosedXML.Excel;
+using CloudyWing.SpreadsheetExporter;
+using CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
+
+public class CustomExcelRenderer : ExcelRenderer {
+    protected override void OnSheetCreated(IXLWorksheet worksheet, SheetLayout context) {
+        // 透過 ClosedXML API 進行自訂設定
+        worksheet.SheetView.ShowGridLines = false;
+    }
+}
+
+SpreadsheetManager.SetRenderer(static () =&gt; new CustomExcelRenderer());
+</code></pre>
+<h2 id="相關主題">相關主題</h2>
+<ul>
+<li><a href="getting-started.html">入門指南</a> - 從零開始設定 SpreadsheetExporter</li>
+<li><a href="sheet-definition.html">SheetDefinition</a> - 工作表管理與設定</li>
+<li><a href="templates.html">Templates</a> - 探索不同的資料結構化方式</li>
+<li><a href="migration-notes.html">Migration Notes</a> - 檢視不同版本之間的 JSON 與 API 調整</li>
+<li><a href="customization.html">自訂樣式</a> - 透過 SpreadsheetManager 設定全域儲存格樣式</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/docs/articles/spreadsheet-document.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
