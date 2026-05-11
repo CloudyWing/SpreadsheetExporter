@@ -519,6 +519,17 @@ if (renderer is ISpreadsheetRendererWithCapabilities capableRenderer) {
 }
 ```
 
+`SpreadsheetDocument.GetRendererCapabilityDiagnostics()` 可檢查文件是否使用 renderer 未宣告支援的能力。
+此方法只在 renderer 實作 `ISpreadsheetRendererWithCapabilities` 時回傳診斷；既有 renderer 未宣告能力時，診斷結果為空集合。
+
+```csharp
+IReadOnlyList<LayoutDiagnostic> diagnostics = document.GetRendererCapabilityDiagnostics();
+
+foreach (LayoutDiagnostic diagnostic in diagnostics) {
+    Console.WriteLine($"{diagnostic.Code}: {diagnostic.Message}");
+}
+```
+
 ## 相關主題
 
 - [入門指南](getting-started.md) - 從零開始設定 SpreadsheetExporter

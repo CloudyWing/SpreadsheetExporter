@@ -133,6 +133,18 @@ public sealed class SpreadsheetDocument {
     }
 
     /// <summary>
+    /// Gets renderer capability diagnostics for the current document without rendering it.
+    /// </summary>
+    /// <returns>
+    /// The renderer capability diagnostics, or an empty collection when the renderer does not expose capabilities.
+    /// </returns>
+    public IReadOnlyList<LayoutDiagnostic> GetRendererCapabilityDiagnostics() {
+        return renderer is ISpreadsheetRendererWithCapabilities capableRenderer
+            ? RendererCapabilityValidator.GetDiagnostics(sheets, DefaultFont, capableRenderer.Capabilities)
+            : [];
+    }
+
+    /// <summary>
     /// Validates the current document layout and throws when diagnostics are found.
     /// </summary>
     /// <exception cref="SpreadsheetLayoutException">Layout diagnostics are found.</exception>

@@ -310,6 +310,62 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void GetRendererCapabilityDiagnostics_WhenRendererDoesNotExposeCapabilities_ShouldReturnEmpty() {
+        SpreadsheetDocument sut = CreateDocumentUsingAllCapabilities(new FakeRenderer());
+
+        IReadOnlyList<LayoutDiagnostic> diagnostics = sut.GetRendererCapabilityDiagnostics();
+
+        Assert.That(diagnostics, Is.Empty);
+    }
+
+    [Test]
+    public void GetRendererCapabilityDiagnostics_WithUnsupportedUsedCapabilities_ShouldReturnDiagnostics() {
+        SpreadsheetDocument sut = CreateDocumentUsingAllCapabilities(
+            new CapabilityRenderer(new RendererCapabilities())
+        );
+
+        IReadOnlyList<LayoutDiagnostic> diagnostics = sut.GetRendererCapabilityDiagnostics();
+        string[] messages = diagnostics.Select(x => x.Message).ToArray();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(diagnostics, Has.Count.EqualTo(9));
+            Assert.That(
+                diagnostics.Select(x => x.Code),
+                Is.All.EqualTo(LayoutDiagnosticCodes.UnsupportedRendererCapability)
+            );
+            Assert.That(messages, Has.Some.Contains(nameof(RendererCapabilities.SupportsMultipleSheets)));
+            Assert.That(messages, Has.Some.Contains(nameof(RendererCapabilities.SupportsStyles)));
+            Assert.That(messages, Has.Some.Contains(nameof(RendererCapabilities.SupportsMergedCells)));
+            Assert.That(messages, Has.Some.Contains(nameof(RendererCapabilities.SupportsFormulas)));
+            Assert.That(messages, Has.Some.Contains(nameof(RendererCapabilities.SupportsDataValidation)));
+            Assert.That(messages, Has.Some.Contains(nameof(RendererCapabilities.SupportsFreezePanes)));
+            Assert.That(messages, Has.Some.Contains(nameof(RendererCapabilities.SupportsAutoFilter)));
+            Assert.That(messages, Has.Some.Contains(nameof(RendererCapabilities.SupportsWorksheetProtection)));
+            Assert.That(messages, Has.Some.Contains(nameof(RendererCapabilities.SupportsPageSettings)));
+        }
+    }
+
+    [Test]
+    public void GetRendererCapabilityDiagnostics_WithSupportedUsedCapabilities_ShouldReturnEmpty() {
+        RendererCapabilities capabilities = new() {
+            SupportsStyles = true,
+            SupportsMergedCells = true,
+            SupportsFormulas = true,
+            SupportsDataValidation = true,
+            SupportsFreezePanes = true,
+            SupportsAutoFilter = true,
+            SupportsMultipleSheets = true,
+            SupportsWorksheetProtection = true,
+            SupportsPageSettings = true
+        };
+        SpreadsheetDocument sut = CreateDocumentUsingAllCapabilities(new CapabilityRenderer(capabilities));
+
+        IReadOnlyList<LayoutDiagnostic> diagnostics = sut.GetRendererCapabilityDiagnostics();
+
+        Assert.That(diagnostics, Is.Empty);
+    }
+
+    [Test]
     public void FromJson_WithFreezePanesAndAutoFilter_ShouldPopulateSheetDefinition() {
         SpreadsheetManager.SetRenderer(() => new FakeRenderer());
 
@@ -510,11 +566,55 @@ internal class SpreadsheetDocumentTests {
         }
     }
 
+    private sealed class CapabilityRenderer : ISpreadsheetRendererWithCapabilities {
+        public CapabilityRenderer(RendererCapabilities capabilities) {
+            Capabilities = capabilities;
+        }
+
+        public string ContentType => FakeRenderer.ExpectedContentType;
+
+        public string FileNameExtension => FakeRenderer.ExpectedFileNameExtension;
+
+        public RendererCapabilities Capabilities { get; }
+
+        public byte[] Render(IEnumerable<SheetLayout> layouts) {
+            return ExportedBytes;
+        }
+    }
+
     private sealed class StubSheetTemplate(TemplateLayout layout) : ISheetTemplate {
         public int ColumnSpan => layout.Cells.Count == 0 ? 0 : layout.Cells.Max(x => x.Point.X + x.Size.Width);
 
         public int RowSpan => layout.RowSpan;
 
         public TemplateLayout GetLayout() => layout;
+    }
+
+    private static SpreadsheetDocument CreateDocumentUsingAllCapabilities(ISpreadsheetRenderer renderer) {
+        SpreadsheetDocument document = new(renderer) {
+            DefaultFont = new CellFont("Calibri", 11)
+        };
+
+        SheetDefinition sheet = document.CreateSheet("Capabilities");
+        sheet.SetFreezePanes(1, 1);
+        sheet.SetAutoFilterEnabled();
+        sheet.SetPassword("password");
+        sheet.ConfigurePageSettings(settings => settings.PageOrientation = PageOrientation.Landscape);
+        sheet.AddTemplate(new StubSheetTemplate(new TemplateLayout(
+            [
+                new Cell {
+                    Point = new Point(0, 0),
+                    Size = new Size(2, 1),
+                    FormulaGenerator = (_, _) => "SUM(A1:A2)",
+                    DataValidationGenerator = (_, _) => new DataValidation(),
+                    CellStyleGenerator = (_, _) => CellStyle.Empty
+                }
+            ],
+            1,
+            new Dictionary<int, double?>()
+        )));
+        document.CreateSheet("Second");
+
+        return document;
     }
 }

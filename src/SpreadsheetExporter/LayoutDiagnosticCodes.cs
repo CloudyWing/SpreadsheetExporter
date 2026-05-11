@@ -23,4 +23,9 @@ public static class LayoutDiagnosticCodes {
     /// Indicates that a row height or column width value is invalid.
     /// </summary>
     public const string InvalidDimension = "SE-LAYOUT-004";
+
+    /// <summary>
+    /// Indicates that the renderer does not support a feature used by the document.
+    /// </summary>
+    public const string UnsupportedRendererCapability = "SE-RENDERER-001";
 }
