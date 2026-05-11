@@ -1,0 +1,195 @@
+{
+  "DefaultFont": {
+    "Name": "Calibri",
+    "Size": 11,
+    "ColorArgb": "#FF000000",
+    "Bold": false,
+    "Italic": false,
+    "Underline": "None",
+    "Strikeout": false
+  },
+  "Worksheets": [
+    {
+      "Name": "Report",
+      "DefaultRowHeight": 24,
+      "IsProtected": true,
+      "PageOrientation": "Landscape",
+      "PaperSize": "A4Paper",
+      "FreezePanes": {
+        "Row": 1,
+        "Column": 1
+      },
+      "AutoFilterRange": "$A$1:$C$2",
+      "Columns": [
+        {
+          "Index": 1,
+          "Width": 18,
+          "IsHidden": false
+        },
+        {
+          "Index": 2,
+          "Width": 8.43,
+          "IsHidden": true
+        },
+        {
+          "Index": 3,
+          "Width": 8.43,
+          "IsHidden": false
+        }
+      ],
+      "Rows": [
+        {
+          "Index": 1,
+          "Height": 32,
+          "IsHidden": false
+        },
+        {
+          "Index": 2,
+          "Height": 24,
+          "IsHidden": true
+        }
+      ],
+      "MergedRanges": [
+        "$A$1:$B$1"
+      ],
+      "Cells": [
+        {
+          "Address": "$A$1",
+          "Value": "Title",
+          "Formula": null,
+          "MergedRange": "$A$1:$B$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": true,
+            "IsLocked": true,
+            "FillArgb": "#FFFAFAD2",
+            "NumberFormat": "",
+            "TopBorder": "Thin",
+            "Font": {
+              "Name": "Arial",
+              "Size": 14,
+              "ColorArgb": "#FF00008B",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$B$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": true,
+            "IsLocked": true,
+            "FillArgb": "#FFFAFAD2",
+            "NumberFormat": "",
+            "TopBorder": "Thin",
+            "Font": {
+              "Name": "Arial",
+              "Size": 14,
+              "ColorArgb": "#FF00008B",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$2",
+          "Value": "10",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Bottom",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "0",
+            "TopBorder": "None",
+            "Font": {
+              "Name": "Consolas",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$2",
+          "Value": null,
+          "Formula": "SUM(A2,1)",
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "TopBorder": "None",
+            "Font": {
+              "Name": "Consolas",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$2",
+          "Value": "Green",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "TopBorder": "None",
+            "Font": {
+              "Name": "Consolas",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "AllowedValues": "List",
+            "Operator": "Between",
+            "InCellDropdown": false,
+            "IgnoreBlanks": false,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "Invalid option",
+            "ErrorMessage": "Choose a configured option.",
+            "ShowInputMessage": false,
+            "InputTitle": "",
+            "InputMessage": ""
+          }
+        }
+      ]
+    }
+  ]
+}
