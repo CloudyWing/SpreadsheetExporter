@@ -606,6 +606,58 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void FromJson_WithMergedTemplate_ShouldStackChildTemplates() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Templates": [
+                  {
+                    "Type": "Merged",
+                    "Templates": [
+                      {
+                        "Type": "Grid",
+                        "Rows": [
+                          {
+                            "Cells": [
+                              { "Value": "Summary" }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "Type": "DataTable",
+                        "Columns": [
+                          { "ColumnName": "Name" }
+                        ],
+                        "Records": [
+                          { "Name": "Alice" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        SpreadsheetDocument sut = SpreadsheetDocument.FromJson(json);
+        SheetLayout layout = new(sut.GetSheet(0));
+        Cell summaryCell = layout.Cells.Single(x => x.Point == new Point(0, 0));
+        Cell nameHeaderCell = layout.Cells.Single(x => x.Point == new Point(0, 1));
+        Cell nameCell = layout.Cells.Single(x => x.Point == new Point(0, 2));
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(layout.Cells, Has.Count.EqualTo(3));
+            Assert.That(summaryCell.GetValue(), Is.EqualTo("Summary"));
+            Assert.That(nameHeaderCell.GetValue(), Is.EqualTo("Name"));
+            Assert.That(nameCell.GetValue(), Is.EqualTo("Alice"));
+        }
+    }
+
+    [Test]
     public void ExportFile_ShouldWriteExportedBytes() {
         FakeRenderer renderer = new();
         SpreadsheetDocument sut = new(renderer);

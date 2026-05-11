@@ -40,6 +40,7 @@ public static class JsonTemplateRegistry {
     /// </summary>
     public static void RegisterBuiltins() {
         Register(new DataTableTemplateJsonParser());
+        Register(new MergedTemplateJsonParser());
         Register(new RecordSetTemplateJsonParser());
         Register(new GridTemplateJsonParser());
     }

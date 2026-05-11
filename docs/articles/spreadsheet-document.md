@@ -156,7 +156,7 @@ SpreadsheetDocument document = SpreadsheetDocument.FromJson(json);
 document.ExportFile($"output{document.FileNameExtension}");
 ```
 
-JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet` 與 `DataTable` 三種 template 類型：
+JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet`、`DataTable` 與 `Merged` 四種 template 類型：
 
 ```json
 [
@@ -301,6 +301,15 @@ JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet` 與 `DataTable
 | `Formula` | `string` / `null` | 固定公式 |
 
 當 `Columns` 省略時，欄位順序依 `Records` 內第一次出現的鍵值順序決定。記錄缺少欄位時，該儲存格值為 `null`。
+
+### Merged template 支援欄位
+
+| 欄位 | 型別 | 說明 |
+| --- | --- | --- |
+| `Type` | `string` | 固定為 `Merged` |
+| `Templates` | `array` | 子 template 定義，支援所有已註冊的 JSON template 型別 |
+
+`Merged` 會依子 template 順序垂直堆疊版面，行為與程式碼中的 `MergedTemplate` 一致。
 
 ### DataValidation 支援欄位
 
@@ -456,7 +465,6 @@ JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet` 與 `DataTable
 
 ### 目前未支援的 JSON 功能
 
-- `MergedTemplate`。
 - 需要以程式碼動態計算的 generator 邏輯。
 - 自訂 template 型別，除非先自行註冊對應的 JSON parser。
 
@@ -468,6 +476,7 @@ JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet` 與 `DataTable
 
 - `DataTable`
 - `Grid`
+- `Merged`
 - `RecordSet`
 
 若要支援自訂 template，可實作 `ITemplateJsonParser`，再於呼叫 `FromJson(...)` 前註冊：
