@@ -141,6 +141,175 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void GetLayoutDiagnostics_WithOverlappingCells_ShouldReturnDiagnostic() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        SheetDefinition sheet = sut.CreateSheet("Diagnostics");
+        sheet.AddTemplate(new StubSheetTemplate(new TemplateLayout(
+            [
+                new Cell {
+                    Point = new Point(0, 0),
+                    Size = new Size(2, 1),
+                    ValueGenerator = (_, _) => "A"
+                },
+                new Cell {
+                    Point = new Point(1, 0),
+                    Size = new Size(1, 1),
+                    ValueGenerator = (_, _) => "B"
+                }
+            ],
+            1,
+            new Dictionary<int, double?>()
+        )));
+
+        IReadOnlyList<LayoutDiagnostic> diagnostics = sut.GetLayoutDiagnostics();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(diagnostics, Has.Count.EqualTo(1));
+            Assert.That(diagnostics[0].Code, Is.EqualTo(LayoutDiagnosticCodes.OverlappingCellRange));
+            Assert.That(diagnostics[0].Range, Is.EqualTo(new CellRange(1, 0, 1, 1)));
+            Assert.That(diagnostics[0].Source?.SheetName, Is.EqualTo("Diagnostics"));
+        }
+    }
+
+    [Test]
+    public void GetLayoutDiagnostics_WithInvalidRangeAndDimension_ShouldReturnDiagnostics() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        SheetDefinition sheet = sut.CreateSheet("Diagnostics");
+        sheet.SetColumnWidth(-1, 12d);
+        sheet.SetColumnWidth(1, -5d);
+        sheet.AddTemplate(new StubSheetTemplate(new TemplateLayout(
+            [
+                new Cell {
+                    Point = new Point(-1, 0),
+                    Size = new Size(1, 1),
+                    ValueGenerator = (_, _) => "A"
+                }
+            ],
+            1,
+            new Dictionary<int, double?> {
+                [0] = -5d
+            }
+        )));
+
+        IReadOnlyList<LayoutDiagnostic> diagnostics = sut.GetLayoutDiagnostics();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(diagnostics.Select(x => x.Code), Does.Contain(LayoutDiagnosticCodes.InvalidCellRange));
+            Assert.That(diagnostics.Select(x => x.Code).Count(x => x == LayoutDiagnosticCodes.InvalidDimension), Is.EqualTo(3));
+        }
+    }
+
+    [Test]
+    public void GetLayoutDiagnostics_WithValueAndFormula_ShouldReturnDiagnostic() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        SheetDefinition sheet = sut.CreateSheet("Diagnostics");
+        sheet.AddTemplate(new StubSheetTemplate(new TemplateLayout(
+            [
+                new Cell {
+                    Point = new Point(0, 0),
+                    Size = new Size(1, 1),
+                    ValueGenerator = (_, _) => "A",
+                    FormulaGenerator = (_, _) => "SUM(A1:A2)"
+                }
+            ],
+            1,
+            new Dictionary<int, double?>()
+        )));
+
+        IReadOnlyList<LayoutDiagnostic> diagnostics = sut.GetLayoutDiagnostics();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(diagnostics, Has.Count.EqualTo(1));
+            Assert.That(diagnostics[0].Code, Is.EqualTo(LayoutDiagnosticCodes.ValueAndFormulaConflict));
+            Assert.That(diagnostics[0].Range, Is.EqualTo(new CellRange(0, 0, 1, 1)));
+        }
+    }
+
+    [Test]
+    public void GetLayoutDiagnostics_WithValueAndFormula_ShouldNotInvokeGenerators() {
+        bool valueGeneratorInvoked = false;
+        bool formulaGeneratorInvoked = false;
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        SheetDefinition sheet = sut.CreateSheet("Diagnostics");
+        sheet.AddTemplate(new StubSheetTemplate(new TemplateLayout(
+            [
+                new Cell {
+                    Point = new Point(0, 0),
+                    Size = new Size(1, 1),
+                    ValueGenerator = (_, _) => {
+                        valueGeneratorInvoked = true;
+                        return "A";
+                    },
+                    FormulaGenerator = (_, _) => {
+                        formulaGeneratorInvoked = true;
+                        return "SUM(A1:A2)";
+                    }
+                }
+            ],
+            1,
+            new Dictionary<int, double?>()
+        )));
+
+        IReadOnlyList<LayoutDiagnostic> diagnostics = sut.GetLayoutDiagnostics();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(diagnostics, Has.Count.EqualTo(1));
+            Assert.That(valueGeneratorInvoked, Is.False);
+            Assert.That(formulaGeneratorInvoked, Is.False);
+        }
+    }
+
+    [Test]
+    public void ValidateLayout_WithDiagnostics_ShouldThrowSpreadsheetLayoutException() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        SheetDefinition sheet = sut.CreateSheet("Diagnostics");
+        sheet.AddTemplate(new StubSheetTemplate(new TemplateLayout(
+            [
+                new Cell {
+                    Point = new Point(0, 0),
+                    Size = new Size(0, 1),
+                    ValueGenerator = (_, _) => "A"
+                }
+            ],
+            1,
+            new Dictionary<int, double?>()
+        )));
+
+        SpreadsheetLayoutException? exception = Assert.Throws<SpreadsheetLayoutException>(() => sut.ValidateLayout());
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception!.Diagnostics, Has.Count.EqualTo(1));
+            Assert.That(exception.Diagnostics[0].Code, Is.EqualTo(LayoutDiagnosticCodes.InvalidCellRange));
+        }
+    }
+
+    [Test]
+    public void Export_WithLayoutDiagnostics_ShouldNotRunValidation() {
+        FakeRenderer renderer = new();
+        SpreadsheetDocument sut = new(renderer);
+        SheetDefinition sheet = sut.CreateSheet("Diagnostics");
+        sheet.AddTemplate(new StubSheetTemplate(new TemplateLayout(
+            [
+                new Cell {
+                    Point = new Point(0, 0),
+                    Size = new Size(0, 1),
+                    ValueGenerator = (_, _) => "A"
+                }
+            ],
+            1,
+            new Dictionary<int, double?>()
+        )));
+
+        byte[] result = sut.Export();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(result, Is.EqualTo(ExportedBytes));
+            Assert.That(renderer.RenderedLayouts, Has.Count.EqualTo(1));
+        }
+    }
+
+    [Test]
     public void FromJson_WithFreezePanesAndAutoFilter_ShouldPopulateSheetDefinition() {
         SpreadsheetManager.SetRenderer(() => new FakeRenderer());
 

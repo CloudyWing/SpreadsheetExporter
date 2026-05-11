@@ -74,6 +74,40 @@ if (document.TryGetSheet(0, out SheetDefinition sheet)) {
 }
 ```
 
+## 版面診斷
+
+`GetLayoutDiagnostics()` 可在匯出前檢查工作表版面。此方法只回傳診斷結果，不會輸出檔案，也不會改變文件內容。
+
+```csharp
+IReadOnlyList<LayoutDiagnostic> diagnostics = document.GetLayoutDiagnostics();
+
+foreach (LayoutDiagnostic diagnostic in diagnostics) {
+    Console.WriteLine($"{diagnostic.Code}: {diagnostic.Message}");
+}
+```
+
+若希望在發現診斷結果時直接中止流程，可使用 `ValidateLayout()`：
+
+```csharp
+try {
+    document.ValidateLayout();
+    document.ExportFile($"output{document.FileNameExtension}");
+} catch (SpreadsheetLayoutException ex) {
+    foreach (LayoutDiagnostic diagnostic in ex.Diagnostics) {
+        Console.WriteLine($"{diagnostic.Code}: {diagnostic.Message}");
+    }
+}
+```
+
+目前診斷範圍包含：
+
+- 儲存格 range 座標或大小是否有效。
+- 儲存格 range 是否重疊。
+- 同一儲存格是否同時定義 value 與 formula。
+- 欄寬與列高是否使用有效值。
+
+`Export()` 不會自動呼叫 `ValidateLayout()`，因此既有匯出流程維持原本行為。需要 render 前驗證時，由呼叫端明確呼叫診斷 API。
+
 ## 匯出
 
 ### 匯出至位元組陣列
@@ -436,6 +470,22 @@ public class CustomExcelRenderer : ExcelRenderer {
 }
 
 SpreadsheetManager.SetRenderer(static () => new CustomExcelRenderer());
+```
+
+### Renderer 能力宣告
+
+Renderer 可選擇實作 `ISpreadsheetRendererWithCapabilities`，宣告自身支援的功能。既有只實作 `ISpreadsheetRenderer` 的 renderer 仍可正常使用。
+
+```csharp
+ISpreadsheetRenderer renderer = new ExcelRenderer();
+
+if (renderer is ISpreadsheetRendererWithCapabilities capableRenderer) {
+    RendererCapabilities capabilities = capableRenderer.Capabilities;
+
+    if (capabilities.SupportsMergedCells) {
+        // 可使用合併儲存格相關版面。
+    }
+}
 ```
 
 ## 相關主題

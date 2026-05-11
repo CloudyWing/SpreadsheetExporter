@@ -18,6 +18,25 @@ internal sealed class ExcelRendererTests {
     }
 
     [Test]
+    public void Capabilities_ShouldExposeSupportedFeatures() {
+        ISpreadsheetRendererWithCapabilities renderer = new ExcelRenderer();
+
+        RendererCapabilities capabilities = renderer.Capabilities;
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(capabilities.SupportsStyles, Is.True);
+            Assert.That(capabilities.SupportsMergedCells, Is.True);
+            Assert.That(capabilities.SupportsFormulas, Is.True);
+            Assert.That(capabilities.SupportsDataValidation, Is.True);
+            Assert.That(capabilities.SupportsFreezePanes, Is.True);
+            Assert.That(capabilities.SupportsAutoFilter, Is.True);
+            Assert.That(capabilities.SupportsMultipleSheets, Is.True);
+            Assert.That(capabilities.SupportsWorksheetProtection, Is.True);
+            Assert.That(capabilities.SupportsPageSettings, Is.True);
+        }
+    }
+
+    [Test]
     public void Export_WithStyledSheet_ShouldGenerateExpectedWorkbook() {
         SpreadsheetDocument document = new(new ExcelRenderer()) {
             DefaultFont = new CellFont("Consolas", 11)
@@ -27,6 +46,8 @@ internal sealed class ExcelRendererTests {
         sheet.Password = "sheet-pass";
         sheet.SetColumnWidth(0, 18);
         sheet.SetColumnWidth(1, Constants.HiddenColumn);
+        sheet.SetFreezePanes(1, 1);
+        sheet.SetAutoFilterEnabled();
         sheet.PageSettings.PageOrientation = PageOrientation.Landscape;
         sheet.PageSettings.PaperSize = PaperSize.A4;
         sheet.AddTemplate(CreateFeatureTemplate());

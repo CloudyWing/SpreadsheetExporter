@@ -125,6 +125,25 @@ public sealed class SpreadsheetDocument {
     }
 
     /// <summary>
+    /// Gets layout diagnostics for the current document without rendering it.
+    /// </summary>
+    /// <returns>The layout diagnostics.</returns>
+    public IReadOnlyList<LayoutDiagnostic> GetLayoutDiagnostics() {
+        return SheetLayoutValidator.GetDiagnostics(sheets);
+    }
+
+    /// <summary>
+    /// Validates the current document layout and throws when diagnostics are found.
+    /// </summary>
+    /// <exception cref="SpreadsheetLayoutException">Layout diagnostics are found.</exception>
+    public void ValidateLayout() {
+        IReadOnlyList<LayoutDiagnostic> diagnostics = GetLayoutDiagnostics();
+        if (diagnostics.Count > 0) {
+            throw new SpreadsheetLayoutException(diagnostics);
+        }
+    }
+
+    /// <summary>
     /// Exports this document as a byte array using the associated renderer.
     /// </summary>
     /// <returns>The rendered spreadsheet bytes.</returns>
