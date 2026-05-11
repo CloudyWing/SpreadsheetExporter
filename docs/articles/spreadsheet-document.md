@@ -329,7 +329,10 @@ JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet`、`DataTable` 
 | `HeaderStyle` | `object` | 標題樣式 |
 | `FieldStyleName` | `string` | 資料儲存格 named style 名稱 |
 | `FieldStyle` | `object` | 資料儲存格樣式 |
+| `Value` | `any` | 固定值 |
 | `Formula` | `string` / `null` | 固定公式 |
+
+`DataTable` 欄位的 `Value` 與 `Formula` 只能擇一設定。
 
 當 `Columns` 省略時，欄位順序依 `Records` 內第一次出現的鍵值順序決定。記錄缺少欄位時，該儲存格值為 `null`。
 

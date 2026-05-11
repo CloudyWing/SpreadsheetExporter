@@ -109,11 +109,23 @@ public class DataTableTemplateJsonParser : ITemplateJsonParserWithContext {
         CellStyle? fieldStyle = JsonStyleParser.ParseOptionalStyle(
             columnElement, "FieldStyle", "FieldStyleName", columnContext
         );
-        string? formula = columnElement.TryGetPropertyIgnoreCase("Formula", out JsonElement formulaElement)
+        bool hasValue = columnElement.TryGetPropertyIgnoreCase("Value", out JsonElement valueElement);
+        bool hasFormula = columnElement.TryGetPropertyIgnoreCase("Formula", out JsonElement formulaElement);
+
+        if (hasValue && hasFormula) {
+            throw JsonParseExceptionFactory.InvalidOperation(
+                columnContext, "cannot specify both 'Value' and 'Formula'."
+            );
+        }
+
+        object? value = hasValue
+            ? valueElement.ToObject(columnContext.Property("Value"))
+            : null;
+        string? formula = hasFormula
             ? GetNullableStringValue(formulaElement, columnContext.Property("Formula"))
             : null;
 
-        return new DataTableColumnDefinition(columnName, headerText, headerStyle, fieldStyle, formula);
+        return new DataTableColumnDefinition(columnName, headerText, headerStyle, fieldStyle, hasValue, value, formula);
     }
 
     private static IReadOnlyList<IDictionary<string, object?>> ParseRecords(
@@ -206,6 +218,10 @@ public class DataTableTemplateJsonParser : ITemplateJsonParserWithContext {
             column.FieldStyleGenerator = value => fieldStyle;
         }
 
+        if (columnDefinition.HasValue) {
+            column.FieldValueGenerator = value => columnDefinition.Value;
+        }
+
         if (columnDefinition.Formula is not null) {
             column.FieldFormulaGenerator = value => columnDefinition.Formula;
         }
@@ -224,6 +240,8 @@ public class DataTableTemplateJsonParser : ITemplateJsonParserWithContext {
         string? HeaderText,
         CellStyle? HeaderStyle,
         CellStyle? FieldStyle,
+        bool HasValue,
+        object? Value,
         string? Formula
     );
 }

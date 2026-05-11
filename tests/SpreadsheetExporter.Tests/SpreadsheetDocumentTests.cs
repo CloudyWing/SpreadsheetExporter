@@ -805,6 +805,73 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void FromJson_WithDataTableColumnValue_ShouldUseFixedValue() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Templates": [
+                  {
+                    "Type": "DataTable",
+                    "Columns": [
+                      { "ColumnName": "Status", "Value": "Active" }
+                    ],
+                    "Records": [
+                      { "Status": "Ignored" }
+                    ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        SpreadsheetDocument sut = SpreadsheetDocument.FromJson(json);
+        SheetLayout layout = new(sut.GetSheet(0));
+        Cell statusCell = layout.Cells.Single(x => x.Point == new Point(0, 1));
+
+        Assert.That(statusCell.GetValue(), Is.EqualTo("Active"));
+    }
+
+    [Test]
+    public void FromJson_WithDataTableColumnValueAndFormula_ShouldThrowPathDiagnostic() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Templates": [
+                  {
+                    "Type": "DataTable",
+                    "Columns": [
+                      {
+                        "ColumnName": "Status",
+                        "Value": "Active",
+                        "Formula": "A2"
+                      }
+                    ],
+                    "Records": [
+                      { "Status": "Ignored" }
+                    ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        InvalidOperationException? exception = Assert.Throws<InvalidOperationException>(
+            () => SpreadsheetDocument.FromJson(json)
+        );
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(exception!.Message, Does.Contain(JsonDiagnosticCodes.InvalidValue));
+            Assert.That(exception.Message, Does.Contain("$[0].Templates[0].Columns[0]"));
+        }
+    }
+
+    [Test]
     public void FromJson_WithDataTableTemplateAndNoColumns_ShouldInferColumnsFromRecords() {
         SpreadsheetManager.SetRenderer(() => new FakeRenderer());
 
