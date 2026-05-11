@@ -99,10 +99,13 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate
 
                 yield return new Cell {
                     ValueGenerator = (cellIndex, rowIdx) => column.FieldValueGenerator?.Invoke(value) ?? value,
-                    CellStyleGenerator = (cellIndex, rowIdx) => column.FieldStyleGenerator?.Invoke(value) ?? SpreadsheetManager.DefaultCellStyles.FieldStyle,
+                    CellStyleGenerator = (cellIndex, rowIdx) => column.FieldStyleGenerator?.Invoke(value)
+                        ?? SpreadsheetManager.DefaultCellStyles.FieldStyle,
                     Point = new Point(colIndex, rowIndex),
                     Size = new Size(1, 1),
-                    FormulaGenerator = (cellIndex, rowIdx) => column.FieldFormulaGenerator?.Invoke(value)
+                    FormulaGenerator = (cellIndex, rowIdx) => column.FieldFormulaGenerator?.Invoke(value),
+                    DataValidationGenerator = (cellIndex, rowIdx) =>
+                        column.FieldDataValidationGenerator?.Invoke(value)
                 };
             }
             rowIndex++;

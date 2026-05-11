@@ -109,6 +109,11 @@ public class DataTableTemplateJsonParser : ITemplateJsonParserWithContext {
         CellStyle? fieldStyle = JsonStyleParser.ParseOptionalStyle(
             columnElement, "FieldStyle", "FieldStyleName", columnContext
         );
+        DataValidation? dataValidation = columnElement.TryGetPropertyIgnoreCase(
+            "DataValidation", out JsonElement dataValidationElement
+        )
+            ? JsonDataValidationParser.Parse(dataValidationElement, columnContext.Property("DataValidation"))
+            : null;
         bool hasValue = columnElement.TryGetPropertyIgnoreCase("Value", out JsonElement valueElement);
         bool hasFormula = columnElement.TryGetPropertyIgnoreCase("Formula", out JsonElement formulaElement);
 
@@ -125,7 +130,16 @@ public class DataTableTemplateJsonParser : ITemplateJsonParserWithContext {
             ? GetNullableStringValue(formulaElement, columnContext.Property("Formula"))
             : null;
 
-        return new DataTableColumnDefinition(columnName, headerText, headerStyle, fieldStyle, hasValue, value, formula);
+        return new DataTableColumnDefinition(
+            columnName,
+            headerText,
+            headerStyle,
+            fieldStyle,
+            dataValidation,
+            hasValue,
+            value,
+            formula
+        );
     }
 
     private static IReadOnlyList<IDictionary<string, object?>> ParseRecords(
@@ -218,6 +232,10 @@ public class DataTableTemplateJsonParser : ITemplateJsonParserWithContext {
             column.FieldStyleGenerator = value => fieldStyle;
         }
 
+        if (columnDefinition.DataValidation is not null) {
+            column.FieldDataValidationGenerator = value => columnDefinition.DataValidation;
+        }
+
         if (columnDefinition.HasValue) {
             column.FieldValueGenerator = value => columnDefinition.Value;
         }
@@ -240,6 +258,7 @@ public class DataTableTemplateJsonParser : ITemplateJsonParserWithContext {
         string? HeaderText,
         CellStyle? HeaderStyle,
         CellStyle? FieldStyle,
+        DataValidation? DataValidation,
         bool HasValue,
         object? Value,
         string? Formula

@@ -241,5 +241,26 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.DataTable {
 
             Assert.That(dataCell.FormulaGenerator!(0, 1), Is.EqualTo("A30"));
         }
+
+        [Test]
+        public void GetLayout_WithFieldDataValidationGenerator_AppliesDataValidation() {
+            DataValidation validation = new() {
+                ValidationType = DataValidationType.Integer,
+                Operator = DataValidationOperator.Between,
+                Value1 = 1,
+                Value2 = 120
+            };
+            template.Columns.Clear();
+            template.Columns.Add(new DataTableColumn {
+                ColumnName = "Age",
+                HeaderText = "Age",
+                FieldDataValidationGenerator = value => validation
+            });
+
+            TemplateLayout layout = template.GetLayout();
+            Cell dataCell = layout.Cells.First(c => c.Point.Y == 1 && c.Point.X == 0);
+
+            Assert.That(dataCell.GetDataValidation(), Is.SameAs(validation));
+        }
     }
 }

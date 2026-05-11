@@ -331,6 +331,7 @@ JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet`、`DataTable` 
 | `FieldStyle` | `object` | 資料儲存格樣式 |
 | `Value` | `any` | 固定值 |
 | `Formula` | `string` / `null` | 固定公式 |
+| `DataValidation` | `object` | 資料儲存格驗證 |
 
 `DataTable` 欄位的 `Value` 與 `Formula` 只能擇一設定。
 
@@ -347,7 +348,7 @@ JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet`、`DataTable` 
 
 ### DataValidation 支援欄位
 
-`Grid` 的 `Rows[].Cells[].DataValidation` 與 `RecordSet` 的 `Columns[].DataValidation` 使用相同欄位：
+`Grid` 的 `Rows[].Cells[].DataValidation`、`RecordSet` 的 `Columns[].DataValidation` 與 `DataTable` 的 `Columns[].DataValidation` 使用相同欄位：
 
 | 欄位 | 型別 | 說明 |
 | --- | --- | --- |

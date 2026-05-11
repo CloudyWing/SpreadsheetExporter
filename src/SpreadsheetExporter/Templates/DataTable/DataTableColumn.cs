@@ -53,4 +53,12 @@ public class DataTableColumn {
     /// The field style generator.
     /// </value>
     public Func<object?, CellStyle>? FieldStyleGenerator { get; set; }
+
+    /// <summary>
+    /// Gets or sets the field data validation generator.
+    /// </summary>
+    /// <value>
+    /// The field data validation generator.
+    /// </value>
+    public Func<object?, DataValidation?>? FieldDataValidationGenerator { get; set; }
 }

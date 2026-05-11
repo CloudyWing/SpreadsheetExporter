@@ -103,6 +103,20 @@ DataTableTemplate template = new DataTableTemplate(dataTable) {
 */
 ```
 
+### 資料驗證
+
+`DataTableColumn.FieldDataValidationGenerator` 可依資料值回傳驗證規則：
+
+```csharp
+DataTableTemplate template = new DataTableTemplate(dataTable);
+template.Columns[1].FieldDataValidationGenerator = value => new DataValidation {
+    ValidationType = DataValidationType.Integer,
+    Operator = DataValidationOperator.Between,
+    Value1 = 1,
+    Value2 = 120
+};
+```
+
 ## RecordSetTemplate
 
 適用於強型別資料集合，支援欄位綁定、資料轉換、條件樣式、多層標題與資料驗證。

@@ -872,6 +872,51 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void FromJson_WithDataTableColumnDataValidation_ShouldPopulateCellValidation() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Templates": [
+                  {
+                    "Type": "DataTable",
+                    "Columns": [
+                      {
+                        "ColumnName": "Quantity",
+                        "DataValidation": {
+                          "ValidationType": "Integer",
+                          "Operator": "Between",
+                          "Value1": 1,
+                          "Value2": 10
+                        }
+                      }
+                    ],
+                    "Records": [
+                      { "Quantity": 2 }
+                    ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        SpreadsheetDocument sut = SpreadsheetDocument.FromJson(json);
+        SheetLayout layout = new(sut.GetSheet(0));
+        Cell quantityCell = layout.Cells.Single(x => x.Point == new Point(0, 1));
+        DataValidation? validation = quantityCell.GetDataValidation();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(validation, Is.Not.Null);
+            Assert.That(validation!.ValidationType, Is.EqualTo(DataValidationType.Integer));
+            Assert.That(validation.Operator, Is.EqualTo(DataValidationOperator.Between));
+            Assert.That(validation.Value1, Is.EqualTo(1));
+            Assert.That(validation.Value2, Is.EqualTo(10));
+        }
+    }
+
+    [Test]
     public void FromJson_WithDataTableTemplateAndNoColumns_ShouldInferColumnsFromRecords() {
         SpreadsheetManager.SetRenderer(() => new FakeRenderer());
 
