@@ -39,6 +39,7 @@ public static class JsonTemplateRegistry {
     /// Registers all built-in parsers. Called automatically on first use.
     /// </summary>
     public static void RegisterBuiltins() {
+        Register(new DataTableTemplateJsonParser());
         Register(new RecordSetTemplateJsonParser());
         Register(new GridTemplateJsonParser());
     }

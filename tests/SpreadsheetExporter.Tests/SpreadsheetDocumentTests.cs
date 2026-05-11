@@ -511,6 +511,101 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void FromJson_WithDataTableTemplate_ShouldPopulateTemplateLayout() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Templates": [
+                  {
+                    "Type": "DataTable",
+                    "HeaderHeight": 22,
+                    "RecordHeight": 18,
+                    "Columns": [
+                      {
+                        "ColumnName": "OrderId",
+                        "HeaderText": "Order ID",
+                        "HeaderStyle": {
+                          "Font": { "Style": "Bold" }
+                        }
+                      },
+                      {
+                        "ColumnName": "Amount",
+                        "FieldStyle": {
+                          "DataFormat": "#,##0.00"
+                        }
+                      }
+                    ],
+                    "Records": [
+                      { "OrderId": 1001, "Amount": 1250.40 },
+                      { "OrderId": 1002 }
+                    ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        SpreadsheetDocument sut = SpreadsheetDocument.FromJson(json);
+        SheetLayout layout = new(sut.GetSheet(0));
+        Cell orderIdHeaderCell = layout.Cells.Single(x => x.Point == new Point(0, 0));
+        Cell amountHeaderCell = layout.Cells.Single(x => x.Point == new Point(1, 0));
+        Cell amountCell = layout.Cells.Single(x => x.Point == new Point(1, 1));
+        Cell missingAmountCell = layout.Cells.Single(x => x.Point == new Point(1, 2));
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(layout.Cells, Has.Count.EqualTo(6));
+            Assert.That(layout.RowHeights[0], Is.EqualTo(22));
+            Assert.That(layout.RowHeights[1], Is.EqualTo(18));
+            Assert.That(orderIdHeaderCell.GetValue(), Is.EqualTo("Order ID"));
+            Assert.That(orderIdHeaderCell.GetCellStyle().Font.Style, Is.EqualTo(FontStyles.Bold));
+            Assert.That(amountHeaderCell.GetValue(), Is.EqualTo("Amount"));
+            Assert.That(amountCell.GetValue(), Is.EqualTo(1250.40m));
+            Assert.That(amountCell.GetCellStyle().DataFormat, Is.EqualTo("#,##0.00"));
+            Assert.That(missingAmountCell.GetValue(), Is.Null);
+        }
+    }
+
+    [Test]
+    public void FromJson_WithDataTableTemplateAndNoColumns_ShouldInferColumnsFromRecords() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Templates": [
+                  {
+                    "Type": "DataTable",
+                    "Records": [
+                      { "Id": 1, "Name": "Alice" },
+                      { "Name": "Bob", "Amount": 20 }
+                    ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        SpreadsheetDocument sut = SpreadsheetDocument.FromJson(json);
+        SheetLayout layout = new(sut.GetSheet(0));
+        List<Cell> headerCells = layout.Cells
+            .Where(x => x.Point.Y == 0)
+            .OrderBy(x => x.Point.X)
+            .ToList();
+        Cell missingIdCell = layout.Cells.Single(x => x.Point == new Point(0, 2));
+        Cell amountCell = layout.Cells.Single(x => x.Point == new Point(2, 2));
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(headerCells.Select(x => x.GetValue()), Is.EqualTo(new[] { "Id", "Name", "Amount" }));
+            Assert.That(missingIdCell.GetValue(), Is.Null);
+            Assert.That(amountCell.GetValue(), Is.EqualTo(20));
+        }
+    }
+
+    [Test]
     public void ExportFile_ShouldWriteExportedBytes() {
         FakeRenderer renderer = new();
         SpreadsheetDocument sut = new(renderer);

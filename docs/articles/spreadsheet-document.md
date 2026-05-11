@@ -156,7 +156,7 @@ SpreadsheetDocument document = SpreadsheetDocument.FromJson(json);
 document.ExportFile($"output{document.FileNameExtension}");
 ```
 
-JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 template 類型：
+JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet` 與 `DataTable` 三種 template 類型：
 
 ```json
 [
@@ -280,6 +280,28 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
 }
 ```
 
+### DataTable template 支援欄位
+
+| 欄位 | 型別 | 說明 |
+| --- | --- | --- |
+| `Type` | `string` | 固定為 `DataTable` |
+| `HeaderHeight` | `number` | 標題列高度 |
+| `RecordHeight` | `number` | 資料列高度 |
+| `Columns` | `array` | 欄位定義；省略時會依 `Records` 的物件鍵值推斷欄位 |
+| `Records` | `array` | 資料列；每筆記錄必須是 JSON object |
+
+`Columns[]` 支援欄位：
+
+| 欄位 | 型別 | 說明 |
+| --- | --- | --- |
+| `ColumnName` | `string` | 對應 `Records[]` 的欄位名稱 |
+| `HeaderText` | `string` / `null` | 欄位標題；省略時使用 `ColumnName` |
+| `HeaderStyle` | `object` | 標題樣式 |
+| `FieldStyle` | `object` | 資料儲存格樣式 |
+| `Formula` | `string` / `null` | 固定公式 |
+
+當 `Columns` 省略時，欄位順序依 `Records` 內第一次出現的鍵值順序決定。記錄缺少欄位時，該儲存格值為 `null`。
+
 ### DataValidation 支援欄位
 
 `Grid` 的 `Rows[].Cells[].DataValidation` 與 `RecordSet` 的 `Columns[].DataValidation` 使用相同欄位：
@@ -305,7 +327,7 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
 
 ### Style 與 Font 支援欄位
 
-`Grid` 的 `Style`，以及 `RecordSet` 的 `HeaderStyle`、`FieldStyle`，目前支援以下欄位：
+`Grid` 的 `Style`、`RecordSet` 的 `HeaderStyle` 與 `FieldStyle`，以及 `DataTable` 的 `HeaderStyle` 與 `FieldStyle` 目前支援以下欄位：
 
 | 欄位 | 型別 | 說明 |
 | --- | --- | --- |
@@ -434,7 +456,6 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
 
 ### 目前未支援的 JSON 功能
 
-- `DataTableTemplate`。
 - `MergedTemplate`。
 - 需要以程式碼動態計算的 generator 邏輯。
 - 自訂 template 型別，除非先自行註冊對應的 JSON parser。
@@ -445,6 +466,7 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
 
 內建已註冊的型別有：
 
+- `DataTable`
 - `Grid`
 - `RecordSet`
 
