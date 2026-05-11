@@ -88,6 +88,15 @@ public class RecordSetTemplateJsonParser : ITemplateJsonParser {
             : SpreadsheetManager.DefaultCellStyles.FieldStyle;
         column.FieldStyleGenerator = context => fieldStyle;
 
+        DataValidation? dataValidation = columnElement.TryGetPropertyIgnoreCase(
+            "DataValidation", out JsonElement dataValidationElement
+        )
+            ? JsonDataValidationParser.Parse(dataValidationElement, "DataValidation")
+            : null;
+        if (dataValidation is not null) {
+            column.FieldDataValidationGenerator = context => dataValidation;
+        }
+
         bool hasFieldKey = columnElement.TryGetPropertyIgnoreCase("FieldKey", out JsonElement fieldKeyElement);
         bool hasFormula = columnElement.TryGetPropertyIgnoreCase("Formula", out JsonElement formulaElement);
         bool hasValue = columnElement.TryGetPropertyIgnoreCase("Value", out JsonElement valueElement);

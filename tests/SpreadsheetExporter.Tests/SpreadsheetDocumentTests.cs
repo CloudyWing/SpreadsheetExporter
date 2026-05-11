@@ -356,6 +356,105 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void FromJson_WithGridDataValidation_ShouldPopulateCellValidation() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Templates": [
+                  {
+                    "Type": "Grid",
+                    "Rows": [
+                      {
+                        "Cells": [
+                          {
+                            "Value": "Status",
+                            "DataValidation": {
+                              "ValidationType": "List",
+                              "ListItems": ["Pending", "Paid"],
+                              "IsBlankAllowed": false,
+                              "ErrorTitle": "Invalid status",
+                              "ErrorMessage": "Choose a listed status.",
+                              "IsInputPromptShown": true,
+                              "PromptTitle": "Status",
+                              "PromptMessage": "Choose a listed status."
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        SpreadsheetDocument sut = SpreadsheetDocument.FromJson(json);
+        SheetLayout layout = new(sut.GetSheet(0));
+        DataValidation? validation = layout.Cells.Single().GetDataValidation();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(validation, Is.Not.Null);
+            Assert.That(validation!.ValidationType, Is.EqualTo(DataValidationType.List));
+            Assert.That(validation.ListItems, Is.EqualTo(new[] { "Pending", "Paid" }));
+            Assert.That(validation.IsBlankAllowed, Is.False);
+            Assert.That(validation.ErrorTitle, Is.EqualTo("Invalid status"));
+            Assert.That(validation.ErrorMessage, Is.EqualTo("Choose a listed status."));
+            Assert.That(validation.IsInputPromptShown, Is.True);
+            Assert.That(validation.PromptTitle, Is.EqualTo("Status"));
+            Assert.That(validation.PromptMessage, Is.EqualTo("Choose a listed status."));
+        }
+    }
+
+    [Test]
+    public void FromJson_WithRecordSetDataValidation_ShouldPopulateFieldValidation() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Templates": [
+                  {
+                    "Type": "RecordSet",
+                    "Columns": [
+                      {
+                        "HeaderText": "Quantity",
+                        "FieldKey": "Quantity",
+                        "DataValidation": {
+                          "ValidationType": "Integer",
+                          "Operator": "Between",
+                          "Value1": 1,
+                          "Value2": 10
+                        }
+                      }
+                    ],
+                    "Records": [
+                      { "Quantity": 2 }
+                    ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        SpreadsheetDocument sut = SpreadsheetDocument.FromJson(json);
+        SheetLayout layout = new(sut.GetSheet(0));
+        Cell fieldCell = layout.Cells.Single(x => x.Point == new Point(0, 1));
+        DataValidation? validation = fieldCell.GetDataValidation();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(validation, Is.Not.Null);
+            Assert.That(validation!.ValidationType, Is.EqualTo(DataValidationType.Integer));
+            Assert.That(validation.Operator, Is.EqualTo(DataValidationOperator.Between));
+            Assert.That(validation.Value1, Is.EqualTo(1));
+            Assert.That(validation.Value2, Is.EqualTo(10));
+        }
+    }
+
+    [Test]
     public void ExportFile_ShouldWriteExportedBytes() {
         FakeRenderer renderer = new();
         SpreadsheetDocument sut = new(renderer);

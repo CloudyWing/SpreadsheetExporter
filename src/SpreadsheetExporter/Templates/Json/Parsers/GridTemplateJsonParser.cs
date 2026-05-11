@@ -79,6 +79,11 @@ public class GridTemplateJsonParser : ITemplateJsonParser {
             && styleElement.ValueKind != JsonValueKind.Null
             ? JsonStyleParser.Parse(styleElement)
             : null;
+        DataValidation? dataValidation = cellElement.TryGetPropertyIgnoreCase(
+            "DataValidation", out JsonElement dataValidationElement
+        )
+            ? JsonDataValidationParser.Parse(dataValidationElement, "DataValidation")
+            : null;
 
         template.CreateCell(
             cell => {
@@ -90,6 +95,10 @@ public class GridTemplateJsonParser : ITemplateJsonParser {
                 if (hasFormula) {
                     string formula = formulaElement.GetStringValue("Formula");
                     cell.FormulaGenerator = (cellIndex, rowIndex) => formula;
+                }
+
+                if (dataValidation is not null) {
+                    cell.DataValidationGenerator = (cellIndex, rowIndex) => dataValidation;
                 }
             },
             columnSpan,

@@ -242,6 +242,7 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
 | `Rows[].Cells[].ColumnSpan` | `number` | 欄合併數，預設 `1` |
 | `Rows[].Cells[].RowSpan` | `number` | 列合併數，預設 `1` |
 | `Rows[].Cells[].Style` | `object` | 儲存格樣式 |
+| `Rows[].Cells[].DataValidation` | `object` | 儲存格資料驗證 |
 
 `Grid` 的 `Value` 與 `Formula` 只能擇一設定。
 
@@ -265,6 +266,7 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
 | `FieldKey` | `string` | 從 `Records[]` 取值的欄位名稱 |
 | `Value` | `any` | 固定值 |
 | `Formula` | `string` | 固定公式 |
+| `DataValidation` | `object` | 資料儲存格驗證 |
 | `Children` | `array` | 子欄位，建立多層標題 |
 
 `RecordSet` 欄位的 `FieldKey`、`Value`、`Formula` 只能擇一設定。
@@ -277,6 +279,29 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
   "FieldKey": "Customer.Address.City"
 }
 ```
+
+### DataValidation 支援欄位
+
+`Grid` 的 `Rows[].Cells[].DataValidation` 與 `RecordSet` 的 `Columns[].DataValidation` 使用相同欄位：
+
+| 欄位 | 型別 | 說明 |
+| --- | --- | --- |
+| `ValidationType` | `string` / `number` | 驗證類型，可用 `List`、`Integer`、`Decimal`、`Date`、`Time`、`TextLength`、`Custom` |
+| `Operator` | `string` / `number` / `null` | 比較運算子，可用 `Between`、`NotBetween`、`Equal`、`NotEqual`、`GreaterThan`、`LessThan`、`GreaterThanOrEqual`、`LessThanOrEqual` |
+| `Value1` | `any` | 第一個比較值 |
+| `Value2` | `any` | 第二個比較值 |
+| `ListItems` | `array` / `null` | 清單驗證的可選值，項目必須是字串 |
+| `Formula` | `string` / `null` | 自訂驗證公式，或數值 / 日期 / 時間驗證的公式來源 |
+| `IsDropdownShown` | `boolean` | 清單驗證是否顯示下拉選單 |
+| `IsBlankAllowed` | `boolean` | 是否允許空白值 |
+| `ErrorTitle` | `string` / `null` | 驗證錯誤標題 |
+| `ErrorMessage` | `string` / `null` | 驗證錯誤訊息 |
+| `IsErrorAlertShown` | `boolean` | 是否顯示錯誤提示 |
+| `PromptTitle` | `string` / `null` | 輸入提示標題 |
+| `PromptMessage` | `string` / `null` | 輸入提示訊息 |
+| `IsInputPromptShown` | `boolean` | 選取儲存格時是否顯示輸入提示 |
+
+未設定 `ValidationType` 時，使用 `DataValidation` 的預設驗證類型 `List`。
 
 ### Style 與 Font 支援欄位
 
@@ -375,6 +400,13 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
             "FieldStyle": {
               "HorizontalAlignment": "Right",
               "DataFormat": "#,##0.00"
+            },
+            "DataValidation": {
+              "ValidationType": "Decimal",
+              "Operator": "GreaterThanOrEqual",
+              "Value1": 0,
+              "ErrorTitle": "Invalid amount",
+              "ErrorMessage": "Amount must be greater than or equal to zero."
             }
           }
         ],
@@ -404,7 +436,6 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
 
 - `DataTableTemplate`。
 - `MergedTemplate`。
-- Grid / RecordSet 的 `DataValidation`。
 - 需要以程式碼動態計算的 generator 邏輯。
 - 自訂 template 型別，除非先自行註冊對應的 JSON parser。
 
