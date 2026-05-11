@@ -14,72 +14,36 @@ internal static class JsonStyleParser {
             return CellStyle.Empty;
         }
 
-        if (element.ValueKind != JsonValueKind.Object) {
-            throw JsonParseExceptionFactory.InvalidType(context, "a JSON object");
+        return ParseStylePatch(element, context).Apply(CellStyle.Empty);
+    }
+
+    internal static CellStyle? ParseOptionalStyle(
+        JsonElement ownerElement,
+        string stylePropertyName,
+        string styleNamePropertyName,
+        JsonParseContext ownerContext
+    ) {
+        CellStyle? style = null;
+
+        if (ownerElement.TryGetPropertyIgnoreCase(styleNamePropertyName, out JsonElement styleNameElement)
+            && styleNameElement.ValueKind != JsonValueKind.Null
+        ) {
+            string styleName = styleNameElement.GetStringValue(ownerContext.Property(styleNamePropertyName));
+            if (!ownerContext.StyleResolver.TryGet(styleName, out CellStyle namedStyle)) {
+                throw JsonParseExceptionFactory.InvalidValue(
+                    ownerContext.Property(styleNamePropertyName),
+                    $"references unknown style '{styleName}'."
+                );
+            }
+
+            style = namedStyle;
         }
 
-        CellStyle style = CellStyle.Empty;
-
-        if (element.TryGetPropertyIgnoreCase(
-            nameof(CellStyle.HorizontalAlignment), out JsonElement horizontalAlignmentElement
-        )) {
-            style = style with {
-                HorizontalAlignment = ParseEnum<HorizontalAlignment>(
-                    horizontalAlignmentElement, context.Property(nameof(CellStyle.HorizontalAlignment))
-                )
-            };
-        }
-
-        if (element.TryGetPropertyIgnoreCase(
-            nameof(CellStyle.VerticalAlignment), out JsonElement verticalAlignmentElement
-        )) {
-            style = style with {
-                VerticalAlignment = ParseEnum<VerticalAlignment>(
-                    verticalAlignmentElement, context.Property(nameof(CellStyle.VerticalAlignment))
-                )
-            };
-        }
-
-        if (element.TryGetPropertyIgnoreCase(nameof(CellStyle.HasBorder), out JsonElement hasBorderElement)) {
-            style = style with {
-                HasBorder = hasBorderElement.GetBooleanValue(context.Property(nameof(CellStyle.HasBorder)))
-            };
-        }
-
-        if (element.TryGetPropertyIgnoreCase(nameof(CellStyle.WrapText), out JsonElement wrapTextElement)) {
-            style = style with {
-                WrapText = wrapTextElement.GetBooleanValue(context.Property(nameof(CellStyle.WrapText)))
-            };
-        }
-
-        if (element.TryGetPropertyIgnoreCase(
-            nameof(CellStyle.BackgroundColor), out JsonElement backgroundColorElement
-        )) {
-            style = style with {
-                BackgroundColor = ParseColor(
-                    backgroundColorElement, context.Property(nameof(CellStyle.BackgroundColor))
-                )
-            };
-        }
-
-        if (element.TryGetPropertyIgnoreCase(nameof(CellStyle.Font), out JsonElement fontElement)) {
-            style = style with {
-                Font = ParseFont(fontElement, context.Property(nameof(CellStyle.Font)))
-            };
-        }
-
-        if (element.TryGetPropertyIgnoreCase(nameof(CellStyle.DataFormat), out JsonElement dataFormatElement)) {
-            style = style with {
-                DataFormat = dataFormatElement.ValueKind == JsonValueKind.Null
-                    ? null
-                    : dataFormatElement.GetStringValue(context.Property(nameof(CellStyle.DataFormat)))
-            };
-        }
-
-        if (element.TryGetPropertyIgnoreCase(nameof(CellStyle.IsLocked), out JsonElement isLockedElement)) {
-            style = style with {
-                IsLocked = isLockedElement.GetBooleanValue(context.Property(nameof(CellStyle.IsLocked)))
-            };
+        if (ownerElement.TryGetPropertyIgnoreCase(stylePropertyName, out JsonElement styleElement)
+            && styleElement.ValueKind != JsonValueKind.Null
+        ) {
+            style = ParseStylePatch(styleElement, ownerContext.Property(stylePropertyName))
+                .Apply(style ?? CellStyle.Empty);
         }
 
         return style;
@@ -94,39 +58,96 @@ internal static class JsonStyleParser {
             return CellFont.Empty;
         }
 
+        return ParseFontPatch(element, context).Apply(CellFont.Empty);
+    }
+
+    private static CellStylePatch ParseStylePatch(JsonElement element, JsonParseContext context) {
         if (element.ValueKind != JsonValueKind.Object) {
             throw JsonParseExceptionFactory.InvalidType(context, "a JSON object");
         }
 
-        CellFont font = CellFont.Empty;
+        CellStylePatch patch = new();
+
+        if (element.TryGetPropertyIgnoreCase(
+            nameof(CellStyle.HorizontalAlignment), out JsonElement horizontalAlignmentElement
+        )) {
+            patch.HorizontalAlignment = ParseEnum<HorizontalAlignment>(
+                horizontalAlignmentElement, context.Property(nameof(CellStyle.HorizontalAlignment))
+            );
+        }
+
+        if (element.TryGetPropertyIgnoreCase(
+            nameof(CellStyle.VerticalAlignment), out JsonElement verticalAlignmentElement
+        )) {
+            patch.VerticalAlignment = ParseEnum<VerticalAlignment>(
+                verticalAlignmentElement, context.Property(nameof(CellStyle.VerticalAlignment))
+            );
+        }
+
+        if (element.TryGetPropertyIgnoreCase(nameof(CellStyle.HasBorder), out JsonElement hasBorderElement)) {
+            patch.HasBorder = hasBorderElement.GetBooleanValue(context.Property(nameof(CellStyle.HasBorder)));
+        }
+
+        if (element.TryGetPropertyIgnoreCase(nameof(CellStyle.WrapText), out JsonElement wrapTextElement)) {
+            patch.WrapText = wrapTextElement.GetBooleanValue(context.Property(nameof(CellStyle.WrapText)));
+        }
+
+        if (element.TryGetPropertyIgnoreCase(
+            nameof(CellStyle.BackgroundColor), out JsonElement backgroundColorElement
+        )) {
+            patch.BackgroundColor = ParseColor(
+                backgroundColorElement, context.Property(nameof(CellStyle.BackgroundColor))
+            );
+        }
+
+        if (element.TryGetPropertyIgnoreCase(nameof(CellStyle.Font), out JsonElement fontElement)) {
+            patch.HasFont = true;
+            patch.Font = fontElement.ValueKind == JsonValueKind.Null
+                ? null
+                : ParseFontPatch(fontElement, context.Property(nameof(CellStyle.Font)));
+        }
+
+        if (element.TryGetPropertyIgnoreCase(nameof(CellStyle.DataFormat), out JsonElement dataFormatElement)) {
+            patch.HasDataFormat = true;
+            patch.DataFormat = dataFormatElement.ValueKind == JsonValueKind.Null
+                ? null
+                : dataFormatElement.GetStringValue(context.Property(nameof(CellStyle.DataFormat)));
+        }
+
+        if (element.TryGetPropertyIgnoreCase(nameof(CellStyle.IsLocked), out JsonElement isLockedElement)) {
+            patch.IsLocked = isLockedElement.GetBooleanValue(context.Property(nameof(CellStyle.IsLocked)));
+        }
+
+        return patch;
+    }
+
+    private static CellFontPatch ParseFontPatch(JsonElement element, JsonParseContext context) {
+        if (element.ValueKind != JsonValueKind.Object) {
+            throw JsonParseExceptionFactory.InvalidType(context, "a JSON object");
+        }
+
+        CellFontPatch patch = new();
 
         if (element.TryGetPropertyIgnoreCase(nameof(CellFont.Name), out JsonElement nameElement)) {
-            font = font with {
-                Name = nameElement.ValueKind == JsonValueKind.Null
-                    ? null
-                    : nameElement.GetStringValue(context.Property(nameof(CellFont.Name)))
-            };
+            patch.HasName = true;
+            patch.Name = nameElement.ValueKind == JsonValueKind.Null
+                ? null
+                : nameElement.GetStringValue(context.Property(nameof(CellFont.Name)));
         }
 
         if (element.TryGetPropertyIgnoreCase(nameof(CellFont.Size), out JsonElement sizeElement)) {
-            font = font with {
-                Size = sizeElement.GetInt16Value(context.Property(nameof(CellFont.Size)))
-            };
+            patch.Size = sizeElement.GetInt16Value(context.Property(nameof(CellFont.Size)));
         }
 
         if (element.TryGetPropertyIgnoreCase(nameof(CellFont.Color), out JsonElement colorElement)) {
-            font = font with {
-                Color = ParseColor(colorElement, context.Property(nameof(CellFont.Color)))
-            };
+            patch.Color = ParseColor(colorElement, context.Property(nameof(CellFont.Color)));
         }
 
         if (element.TryGetPropertyIgnoreCase(nameof(CellFont.Style), out JsonElement styleElement)) {
-            font = font with {
-                Style = ParseFontStyles(styleElement, context.Property(nameof(CellFont.Style)))
-            };
+            patch.Style = ParseFontStyles(styleElement, context.Property(nameof(CellFont.Style)));
         }
 
-        return font;
+        return patch;
     }
 
     private static TEnum ParseEnum<TEnum>(JsonElement element, JsonParseContext context)
@@ -232,5 +253,99 @@ internal static class JsonStyleParser {
             : throw JsonParseExceptionFactory.InvalidValue(
                 context, "must be between 0 and 255."
             );
+    }
+
+    private sealed class CellStylePatch {
+        public HorizontalAlignment? HorizontalAlignment { get; set; }
+
+        public VerticalAlignment? VerticalAlignment { get; set; }
+
+        public bool? HasBorder { get; set; }
+
+        public bool? WrapText { get; set; }
+
+        public Color? BackgroundColor { get; set; }
+
+        public bool HasFont { get; set; }
+
+        public CellFontPatch? Font { get; set; }
+
+        public bool HasDataFormat { get; set; }
+
+        public string? DataFormat { get; set; }
+
+        public bool? IsLocked { get; set; }
+
+        public CellStyle Apply(CellStyle baseStyle) {
+            CellStyle style = baseStyle;
+
+            if (HorizontalAlignment.HasValue) {
+                style = style with { HorizontalAlignment = HorizontalAlignment.Value };
+            }
+
+            if (VerticalAlignment.HasValue) {
+                style = style with { VerticalAlignment = VerticalAlignment.Value };
+            }
+
+            if (HasBorder.HasValue) {
+                style = style with { HasBorder = HasBorder.Value };
+            }
+
+            if (WrapText.HasValue) {
+                style = style with { WrapText = WrapText.Value };
+            }
+
+            if (BackgroundColor.HasValue) {
+                style = style with { BackgroundColor = BackgroundColor.Value };
+            }
+
+            if (HasFont) {
+                style = style with { Font = Font?.Apply(style.Font) ?? CellFont.Empty };
+            }
+
+            if (HasDataFormat) {
+                style = style with { DataFormat = DataFormat };
+            }
+
+            if (IsLocked.HasValue) {
+                style = style with { IsLocked = IsLocked.Value };
+            }
+
+            return style;
+        }
+    }
+
+    private sealed class CellFontPatch {
+        public bool HasName { get; set; }
+
+        public string? Name { get; set; }
+
+        public short? Size { get; set; }
+
+        public Color? Color { get; set; }
+
+        public FontStyles? Style { get; set; }
+
+        public CellFont Apply(CellFont baseFont) {
+            CellFont font = baseFont;
+
+            if (HasName) {
+                font = font with { Name = Name };
+            }
+
+            if (Size.HasValue) {
+                font = font with { Size = Size.Value };
+            }
+
+            if (Color.HasValue) {
+                font = font with { Color = Color.Value };
+            }
+
+            if (Style.HasValue) {
+                font = font with { Style = Style.Value };
+            }
+
+            return font;
+        }
     }
 }

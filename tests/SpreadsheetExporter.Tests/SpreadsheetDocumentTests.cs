@@ -503,6 +503,151 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void FromJson_WithNamedStyles_ShouldApplyStyleNameAndInlineOverrides() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+        SpreadsheetStyleRegistry documentStyles = new();
+        documentStyles.Set(
+            "DocumentHeader",
+            new CellStyle(
+                HasBorder: true,
+                Font: new CellFont("Document Font", 12, Style: FontStyles.Bold)
+            )
+        );
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Styles": {
+                  "SheetAmount": {
+                    "Font": {
+                      "Name": "Sheet Font",
+                      "Size": 14
+                    },
+                    "DataFormat": "#,##0.00"
+                  }
+                },
+                "Templates": [
+                  {
+                    "Type": "Grid",
+                    "Rows": [
+                      {
+                        "Cells": [
+                          {
+                            "Value": "Header",
+                            "StyleName": "DocumentHeader",
+                            "Style": {
+                              "Font": { "Style": "Italic" },
+                              "WrapText": true
+                            }
+                          },
+                          {
+                            "Value": 1250.40,
+                            "StyleName": "SheetAmount"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        SpreadsheetDocument sut = SpreadsheetDocument.FromJson(json, documentStyles);
+        SheetLayout layout = new(sut.GetSheet(0));
+        Cell headerCell = layout.Cells.Single(x => x.Point == new Point(0, 0));
+        Cell amountCell = layout.Cells.Single(x => x.Point == new Point(1, 0));
+        CellStyle headerStyle = headerCell.GetCellStyle();
+        CellStyle amountStyle = amountCell.GetCellStyle();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(headerStyle.HasBorder, Is.True);
+            Assert.That(headerStyle.WrapText, Is.True);
+            Assert.That(headerStyle.Font.Name, Is.EqualTo("Document Font"));
+            Assert.That(headerStyle.Font.Size, Is.EqualTo(12));
+            Assert.That(headerStyle.Font.Style, Is.EqualTo(FontStyles.Italic));
+            Assert.That(amountStyle.Font.Name, Is.EqualTo("Sheet Font"));
+            Assert.That(amountStyle.Font.Size, Is.EqualTo(14));
+            Assert.That(amountStyle.DataFormat, Is.EqualTo("#,##0.00"));
+        }
+    }
+
+    [Test]
+    public void FromJson_WithNamedStyleAndNullFont_ShouldClearInheritedFont() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+        SpreadsheetStyleRegistry documentStyles = new();
+        documentStyles.Set("Header", new CellStyle(Font: new CellFont("Document Font", 12, Style: FontStyles.Bold)));
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Templates": [
+                  {
+                    "Type": "Grid",
+                    "Rows": [
+                      {
+                        "Cells": [
+                          {
+                            "Value": "Header",
+                            "StyleName": "Header",
+                            "Style": {
+                              "Font": null
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        SpreadsheetDocument sut = SpreadsheetDocument.FromJson(json, documentStyles);
+        SheetLayout layout = new(sut.GetSheet(0));
+        CellStyle actual = layout.Cells.Single(x => x.Point == new Point(0, 0)).GetCellStyle();
+
+        Assert.That(actual.Font, Is.EqualTo(CellFont.Empty));
+    }
+
+    [Test]
+    public void FromJson_WithUnknownStyleName_ShouldThrowPathDiagnostic() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Templates": [
+                  {
+                    "Type": "Grid",
+                    "Rows": [
+                      {
+                        "Cells": [
+                          {
+                            "Value": "Header",
+                            "StyleName": "Missing"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        FormatException? exception = Assert.Throws<FormatException>(() => SpreadsheetDocument.FromJson(json));
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(exception!.Message, Does.Contain(JsonDiagnosticCodes.InvalidValue));
+            Assert.That(exception.Message, Does.Contain("$[0].Templates[0].Rows[0].Cells[0].StyleName"));
+        }
+    }
+
+    [Test]
     public void FromJson_WithGridDataValidation_ShouldPopulateCellValidation() {
         SpreadsheetManager.SetRenderer(() => new FakeRenderer());
 

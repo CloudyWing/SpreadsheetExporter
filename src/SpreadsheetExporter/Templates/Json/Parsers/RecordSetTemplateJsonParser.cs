@@ -92,21 +92,22 @@ public class RecordSetTemplateJsonParser : ITemplateJsonParserWithContext {
             throw JsonParseExceptionFactory.InvalidType(columnContext, "a JSON object");
         }
 
+        CellStyle? headerStyle = JsonStyleParser.ParseOptionalStyle(
+            columnElement, "HeaderStyle", "HeaderStyleName", columnContext
+        );
+        CellStyle? fieldStyle = JsonStyleParser.ParseOptionalStyle(
+            columnElement, "FieldStyle", "FieldStyleName", columnContext
+        );
+
         GeneratorColumn<IDictionary<string, object?>> column = new() {
             HeaderText = columnElement.TryGetPropertyIgnoreCase("HeaderText", out JsonElement headerTextElement)
                 ? headerTextElement.GetStringValue(columnContext.Property("HeaderText"))
                 : null,
-            HeaderStyle = columnElement.TryGetPropertyIgnoreCase("HeaderStyle", out JsonElement headerStyleElement)
-                && headerStyleElement.ValueKind != JsonValueKind.Null
-                ? JsonStyleParser.Parse(headerStyleElement, columnContext.Property("HeaderStyle"))
-                : SpreadsheetManager.DefaultCellStyles.HeaderStyle
+            HeaderStyle = headerStyle ?? SpreadsheetManager.DefaultCellStyles.HeaderStyle
         };
 
-        CellStyle fieldStyle = columnElement.TryGetPropertyIgnoreCase("FieldStyle", out JsonElement fieldStyleElement)
-            && fieldStyleElement.ValueKind != JsonValueKind.Null
-            ? JsonStyleParser.Parse(fieldStyleElement, columnContext.Property("FieldStyle"))
-            : SpreadsheetManager.DefaultCellStyles.FieldStyle;
-        column.FieldStyleGenerator = context => fieldStyle;
+        CellStyle resolvedFieldStyle = fieldStyle ?? SpreadsheetManager.DefaultCellStyles.FieldStyle;
+        column.FieldStyleGenerator = context => resolvedFieldStyle;
 
         DataValidation? dataValidation = columnElement.TryGetPropertyIgnoreCase(
             "DataValidation", out JsonElement dataValidationElement

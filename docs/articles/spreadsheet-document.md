@@ -33,6 +33,7 @@ SpreadsheetDocument document = new SpreadsheetDocument(renderer);
 | --- | --- |
 | `DefaultFont` | 套用至整份文件的預設字型；`null` 代表使用 renderer 預設值 |
 | `DefaultSheetName` | 自動產生工作表名稱時使用的前綴（預設值：「工作表」） |
+| `Styles` | 文件層級 named styles，供 JSON template 以 style name 引用 |
 | `ContentType` | 匯出格式的 MIME 類型，來自 renderer |
 | `FileNameExtension` | 匯出格式的副檔名（含前置點），來自 renderer |
 
@@ -40,6 +41,18 @@ SpreadsheetDocument document = new SpreadsheetDocument(renderer);
 SpreadsheetDocument document = SpreadsheetManager.CreateDocument();
 document.DefaultFont = new CellFont("Calibri", 11);
 document.DefaultSheetName = "Sheet";
+```
+
+文件層級 named styles 可透過 `UseStyles(...)` 設定：
+
+```csharp
+SpreadsheetStyleRegistry styles = new();
+styles.Set("Header", new CellStyle(
+    HasBorder: true,
+    Font: new CellFont("Calibri", 12, Style: FontStyles.Bold)
+));
+
+document.UseStyles(styles);
 ```
 
 ## 工作表管理
@@ -156,6 +169,18 @@ SpreadsheetDocument document = SpreadsheetDocument.FromJson(json);
 document.ExportFile($"output{document.FileNameExtension}");
 ```
 
+若要讓 JSON template 引用程式碼中建立的文件層級 named styles，可傳入 `SpreadsheetStyleRegistry`：
+
+```csharp
+SpreadsheetStyleRegistry styles = new();
+styles.Set("Header", new CellStyle(
+    HasBorder: true,
+    Font: new CellFont("Calibri", 12, Style: FontStyles.Bold)
+));
+
+SpreadsheetDocument document = SpreadsheetDocument.FromJson(json, styles);
+```
+
 JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet`、`DataTable` 與 `Merged` 四種 template 類型：
 
 ```json
@@ -196,6 +221,7 @@ JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet`、`DataTable` 
 | `ColumnWidths` | `object` / `array` | 欄寬設定，可用索引物件或 `{ Index, Width }` 陣列 |
 | `PageSettings` | `object` | 列印設定，目前支援 `PageOrientation` 與 `PaperSize` |
 | `Metadata` | `object` | 附加自訂資料，供 renderer 或擴充邏輯讀取 |
+| `Styles` | `object` | 工作表層級 named styles，供 template 以 style name 引用 |
 | `Templates` | `array` | 工作表上的 template 定義 |
 
 `FreezePanes` 範例：
@@ -241,6 +267,7 @@ JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet`、`DataTable` 
 | `Rows[].Cells[].Formula` | `string` | 公式字串 |
 | `Rows[].Cells[].ColumnSpan` | `number` | 欄合併數，預設 `1` |
 | `Rows[].Cells[].RowSpan` | `number` | 列合併數，預設 `1` |
+| `Rows[].Cells[].StyleName` | `string` | named style 名稱 |
 | `Rows[].Cells[].Style` | `object` | 儲存格樣式 |
 | `Rows[].Cells[].DataValidation` | `object` | 儲存格資料驗證 |
 
@@ -261,7 +288,9 @@ JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet`、`DataTable` 
 | 欄位 | 型別 | 說明 |
 | --- | --- | --- |
 | `HeaderText` | `string` | 欄位標題 |
+| `HeaderStyleName` | `string` | 標題 named style 名稱 |
 | `HeaderStyle` | `object` | 標題樣式 |
+| `FieldStyleName` | `string` | 資料儲存格 named style 名稱 |
 | `FieldStyle` | `object` | 資料儲存格樣式 |
 | `FieldKey` | `string` | 從 `Records[]` 取值的欄位名稱 |
 | `Value` | `any` | 固定值 |
@@ -296,7 +325,9 @@ JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet`、`DataTable` 
 | --- | --- | --- |
 | `ColumnName` | `string` | 對應 `Records[]` 的欄位名稱 |
 | `HeaderText` | `string` / `null` | 欄位標題；省略時使用 `ColumnName` |
+| `HeaderStyleName` | `string` | 標題 named style 名稱 |
 | `HeaderStyle` | `object` | 標題樣式 |
+| `FieldStyleName` | `string` | 資料儲存格 named style 名稱 |
 | `FieldStyle` | `object` | 資料儲存格樣式 |
 | `Formula` | `string` / `null` | 固定公式 |
 
@@ -335,6 +366,39 @@ JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet`、`DataTable` 
 未設定 `ValidationType` 時，使用 `DataValidation` 的預設驗證類型 `List`。
 
 ### Style 與 Font 支援欄位
+
+`Styles` 可在文件與工作表層級宣告 named styles。文件層級 styles 透過 `SpreadsheetDocument.FromJson(json, styles)` 或 `document.UseStyles(styles)` 提供；工作表層級 styles 則在 JSON 的 `Styles` 欄位宣告。
+
+template 使用 `StyleName`、`HeaderStyleName` 或 `FieldStyleName` 引用時，會先找工作表層級 style，再找文件層級 style。找到 named style 後，inline style 欄位只覆寫 JSON 中有明確宣告的屬性。例如 inline `Font.Style` 只會覆寫字型樣式，不會清除 named style 中的字型名稱、大小或顏色。
+
+```json
+{
+  "Styles": {
+    "Header": {
+      "HasBorder": true,
+      "Font": { "Style": "Bold" }
+    }
+  },
+  "Templates": [
+    {
+      "Type": "Grid",
+      "Rows": [
+        {
+          "Cells": [
+            {
+              "Value": "Title",
+              "StyleName": "Header",
+              "Style": {
+                "HorizontalAlignment": "Center"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
 
 `Grid` 的 `Style`、`RecordSet` 的 `HeaderStyle` 與 `FieldStyle`，以及 `DataTable` 的 `HeaderStyle` 與 `FieldStyle` 目前支援以下欄位：
 

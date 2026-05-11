@@ -87,10 +87,7 @@ public class GridTemplateJsonParser : ITemplateJsonParserWithContext {
         int rowSpan = cellElement.TryGetPropertyIgnoreCase(nameof(GridTemplate.RowSpan), out JsonElement rowSpanElement)
             ? rowSpanElement.GetInt32Value(cellContext.Property(nameof(GridTemplate.RowSpan)))
             : 1;
-        CellStyle? style = cellElement.TryGetPropertyIgnoreCase("Style", out JsonElement styleElement)
-            && styleElement.ValueKind != JsonValueKind.Null
-            ? JsonStyleParser.Parse(styleElement, cellContext.Property("Style"))
-            : null;
+        CellStyle? style = JsonStyleParser.ParseOptionalStyle(cellElement, "Style", "StyleName", cellContext);
         DataValidation? dataValidation = cellElement.TryGetPropertyIgnoreCase(
             "DataValidation", out JsonElement dataValidationElement
         )

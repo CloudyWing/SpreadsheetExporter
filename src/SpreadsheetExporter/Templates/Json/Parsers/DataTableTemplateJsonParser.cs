@@ -103,18 +103,12 @@ public class DataTableTemplateJsonParser : ITemplateJsonParserWithContext {
         )
             ? GetNullableStringValue(headerTextElement, columnContext.Property(nameof(DataTableColumn.HeaderText)))
             : null;
-        CellStyle? headerStyle = columnElement.TryGetPropertyIgnoreCase(
-            nameof(DataTableColumn.HeaderStyle), out JsonElement headerStyleElement
-        )
-            && headerStyleElement.ValueKind != JsonValueKind.Null
-            ? JsonStyleParser.Parse(headerStyleElement, columnContext.Property(nameof(DataTableColumn.HeaderStyle)))
-            : null;
-        CellStyle? fieldStyle = columnElement.TryGetPropertyIgnoreCase(
-            "FieldStyle", out JsonElement fieldStyleElement
-        )
-            && fieldStyleElement.ValueKind != JsonValueKind.Null
-            ? JsonStyleParser.Parse(fieldStyleElement, columnContext.Property("FieldStyle"))
-            : null;
+        CellStyle? headerStyle = JsonStyleParser.ParseOptionalStyle(
+            columnElement, nameof(DataTableColumn.HeaderStyle), "HeaderStyleName", columnContext
+        );
+        CellStyle? fieldStyle = JsonStyleParser.ParseOptionalStyle(
+            columnElement, "FieldStyle", "FieldStyleName", columnContext
+        );
         string? formula = columnElement.TryGetPropertyIgnoreCase("Formula", out JsonElement formulaElement)
             ? GetNullableStringValue(formulaElement, columnContext.Property("Formula"))
             : null;

@@ -52,6 +52,11 @@ public sealed class SpreadsheetDocument {
     public CellFont? DefaultFont { get; set; }
 
     /// <summary>
+    /// Gets the named styles registered for this document.
+    /// </summary>
+    public SpreadsheetStyleRegistry Styles { get; private set; } = new();
+
+    /// <summary>
     /// Sets the default sheet name prefix used when creating sheets without an explicit name.
     /// </summary>
     /// <param name="defaultSheetName">The default sheet name prefix.</param>
@@ -68,6 +73,18 @@ public sealed class SpreadsheetDocument {
     /// <returns>The current <see cref="SpreadsheetDocument"/> instance.</returns>
     public SpreadsheetDocument SetDefaultFont(CellFont? defaultFont) {
         DefaultFont = defaultFont;
+        return this;
+    }
+
+    /// <summary>
+    /// Uses the specified named styles for this document.
+    /// </summary>
+    /// <param name="styles">The named styles.</param>
+    /// <returns>The current <see cref="SpreadsheetDocument"/> instance.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="styles"/> is <see langword="null"/>.</exception>
+    public SpreadsheetDocument UseStyles(SpreadsheetStyleRegistry styles) {
+        ArgumentNullException.ThrowIfNull(styles);
+        Styles = styles;
         return this;
     }
 
@@ -193,9 +210,28 @@ public sealed class SpreadsheetDocument {
     /// <param name="json">The JSON string describing sheets and templates.</param>
     /// <returns>A configured <see cref="SpreadsheetDocument"/>.</returns>
     public static SpreadsheetDocument FromJson(string json) {
+        return FromJsonCore(json, null);
+    }
+
+    /// <summary>
+    /// Creates a <see cref="SpreadsheetDocument"/> from a JSON string using the specified document-level named styles.
+    /// </summary>
+    /// <param name="json">The JSON string describing sheets and templates.</param>
+    /// <param name="styles">The document-level named styles.</param>
+    /// <returns>A configured <see cref="SpreadsheetDocument"/>.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="styles"/> is <see langword="null"/>.</exception>
+    public static SpreadsheetDocument FromJson(string json, SpreadsheetStyleRegistry styles) {
+        ArgumentNullException.ThrowIfNull(styles);
+        return FromJsonCore(json, styles);
+    }
+
+    private static SpreadsheetDocument FromJsonCore(string json, SpreadsheetStyleRegistry? styles) {
         ArgumentNullException.ThrowIfNull(json);
 
         SpreadsheetDocument document = SpreadsheetManager.CreateDocument();
+        if (styles is not null) {
+            document.UseStyles(styles);
+        }
 
         using JsonDocument jsonDocument = JsonDocument.Parse(json);
         JsonElement root = jsonDocument.RootElement;
@@ -224,7 +260,7 @@ public sealed class SpreadsheetDocument {
                 : null;
 
             SheetDefinition sheet = document.CreateSheet(sheetName, defaultRowHeight);
-            PopulateSheet(sheet, sheetElement, sheetContext);
+            PopulateSheet(document, sheet, sheetElement, sheetContext);
         }
 
         return document;
@@ -263,7 +299,12 @@ public sealed class SpreadsheetDocument {
         return sheets.Select(x => x.SheetName).Contains(sheetName);
     }
 
-    private static void PopulateSheet(SheetDefinition sheet, JsonElement sheetElement, JsonParseContext sheetContext) {
+    private static void PopulateSheet(
+        SpreadsheetDocument document,
+        SheetDefinition sheet,
+        JsonElement sheetElement,
+        JsonParseContext sheetContext
+    ) {
         if (sheetElement.TryGetPropertyIgnoreCase(nameof(SheetDefinition.Password), out JsonElement passwordElement)
             && passwordElement.ValueKind != JsonValueKind.Null) {
             sheet.Password = passwordElement.GetStringValue(sheetContext.Property(nameof(SheetDefinition.Password)));
@@ -318,6 +359,10 @@ public sealed class SpreadsheetDocument {
             }
         }
 
+        if (sheetElement.TryGetPropertyIgnoreCase("Styles", out JsonElement stylesElement)) {
+            PopulateStyles(sheet.Styles, stylesElement, sheetContext.Property("Styles"));
+        }
+
         if (!sheetElement.TryGetPropertyIgnoreCase(
             nameof(SheetDefinition.Templates), out JsonElement templatesElement
         )) {
@@ -330,12 +375,33 @@ public sealed class SpreadsheetDocument {
             );
         }
 
+        JsonStyleResolver styleResolver = new(document.Styles, sheet.Styles);
         int templateIndex = 0;
         foreach (JsonElement templateElement in templatesElement.EnumerateArray()) {
             JsonParseContext templateContext = sheetContext
                 .Property(nameof(SheetDefinition.Templates))
-                .Index(templateIndex++);
+                .Index(templateIndex++)
+                .WithStyleResolver(styleResolver);
             sheet.AddTemplate(CreateTemplate(templateElement, templateContext));
+        }
+    }
+
+    private static void PopulateStyles(
+        SpreadsheetStyleRegistry styles, JsonElement stylesElement, JsonParseContext stylesContext
+    ) {
+        if (stylesElement.ValueKind != JsonValueKind.Object) {
+            throw JsonParseExceptionFactory.InvalidType(stylesContext, "a JSON object");
+        }
+
+        foreach (JsonProperty styleProperty in stylesElement.EnumerateObject()) {
+            if (string.IsNullOrWhiteSpace(styleProperty.Name)) {
+                throw JsonParseExceptionFactory.InvalidValue(stylesContext, "contains a blank style name.");
+            }
+
+            styles.Set(
+                styleProperty.Name,
+                JsonStyleParser.Parse(styleProperty.Value, stylesContext.Property(styleProperty.Name))
+            );
         }
     }
 

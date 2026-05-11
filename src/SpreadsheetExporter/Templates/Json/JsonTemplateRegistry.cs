@@ -7,7 +7,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Json;
 
 /// <summary>
 /// Manages the registration of <see cref="ITemplateJsonParser"/> instances
-/// used by <see cref="SpreadsheetDocument.FromJson"/>.
+/// used by <see cref="SpreadsheetDocument.FromJson(string)"/>.
 /// </summary>
 public static class JsonTemplateRegistry {
     private static readonly Dictionary<string, ITemplateJsonParser> Parsers

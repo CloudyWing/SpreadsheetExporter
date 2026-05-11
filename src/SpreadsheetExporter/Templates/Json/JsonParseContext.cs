@@ -10,8 +10,12 @@ public sealed class JsonParseContext {
     /// Initializes a new instance of the <see cref="JsonParseContext"/> class.
     /// </summary>
     /// <param name="path">The JSON path.</param>
-    public JsonParseContext(string path) {
+    public JsonParseContext(string path) : this(path, JsonStyleResolver.Empty) {
+    }
+
+    private JsonParseContext(string path, JsonStyleResolver styleResolver) {
         Path = string.IsNullOrWhiteSpace(path) ? "$" : path;
+        StyleResolver = styleResolver;
     }
 
     /// <summary>
@@ -24,6 +28,8 @@ public sealed class JsonParseContext {
     /// </summary>
     public string Path { get; }
 
+    internal JsonStyleResolver StyleResolver { get; }
+
     /// <summary>
     /// Creates a context for a JSON object property.
     /// </summary>
@@ -31,7 +37,7 @@ public sealed class JsonParseContext {
     /// <returns>The property context.</returns>
     public JsonParseContext Property(string name) {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        return new JsonParseContext($"{Path}.{name}");
+        return new JsonParseContext($"{Path}.{name}", StyleResolver);
     }
 
     /// <summary>
@@ -44,7 +50,11 @@ public sealed class JsonParseContext {
             throw new ArgumentOutOfRangeException(nameof(index), index, "Index must be greater than or equal to 0.");
         }
 
-        return new JsonParseContext($"{Path}[{index}]");
+        return new JsonParseContext($"{Path}[{index}]", StyleResolver);
+    }
+
+    internal JsonParseContext WithStyleResolver(JsonStyleResolver styleResolver) {
+        return new JsonParseContext(Path, styleResolver);
     }
 
     /// <inheritdoc/>
