@@ -468,6 +468,16 @@ JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet`、`DataTable` 
 - 需要以程式碼動態計算的 generator 邏輯。
 - 自訂 template 型別，除非先自行註冊對應的 JSON parser。
 
+### JSON 錯誤診斷
+
+`SpreadsheetDocument.FromJson(...)` 解析失敗時，內建 parser 會在錯誤訊息中附上診斷代碼與 JSON path。JSON root 是工作表陣列，因此第一張工作表的路徑會從 `$[0]` 開始。
+
+```text
+SE-JSON-001: $[0].Templates[0].Rows[0].Cells[0].ColumnSpan must be a 32-bit integer.
+SE-JSON-002: $[0].Templates[0].Type is required.
+SE-JSON-003: $[0].Templates[0].Rows[0].Cells[0] cannot specify both 'Value' and 'Formula'.
+```
+
 ### 註冊自訂 JSON parser
 
 `SpreadsheetDocument.FromJson(...)` 會透過 `JsonTemplateRegistry` 依 `Type` 欄位尋找對應的 parser。

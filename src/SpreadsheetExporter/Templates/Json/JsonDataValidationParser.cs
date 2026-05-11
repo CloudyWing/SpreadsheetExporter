@@ -6,12 +6,16 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Json;
 
 internal static class JsonDataValidationParser {
     internal static DataValidation? Parse(JsonElement element, string propertyName) {
+        return Parse(element, new JsonParseContext(propertyName));
+    }
+
+    internal static DataValidation? Parse(JsonElement element, JsonParseContext context) {
         if (element.ValueKind == JsonValueKind.Null || element.ValueKind == JsonValueKind.Undefined) {
             return null;
         }
 
         if (element.ValueKind != JsonValueKind.Object) {
-            throw new FormatException($"Property '{propertyName}' must be a JSON object.");
+            throw JsonParseExceptionFactory.InvalidType(context, "a JSON object");
         }
 
         DataValidation validation = new();
@@ -20,7 +24,7 @@ internal static class JsonDataValidationParser {
             nameof(DataValidation.ValidationType), out JsonElement validationTypeElement
         )) {
             validation.ValidationType = ParseEnum<DataValidationType>(
-                validationTypeElement, $"{propertyName}.{nameof(DataValidation.ValidationType)}"
+                validationTypeElement, context.Property(nameof(DataValidation.ValidationType))
             );
         }
 
@@ -28,27 +32,27 @@ internal static class JsonDataValidationParser {
             validation.Operator = operatorElement.ValueKind == JsonValueKind.Null
                 ? null
                 : ParseEnum<DataValidationOperator>(
-                    operatorElement, $"{propertyName}.{nameof(DataValidation.Operator)}"
+                    operatorElement, context.Property(nameof(DataValidation.Operator))
                 );
         }
 
         if (element.TryGetPropertyIgnoreCase(nameof(DataValidation.Value1), out JsonElement value1Element)) {
-            validation.Value1 = value1Element.ToObject();
+            validation.Value1 = value1Element.ToObject(context.Property(nameof(DataValidation.Value1)));
         }
 
         if (element.TryGetPropertyIgnoreCase(nameof(DataValidation.Value2), out JsonElement value2Element)) {
-            validation.Value2 = value2Element.ToObject();
+            validation.Value2 = value2Element.ToObject(context.Property(nameof(DataValidation.Value2)));
         }
 
         if (element.TryGetPropertyIgnoreCase(nameof(DataValidation.ListItems), out JsonElement listItemsElement)) {
             validation.ListItems = ParseListItems(
-                listItemsElement, $"{propertyName}.{nameof(DataValidation.ListItems)}"
+                listItemsElement, context.Property(nameof(DataValidation.ListItems))
             );
         }
 
         if (element.TryGetPropertyIgnoreCase(nameof(DataValidation.Formula), out JsonElement formulaElement)) {
             validation.Formula = GetNullableStringValue(
-                formulaElement, $"{propertyName}.{nameof(DataValidation.Formula)}"
+                formulaElement, context.Property(nameof(DataValidation.Formula))
             );
         }
 
@@ -56,7 +60,7 @@ internal static class JsonDataValidationParser {
             nameof(DataValidation.IsDropdownShown), out JsonElement isDropdownShownElement
         )) {
             validation.IsDropdownShown = isDropdownShownElement.GetBooleanValue(
-                $"{propertyName}.{nameof(DataValidation.IsDropdownShown)}"
+                context.Property(nameof(DataValidation.IsDropdownShown))
             );
         }
 
@@ -64,13 +68,13 @@ internal static class JsonDataValidationParser {
             nameof(DataValidation.IsBlankAllowed), out JsonElement isBlankAllowedElement
         )) {
             validation.IsBlankAllowed = isBlankAllowedElement.GetBooleanValue(
-                $"{propertyName}.{nameof(DataValidation.IsBlankAllowed)}"
+                context.Property(nameof(DataValidation.IsBlankAllowed))
             );
         }
 
         if (element.TryGetPropertyIgnoreCase(nameof(DataValidation.ErrorTitle), out JsonElement errorTitleElement)) {
             validation.ErrorTitle = GetNullableStringValue(
-                errorTitleElement, $"{propertyName}.{nameof(DataValidation.ErrorTitle)}"
+                errorTitleElement, context.Property(nameof(DataValidation.ErrorTitle))
             );
         }
 
@@ -78,7 +82,7 @@ internal static class JsonDataValidationParser {
             nameof(DataValidation.ErrorMessage), out JsonElement errorMessageElement
         )) {
             validation.ErrorMessage = GetNullableStringValue(
-                errorMessageElement, $"{propertyName}.{nameof(DataValidation.ErrorMessage)}"
+                errorMessageElement, context.Property(nameof(DataValidation.ErrorMessage))
             );
         }
 
@@ -86,13 +90,13 @@ internal static class JsonDataValidationParser {
             nameof(DataValidation.IsErrorAlertShown), out JsonElement isErrorAlertShownElement
         )) {
             validation.IsErrorAlertShown = isErrorAlertShownElement.GetBooleanValue(
-                $"{propertyName}.{nameof(DataValidation.IsErrorAlertShown)}"
+                context.Property(nameof(DataValidation.IsErrorAlertShown))
             );
         }
 
         if (element.TryGetPropertyIgnoreCase(nameof(DataValidation.PromptTitle), out JsonElement promptTitleElement)) {
             validation.PromptTitle = GetNullableStringValue(
-                promptTitleElement, $"{propertyName}.{nameof(DataValidation.PromptTitle)}"
+                promptTitleElement, context.Property(nameof(DataValidation.PromptTitle))
             );
         }
 
@@ -100,7 +104,7 @@ internal static class JsonDataValidationParser {
             nameof(DataValidation.PromptMessage), out JsonElement promptMessageElement
         )) {
             validation.PromptMessage = GetNullableStringValue(
-                promptMessageElement, $"{propertyName}.{nameof(DataValidation.PromptMessage)}"
+                promptMessageElement, context.Property(nameof(DataValidation.PromptMessage))
             );
         }
 
@@ -108,37 +112,38 @@ internal static class JsonDataValidationParser {
             nameof(DataValidation.IsInputPromptShown), out JsonElement isInputPromptShownElement
         )) {
             validation.IsInputPromptShown = isInputPromptShownElement.GetBooleanValue(
-                $"{propertyName}.{nameof(DataValidation.IsInputPromptShown)}"
+                context.Property(nameof(DataValidation.IsInputPromptShown))
             );
         }
 
         return validation;
     }
 
-    private static IReadOnlyList<string>? ParseListItems(JsonElement element, string propertyName) {
+    private static IReadOnlyList<string>? ParseListItems(JsonElement element, JsonParseContext context) {
         if (element.ValueKind == JsonValueKind.Null) {
             return null;
         }
 
         if (element.ValueKind != JsonValueKind.Array) {
-            throw new FormatException($"Property '{propertyName}' must be an array.");
+            throw JsonParseExceptionFactory.InvalidType(context, "an array");
         }
 
         List<string> items = [];
+        int index = 0;
         foreach (JsonElement itemElement in element.EnumerateArray()) {
-            items.Add(itemElement.GetStringValue(propertyName));
+            items.Add(itemElement.GetStringValue(context.Index(index++)));
         }
 
         return items.AsReadOnly();
     }
 
-    private static string? GetNullableStringValue(JsonElement element, string propertyName) {
+    private static string? GetNullableStringValue(JsonElement element, JsonParseContext context) {
         return element.ValueKind == JsonValueKind.Null
             ? null
-            : element.GetStringValue(propertyName);
+            : element.GetStringValue(context);
     }
 
-    private static TEnum ParseEnum<TEnum>(JsonElement element, string propertyName)
+    private static TEnum ParseEnum<TEnum>(JsonElement element, JsonParseContext context)
         where TEnum : struct, Enum {
         if (element.ValueKind == JsonValueKind.String) {
             string? raw = element.GetString();
@@ -149,8 +154,6 @@ internal static class JsonDataValidationParser {
             return (TEnum)Enum.ToObject(typeof(TEnum), numericValue);
         }
 
-        throw new FormatException(
-            $"Property '{propertyName}' must be a valid {typeof(TEnum).Name} value."
-        );
+        throw JsonParseExceptionFactory.InvalidType(context, $"a valid {typeof(TEnum).Name} value");
     }
 }

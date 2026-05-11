@@ -412,6 +412,97 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void FromJson_WithMissingTemplateType_ShouldThrowPathDiagnostic() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Templates": [
+                  {
+                    "Rows": []
+                  }
+                ]
+              }
+            ]
+            """;
+
+        FormatException? exception = Assert.Throws<FormatException>(() => SpreadsheetDocument.FromJson(json));
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(exception!.Message, Does.Contain(JsonDiagnosticCodes.MissingRequiredProperty));
+            Assert.That(exception.Message, Does.Contain("$[0].Templates[0].Type"));
+        }
+    }
+
+    [Test]
+    public void FromJson_WithInvalidNestedGridCellType_ShouldThrowPathDiagnostic() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Templates": [
+                  {
+                    "Type": "Grid",
+                    "Rows": [
+                      {
+                        "Cells": [
+                          { "Value": "A", "ColumnSpan": "abc" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        FormatException? exception = Assert.Throws<FormatException>(() => SpreadsheetDocument.FromJson(json));
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(exception!.Message, Does.Contain(JsonDiagnosticCodes.InvalidType));
+            Assert.That(exception.Message, Does.Contain("$[0].Templates[0].Rows[0].Cells[0].ColumnSpan"));
+        }
+    }
+
+    [Test]
+    public void FromJson_WithGridCellValueAndFormula_ShouldThrowPathDiagnostic() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "Templates": [
+                  {
+                    "Type": "Grid",
+                    "Rows": [
+                      {
+                        "Cells": [
+                          { "Value": "A", "Formula": "SUM(A1:A2)" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        InvalidOperationException? exception = Assert.Throws<InvalidOperationException>(
+            () => SpreadsheetDocument.FromJson(json)
+        );
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(exception!.Message, Does.Contain(JsonDiagnosticCodes.InvalidValue));
+            Assert.That(exception.Message, Does.Contain("$[0].Templates[0].Rows[0].Cells[0]"));
+        }
+    }
+
+    [Test]
     public void FromJson_WithGridDataValidation_ShouldPopulateCellValidation() {
         SpreadsheetManager.SetRenderer(() => new FakeRenderer());
 

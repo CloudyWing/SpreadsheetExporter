@@ -199,26 +199,32 @@ public sealed class SpreadsheetDocument {
 
         using JsonDocument jsonDocument = JsonDocument.Parse(json);
         JsonElement root = jsonDocument.RootElement;
+        JsonParseContext rootContext = JsonParseContext.Root;
         if (root.ValueKind != JsonValueKind.Array) {
-            throw new FormatException("Root JSON element must be an array of sheet definitions.");
+            throw JsonParseExceptionFactory.InvalidType(rootContext, "an array of sheet definitions");
         }
 
+        int sheetIndex = 0;
         foreach (JsonElement sheetElement in root.EnumerateArray()) {
+            JsonParseContext sheetContext = rootContext.Index(sheetIndex++);
+
             if (sheetElement.ValueKind != JsonValueKind.Object) {
-                throw new FormatException("Each sheet definition must be a JSON object.");
+                throw JsonParseExceptionFactory.InvalidType(sheetContext, "a JSON object");
             }
 
             string? sheetName = sheetElement.TryGetPropertyIgnoreCase("SheetName", out JsonElement sheetNameElement)
                 && sheetNameElement.ValueKind != JsonValueKind.Null
-                ? sheetNameElement.GetStringValue("SheetName")
+                ? sheetNameElement.GetStringValue(sheetContext.Property("SheetName"))
                 : null;
-            double? defaultRowHeight = sheetElement.TryGetPropertyIgnoreCase("DefaultRowHeight", out JsonElement defaultRowHeightElement)
+            double? defaultRowHeight = sheetElement.TryGetPropertyIgnoreCase(
+                "DefaultRowHeight", out JsonElement defaultRowHeightElement
+            )
                 && defaultRowHeightElement.ValueKind != JsonValueKind.Null
-                ? defaultRowHeightElement.GetDoubleValue("DefaultRowHeight")
+                ? defaultRowHeightElement.GetDoubleValue(sheetContext.Property("DefaultRowHeight"))
                 : null;
 
             SheetDefinition sheet = document.CreateSheet(sheetName, defaultRowHeight);
-            PopulateSheet(sheet, sheetElement);
+            PopulateSheet(sheet, sheetElement, sheetContext);
         }
 
         return document;
@@ -257,134 +263,168 @@ public sealed class SpreadsheetDocument {
         return sheets.Select(x => x.SheetName).Contains(sheetName);
     }
 
-    private static void PopulateSheet(SheetDefinition sheet, JsonElement sheetElement) {
+    private static void PopulateSheet(SheetDefinition sheet, JsonElement sheetElement, JsonParseContext sheetContext) {
         if (sheetElement.TryGetPropertyIgnoreCase(nameof(SheetDefinition.Password), out JsonElement passwordElement)
             && passwordElement.ValueKind != JsonValueKind.Null) {
-            sheet.Password = passwordElement.GetStringValue(nameof(SheetDefinition.Password));
+            sheet.Password = passwordElement.GetStringValue(sheetContext.Property(nameof(SheetDefinition.Password)));
         }
 
-        if (sheetElement.TryGetPropertyIgnoreCase(nameof(SheetDefinition.FreezePanes), out JsonElement freezePanesElement)
+        if (sheetElement.TryGetPropertyIgnoreCase(
+            nameof(SheetDefinition.FreezePanes), out JsonElement freezePanesElement
+        )
             && freezePanesElement.ValueKind == JsonValueKind.Object) {
+            JsonParseContext freezePanesContext = sheetContext.Property(nameof(SheetDefinition.FreezePanes));
             if (!freezePanesElement.TryGetPropertyIgnoreCase("Row", out JsonElement rowElement)) {
-                throw new FormatException("FreezePanes requires a 'Row' property.");
+                throw JsonParseExceptionFactory.MissingRequiredProperty(freezePanesContext.Property("Row"));
             }
             if (!freezePanesElement.TryGetPropertyIgnoreCase("Column", out JsonElement columnElement)) {
-                throw new FormatException("FreezePanes requires a 'Column' property.");
+                throw JsonParseExceptionFactory.MissingRequiredProperty(freezePanesContext.Property("Column"));
             }
             sheet.FreezePanes = new Point(
-                columnElement.GetInt32Value("FreezePanes.Column"),
-                rowElement.GetInt32Value("FreezePanes.Row")
+                columnElement.GetInt32Value(freezePanesContext.Property("Column")),
+                rowElement.GetInt32Value(freezePanesContext.Property("Row"))
             );
         }
 
-        if (sheetElement.TryGetPropertyIgnoreCase(nameof(SheetDefinition.IsAutoFilterEnabled), out JsonElement isAutoFilterEnabledElement)) {
-            sheet.IsAutoFilterEnabled = isAutoFilterEnabledElement.GetBooleanValue(nameof(SheetDefinition.IsAutoFilterEnabled));
+        if (sheetElement.TryGetPropertyIgnoreCase(
+            nameof(SheetDefinition.IsAutoFilterEnabled), out JsonElement isAutoFilterEnabledElement
+        )) {
+            sheet.IsAutoFilterEnabled = isAutoFilterEnabledElement.GetBooleanValue(
+                sheetContext.Property(nameof(SheetDefinition.IsAutoFilterEnabled))
+            );
         }
 
         if (sheetElement.TryGetPropertyIgnoreCase("ColumnWidths", out JsonElement columnWidthsElement)) {
-            PopulateColumnWidths(sheet, columnWidthsElement);
+            PopulateColumnWidths(sheet, columnWidthsElement, sheetContext.Property("ColumnWidths"));
         }
 
-        if (sheetElement.TryGetPropertyIgnoreCase(nameof(SheetDefinition.PageSettings), out JsonElement pageSettingsElement)
+        if (sheetElement.TryGetPropertyIgnoreCase(
+            nameof(SheetDefinition.PageSettings), out JsonElement pageSettingsElement
+        )
             && pageSettingsElement.ValueKind != JsonValueKind.Null) {
-            PopulatePageSettings(sheet.PageSettings, pageSettingsElement);
+            PopulatePageSettings(
+                sheet.PageSettings,
+                pageSettingsElement,
+                sheetContext.Property(nameof(SheetDefinition.PageSettings))
+            );
         }
 
         if (sheetElement.TryGetPropertyIgnoreCase(nameof(SheetDefinition.Metadata), out JsonElement metadataElement)
             && metadataElement.ValueKind != JsonValueKind.Null) {
-            foreach (KeyValuePair<string, object?> pair in metadataElement.ToDictionary()) {
+            foreach (KeyValuePair<string, object?> pair in metadataElement.ToDictionary(
+                sheetContext.Property(nameof(SheetDefinition.Metadata))
+            )) {
                 sheet.Metadata[pair.Key] = pair.Value;
             }
         }
 
-        if (!sheetElement.TryGetPropertyIgnoreCase(nameof(SheetDefinition.Templates), out JsonElement templatesElement)) {
+        if (!sheetElement.TryGetPropertyIgnoreCase(
+            nameof(SheetDefinition.Templates), out JsonElement templatesElement
+        )) {
             return;
         }
 
         if (templatesElement.ValueKind != JsonValueKind.Array) {
-            throw new FormatException("Sheet property 'Templates' must be an array.");
+            throw JsonParseExceptionFactory.InvalidType(
+                sheetContext.Property(nameof(SheetDefinition.Templates)), "an array"
+            );
         }
 
+        int templateIndex = 0;
         foreach (JsonElement templateElement in templatesElement.EnumerateArray()) {
-            sheet.AddTemplate(CreateTemplate(templateElement));
+            JsonParseContext templateContext = sheetContext
+                .Property(nameof(SheetDefinition.Templates))
+                .Index(templateIndex++);
+            sheet.AddTemplate(CreateTemplate(templateElement, templateContext));
         }
     }
 
-    private static void PopulateColumnWidths(SheetDefinition sheet, JsonElement columnWidthsElement) {
+    private static void PopulateColumnWidths(
+        SheetDefinition sheet, JsonElement columnWidthsElement, JsonParseContext columnWidthsContext
+    ) {
         if (columnWidthsElement.ValueKind == JsonValueKind.Object) {
             foreach (JsonProperty property in columnWidthsElement.EnumerateObject()) {
                 if (!int.TryParse(property.Name, NumberStyles.Integer, CultureInfo.InvariantCulture, out int index)) {
-                    throw new FormatException(
+                    throw JsonParseExceptionFactory.InvalidValue(
+                        columnWidthsContext.Property(property.Name),
                         $"Column width key '{property.Name}' must be a zero-based integer index."
                     );
                 }
 
-                sheet.SetColumnWidth(index, property.Value.GetDoubleValue($"ColumnWidths.{property.Name}"));
+                sheet.SetColumnWidth(index, property.Value.GetDoubleValue(columnWidthsContext.Property(property.Name)));
             }
 
             return;
         }
 
         if (columnWidthsElement.ValueKind == JsonValueKind.Array) {
+            int columnWidthIndex = 0;
             foreach (JsonElement columnWidthElement in columnWidthsElement.EnumerateArray()) {
+                JsonParseContext itemContext = columnWidthsContext.Index(columnWidthIndex++);
                 if (columnWidthElement.ValueKind != JsonValueKind.Object) {
-                    throw new FormatException("Each 'ColumnWidths' array item must be an object.");
+                    throw JsonParseExceptionFactory.InvalidType(itemContext, "a JSON object");
                 }
 
                 if (!columnWidthElement.TryGetPropertyIgnoreCase("Index", out JsonElement indexElement)) {
-                    throw new FormatException("Column width item requires an 'Index' property.");
+                    throw JsonParseExceptionFactory.MissingRequiredProperty(itemContext.Property("Index"));
                 }
 
                 if (!columnWidthElement.TryGetPropertyIgnoreCase("Width", out JsonElement widthElement)) {
-                    throw new FormatException("Column width item requires a 'Width' property.");
+                    throw JsonParseExceptionFactory.MissingRequiredProperty(itemContext.Property("Width"));
                 }
 
                 sheet.SetColumnWidth(
-                    indexElement.GetInt32Value("ColumnWidths[].Index"),
-                    widthElement.GetDoubleValue("ColumnWidths[].Width")
+                    indexElement.GetInt32Value(itemContext.Property("Index")),
+                    widthElement.GetDoubleValue(itemContext.Property("Width"))
                 );
             }
 
             return;
         }
 
-        throw new FormatException("Sheet property 'ColumnWidths' must be an object or array.");
+        throw JsonParseExceptionFactory.InvalidType(columnWidthsContext, "a JSON object or array");
     }
 
-    private static void PopulatePageSettings(PageSettings pageSettings, JsonElement pageSettingsElement) {
+    private static void PopulatePageSettings(
+        PageSettings pageSettings, JsonElement pageSettingsElement, JsonParseContext pageSettingsContext
+    ) {
         if (pageSettingsElement.ValueKind != JsonValueKind.Object) {
-            throw new FormatException("PageSettings must be a JSON object.");
+            throw JsonParseExceptionFactory.InvalidType(pageSettingsContext, "a JSON object");
         }
 
-        if (pageSettingsElement.TryGetPropertyIgnoreCase(nameof(PageSettings.PageOrientation), out JsonElement orientationElement)) {
+        if (pageSettingsElement.TryGetPropertyIgnoreCase(
+            nameof(PageSettings.PageOrientation), out JsonElement orientationElement
+        )) {
             pageSettings.PageOrientation = ParseEnum<PageOrientation>(
                 orientationElement,
-                $"{nameof(PageSettings)}.{nameof(PageSettings.PageOrientation)}"
+                pageSettingsContext.Property(nameof(PageSettings.PageOrientation))
             );
         }
 
-        if (pageSettingsElement.TryGetPropertyIgnoreCase(nameof(PageSettings.PaperSize), out JsonElement paperSizeElement)) {
+        if (pageSettingsElement.TryGetPropertyIgnoreCase(
+            nameof(PageSettings.PaperSize), out JsonElement paperSizeElement
+        )) {
             pageSettings.PaperSize = ParsePaperSize(
                 paperSizeElement,
-                $"{nameof(PageSettings)}.{nameof(PageSettings.PaperSize)}"
+                pageSettingsContext.Property(nameof(PageSettings.PaperSize))
             );
         }
     }
 
-    private static ISheetTemplate CreateTemplate(JsonElement templateElement) {
+    private static ISheetTemplate CreateTemplate(JsonElement templateElement, JsonParseContext templateContext) {
         if (templateElement.ValueKind != JsonValueKind.Object) {
-            throw new FormatException("Each template definition must be a JSON object.");
+            throw JsonParseExceptionFactory.InvalidType(templateContext, "a JSON object");
         }
 
         if (!templateElement.TryGetPropertyIgnoreCase("Type", out JsonElement typeElement)) {
-            throw new FormatException("Template definition requires a 'Type' property.");
+            throw JsonParseExceptionFactory.MissingRequiredProperty(templateContext.Property("Type"));
         }
 
-        string typeName = typeElement.GetStringValue("Type");
-        return JsonTemplateRegistry.Create(typeName, templateElement);
+        string typeName = typeElement.GetStringValue(templateContext.Property("Type"));
+        return JsonTemplateRegistry.Create(typeName, templateElement, templateContext);
     }
 
-    private static TEnum ParseEnum<TEnum>(JsonElement element, string propertyName)
+    private static TEnum ParseEnum<TEnum>(JsonElement element, JsonParseContext context)
         where TEnum : struct, Enum {
         if (element.ValueKind == JsonValueKind.String) {
             string? raw = element.GetString();
@@ -395,12 +435,10 @@ public sealed class SpreadsheetDocument {
             return (TEnum)Enum.ToObject(typeof(TEnum), numericValue);
         }
 
-        throw new FormatException(
-            $"Property '{propertyName}' must be a valid {typeof(TEnum).Name} value."
-        );
+        throw JsonParseExceptionFactory.InvalidType(context, $"a valid {typeof(TEnum).Name} value");
     }
 
-    private static PaperSize ParsePaperSize(JsonElement element, string propertyName) {
+    private static PaperSize ParsePaperSize(JsonElement element, JsonParseContext context) {
         if (element.ValueKind == JsonValueKind.String) {
             string? raw = element.GetString();
             if (int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out int numericStringValue)) {
@@ -411,8 +449,8 @@ public sealed class SpreadsheetDocument {
                 .FirstOrDefault(pair => string.Equals(pair.Key, raw, StringComparison.OrdinalIgnoreCase))
                 .Value;
 
-            return namedPaperSize ?? throw new FormatException(
-                $"Property '{propertyName}' contains unknown paper size '{raw}'."
+            return namedPaperSize ?? throw JsonParseExceptionFactory.InvalidValue(
+                context, $"contains unknown paper size '{raw}'."
             );
         }
 
@@ -420,9 +458,7 @@ public sealed class SpreadsheetDocument {
             return ParsePaperSizeFromValue(numericValue);
         }
 
-        throw new FormatException(
-            $"Property '{propertyName}' must be a paper size name or numeric value."
-        );
+        throw JsonParseExceptionFactory.InvalidType(context, "a paper size name or numeric value");
     }
 
     private static PaperSize ParsePaperSizeFromValue(int value) {

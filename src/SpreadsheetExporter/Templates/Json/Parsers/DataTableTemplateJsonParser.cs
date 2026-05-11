@@ -9,18 +9,23 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Json.Parsers;
 /// <summary>
 /// Parses a JSON element into a <see cref="DataTableTemplate"/>.
 /// </summary>
-public class DataTableTemplateJsonParser : ITemplateJsonParser {
+public class DataTableTemplateJsonParser : ITemplateJsonParserWithContext {
     /// <inheritdoc/>
     public string TypeName => "DataTable";
 
     /// <inheritdoc/>
     public ISheetTemplate Parse(JsonElement element) {
+        return Parse(element, JsonParseContext.Root);
+    }
+
+    /// <inheritdoc/>
+    public ISheetTemplate Parse(JsonElement element, JsonParseContext context) {
         if (element.ValueKind != JsonValueKind.Object) {
-            throw new FormatException("DataTable template JSON must be an object.");
+            throw JsonParseExceptionFactory.InvalidType(context, "a JSON object");
         }
 
-        IReadOnlyList<DataTableColumnDefinition> columnDefinitions = ParseColumnDefinitions(element);
-        IReadOnlyList<IDictionary<string, object?>> records = ParseRecords(element);
+        IReadOnlyList<DataTableColumnDefinition> columnDefinitions = ParseColumnDefinitions(element, context);
+        IReadOnlyList<IDictionary<string, object?>> records = ParseRecords(element, context);
         System.Data.DataTable dataTable = CreateDataTable(columnDefinitions, records);
         DataTableTemplate template = new(dataTable);
 
@@ -29,7 +34,9 @@ public class DataTableTemplateJsonParser : ITemplateJsonParser {
         )
             && headerHeightElement.ValueKind != JsonValueKind.Null
         ) {
-            template.HeaderHeight = headerHeightElement.GetDoubleValue(nameof(DataTableTemplate.HeaderHeight));
+            template.HeaderHeight = headerHeightElement.GetDoubleValue(
+                context.Property(nameof(DataTableTemplate.HeaderHeight))
+            );
         }
 
         if (element.TryGetPropertyIgnoreCase(
@@ -37,7 +44,9 @@ public class DataTableTemplateJsonParser : ITemplateJsonParser {
         )
             && recordHeightElement.ValueKind != JsonValueKind.Null
         ) {
-            template.RecordHeight = recordHeightElement.GetDoubleValue(nameof(DataTableTemplate.RecordHeight));
+            template.RecordHeight = recordHeightElement.GetDoubleValue(
+                context.Property(nameof(DataTableTemplate.RecordHeight))
+            );
         }
 
         if (columnDefinitions.Count > 0) {
@@ -50,71 +59,85 @@ public class DataTableTemplateJsonParser : ITemplateJsonParser {
         return template;
     }
 
-    private static IReadOnlyList<DataTableColumnDefinition> ParseColumnDefinitions(JsonElement element) {
+    private static IReadOnlyList<DataTableColumnDefinition> ParseColumnDefinitions(
+        JsonElement element, JsonParseContext context
+    ) {
         if (!element.TryGetPropertyIgnoreCase(nameof(DataTableTemplate.Columns), out JsonElement columnsElement)) {
             return [];
         }
 
+        JsonParseContext columnsContext = context.Property(nameof(DataTableTemplate.Columns));
         if (columnsElement.ValueKind != JsonValueKind.Array) {
-            throw new FormatException("DataTable template property 'Columns' must be an array.");
+            throw JsonParseExceptionFactory.InvalidType(columnsContext, "an array");
         }
 
         List<DataTableColumnDefinition> columns = [];
+        int columnIndex = 0;
         foreach (JsonElement columnElement in columnsElement.EnumerateArray()) {
-            columns.Add(ParseColumnDefinition(columnElement));
+            columns.Add(ParseColumnDefinition(columnElement, columnsContext.Index(columnIndex++)));
         }
 
         return columns.AsReadOnly();
     }
 
-    private static DataTableColumnDefinition ParseColumnDefinition(JsonElement columnElement) {
+    private static DataTableColumnDefinition ParseColumnDefinition(
+        JsonElement columnElement, JsonParseContext columnContext
+    ) {
         if (columnElement.ValueKind != JsonValueKind.Object) {
-            throw new FormatException("Each DataTable column must be a JSON object.");
+            throw JsonParseExceptionFactory.InvalidType(columnContext, "a JSON object");
         }
 
         if (!columnElement.TryGetPropertyIgnoreCase(
             nameof(DataTableColumn.ColumnName), out JsonElement columnNameElement
         )) {
-            throw new FormatException("DataTable column requires a 'ColumnName' property.");
+            throw JsonParseExceptionFactory.MissingRequiredProperty(
+                columnContext.Property(nameof(DataTableColumn.ColumnName))
+            );
         }
 
-        string columnName = columnNameElement.GetStringValue(nameof(DataTableColumn.ColumnName));
+        string columnName = columnNameElement.GetStringValue(
+            columnContext.Property(nameof(DataTableColumn.ColumnName))
+        );
         string? headerText = columnElement.TryGetPropertyIgnoreCase(
             nameof(DataTableColumn.HeaderText), out JsonElement headerTextElement
         )
-            ? GetNullableStringValue(headerTextElement, nameof(DataTableColumn.HeaderText))
+            ? GetNullableStringValue(headerTextElement, columnContext.Property(nameof(DataTableColumn.HeaderText)))
             : null;
         CellStyle? headerStyle = columnElement.TryGetPropertyIgnoreCase(
             nameof(DataTableColumn.HeaderStyle), out JsonElement headerStyleElement
         )
             && headerStyleElement.ValueKind != JsonValueKind.Null
-            ? JsonStyleParser.Parse(headerStyleElement)
+            ? JsonStyleParser.Parse(headerStyleElement, columnContext.Property(nameof(DataTableColumn.HeaderStyle)))
             : null;
         CellStyle? fieldStyle = columnElement.TryGetPropertyIgnoreCase(
             "FieldStyle", out JsonElement fieldStyleElement
         )
             && fieldStyleElement.ValueKind != JsonValueKind.Null
-            ? JsonStyleParser.Parse(fieldStyleElement)
+            ? JsonStyleParser.Parse(fieldStyleElement, columnContext.Property("FieldStyle"))
             : null;
         string? formula = columnElement.TryGetPropertyIgnoreCase("Formula", out JsonElement formulaElement)
-            ? GetNullableStringValue(formulaElement, "Formula")
+            ? GetNullableStringValue(formulaElement, columnContext.Property("Formula"))
             : null;
 
         return new DataTableColumnDefinition(columnName, headerText, headerStyle, fieldStyle, formula);
     }
 
-    private static IReadOnlyList<IDictionary<string, object?>> ParseRecords(JsonElement element) {
+    private static IReadOnlyList<IDictionary<string, object?>> ParseRecords(
+        JsonElement element, JsonParseContext context
+    ) {
         if (!element.TryGetPropertyIgnoreCase("Records", out JsonElement recordsElement)) {
             return [];
         }
 
+        JsonParseContext recordsContext = context.Property("Records");
         if (recordsElement.ValueKind != JsonValueKind.Array) {
-            throw new FormatException("DataTable template property 'Records' must be an array.");
+            throw JsonParseExceptionFactory.InvalidType(recordsContext, "an array");
         }
 
         List<IDictionary<string, object?>> records = [];
+        int recordIndex = 0;
         foreach (JsonElement recordElement in recordsElement.EnumerateArray()) {
-            records.Add(recordElement.ToDictionary());
+            records.Add(recordElement.ToDictionary(recordsContext.Index(recordIndex++)));
         }
 
         return records.AsReadOnly();
@@ -196,10 +219,10 @@ public class DataTableTemplateJsonParser : ITemplateJsonParser {
         return column;
     }
 
-    private static string? GetNullableStringValue(JsonElement element, string propertyName) {
+    private static string? GetNullableStringValue(JsonElement element, JsonParseContext context) {
         return element.ValueKind == JsonValueKind.Null
             ? null
-            : element.GetStringValue(propertyName);
+            : element.GetStringValue(context);
     }
 
     private sealed record DataTableColumnDefinition(
