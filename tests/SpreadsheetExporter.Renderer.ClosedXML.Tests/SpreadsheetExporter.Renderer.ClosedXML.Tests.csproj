@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\SpreadsheetExporter.Renderer.ClosedXML\SpreadsheetExporter.Renderer.ClosedXML.csproj" />
+    <ProjectReference Include="..\..\samples\SpreadsheetExporter.Sample\SpreadsheetExporter.Sample.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.105.0" />
