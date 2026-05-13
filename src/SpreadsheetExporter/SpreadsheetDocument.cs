@@ -313,8 +313,12 @@ public sealed class SpreadsheetDocument {
         if (sheetElement.TryGetPropertyIgnoreCase(
             nameof(SheetDefinition.FreezePanes), out JsonElement freezePanesElement
         )
-            && freezePanesElement.ValueKind == JsonValueKind.Object) {
+            && freezePanesElement.ValueKind != JsonValueKind.Null) {
             JsonParseContext freezePanesContext = sheetContext.Property(nameof(SheetDefinition.FreezePanes));
+            if (freezePanesElement.ValueKind != JsonValueKind.Object) {
+                throw JsonParseExceptionFactory.InvalidType(freezePanesContext, "a JSON object");
+            }
+
             if (!freezePanesElement.TryGetPropertyIgnoreCase("Row", out JsonElement rowElement)) {
                 throw JsonParseExceptionFactory.MissingRequiredProperty(freezePanesContext.Property("Row"));
             }

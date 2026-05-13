@@ -412,6 +412,28 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void FromJson_WithInvalidFreezePanesType_ShouldThrowPathDiagnostic() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+
+        string json = """
+            [
+              {
+                "SheetName": "Data",
+                "FreezePanes": true,
+                "Templates": []
+              }
+            ]
+            """;
+
+        FormatException? exception = Assert.Throws<FormatException>(() => SpreadsheetDocument.FromJson(json));
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(exception!.Message, Does.Contain(JsonDiagnosticCodes.InvalidType));
+            Assert.That(exception.Message, Does.Contain("$[0].FreezePanes"));
+        }
+    }
+
+    [Test]
     public void FromJson_WithMissingTemplateType_ShouldThrowPathDiagnostic() {
         SpreadsheetManager.SetRenderer(() => new FakeRenderer());
 
