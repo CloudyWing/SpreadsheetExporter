@@ -59,6 +59,12 @@ public abstract class RecordSetColumnBase<T> {
     public int HeaderDepth => ChildColumns.Count == 0
         ? 1 : ChildColumns.RowSpan + 1;
 
+    internal virtual bool HasFieldValue => true;
+
+    internal virtual bool HasFieldFormula => true;
+
+    internal virtual bool HasFieldDataValidation => true;
+
     /// <summary>
     /// Gets the field value for the specified context.
     /// </summary>

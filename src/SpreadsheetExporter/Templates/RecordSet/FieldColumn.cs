@@ -60,6 +60,14 @@ internal class FieldColumn<TRecord, TField> : RecordSetColumnBase<TRecord> {
     /// <value>The field data validation generator.</value>
     public Func<FieldContext<TRecord, TField>, DataValidation?>? FieldDataValidationGenerator { get; set; }
 
+    internal override bool HasFieldValue
+        => FieldValueGenerator is not null
+            || (!string.IsNullOrWhiteSpace(FieldKey) && FieldFormulaGenerator is null);
+
+    internal override bool HasFieldFormula => FieldFormulaGenerator is not null;
+
+    internal override bool HasFieldDataValidation => FieldDataValidationGenerator is not null;
+
     private static string GetFieldKeyByExpression(Expression<Func<TRecord, TField>> expression) {
         Stack<string> memberExpressions = [];
         if (expression.Body is ConstantExpression constant) {

@@ -98,14 +98,26 @@ public class RecordSetTemplate<T> : ISheetTemplate {
         Point point = new(0, Columns.RowSpan);
         foreach (T record in CachedDataSource!) {
             foreach (RecordSetColumnBase<T> column in Columns.LeafColumns) {
-                yield return new Cell {
-                    ValueGenerator = (cellIndex, rowIndex) => column.GetFieldValue(new RecordContext<T>(cellIndex, rowIndex, record)),
+                Cell cell = new() {
                     CellStyleGenerator = (cellIndex, rowIndex) => column.GetFieldStyle(new RecordContext<T>(cellIndex, rowIndex, record)),
                     Point = point,
-                    Size = new Size(column.ColumnSpan, 1),
-                    FormulaGenerator = (cellIndex, rowIndex) => column.GetFieldFormula(new RecordContext<T>(cellIndex, rowIndex, record)),
-                    DataValidationGenerator = (cellIndex, rowIndex) => column.GetFieldDataValidation(new RecordContext<T>(cellIndex, rowIndex, record))
+                    Size = new Size(column.ColumnSpan, 1)
                 };
+
+                if (column.HasFieldFormula) {
+                    cell.FormulaGenerator = (cellIndex, rowIndex) =>
+                        column.GetFieldFormula(new RecordContext<T>(cellIndex, rowIndex, record));
+                } else if (column.HasFieldValue) {
+                    cell.ValueGenerator = (cellIndex, rowIndex) =>
+                        column.GetFieldValue(new RecordContext<T>(cellIndex, rowIndex, record));
+                }
+
+                if (column.HasFieldDataValidation) {
+                    cell.DataValidationGenerator = (cellIndex, rowIndex) =>
+                        column.GetFieldDataValidation(new RecordContext<T>(cellIndex, rowIndex, record));
+                }
+
+                yield return cell;
                 point.X += column.ColumnSpan;
             }
             point = new Point(0, point.Y + 1);

@@ -32,7 +32,7 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
             TemplateLayout layout = template.GetLayout();
 
             Assert.That(layout.Cells, Has.Count.EqualTo(Records.Count() + template.Columns.RowSpan));
-            Assert.That(layout.Cells.All(x => x.ValueGenerator != null), Is.True);
+            Assert.That(layout.Cells.Where(x => x.Point.Y < template.Columns.RowSpan).All(x => x.ValueGenerator != null), Is.True);
         }
 
         [Test]
@@ -101,7 +101,28 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.RecordSet {
 
             Assert.That(layout.Cells.Select(x => new { x.Point, x.Size }).ToList(), Is.EqualTo(expectedCells));
             Assert.That(layout.Cells.All(x => x.CellStyleGenerator != null), Is.True);
-            Assert.That(layout.Cells.All(x => x.ValueGenerator != null), Is.True);
+            Assert.That(layout.Cells.Where(x => x.Point.Y < template.Columns.RowSpan).All(x => x.ValueGenerator != null), Is.True);
+        }
+
+        [Test]
+        public void GetLayout_WithFieldAndFormulaColumns_ShouldCreateOnlyOneContentGeneratorPerDataCell() {
+            template = new RecordSetTemplate<Record>([new Record { Id = 7 }]);
+            template.Columns.Add("Id", static x => x.Id);
+            template.Columns.Add(
+                "Formula",
+                configureGenerators: static cfg => cfg.UseFormula(ctx => $"A{ctx.RowIndex + 1}*2")
+            );
+
+            TemplateLayout layout = template.GetLayout();
+            Cell valueCell = layout.Cells.Single(x => x.Point == new Point(0, 1));
+            Cell formulaCell = layout.Cells.Single(x => x.Point == new Point(1, 1));
+
+            using (Assert.EnterMultipleScope()) {
+                Assert.That(valueCell.ValueGenerator, Is.Not.Null);
+                Assert.That(valueCell.FormulaGenerator, Is.Null);
+                Assert.That(formulaCell.ValueGenerator, Is.Null);
+                Assert.That(formulaCell.FormulaGenerator, Is.Not.Null);
+            }
         }
 
         [Test]

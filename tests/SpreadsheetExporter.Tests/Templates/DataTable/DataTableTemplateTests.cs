@@ -239,7 +239,10 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.DataTable {
             TemplateLayout layout = template.GetLayout();
             var dataCell = layout.Cells.First(c => c.Point.Y == 1 && c.Point.X == 0);
 
-            Assert.That(dataCell.FormulaGenerator!(0, 1), Is.EqualTo("A30"));
+            Assert.Multiple(() => {
+                Assert.That(dataCell.ValueGenerator, Is.Null);
+                Assert.That(dataCell.FormulaGenerator!(0, 1), Is.EqualTo("A30"));
+            });
         }
 
         [Test]
