@@ -114,7 +114,20 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate
 
     /// <inheritdoc/>
     public TemplateLayout GetLayout() {
+        ValidateColumns();
+
         return new TemplateLayout(GetCells(), RowSpan, GetRowHeights());
+    }
+
+    private void ValidateColumns() {
+        foreach (DataTableColumn column in Columns) {
+            if (column.FieldValueGenerator is not null && column.FieldFormulaGenerator is not null) {
+                throw new InvalidOperationException(
+                    $"Cannot use both FieldValueGenerator and FieldFormulaGenerator on DataTable column '{column.ColumnName}'. "
+                    + "A cell can only have a value or a formula, not both."
+                );
+            }
+        }
     }
 
     private IEnumerable<Cell> GetCells() {

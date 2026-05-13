@@ -243,6 +243,24 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.DataTable {
         }
 
         [Test]
+        public void GetLayout_WithFieldValueGeneratorAndFieldFormulaGenerator_ThrowsInvalidOperationException() {
+            template.Columns.Clear();
+            template.Columns.Add(new DataTableColumn {
+                ColumnName = "Age",
+                HeaderText = "Age",
+                FieldValueGenerator = value => value,
+                FieldFormulaGenerator = value => $"A{value}"
+            });
+
+            InvalidOperationException exception = Assert.Throws<InvalidOperationException>(() => template.GetLayout())!;
+
+            Assert.That(
+                exception.Message,
+                Does.Contain("Cannot use both FieldValueGenerator and FieldFormulaGenerator")
+            );
+        }
+
+        [Test]
         public void GetLayout_WithFieldDataValidationGenerator_AppliesDataValidation() {
             DataValidation validation = new() {
                 ValidationType = DataValidationType.Integer,

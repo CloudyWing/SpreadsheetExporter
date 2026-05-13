@@ -256,13 +256,17 @@ public class RecordSetColumnCollection<T> : Collection<RecordSetColumnBase<T>> {
 
     /// <inheritdoc/>
     protected override void RemoveItem(int index) {
+        RecordSetColumnBase<T> item = Items[index];
+
         base.RemoveItem(index);
-        Items[index].ParentCollection = null;
+        item.ParentCollection = null;
     }
 
     /// <inheritdoc/>
     protected override void SetItem(int index, RecordSetColumnBase<T> item) {
-        if (item.ParentCollection is not null) {
+        RecordSetColumnBase<T> oldItem = Items[index];
+
+        if (!ReferenceEquals(oldItem, item) && item.ParentCollection is not null) {
             throw new ArgumentException(
                 $"RecordSetColumnBase<{typeof(T).Name}> with HeaderText '{item.HeaderText}' is already contained by another RecordSetColumnCollection. " +
                 $"A column can only belong to one collection at a time.",
@@ -271,7 +275,7 @@ public class RecordSetColumnCollection<T> : Collection<RecordSetColumnBase<T>> {
         }
 
         base.SetItem(index, item);
-        Items[index].ParentCollection = null;
+        oldItem.ParentCollection = null;
         item.ParentCollection = this;
     }
 

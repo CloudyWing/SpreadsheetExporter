@@ -148,6 +148,63 @@ internal class RecordSetColumnCollectionTests {
         );
     }
 
+    [Test]
+    public void RemoveAt_WhenRemovingLastColumn_ShouldClearRemovedParentCollection() {
+        GeneratorColumn<Record> column = new() { HeaderText = "Last" };
+        columns.Add(column);
+
+        columns.RemoveAt(0);
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(columns, Is.Empty);
+            Assert.That(column.ParentCollection, Is.Null);
+        }
+    }
+
+    [Test]
+    public void RemoveAt_WhenRemovingMiddleColumn_ShouldKeepRemainingParentCollection() {
+        GeneratorColumn<Record> firstColumn = new() { HeaderText = "First" };
+        GeneratorColumn<Record> secondColumn = new() { HeaderText = "Second" };
+        columns.Add(firstColumn);
+        columns.Add(secondColumn);
+
+        columns.RemoveAt(0);
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(firstColumn.ParentCollection, Is.Null);
+            Assert.That(secondColumn.ParentCollection, Is.SameAs(columns));
+            Assert.That(columns.Single(), Is.SameAs(secondColumn));
+        }
+    }
+
+    [Test]
+    public void SetItem_WhenReplacingColumn_ShouldClearReplacedParentCollection() {
+        GeneratorColumn<Record> oldColumn = new() { HeaderText = "Old" };
+        GeneratorColumn<Record> newColumn = new() { HeaderText = "New" };
+        columns.Add(oldColumn);
+
+        columns[0] = newColumn;
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(oldColumn.ParentCollection, Is.Null);
+            Assert.That(newColumn.ParentCollection, Is.SameAs(columns));
+            Assert.That(columns.Single(), Is.SameAs(newColumn));
+        }
+    }
+
+    [Test]
+    public void SetItem_WhenAssigningSameColumn_ShouldKeepParentCollection() {
+        GeneratorColumn<Record> column = new() { HeaderText = "Same" };
+        columns.Add(column);
+
+        columns[0] = column;
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(column.ParentCollection, Is.SameAs(columns));
+            Assert.That(columns.Single(), Is.SameAs(column));
+        }
+    }
+
     private sealed class Record {
         public int Id { get; init; }
 
