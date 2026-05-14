@@ -233,6 +233,20 @@
         "Type"
       ],
       "additionalProperties": true,
+      "allOf": [
+        {
+          "not": {
+            "properties": {
+              "Type": {
+                "pattern": "^(?:[Gg][Rr][Ii][Dd]|[Rr][Ee][Cc][Oo][Rr][Dd][Ss][Ee][Tt]|[Dd][Aa][Tt][Aa][Tt][Aa][Bb][Ll][Ee]|[Mm][Ee][Rr][Gg][Ee][Dd])$"
+              }
+            },
+            "required": [
+              "Type"
+            ]
+          }
+        }
+      ],
       "properties": {
         "Type": {
           "type": "string"
@@ -283,6 +297,12 @@
     "gridCell": {
       "type": "object",
       "additionalProperties": true,
+      "not": {
+        "required": [
+          "Value",
+          "Formula"
+        ]
+      },
       "properties": {
         "Value": {
           "$ref": "#/$defs/jsonValue"
@@ -352,6 +372,32 @@
     "recordSetColumn": {
       "type": "object",
       "additionalProperties": true,
+      "allOf": [
+        {
+          "not": {
+            "required": [
+              "FieldKey",
+              "Value"
+            ]
+          }
+        },
+        {
+          "not": {
+            "required": [
+              "FieldKey",
+              "Formula"
+            ]
+          }
+        },
+        {
+          "not": {
+            "required": [
+              "Value",
+              "Formula"
+            ]
+          }
+        }
+      ],
       "properties": {
         "HeaderText": {
           "type": "string"
@@ -436,6 +482,12 @@
         "ColumnName"
       ],
       "additionalProperties": true,
+      "not": {
+        "required": [
+          "Value",
+          "Formula"
+        ]
+      },
       "properties": {
         "ColumnName": {
           "type": "string"
