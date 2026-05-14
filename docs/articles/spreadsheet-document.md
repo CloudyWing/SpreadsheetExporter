@@ -183,6 +183,8 @@ SpreadsheetDocument document = SpreadsheetDocument.FromJson(json, styles);
 
 JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet`、`DataTable` 與 `Merged` 四種 template 類型：
 
+JSON Schema 可參考 [`spreadsheet-exporter.schema.json`](../schemas/spreadsheet-exporter.schema.json)。因為 JSON root 是工作表陣列，不建議把 `$schema` 寫入同一份 template；建議在編輯器設定中將該 schema 綁定到 template 檔案。
+
 ```json
 [
   {

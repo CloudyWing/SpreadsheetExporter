@@ -1,0 +1,696 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cloudywing.github.io/SpreadsheetExporter/schemas/spreadsheet-exporter.schema.json",
+  "title": "SpreadsheetExporter JSON template",
+  "description": "Describes the JSON structure accepted by SpreadsheetDocument.FromJson.",
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/sheet"
+  },
+  "$defs": {
+    "jsonValue": {
+      "description": "Any JSON value."
+    },
+    "stringOrNull": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "integerLike": {
+      "oneOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string",
+          "pattern": "^-?\\d+$"
+        }
+      ]
+    },
+    "byteLike": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        },
+        {
+          "type": "string",
+          "pattern": "^(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$"
+        }
+      ]
+    },
+    "numberLike": {
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "booleanLike": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string",
+          "pattern": "^(?:[Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])$"
+        }
+      ]
+    },
+    "enumLike": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/integerLike"
+        }
+      ]
+    },
+    "sheet": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "SheetName": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "DefaultRowHeight": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/numberLike"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "Password": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "FreezePanes": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/freezePanes"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "IsAutoFilterEnabled": {
+          "$ref": "#/$defs/booleanLike"
+        },
+        "ColumnWidths": {
+          "$ref": "#/$defs/columnWidths"
+        },
+        "PageSettings": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/pageSettings"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "Metadata": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/jsonValue"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "Styles": {
+          "$ref": "#/$defs/namedStyles"
+        },
+        "Templates": {
+          "$ref": "#/$defs/templates"
+        }
+      }
+    },
+    "freezePanes": {
+      "type": "object",
+      "required": [
+        "Row",
+        "Column"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "Row": {
+          "$ref": "#/$defs/integerLike"
+        },
+        "Column": {
+          "$ref": "#/$defs/integerLike"
+        }
+      }
+    },
+    "columnWidths": {
+      "oneOf": [
+        {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^-?\\d+$"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/numberLike"
+          }
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/columnWidth"
+          }
+        }
+      ]
+    },
+    "columnWidth": {
+      "type": "object",
+      "required": [
+        "Index",
+        "Width"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "Index": {
+          "$ref": "#/$defs/integerLike"
+        },
+        "Width": {
+          "$ref": "#/$defs/numberLike"
+        }
+      }
+    },
+    "pageSettings": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "PageOrientation": {
+          "$ref": "#/$defs/enumLike"
+        },
+        "PaperSize": {
+          "$ref": "#/$defs/enumLike"
+        }
+      }
+    },
+    "templates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/template"
+      }
+    },
+    "template": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/gridTemplate"
+        },
+        {
+          "$ref": "#/$defs/recordSetTemplate"
+        },
+        {
+          "$ref": "#/$defs/dataTableTemplate"
+        },
+        {
+          "$ref": "#/$defs/mergedTemplate"
+        },
+        {
+          "$ref": "#/$defs/customTemplate"
+        }
+      ]
+    },
+    "customTemplate": {
+      "type": "object",
+      "required": [
+        "Type"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "Type": {
+          "type": "string"
+        }
+      }
+    },
+    "gridTemplate": {
+      "type": "object",
+      "required": [
+        "Type"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "Type": {
+          "type": "string",
+          "pattern": "^[Gg][Rr][Ii][Dd]$"
+        },
+        "Rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gridRow"
+          }
+        }
+      }
+    },
+    "gridRow": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "Height": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/numberLike"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "Cells": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gridCell"
+          }
+        }
+      }
+    },
+    "gridCell": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "Value": {
+          "$ref": "#/$defs/jsonValue"
+        },
+        "Formula": {
+          "type": "string"
+        },
+        "ColumnSpan": {
+          "$ref": "#/$defs/integerLike"
+        },
+        "RowSpan": {
+          "$ref": "#/$defs/integerLike"
+        },
+        "StyleName": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "Style": {
+          "$ref": "#/$defs/styleOrNull"
+        },
+        "DataValidation": {
+          "$ref": "#/$defs/dataValidationOrNull"
+        }
+      }
+    },
+    "recordSetTemplate": {
+      "type": "object",
+      "required": [
+        "Type"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "Type": {
+          "type": "string",
+          "pattern": "^[Rr][Ee][Cc][Oo][Rr][Dd][Ss][Ee][Tt]$"
+        },
+        "HeaderHeight": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/numberLike"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "RecordHeight": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/numberLike"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "Columns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/recordSetColumn"
+          }
+        },
+        "Records": {
+          "$ref": "#/$defs/records"
+        }
+      }
+    },
+    "recordSetColumn": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "HeaderText": {
+          "type": "string"
+        },
+        "HeaderStyleName": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "HeaderStyle": {
+          "$ref": "#/$defs/styleOrNull"
+        },
+        "FieldStyleName": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "FieldStyle": {
+          "$ref": "#/$defs/styleOrNull"
+        },
+        "FieldKey": {
+          "type": "string"
+        },
+        "Value": {
+          "$ref": "#/$defs/jsonValue"
+        },
+        "Formula": {
+          "type": "string"
+        },
+        "DataValidation": {
+          "$ref": "#/$defs/dataValidationOrNull"
+        },
+        "Children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/recordSetColumn"
+          }
+        }
+      }
+    },
+    "dataTableTemplate": {
+      "type": "object",
+      "required": [
+        "Type"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "Type": {
+          "type": "string",
+          "pattern": "^[Dd][Aa][Tt][Aa][Tt][Aa][Bb][Ll][Ee]$"
+        },
+        "HeaderHeight": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/numberLike"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "RecordHeight": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/numberLike"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "Columns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dataTableColumn"
+          }
+        },
+        "Records": {
+          "$ref": "#/$defs/records"
+        }
+      }
+    },
+    "dataTableColumn": {
+      "type": "object",
+      "required": [
+        "ColumnName"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "ColumnName": {
+          "type": "string"
+        },
+        "HeaderText": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "HeaderStyleName": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "HeaderStyle": {
+          "$ref": "#/$defs/styleOrNull"
+        },
+        "FieldStyleName": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "FieldStyle": {
+          "$ref": "#/$defs/styleOrNull"
+        },
+        "Value": {
+          "$ref": "#/$defs/jsonValue"
+        },
+        "Formula": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "DataValidation": {
+          "$ref": "#/$defs/dataValidationOrNull"
+        }
+      }
+    },
+    "mergedTemplate": {
+      "type": "object",
+      "required": [
+        "Type"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "Type": {
+          "type": "string",
+          "pattern": "^[Mm][Ee][Rr][Gg][Ee][Dd]$"
+        },
+        "Templates": {
+          "$ref": "#/$defs/templates"
+        }
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/$defs/jsonValue"
+        }
+      }
+    },
+    "namedStyles": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "\\S"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/styleOrNull"
+      }
+    },
+    "styleOrNull": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/style"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "style": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "HorizontalAlignment": {
+          "$ref": "#/$defs/enumLike"
+        },
+        "VerticalAlignment": {
+          "$ref": "#/$defs/enumLike"
+        },
+        "HasBorder": {
+          "$ref": "#/$defs/booleanLike"
+        },
+        "WrapText": {
+          "$ref": "#/$defs/booleanLike"
+        },
+        "BackgroundColor": {
+          "$ref": "#/$defs/color"
+        },
+        "DataFormat": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "IsLocked": {
+          "$ref": "#/$defs/booleanLike"
+        },
+        "Font": {
+          "$ref": "#/$defs/fontOrNull"
+        }
+      }
+    },
+    "fontOrNull": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/font"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "font": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "Name": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "Size": {
+          "$ref": "#/$defs/integerLike"
+        },
+        "Color": {
+          "$ref": "#/$defs/color"
+        },
+        "Style": {
+          "$ref": "#/$defs/fontStyle"
+        }
+      }
+    },
+    "fontStyle": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/integerLike"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/enumLike"
+          }
+        }
+      ]
+    },
+    "color": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/colorObject"
+        }
+      ]
+    },
+    "colorObject": {
+      "type": "object",
+      "required": [
+        "R",
+        "G",
+        "B"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "A": {
+          "$ref": "#/$defs/byteLike"
+        },
+        "R": {
+          "$ref": "#/$defs/byteLike"
+        },
+        "G": {
+          "$ref": "#/$defs/byteLike"
+        },
+        "B": {
+          "$ref": "#/$defs/byteLike"
+        }
+      }
+    },
+    "dataValidationOrNull": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/dataValidation"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "dataValidation": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "ValidationType": {
+          "$ref": "#/$defs/enumLike"
+        },
+        "Operator": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/enumLike"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "Value1": {
+          "$ref": "#/$defs/jsonValue"
+        },
+        "Value2": {
+          "$ref": "#/$defs/jsonValue"
+        },
+        "ListItems": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "Formula": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "IsDropdownShown": {
+          "$ref": "#/$defs/booleanLike"
+        },
+        "IsBlankAllowed": {
+          "$ref": "#/$defs/booleanLike"
+        },
+        "ErrorTitle": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "ErrorMessage": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "IsErrorAlertShown": {
+          "$ref": "#/$defs/booleanLike"
+        },
+        "PromptTitle": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "PromptMessage": {
+          "$ref": "#/$defs/stringOrNull"
+        },
+        "IsInputPromptShown": {
+          "$ref": "#/$defs/booleanLike"
+        }
+      }
+    }
+  }
+}

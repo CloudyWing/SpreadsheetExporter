@@ -28,6 +28,7 @@
       {
         "files": [
           "images/**",
+          "schemas/**",
           ".nojekyll"
         ]
       }
