@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Migration Notes | SpreadsheetExporter Docs </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Migration Notes | SpreadsheetExporter Docs ">
+      
+      
+      <link rel="icon" href="../images/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/docs/articles/migration-notes.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../images/logo.png" alt="SpreadsheetExporter Docs">
+            SpreadsheetExporter Docs
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="migration-notes">Migration Notes</h1>
+
+<p>本文整理 <code>SpreadsheetExporter</code> 各版本之間的升級重點，方便後續持續追加新的遷移內容。</p>
+<h2 id="v2--v3">v2 → v3</h2>
+<h3 id="核心命名調整">核心命名調整</h3>
+<ul>
+<li><code>Sheeter</code> 改為 <code>SheetDefinition</code></li>
+<li><code>SheeterContext</code> 改為 <code>SheetLayout</code></li>
+<li><code>TemplateContext</code> 改為 <code>TemplateLayout</code></li>
+<li><code>GetContext()</code> 改為 <code>GetLayout()</code></li>
+<li><code>ITemplate</code> 改為 <code>ISheetTemplate</code></li>
+<li><code>ISpreadsheetExporter</code> / <code>ExporterBase</code> 改為 <code>ISpreadsheetRenderer</code></li>
+</ul>
+<h3 id="renderer-與套件調整">Renderer 與套件調整</h3>
+<p>v3 將 renderer 抽離成 <code>ISpreadsheetRenderer</code>，並以 <code>SpreadsheetExporter.Renderer.ClosedXML</code> 作為目前的 <code>.xlsx</code> 輸出實作。</p>
+<ul>
+<li>舊的 EPPlus / NPOI solution 專案已移除</li>
+<li>請改用 <code>CloudyWing.SpreadsheetExporter.Renderer.ClosedXML</code></li>
+<li>使用入口改為 <code>ExcelRenderer</code></li>
+</ul>
+<p>若是非 DI 專案，可透過 <code>SpreadsheetManager.SetRenderer(...)</code> 完成初始化：</p>
+<pre><code class="lang-csharp">using CloudyWing.SpreadsheetExporter;
+using CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
+
+SpreadsheetManager.SetRenderer(static () =&gt; new ExcelRenderer());
+SpreadsheetDocument document = SpreadsheetManager.CreateDocument();
+</code></pre>
+<p>若是 DI 專案，則可直接註冊 <code>ISpreadsheetRenderer</code>，並在使用處建立 <code>SpreadsheetDocument</code>：</p>
+<pre><code class="lang-csharp">using CloudyWing.SpreadsheetExporter;
+using CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
+using Microsoft.Extensions.DependencyInjection;
+
+ServiceCollection services = new();
+services.AddSingleton&lt;ISpreadsheetRenderer&gt;(_ =&gt; new ExcelRenderer());
+
+ServiceProvider serviceProvider = services.BuildServiceProvider();
+ISpreadsheetRenderer renderer = serviceProvider.GetRequiredService&lt;ISpreadsheetRenderer&gt;();
+
+SpreadsheetDocument document = new(renderer);
+</code></pre>
+<h3 id="工作表層級設定調整">工作表層級設定調整</h3>
+<p><code>FreezePanes</code> 與 <code>IsAutoFilterEnabled</code> 在 v3 屬於 <code>SheetDefinition</code> 的設定，不再掛在 <code>RecordSetTemplate</code>。</p>
+<pre><code class="lang-csharp">SheetDefinition sheet = document.CreateSheet(&quot;Orders&quot;);
+sheet
+    .SetFreezePanes(0, 1)
+    .SetAutoFilterEnabled();
+</code></pre>
+<h3 id="recordset-階層欄位調整">RecordSet 階層欄位調整</h3>
+<p><code>RecordSetColumnCollection&lt;T&gt;</code> 移除了 <code>AddChildToLastColumn(...)</code> 系列多載，改為先取得最後一個欄位，再對其 <code>ChildColumns</code> 操作。</p>
+<pre><code class="lang-csharp">template.Columns
+    .Add(&quot;Order Info&quot;)
+    .GetLastColumn().ChildColumns
+        .Add(&quot;Order ID&quot;, static x =&gt; x.OrderId)
+        .Add(&quot;Customer&quot;, static x =&gt; x.Customer);
+</code></pre>
+<h3 id="cell-generator-型別調整">Cell Generator 型別調整</h3>
+<p><code>Cell</code> 上的 generator 屬性型別已從 <code>Func&lt;int, int, T&gt;</code> 改為 <code>CellGenerator&lt;T&gt;</code>。</p>
+<p>多數直接寫 lambda 的情境通常不需要改寫，但若有明確宣告舊 delegate 型別，請一併更新。</p>
+<h2 id="相關文件">相關文件</h2>
+<ul>
+<li><a href="getting-started.html">入門指南</a></li>
+<li><a href="spreadsheet-document.html">SpreadsheetDocument（文件）</a></li>
+<li><a href="sheet-definition.html">SheetDefinition（工作表）</a></li>
+<li><a href="templates.html">Templates（範本）</a></li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/CloudyWing/SpreadsheetExporter/blob/main/docs/articles/migration-notes.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
