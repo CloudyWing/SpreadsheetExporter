@@ -11,12 +11,27 @@ namespace CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
 /// <summary>
 /// Renders spreadsheet data to Excel (.xlsx) format using ClosedXML.
 /// </summary>
-public class ExcelRenderer : ISpreadsheetRenderer {
+public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
+    private static readonly RendererCapabilities excelCapabilities = new() {
+        SupportsStyles = true,
+        SupportsMergedCells = true,
+        SupportsFormulas = true,
+        SupportsDataValidation = true,
+        SupportsFreezePanes = true,
+        SupportsAutoFilter = true,
+        SupportsMultipleSheets = true,
+        SupportsWorksheetProtection = true,
+        SupportsPageSettings = true
+    };
+
     /// <inheritdoc/>
     public string ContentType => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
     /// <inheritdoc/>
     public string FileNameExtension => ".xlsx";
+
+    /// <inheritdoc/>
+    public RendererCapabilities Capabilities => excelCapabilities;
 
     /// <inheritdoc/>
     public byte[] Render(IEnumerable<SheetLayout> contexts) {

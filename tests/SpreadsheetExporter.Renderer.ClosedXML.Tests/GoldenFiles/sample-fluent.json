@@ -1,0 +1,3891 @@
+{
+  "DefaultFont": {
+    "Name": "Calibri",
+    "Size": 11,
+    "ColorArgb": "#FF000000",
+    "Bold": false,
+    "Italic": false,
+    "Underline": "None",
+    "Strikeout": false
+  },
+  "Worksheets": [
+    {
+      "Name": "Overview",
+      "DefaultRowHeight": 20,
+      "IsProtected": false,
+      "PageOrientation": "Portrait",
+      "PaperSize": "A4Paper",
+      "FreezePanes": {
+        "Row": 0,
+        "Column": 0
+      },
+      "AutoFilterRange": null,
+      "Columns": [
+        {
+          "Index": 1,
+          "Width": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 2,
+          "Width": 30,
+          "IsHidden": false
+        },
+        {
+          "Index": 3,
+          "Width": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 4,
+          "Width": 30,
+          "IsHidden": false
+        }
+      ],
+      "Rows": [
+        {
+          "Index": 1,
+          "Height": 28,
+          "IsHidden": false
+        },
+        {
+          "Index": 2,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 3,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 4,
+          "Height": 36,
+          "IsHidden": false
+        }
+      ],
+      "MergedRanges": [
+        "$A$1:$D$1",
+        "$B$4:$D$4"
+      ],
+      "Cells": [
+        {
+          "Address": "$A$1",
+          "Value": "SpreadsheetExporter ClosedXML \u2014 Feature Verification",
+          "Formula": null,
+          "MergedRange": "$A$1:$D$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FF1F4E79",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 14,
+              "ColorArgb": "#FFFFFFFF",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$D$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FF1F4E79",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 14,
+              "ColorArgb": "#FFFFFFFF",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$D$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FF1F4E79",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 14,
+              "ColorArgb": "#FFFFFFFF",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$D$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FF1F4E79",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 14,
+              "ColorArgb": "#FFFFFFFF",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$2",
+          "Value": "Generated",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FFDDEBF7",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$2",
+          "Value": "2026-05-14 10:30:00 \u002B08:00",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$2",
+          "Value": "Renderer",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FFDDEBF7",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$2",
+          "Value": "ClosedXML",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$3",
+          "Value": "Template Source",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FFDDEBF7",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$3",
+          "Value": "Fluent API",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$3",
+          "Value": "Status",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FFDDEBF7",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$3",
+          "Value": "Ready",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FFE2EFDA",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "Ranges": [
+              "$D$3:$D$3"
+            ],
+            "AllowedValues": "List",
+            "Operator": "Between",
+            "InCellDropdown": true,
+            "IgnoreBlanks": true,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "",
+            "ErrorMessage": "",
+            "ShowInputMessage": true,
+            "InputTitle": "Workbook status",
+            "InputMessage": "Choose one of the supported workflow states.",
+            "MinValue": "\u0022Draft,Ready,Archived\u0022",
+            "MaxValue": ""
+          }
+        },
+        {
+          "Address": "$A$4",
+          "Value": "Notes",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FFDDEBF7",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$4",
+          "Value": "This workbook verifies: GridTemplate (merge, style, validation), RecordSetTemplate (hierarchy, freeze, autofilter, formula, validation), DataTableTemplate (auto-columns, custom columns, style generators), MergedTemplate (header \u002B data combined).",
+          "Formula": null,
+          "MergedRange": "$B$4:$D$4",
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": true,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$4",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$B$4:$D$4",
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": true,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$4",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$B$4:$D$4",
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": true,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        }
+      ]
+    },
+    {
+      "Name": "Orders",
+      "DefaultRowHeight": 20,
+      "IsProtected": false,
+      "PageOrientation": "Landscape",
+      "PaperSize": "A4Paper",
+      "FreezePanes": {
+        "Row": 2,
+        "Column": 0
+      },
+      "AutoFilterRange": "$A$1:$F$8",
+      "Columns": [
+        {
+          "Index": 1,
+          "Width": 12,
+          "IsHidden": false
+        },
+        {
+          "Index": 2,
+          "Width": 22,
+          "IsHidden": false
+        },
+        {
+          "Index": 3,
+          "Width": 14,
+          "IsHidden": false
+        },
+        {
+          "Index": 4,
+          "Width": 16,
+          "IsHidden": false
+        },
+        {
+          "Index": 5,
+          "Width": 16,
+          "IsHidden": false
+        },
+        {
+          "Index": 6,
+          "Width": 16,
+          "IsHidden": false
+        }
+      ],
+      "Rows": [
+        {
+          "Index": 1,
+          "Height": 22,
+          "IsHidden": false
+        },
+        {
+          "Index": 2,
+          "Height": 22,
+          "IsHidden": false
+        },
+        {
+          "Index": 3,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 4,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 5,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 6,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 7,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 8,
+          "Height": 20,
+          "IsHidden": false
+        }
+      ],
+      "MergedRanges": [
+        "$A$1:$C$1",
+        "$D$1:$F$1"
+      ],
+      "Cells": [
+        {
+          "Address": "$A$1",
+          "Value": "Order Info",
+          "Formula": null,
+          "MergedRange": "$A$1:$C$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$C$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$C$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$1",
+          "Value": "Financial",
+          "Formula": null,
+          "MergedRange": "$D$1:$F$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$D$1:$F$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$F$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$D$1:$F$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$2",
+          "Value": "Order ID",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$2",
+          "Value": "Customer",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$2",
+          "Value": "Region",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$2",
+          "Value": "Amount",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$2",
+          "Value": "Margin",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$F$2",
+          "Value": "Qty",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$3",
+          "Value": "1001",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$3",
+          "Value": "Northwind",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$3",
+          "Value": "North",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "Ranges": [
+              "$C$3:$C$8"
+            ],
+            "AllowedValues": "List",
+            "Operator": "Between",
+            "InCellDropdown": true,
+            "IgnoreBlanks": true,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "Unsupported region",
+            "ErrorMessage": "Region must be one of the configured sales territories.",
+            "ShowInputMessage": false,
+            "InputTitle": "",
+            "InputMessage": "",
+            "MinValue": "\u0022North,South,East,West\u0022",
+            "MaxValue": ""
+          }
+        },
+        {
+          "Address": "$D$3",
+          "Value": "1250.4",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$3",
+          "Value": null,
+          "Formula": "E5*0.35",
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$F$3",
+          "Value": "8",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "Ranges": [
+              "$F$3:$F$8"
+            ],
+            "AllowedValues": "WholeNumber",
+            "Operator": "GreaterThan",
+            "InCellDropdown": true,
+            "IgnoreBlanks": true,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "Invalid quantity",
+            "ErrorMessage": "Quantity must be a positive integer.",
+            "ShowInputMessage": false,
+            "InputTitle": "",
+            "InputMessage": "",
+            "MinValue": "0",
+            "MaxValue": ""
+          }
+        },
+        {
+          "Address": "$A$4",
+          "Value": "1002",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$4",
+          "Value": "Adventure Works",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$4",
+          "Value": "West",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "Ranges": [
+              "$C$3:$C$8"
+            ],
+            "AllowedValues": "List",
+            "Operator": "Between",
+            "InCellDropdown": true,
+            "IgnoreBlanks": true,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "Unsupported region",
+            "ErrorMessage": "Region must be one of the configured sales territories.",
+            "ShowInputMessage": false,
+            "InputTitle": "",
+            "InputMessage": "",
+            "MinValue": "\u0022North,South,East,West\u0022",
+            "MaxValue": ""
+          }
+        },
+        {
+          "Address": "$D$4",
+          "Value": "980",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$4",
+          "Value": null,
+          "Formula": "E6*0.35",
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$F$4",
+          "Value": "5",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "Ranges": [
+              "$F$3:$F$8"
+            ],
+            "AllowedValues": "WholeNumber",
+            "Operator": "GreaterThan",
+            "InCellDropdown": true,
+            "IgnoreBlanks": true,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "Invalid quantity",
+            "ErrorMessage": "Quantity must be a positive integer.",
+            "ShowInputMessage": false,
+            "InputTitle": "",
+            "InputMessage": "",
+            "MinValue": "0",
+            "MaxValue": ""
+          }
+        },
+        {
+          "Address": "$A$5",
+          "Value": "1003",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$5",
+          "Value": "Tailspin Toys",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$5",
+          "Value": "South",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "Ranges": [
+              "$C$3:$C$8"
+            ],
+            "AllowedValues": "List",
+            "Operator": "Between",
+            "InCellDropdown": true,
+            "IgnoreBlanks": true,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "Unsupported region",
+            "ErrorMessage": "Region must be one of the configured sales territories.",
+            "ShowInputMessage": false,
+            "InputTitle": "",
+            "InputMessage": "",
+            "MinValue": "\u0022North,South,East,West\u0022",
+            "MaxValue": ""
+          }
+        },
+        {
+          "Address": "$D$5",
+          "Value": "1640.75",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$5",
+          "Value": null,
+          "Formula": "E7*0.35",
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$F$5",
+          "Value": "12",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "Ranges": [
+              "$F$3:$F$8"
+            ],
+            "AllowedValues": "WholeNumber",
+            "Operator": "GreaterThan",
+            "InCellDropdown": true,
+            "IgnoreBlanks": true,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "Invalid quantity",
+            "ErrorMessage": "Quantity must be a positive integer.",
+            "ShowInputMessage": false,
+            "InputTitle": "",
+            "InputMessage": "",
+            "MinValue": "0",
+            "MaxValue": ""
+          }
+        },
+        {
+          "Address": "$A$6",
+          "Value": "1004",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$6",
+          "Value": "Litware",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$6",
+          "Value": "East",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "Ranges": [
+              "$C$3:$C$8"
+            ],
+            "AllowedValues": "List",
+            "Operator": "Between",
+            "InCellDropdown": true,
+            "IgnoreBlanks": true,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "Unsupported region",
+            "ErrorMessage": "Region must be one of the configured sales territories.",
+            "ShowInputMessage": false,
+            "InputTitle": "",
+            "InputMessage": "",
+            "MinValue": "\u0022North,South,East,West\u0022",
+            "MaxValue": ""
+          }
+        },
+        {
+          "Address": "$D$6",
+          "Value": "725.2",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$6",
+          "Value": null,
+          "Formula": "E8*0.35",
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$F$6",
+          "Value": "3",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "Ranges": [
+              "$F$3:$F$8"
+            ],
+            "AllowedValues": "WholeNumber",
+            "Operator": "GreaterThan",
+            "InCellDropdown": true,
+            "IgnoreBlanks": true,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "Invalid quantity",
+            "ErrorMessage": "Quantity must be a positive integer.",
+            "ShowInputMessage": false,
+            "InputTitle": "",
+            "InputMessage": "",
+            "MinValue": "0",
+            "MaxValue": ""
+          }
+        },
+        {
+          "Address": "$A$7",
+          "Value": "1005",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$7",
+          "Value": "Contoso",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$7",
+          "Value": "North",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "Ranges": [
+              "$C$3:$C$8"
+            ],
+            "AllowedValues": "List",
+            "Operator": "Between",
+            "InCellDropdown": true,
+            "IgnoreBlanks": true,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "Unsupported region",
+            "ErrorMessage": "Region must be one of the configured sales territories.",
+            "ShowInputMessage": false,
+            "InputTitle": "",
+            "InputMessage": "",
+            "MinValue": "\u0022North,South,East,West\u0022",
+            "MaxValue": ""
+          }
+        },
+        {
+          "Address": "$D$7",
+          "Value": "2100",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$7",
+          "Value": null,
+          "Formula": "E9*0.35",
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$F$7",
+          "Value": "7",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "Ranges": [
+              "$F$3:$F$8"
+            ],
+            "AllowedValues": "WholeNumber",
+            "Operator": "GreaterThan",
+            "InCellDropdown": true,
+            "IgnoreBlanks": true,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "Invalid quantity",
+            "ErrorMessage": "Quantity must be a positive integer.",
+            "ShowInputMessage": false,
+            "InputTitle": "",
+            "InputMessage": "",
+            "MinValue": "0",
+            "MaxValue": ""
+          }
+        },
+        {
+          "Address": "$A$8",
+          "Value": "1006",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$8",
+          "Value": "Fabrikam",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$8",
+          "Value": "West",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "Ranges": [
+              "$C$3:$C$8"
+            ],
+            "AllowedValues": "List",
+            "Operator": "Between",
+            "InCellDropdown": true,
+            "IgnoreBlanks": true,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "Unsupported region",
+            "ErrorMessage": "Region must be one of the configured sales territories.",
+            "ShowInputMessage": false,
+            "InputTitle": "",
+            "InputMessage": "",
+            "MinValue": "\u0022North,South,East,West\u0022",
+            "MaxValue": ""
+          }
+        },
+        {
+          "Address": "$D$8",
+          "Value": "430.5",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$8",
+          "Value": null,
+          "Formula": "E10*0.35",
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$F$8",
+          "Value": "15",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": {
+            "Ranges": [
+              "$F$3:$F$8"
+            ],
+            "AllowedValues": "WholeNumber",
+            "Operator": "GreaterThan",
+            "InCellDropdown": true,
+            "IgnoreBlanks": true,
+            "ShowErrorMessage": true,
+            "ErrorTitle": "Invalid quantity",
+            "ErrorMessage": "Quantity must be a positive integer.",
+            "ShowInputMessage": false,
+            "InputTitle": "",
+            "InputMessage": "",
+            "MinValue": "0",
+            "MaxValue": ""
+          }
+        }
+      ]
+    },
+    {
+      "Name": "Products",
+      "DefaultRowHeight": 20,
+      "IsProtected": false,
+      "PageOrientation": "Portrait",
+      "PaperSize": "A4Paper",
+      "FreezePanes": {
+        "Row": 0,
+        "Column": 0
+      },
+      "AutoFilterRange": null,
+      "Columns": [
+        {
+          "Index": 1,
+          "Width": 10,
+          "IsHidden": false
+        },
+        {
+          "Index": 2,
+          "Width": 28,
+          "IsHidden": false
+        },
+        {
+          "Index": 3,
+          "Width": 16,
+          "IsHidden": false
+        },
+        {
+          "Index": 4,
+          "Width": 14,
+          "IsHidden": false
+        },
+        {
+          "Index": 5,
+          "Width": 12,
+          "IsHidden": false
+        }
+      ],
+      "Rows": [
+        {
+          "Index": 1,
+          "Height": 28,
+          "IsHidden": false
+        },
+        {
+          "Index": 2,
+          "Height": 22,
+          "IsHidden": false
+        },
+        {
+          "Index": 3,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 4,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 5,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 6,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 7,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 8,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 9,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 10,
+          "Height": 20,
+          "IsHidden": false
+        }
+      ],
+      "MergedRanges": [
+        "$A$1:$E$1"
+      ],
+      "Cells": [
+        {
+          "Address": "$A$1",
+          "Value": "Product Inventory \u2014 DataTableTemplate Demo",
+          "Formula": null,
+          "MergedRange": "$A$1:$E$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FF548235",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 12,
+              "ColorArgb": "#FFFFFFFF",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$E$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FF548235",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 12,
+              "ColorArgb": "#FFFFFFFF",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$E$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FF548235",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 12,
+              "ColorArgb": "#FFFFFFFF",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$E$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FF548235",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 12,
+              "ColorArgb": "#FFFFFFFF",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$E$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FF548235",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 12,
+              "ColorArgb": "#FFFFFFFF",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$2",
+          "Value": "ID",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "None",
+              "Right": "None",
+              "Bottom": "None",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$2",
+          "Value": "Product Name",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "None",
+              "Right": "None",
+              "Bottom": "None",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$2",
+          "Value": "Category",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "None",
+              "Right": "None",
+              "Bottom": "None",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$2",
+          "Value": "Unit Price",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "None",
+              "Right": "None",
+              "Bottom": "None",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$2",
+          "Value": "Stock",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "None",
+              "Right": "None",
+              "Bottom": "None",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$3",
+          "Value": "1",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$3",
+          "Value": "Laptop Pro 15",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$3",
+          "Value": "Computers",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$3",
+          "Value": "1299",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$3",
+          "Value": "24",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$4",
+          "Value": "2",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$4",
+          "Value": "Wireless Mouse",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$4",
+          "Value": "Accessories",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$4",
+          "Value": "29.99",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$4",
+          "Value": "5",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FFFFEB9C",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$5",
+          "Value": "3",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$5",
+          "Value": "Mechanical Keyboard",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$5",
+          "Value": "Accessories",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$5",
+          "Value": "89",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$5",
+          "Value": "8",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FFFFEB9C",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$6",
+          "Value": "4",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$6",
+          "Value": "4K Monitor 27\u0022",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$6",
+          "Value": "Displays",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$6",
+          "Value": "549",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$6",
+          "Value": "3",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FFFFEB9C",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$7",
+          "Value": "5",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$7",
+          "Value": "USB-C Hub",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$7",
+          "Value": "Accessories",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$7",
+          "Value": "49.99",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$7",
+          "Value": "42",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$8",
+          "Value": "6",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$8",
+          "Value": "SSD 1TB",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$8",
+          "Value": "Storage",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$8",
+          "Value": "119",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$8",
+          "Value": "17",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$9",
+          "Value": "7",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$9",
+          "Value": "Webcam HD",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$9",
+          "Value": "Peripherals",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$9",
+          "Value": "79",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$9",
+          "Value": "9",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FFFFEB9C",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$10",
+          "Value": "8",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$10",
+          "Value": "Desk Lamp LED",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$10",
+          "Value": "Furniture",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$10",
+          "Value": "39.99",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "\u65B0\u7D30\u660E\u9AD4",
+              "Size": 10,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$10",
+          "Value": "2",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Center",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#FFFFEB9C",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        }
+      ]
+    }
+  ]
+}

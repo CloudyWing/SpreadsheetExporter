@@ -137,6 +137,7 @@ dotnet run -c Release --project .\benchmarks\SpreadsheetExporter.Benchmarks -- -
 - [SheetDefinition](./docs/articles/sheet-definition.md)
 - [Templates](./docs/articles/templates.md)
 - [自訂樣式](./docs/articles/customization.md)
+- [JSON Schema](./docs/schemas/spreadsheet-exporter.schema.json)
 
 ## License
 

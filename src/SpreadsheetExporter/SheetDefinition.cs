@@ -77,6 +77,11 @@ public class SheetDefinition {
     public IDictionary<string, object?> Metadata { get; } = new Dictionary<string, object?>();
 
     /// <summary>
+    /// Gets the named styles registered for this sheet.
+    /// </summary>
+    public SpreadsheetStyleRegistry Styles { get; private set; } = new();
+
+    /// <summary>
     /// Sets the name of the sheet.
     /// </summary>
     /// <param name="sheetName">The sheet name.</param>
@@ -135,6 +140,18 @@ public class SheetDefinition {
     public SheetDefinition ConfigurePageSettings(Action<PageSettings> configure) {
         ArgumentNullException.ThrowIfNull(configure);
         configure(PageSettings);
+        return this;
+    }
+
+    /// <summary>
+    /// Uses the specified named styles for this sheet.
+    /// </summary>
+    /// <param name="styles">The named styles.</param>
+    /// <returns>The current <see cref="SheetDefinition"/> instance.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="styles"/> is <see langword="null"/>.</exception>
+    public SheetDefinition UseStyles(SpreadsheetStyleRegistry styles) {
+        ArgumentNullException.ThrowIfNull(styles);
+        Styles = styles;
         return this;
     }
 

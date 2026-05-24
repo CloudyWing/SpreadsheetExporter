@@ -33,6 +33,7 @@ SpreadsheetDocument document = new SpreadsheetDocument(renderer);
 | --- | --- |
 | `DefaultFont` | 套用至整份文件的預設字型；`null` 代表使用 renderer 預設值 |
 | `DefaultSheetName` | 自動產生工作表名稱時使用的前綴（預設值：「工作表」） |
+| `Styles` | 文件層級 named styles，供 JSON template 以 style name 引用 |
 | `ContentType` | 匯出格式的 MIME 類型，來自 renderer |
 | `FileNameExtension` | 匯出格式的副檔名（含前置點），來自 renderer |
 
@@ -40,6 +41,18 @@ SpreadsheetDocument document = new SpreadsheetDocument(renderer);
 SpreadsheetDocument document = SpreadsheetManager.CreateDocument();
 document.DefaultFont = new CellFont("Calibri", 11);
 document.DefaultSheetName = "Sheet";
+```
+
+文件層級 named styles 可透過 `UseStyles(...)` 設定：
+
+```csharp
+SpreadsheetStyleRegistry styles = new();
+styles.Set("Header", new CellStyle(
+    HasBorder: true,
+    Font: new CellFont("Calibri", 12, Style: FontStyles.Bold)
+));
+
+document.UseStyles(styles);
 ```
 
 ## 工作表管理
@@ -73,6 +86,40 @@ if (document.TryGetSheet(0, out SheetDefinition sheet)) {
     // ...
 }
 ```
+
+## 版面診斷
+
+`GetLayoutDiagnostics()` 可在匯出前檢查工作表版面。此方法只回傳診斷結果，不會輸出檔案，也不會改變文件內容。
+
+```csharp
+IReadOnlyList<LayoutDiagnostic> diagnostics = document.GetLayoutDiagnostics();
+
+foreach (LayoutDiagnostic diagnostic in diagnostics) {
+    Console.WriteLine($"{diagnostic.Code}: {diagnostic.Message}");
+}
+```
+
+若希望在發現診斷結果時直接中止流程，可使用 `ValidateLayout()`：
+
+```csharp
+try {
+    document.ValidateLayout();
+    document.ExportFile($"output{document.FileNameExtension}");
+} catch (SpreadsheetLayoutException ex) {
+    foreach (LayoutDiagnostic diagnostic in ex.Diagnostics) {
+        Console.WriteLine($"{diagnostic.Code}: {diagnostic.Message}");
+    }
+}
+```
+
+目前診斷範圍包含：
+
+- 儲存格 range 座標或大小是否有效。
+- 儲存格 range 是否重疊。
+- 同一儲存格是否同時定義 value 與 formula。
+- 欄寬與列高是否使用有效值。
+
+`Export()` 不會自動呼叫 `ValidateLayout()`，因此既有匯出流程維持原本行為。需要 render 前驗證時，由呼叫端明確呼叫診斷 API。
 
 ## 匯出
 
@@ -122,7 +169,21 @@ SpreadsheetDocument document = SpreadsheetDocument.FromJson(json);
 document.ExportFile($"output{document.FileNameExtension}");
 ```
 
-JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 template 類型：
+若要讓 JSON template 引用程式碼中建立的文件層級 named styles，可傳入 `SpreadsheetStyleRegistry`：
+
+```csharp
+SpreadsheetStyleRegistry styles = new();
+styles.Set("Header", new CellStyle(
+    HasBorder: true,
+    Font: new CellFont("Calibri", 12, Style: FontStyles.Bold)
+));
+
+SpreadsheetDocument document = SpreadsheetDocument.FromJson(json, styles);
+```
+
+JSON 格式為工作表陣列，目前支援 `Grid`、`RecordSet`、`DataTable` 與 `Merged` 四種 template 類型：
+
+JSON Schema 可參考 [`spreadsheet-exporter.schema.json`](../schemas/spreadsheet-exporter.schema.json)。因為 JSON root 是工作表陣列，不建議把 `$schema` 寫入同一份 template；建議在編輯器設定中將該 schema 綁定到 template 檔案。
 
 ```json
 [
@@ -162,6 +223,7 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
 | `ColumnWidths` | `object` / `array` | 欄寬設定，可用索引物件或 `{ Index, Width }` 陣列 |
 | `PageSettings` | `object` | 列印設定，目前支援 `PageOrientation` 與 `PaperSize` |
 | `Metadata` | `object` | 附加自訂資料，供 renderer 或擴充邏輯讀取 |
+| `Styles` | `object` | 工作表層級 named styles，供 template 以 style name 引用 |
 | `Templates` | `array` | 工作表上的 template 定義 |
 
 `FreezePanes` 範例：
@@ -207,7 +269,9 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
 | `Rows[].Cells[].Formula` | `string` | 公式字串 |
 | `Rows[].Cells[].ColumnSpan` | `number` | 欄合併數，預設 `1` |
 | `Rows[].Cells[].RowSpan` | `number` | 列合併數，預設 `1` |
+| `Rows[].Cells[].StyleName` | `string` | named style 名稱 |
 | `Rows[].Cells[].Style` | `object` | 儲存格樣式 |
+| `Rows[].Cells[].DataValidation` | `object` | 儲存格資料驗證 |
 
 `Grid` 的 `Value` 與 `Formula` 只能擇一設定。
 
@@ -226,11 +290,14 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
 | 欄位 | 型別 | 說明 |
 | --- | --- | --- |
 | `HeaderText` | `string` | 欄位標題 |
+| `HeaderStyleName` | `string` | 標題 named style 名稱 |
 | `HeaderStyle` | `object` | 標題樣式 |
+| `FieldStyleName` | `string` | 資料儲存格 named style 名稱 |
 | `FieldStyle` | `object` | 資料儲存格樣式 |
 | `FieldKey` | `string` | 從 `Records[]` 取值的欄位名稱 |
 | `Value` | `any` | 固定值 |
 | `Formula` | `string` | 固定公式 |
+| `DataValidation` | `object` | 資料儲存格驗證 |
 | `Children` | `array` | 子欄位，建立多層標題 |
 
 `RecordSet` 欄位的 `FieldKey`、`Value`、`Formula` 只能擇一設定。
@@ -244,9 +311,102 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
 }
 ```
 
+### DataTable template 支援欄位
+
+| 欄位 | 型別 | 說明 |
+| --- | --- | --- |
+| `Type` | `string` | 固定為 `DataTable` |
+| `HeaderHeight` | `number` | 標題列高度 |
+| `RecordHeight` | `number` | 資料列高度 |
+| `Columns` | `array` | 欄位定義；省略時會依 `Records` 的物件鍵值推斷欄位 |
+| `Records` | `array` | 資料列；每筆記錄必須是 JSON object |
+
+`Columns[]` 支援欄位：
+
+| 欄位 | 型別 | 說明 |
+| --- | --- | --- |
+| `ColumnName` | `string` | 對應 `Records[]` 的欄位名稱 |
+| `HeaderText` | `string` / `null` | 欄位標題；省略時使用 `ColumnName` |
+| `HeaderStyleName` | `string` | 標題 named style 名稱 |
+| `HeaderStyle` | `object` | 標題樣式 |
+| `FieldStyleName` | `string` | 資料儲存格 named style 名稱 |
+| `FieldStyle` | `object` | 資料儲存格樣式 |
+| `Value` | `any` | 固定值 |
+| `Formula` | `string` / `null` | 固定公式 |
+| `DataValidation` | `object` | 資料儲存格驗證 |
+
+`DataTable` 欄位的 `Value` 與 `Formula` 只能擇一設定。
+
+當 `Columns` 省略時，欄位順序依 `Records` 內第一次出現的鍵值順序決定。記錄缺少欄位時，該儲存格值為 `null`。
+
+### Merged template 支援欄位
+
+| 欄位 | 型別 | 說明 |
+| --- | --- | --- |
+| `Type` | `string` | 固定為 `Merged` |
+| `Templates` | `array` | 子 template 定義，支援所有已註冊的 JSON template 型別 |
+
+`Merged` 會依子 template 順序垂直堆疊版面，行為與程式碼中的 `MergedTemplate` 一致。
+
+### DataValidation 支援欄位
+
+`Grid` 的 `Rows[].Cells[].DataValidation`、`RecordSet` 的 `Columns[].DataValidation` 與 `DataTable` 的 `Columns[].DataValidation` 使用相同欄位：
+
+| 欄位 | 型別 | 說明 |
+| --- | --- | --- |
+| `ValidationType` | `string` / `number` | 驗證類型，可用 `List`、`Integer`、`Decimal`、`Date`、`Time`、`TextLength`、`Custom` |
+| `Operator` | `string` / `number` / `null` | 比較運算子，可用 `Between`、`NotBetween`、`Equal`、`NotEqual`、`GreaterThan`、`LessThan`、`GreaterThanOrEqual`、`LessThanOrEqual` |
+| `Value1` | `any` | 第一個比較值 |
+| `Value2` | `any` | 第二個比較值 |
+| `ListItems` | `array` / `null` | 清單驗證的可選值，項目必須是字串 |
+| `Formula` | `string` / `null` | 自訂驗證公式，或數值 / 日期 / 時間驗證的公式來源 |
+| `IsDropdownShown` | `boolean` | 清單驗證是否顯示下拉選單 |
+| `IsBlankAllowed` | `boolean` | 是否允許空白值 |
+| `ErrorTitle` | `string` / `null` | 驗證錯誤標題 |
+| `ErrorMessage` | `string` / `null` | 驗證錯誤訊息 |
+| `IsErrorAlertShown` | `boolean` | 是否顯示錯誤提示 |
+| `PromptTitle` | `string` / `null` | 輸入提示標題 |
+| `PromptMessage` | `string` / `null` | 輸入提示訊息 |
+| `IsInputPromptShown` | `boolean` | 選取儲存格時是否顯示輸入提示 |
+
+未設定 `ValidationType` 時，使用 `DataValidation` 的預設驗證類型 `List`。
+
 ### Style 與 Font 支援欄位
 
-`Grid` 的 `Style`，以及 `RecordSet` 的 `HeaderStyle`、`FieldStyle`，目前支援以下欄位：
+`Styles` 可在文件與工作表層級宣告 named styles。文件層級 styles 透過 `SpreadsheetDocument.FromJson(json, styles)` 或 `document.UseStyles(styles)` 提供；工作表層級 styles 則在 JSON 的 `Styles` 欄位宣告。
+
+template 使用 `StyleName`、`HeaderStyleName` 或 `FieldStyleName` 引用時，會先找工作表層級 style，再找文件層級 style。找到 named style 後，inline style 欄位只覆寫 JSON 中有明確宣告的屬性。例如 inline `Font.Style` 只會覆寫字型樣式，不會清除 named style 中的字型名稱、大小或顏色。
+
+```json
+{
+  "Styles": {
+    "Header": {
+      "HasBorder": true,
+      "Font": { "Style": "Bold" }
+    }
+  },
+  "Templates": [
+    {
+      "Type": "Grid",
+      "Rows": [
+        {
+          "Cells": [
+            {
+              "Value": "Title",
+              "StyleName": "Header",
+              "Style": {
+                "HorizontalAlignment": "Center"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+`Grid` 的 `Style`、`RecordSet` 的 `HeaderStyle` 與 `FieldStyle`，以及 `DataTable` 的 `HeaderStyle` 與 `FieldStyle` 目前支援以下欄位：
 
 | 欄位 | 型別 | 說明 |
 | --- | --- | --- |
@@ -341,6 +501,13 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
             "FieldStyle": {
               "HorizontalAlignment": "Right",
               "DataFormat": "#,##0.00"
+            },
+            "DataValidation": {
+              "ValidationType": "Decimal",
+              "Operator": "GreaterThanOrEqual",
+              "Value1": 0,
+              "ErrorTitle": "Invalid amount",
+              "ErrorMessage": "Amount must be greater than or equal to zero."
             }
           }
         ],
@@ -368,11 +535,18 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
 
 ### 目前未支援的 JSON 功能
 
-- `DataTableTemplate`。
-- `MergedTemplate`。
-- Grid / RecordSet 的 `DataValidation`。
 - 需要以程式碼動態計算的 generator 邏輯。
 - 自訂 template 型別，除非先自行註冊對應的 JSON parser。
+
+### JSON 錯誤診斷
+
+`SpreadsheetDocument.FromJson(...)` 解析失敗時，內建 parser 會在錯誤訊息中附上診斷代碼與 JSON path。JSON root 是工作表陣列，因此第一張工作表的路徑會從 `$[0]` 開始。
+
+```text
+SE-JSON-001: $[0].Templates[0].Rows[0].Cells[0].ColumnSpan must be a 32-bit integer.
+SE-JSON-002: $[0].Templates[0].Type is required.
+SE-JSON-003: $[0].Templates[0].Rows[0].Cells[0] cannot specify both 'Value' and 'Formula'.
+```
 
 ### 註冊自訂 JSON parser
 
@@ -380,7 +554,9 @@ JSON 格式為工作表陣列，目前支援 `Grid` 與 `RecordSet` 兩種 templ
 
 內建已註冊的型別有：
 
+- `DataTable`
 - `Grid`
+- `Merged`
 - `RecordSet`
 
 若要支援自訂 template，可實作 `ITemplateJsonParser`，再於呼叫 `FromJson(...)` 前註冊：
@@ -436,6 +612,33 @@ public class CustomExcelRenderer : ExcelRenderer {
 }
 
 SpreadsheetManager.SetRenderer(static () => new CustomExcelRenderer());
+```
+
+### Renderer 能力宣告
+
+Renderer 可選擇實作 `ISpreadsheetRendererWithCapabilities`，宣告自身支援的功能。既有只實作 `ISpreadsheetRenderer` 的 renderer 仍可正常使用。
+
+```csharp
+ISpreadsheetRenderer renderer = new ExcelRenderer();
+
+if (renderer is ISpreadsheetRendererWithCapabilities capableRenderer) {
+    RendererCapabilities capabilities = capableRenderer.Capabilities;
+
+    if (capabilities.SupportsMergedCells) {
+        // 可使用合併儲存格相關版面。
+    }
+}
+```
+
+`SpreadsheetDocument.GetRendererCapabilityDiagnostics()` 可檢查文件是否使用 renderer 未宣告支援的能力。
+此方法只在 renderer 實作 `ISpreadsheetRendererWithCapabilities` 時回傳診斷；既有 renderer 未宣告能力時，診斷結果為空集合。
+
+```csharp
+IReadOnlyList<LayoutDiagnostic> diagnostics = document.GetRendererCapabilityDiagnostics();
+
+foreach (LayoutDiagnostic diagnostic in diagnostics) {
+    Console.WriteLine($"{diagnostic.Code}: {diagnostic.Message}");
+}
 ```
 
 ## 相關主題

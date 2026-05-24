@@ -7,7 +7,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Json;
 
 /// <summary>
 /// Manages the registration of <see cref="ITemplateJsonParser"/> instances
-/// used by <see cref="SpreadsheetDocument.FromJson"/>.
+/// used by <see cref="SpreadsheetDocument.FromJson(string)"/>.
 /// </summary>
 public static class JsonTemplateRegistry {
     private static readonly Dictionary<string, ITemplateJsonParser> Parsers
@@ -18,7 +18,8 @@ public static class JsonTemplateRegistry {
     }
 
     /// <summary>
-    /// Registers a parser. If a parser with the same <see cref="ITemplateJsonParser.TypeName"/> already exists, it is replaced.
+    /// Registers a parser. If a parser with the same <see cref="ITemplateJsonParser.TypeName"/>
+    /// already exists, it is replaced.
     /// </summary>
     /// <param name="parser">The parser to register.</param>
     /// <exception cref="ArgumentNullException"><paramref name="parser"/> is <see langword="null"/>.</exception>
@@ -39,17 +40,27 @@ public static class JsonTemplateRegistry {
     /// Registers all built-in parsers. Called automatically on first use.
     /// </summary>
     public static void RegisterBuiltins() {
+        Register(new DataTableTemplateJsonParser());
+        Register(new MergedTemplateJsonParser());
         Register(new RecordSetTemplateJsonParser());
         Register(new GridTemplateJsonParser());
     }
 
     internal static ISheetTemplate Create(string typeName, JsonElement element) {
+        return Create(typeName, element, JsonParseContext.Root);
+    }
+
+    internal static ISheetTemplate Create(string typeName, JsonElement element, JsonParseContext context) {
         if (!Parsers.TryGetValue(typeName, out ITemplateJsonParser? parser)) {
-            throw new NotSupportedException(
+            throw JsonParseExceptionFactory.NotSupported(
+                context.Property("Type"),
                 $"Template type '{typeName}' is not registered in {nameof(JsonTemplateRegistry)}. " +
                 $"Call {nameof(JsonTemplateRegistry)}.{nameof(Register)}() to add a custom parser."
             );
         }
-        return parser.Parse(element);
+
+        return parser is ITemplateJsonParserWithContext contextParser
+            ? contextParser.Parse(element, context)
+            : parser.Parse(element);
     }
 }

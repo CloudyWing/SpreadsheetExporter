@@ -1,0 +1,1767 @@
+{
+  "DefaultFont": {
+    "Name": "Calibri",
+    "Size": 11,
+    "ColorArgb": "#FF000000",
+    "Bold": false,
+    "Italic": false,
+    "Underline": "None",
+    "Strikeout": false
+  },
+  "Worksheets": [
+    {
+      "Name": "Summary",
+      "DefaultRowHeight": 20,
+      "IsProtected": false,
+      "PageOrientation": "Landscape",
+      "PaperSize": "A4Paper",
+      "FreezePanes": {
+        "Row": 3,
+        "Column": 0
+      },
+      "AutoFilterRange": "$A$1:$E$11",
+      "Columns": [
+        {
+          "Index": 1,
+          "Width": 12,
+          "IsHidden": false
+        },
+        {
+          "Index": 2,
+          "Width": 28,
+          "IsHidden": false
+        },
+        {
+          "Index": 3,
+          "Width": 16,
+          "IsHidden": false
+        },
+        {
+          "Index": 4,
+          "Width": 16,
+          "IsHidden": false
+        },
+        {
+          "Index": 5,
+          "Width": 14,
+          "IsHidden": false
+        }
+      ],
+      "Rows": [
+        {
+          "Index": 1,
+          "Height": 28,
+          "IsHidden": false
+        },
+        {
+          "Index": 2,
+          "Height": 22,
+          "IsHidden": false
+        },
+        {
+          "Index": 3,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 4,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 5,
+          "Height": 22,
+          "IsHidden": false
+        },
+        {
+          "Index": 6,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 7,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 8,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 9,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 10,
+          "Height": 20,
+          "IsHidden": false
+        },
+        {
+          "Index": 11,
+          "Height": 20,
+          "IsHidden": false
+        }
+      ],
+      "MergedRanges": [
+        "$A$1:$E$1",
+        "$B$2:$C$2",
+        "$B$3:$C$3",
+        "$B$4:$C$4"
+      ],
+      "Cells": [
+        {
+          "Address": "$A$1",
+          "Value": "Sales Summary \u2014 Generated from SpreadsheetDocument.FromJson",
+          "Formula": null,
+          "MergedRange": "$A$1:$E$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 13,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$E$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 13,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$E$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 13,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$E$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 13,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$1",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$A$1:$E$1",
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 13,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$2",
+          "Value": "Region",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$2",
+          "Value": "Description",
+          "Formula": null,
+          "MergedRange": "$B$2:$C$2",
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$2",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$B$2:$C$2",
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$2",
+          "Value": "Target",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$2",
+          "Value": "Achieved",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$3",
+          "Value": "North",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$3",
+          "Value": "Northwind \u002B Contoso combined",
+          "Formula": null,
+          "MergedRange": "$B$3:$C$3",
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$3",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$B$3:$C$3",
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$3",
+          "Value": "3000",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$3",
+          "Value": "3350.4",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$4",
+          "Value": "West",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$4",
+          "Value": "Adventure Works \u002B Fabrikam",
+          "Formula": null,
+          "MergedRange": "$B$4:$C$4",
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "None",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$4",
+          "Value": "",
+          "Formula": null,
+          "MergedRange": "$B$4:$C$4",
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "None"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$4",
+          "Value": "1500",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$4",
+          "Value": "1410.5",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$5",
+          "Value": "Order ID",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$5",
+          "Value": "Customer",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$5",
+          "Value": "Region",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$5",
+          "Value": "Amount",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$5",
+          "Value": "Qty",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": true,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$6",
+          "Value": "1001",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$6",
+          "Value": "Northwind",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$6",
+          "Value": "North",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$6",
+          "Value": "1250.4",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$6",
+          "Value": "8",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$7",
+          "Value": "1002",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$7",
+          "Value": "Adventure Works",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$7",
+          "Value": "West",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$7",
+          "Value": "980",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$7",
+          "Value": "5",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$8",
+          "Value": "1003",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$8",
+          "Value": "Tailspin Toys",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$8",
+          "Value": "South",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$8",
+          "Value": "1640.75",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$8",
+          "Value": "12",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$9",
+          "Value": "1004",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$9",
+          "Value": "Litware",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$9",
+          "Value": "East",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$9",
+          "Value": "725.2",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$9",
+          "Value": "3",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$10",
+          "Value": "1005",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$10",
+          "Value": "Contoso",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$10",
+          "Value": "North",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$10",
+          "Value": "2100",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$10",
+          "Value": "7",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$A$11",
+          "Value": "1006",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$B$11",
+          "Value": "Fabrikam",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "General",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$C$11",
+          "Value": "West",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Center",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$D$11",
+          "Value": "430.5",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "#,##0.00",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        },
+        {
+          "Address": "$E$11",
+          "Value": "15",
+          "Formula": null,
+          "MergedRange": null,
+          "Style": {
+            "HorizontalAlignment": "Right",
+            "VerticalAlignment": "Top",
+            "WrapText": false,
+            "IsLocked": false,
+            "FillArgb": "#00FFFFFF",
+            "NumberFormat": "",
+            "Border": {
+              "Top": "Thin",
+              "Right": "Thin",
+              "Bottom": "Thin",
+              "Left": "Thin"
+            },
+            "Font": {
+              "Name": "Calibri",
+              "Size": 11,
+              "ColorArgb": "#FF000000",
+              "Bold": false,
+              "Italic": false,
+              "Underline": "None",
+              "Strikeout": false
+            }
+          },
+          "DataValidation": null
+        }
+      ]
+    }
+  ]
+}

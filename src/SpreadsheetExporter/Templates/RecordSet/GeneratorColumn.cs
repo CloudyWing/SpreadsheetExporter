@@ -31,6 +31,12 @@ internal class GeneratorColumn<T> : RecordSetColumnBase<T> {
     /// <value>The field data validation generator.</value>
     public Func<RecordContext<T>, DataValidation?>? FieldDataValidationGenerator { get; set; }
 
+    internal override bool HasFieldValue => FieldValueGenerator is not null;
+
+    internal override bool HasFieldFormula => FieldFormulaGenerator is not null;
+
+    internal override bool HasFieldDataValidation => FieldDataValidationGenerator is not null;
+
     /// <inheritdoc/>
     public override object? GetFieldValue(RecordContext<T> context) {
         return GetInternal(FieldValueGenerator, null, context);

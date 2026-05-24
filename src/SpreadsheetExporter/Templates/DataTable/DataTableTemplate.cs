@@ -97,13 +97,25 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate
                     value = null;
                 }
 
-                yield return new Cell {
-                    ValueGenerator = (cellIndex, rowIdx) => column.FieldValueGenerator?.Invoke(value) ?? value,
-                    CellStyleGenerator = (cellIndex, rowIdx) => column.FieldStyleGenerator?.Invoke(value) ?? SpreadsheetManager.DefaultCellStyles.FieldStyle,
+                Cell cell = new() {
+                    CellStyleGenerator = (cellIndex, rowIdx) => column.FieldStyleGenerator?.Invoke(value)
+                        ?? SpreadsheetManager.DefaultCellStyles.FieldStyle,
                     Point = new Point(colIndex, rowIndex),
-                    Size = new Size(1, 1),
-                    FormulaGenerator = (cellIndex, rowIdx) => column.FieldFormulaGenerator?.Invoke(value)
+                    Size = new Size(1, 1)
                 };
+
+                if (column.FieldFormulaGenerator is not null) {
+                    cell.FormulaGenerator = (cellIndex, rowIdx) => column.FieldFormulaGenerator.Invoke(value);
+                } else {
+                    cell.ValueGenerator = (cellIndex, rowIdx) => column.FieldValueGenerator?.Invoke(value) ?? value;
+                }
+
+                if (column.FieldDataValidationGenerator is not null) {
+                    cell.DataValidationGenerator = (cellIndex, rowIdx) =>
+                        column.FieldDataValidationGenerator.Invoke(value);
+                }
+
+                yield return cell;
             }
             rowIndex++;
         }
@@ -111,7 +123,20 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate
 
     /// <inheritdoc/>
     public TemplateLayout GetLayout() {
+        ValidateColumns();
+
         return new TemplateLayout(GetCells(), RowSpan, GetRowHeights());
+    }
+
+    private void ValidateColumns() {
+        foreach (DataTableColumn column in Columns) {
+            if (column.FieldValueGenerator is not null && column.FieldFormulaGenerator is not null) {
+                throw new InvalidOperationException(
+                    $"Cannot use both FieldValueGenerator and FieldFormulaGenerator on DataTable column '{column.ColumnName}'. "
+                    + "A cell can only have a value or a formula, not both."
+                );
+            }
+        }
     }
 
     private IEnumerable<Cell> GetCells() {

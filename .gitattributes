@@ -1,63 +1,58 @@
-###############################################################################
-# Set default behavior to automatically normalize line endings.
-###############################################################################
-* text=auto
+# 預設所有文字檔使用 LF，二進位檔不轉換
+* text=auto eol=lf
 
-###############################################################################
-# Set default behavior for command prompt diff.
-#
-# This is need for earlier builds of msysgit that does not have it on by
-# default for csharp files.
-# Note: This is only used by command line
-###############################################################################
-#*.cs     diff=csharp
+# Windows 專用腳本維持 CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
 
-###############################################################################
-# Set the merge driver for project and solution files
-#
-# Merging from the command prompt will add diff markers to the files if there
-# are conflicts (Merging from VS is not affected by the settings below, in VS
-# the diff markers are never inserted). Diff markers may cause the following 
-# file extensions to fail to load in VS. An alternative would be to treat
-# these files as binary and thus will always conflict and require user
-# intervention with every merge. To do so, just uncomment the entries below
-###############################################################################
-#*.sln       merge=binary
-#*.csproj    merge=binary
-#*.vbproj    merge=binary
-#*.vcxproj   merge=binary
-#*.vcproj    merge=binary
-#*.dbproj    merge=binary
-#*.fsproj    merge=binary
-#*.lsproj    merge=binary
-#*.wixproj   merge=binary
-#*.modelproj merge=binary
-#*.sqlproj   merge=binary
-#*.wwaproj   merge=binary
+# Unix 腳本與 git hooks 強制 LF
+*.sh text eol=lf
+.githooks/* text eol=lf
 
-###############################################################################
-# behavior for image files
-#
-# image files are treated as binary by default.
-###############################################################################
-#*.jpg   binary
-#*.png   binary
-#*.gif   binary
+# 容器與 CI（Linux 環境，必須 LF）
+Dockerfile text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
 
-###############################################################################
-# diff behavior for common document formats
-# 
-# Convert binary document formats to text before diffing them. This feature
-# is only available from the command line. Turn it on by uncommenting the 
-# entries below.
-###############################################################################
-#*.doc   diff=astextplain
-#*.DOC   diff=astextplain
-#*.docx  diff=astextplain
-#*.DOCX  diff=astextplain
-#*.dot   diff=astextplain
-#*.DOT   diff=astextplain
-#*.pdf   diff=astextplain
-#*.PDF   diff=astextplain
-#*.rtf   diff=astextplain
-#*.RTF   diff=astextplain
+# SVG 是 XML 文字，需要 diff
+*.svg text
+
+# Lock files 不計入語言統計，PR diff 不展開
+package-lock.json -diff linguist-generated
+pnpm-lock.yaml -diff linguist-generated
+yarn.lock -diff linguist-generated
+Pipfile.lock -diff linguist-generated
+poetry.lock -diff linguist-generated
+composer.lock -diff linguist-generated
+Cargo.lock -diff linguist-generated
+
+# 圖片
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.bmp binary
+*.tiff binary
+
+# 字型
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+
+# 文件
+*.pdf binary
+*.docx binary
+*.xlsx binary
+*.pptx binary
+
+# 壓縮與執行檔
+*.zip binary
+*.7z binary
+*.gz binary
+*.tar.gz binary
+*.dll binary
+*.exe binary
+*.so binary

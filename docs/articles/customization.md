@@ -140,6 +140,41 @@ CellStyle customHeader = SpreadsheetManager.DefaultCellStyles.HeaderStyle with {
 template.Columns.Add<string>("客戶", order => order.Customer, headerStyle: customHeader);
 ```
 
+## JSON named styles
+
+若報表結構由 JSON 描述，可用 `SpreadsheetStyleRegistry` 宣告可重複引用的 named styles：
+
+```csharp
+SpreadsheetStyleRegistry styles = new();
+styles.Set("Header", new CellStyle(
+    HasBorder: true,
+    Font: new CellFont("Calibri", 12, Style: FontStyles.Bold)
+));
+
+SpreadsheetDocument document = SpreadsheetDocument.FromJson(json, styles);
+```
+
+JSON template 可用 `StyleName`、`HeaderStyleName` 或 `FieldStyleName` 引用 named style。若同時提供 inline style，inline style 只覆寫有明確宣告的屬性：
+
+```json
+{
+  "Type": "Grid",
+  "Rows": [
+    {
+      "Cells": [
+        {
+          "Value": "Title",
+          "StyleName": "Header",
+          "Style": {
+            "HorizontalAlignment": "Center"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
 ## 相關主題
 
 - [入門指南](getting-started.md) - 了解 SpreadsheetManager 的設定時機
