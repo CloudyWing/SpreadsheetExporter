@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: windows-latest
+
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOTNET_NOLOGO: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Restore
+        run: dotnet restore .\SpreadsheetExporter.slnx
+
+      - name: Build
+        run: dotnet build .\SpreadsheetExporter.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test .\SpreadsheetExporter.slnx --configuration Release --no-build --verbosity normal
+
+  create-release:
+    needs: verify
+    uses: CloudyWing/devops-templates/.github/workflows/reusable-create-release.yml@main
+    with:
+      changelog-path: "CHANGELOG.md"
+
+  publish-nuget:
+    needs: create-release
+    uses: CloudyWing/devops-templates/.github/workflows/reusable-nuget-publish.yml@main
+    with:
+      dotnet-version: |
+        8.0.x
+        10.0.x
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
