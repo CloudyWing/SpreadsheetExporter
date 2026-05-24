@@ -1,5 +1,29 @@
 # Changelog
 
+## v3.1.0 (2026-05-24)
+
+### New Features
+
+- 新增版面診斷與 Renderer 能力宣告，匯出前可檢查版面衝突與 renderer 支援狀態。
+- 支援 JSON DataValidation 設定，可從 FromJson 流程建立資料驗證規則。
+- 支援 JSON DataTable template，可透過 JSON 建立 DataTable 匯出模板。
+- 支援 JSON Merged template，可透過 JSON 建立合併儲存格模板。
+- 新增 JSON path diagnostics，JSON 解析錯誤可回報對應來源路徑。
+- 新增 named style 與 JSON style inheritance，支援共用樣式與樣式繼承。
+- 支援 JSON DataTable column value，可在 DataTable 欄位中指定固定值。
+- 支援 DataTable 資料驗證，可在 DataTable 模板欄位設定驗證規則。
+- 新增 FromJson JSON Schema，提供 JSON 模板格式驗證依據。
+
+### Bug Fixes
+
+- 修正模板欄位集合狀態與 DataTable 公式衝突防護。
+- 補齊 FreezePanes JSON 型別診斷。
+- 修正模板資料格可同時宣告值與公式的問題。
+
+### 文件
+
+- 補充 JSON 解析產生 Excel 章節。
+
 ## v3.0.0 (2026-03-29)
 
 ### New Features
