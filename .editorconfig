@@ -4,7 +4,7 @@ root = true
 # 通用基礎設定
 [*]
 charset = utf-8
-end_of_line = crlf
+end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
@@ -25,17 +25,18 @@ indent_size = 4
 # PowerShell 腳本
 [*.ps1]
 charset = utf-8-bom
+end_of_line = crlf
 indent_style = space
 indent_size = 4
 
 # Excel 與舊平台相容性檔案
 [*.{csv,bat,cmd}]
 charset = utf-8-bom
+end_of_line = crlf
 
 #### .NET / C# 共用規則（適用 C# 和 VB） ####
 
 [*.{cs,vb}]
-end_of_line = crlf
 tab_width = 4
 indent_size = 4
 
@@ -56,7 +57,7 @@ dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
 dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
 
 # 修飾元喜好設定
-dotnet_style_require_accessibility_modifiers = for_non_interface_members:silent
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
 
 # 運算式層級喜好設定
 dotnet_style_coalesce_expression = true:suggestion
@@ -87,7 +88,8 @@ dotnet_code_quality_unused_parameters = all:suggestion
 dotnet_remove_unnecessary_suppression_exclusions = none
 
 # 多行與連續區塊規範
-dotnet_style_allow_multiple_blank_lines_experimental = true:silent
+# 連續空行上限最多一個（與 csharp-style「空行」規範一致）
+dotnet_style_allow_multiple_blank_lines_experimental = false:silent
 dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
 
 # 組合管理 Using
@@ -182,6 +184,21 @@ dotnet_naming_symbols.private_or_internal_field.applicable_accessibilities = int
 ## 排除 const (常數) 和 static
 dotnet_naming_symbols.private_or_internal_field.required_modifiers =
 
+#### 泛型型別參數命名規則 (Type parameters: T 前綴 + PascalCase)
+# T 前綴可由此強制；單一型別用 T、多型別用 TXxx 的語意區分由 csharp-style skill 規範
+dotnet_naming_rule.type_parameters_should_begin_with_t.severity = suggestion
+dotnet_naming_rule.type_parameters_should_begin_with_t.symbols = type_parameter
+dotnet_naming_rule.type_parameters_should_begin_with_t.style = begins_with_t
+
+dotnet_naming_symbols.type_parameter.applicable_kinds = type_parameter
+dotnet_naming_symbols.type_parameter.applicable_accessibilities = *
+dotnet_naming_symbols.type_parameter.required_modifiers =
+
+dotnet_naming_style.begins_with_t.required_prefix = T
+dotnet_naming_style.begins_with_t.required_suffix =
+dotnet_naming_style.begins_with_t.word_separator =
+dotnet_naming_style.begins_with_t.capitalization = pascal_case
+
 #### C# 專屬規則 ####
 
 [*.cs]
@@ -219,16 +236,18 @@ csharp_prefer_static_local_function = true:suggestion
 csharp_preferred_modifier_order = public,private,protected,internal,file,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,required,volatile,async
 
 # 程式碼區塊喜好設定
-csharp_prefer_braces = true:silent
+csharp_prefer_braces = true:suggestion
 csharp_prefer_simple_using_statement = true:suggestion
-csharp_style_namespace_declarations = file_scoped:silent
+csharp_style_namespace_declarations = file_scoped:suggestion
 csharp_style_prefer_method_group_conversion = true:silent
 csharp_style_prefer_primary_constructors = false:silent
 csharp_style_prefer_top_level_statements = true:silent
 
 # 運算式層級喜好設定
-# 集合運算式 [] (全開建議，遇 ToList() 時請開發者自行衡量是否轉換)
-csharp_style_prefer_collection_expression = true:suggestion
+# 集合運算式 []：空集合、陣列字面值等導向 [] (C# 12+)
+dotnet_style_prefer_collection_expression = when_types_loosely_match:suggestion
+# 保留 .ToList() / .ToArray()，不建議改寫成 [.. source]
+dotnet_diagnostic.IDE0305.severity = none
 csharp_prefer_simple_default_expression = true:suggestion
 csharp_style_deconstructed_variable_declaration = true:suggestion
 csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
