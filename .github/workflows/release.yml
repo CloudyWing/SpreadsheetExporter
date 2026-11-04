@@ -1,55 +1,89 @@
 name: Release
 
+# push vX.Y.Z tag 時：驗證 → 建立 GitHub Release → 以 Trusted Publishing 發佈 NuGet。
+# 手動觸發（workflow_dispatch）時只執行 probe：取得 nuget.org 臨時憑證但不 push，
+# 用來在不發版的情況下驗證 Trusted Publishing policy 綁定。
+
 on:
   push:
     tags:
-      - "v*.*.*"
+      - 'v*.*.*'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   verify:
-    if: startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'push'
+    uses: CloudyWing/devops-templates/.github/workflows/reusable-dotnet-ci.yml@v1
+    with:
+      solution: SpreadsheetExporter.slnx
+      dotnet-version: |
+        8.0.x
+        10.0.x
+
+  create-release:
+    needs: verify
+    permissions:
+      contents: write
+    uses: CloudyWing/devops-templates/.github/workflows/reusable-create-release.yml@v1
+
+  # 發佈步驟以 composite action 執行，而非 reusable workflow：nuget.org 的
+  # Trusted Publishing 驗證 OIDC token 的 job_workflow_ref，必須指向本 repo 的 workflow。
+  publish-nuget:
+    needs: create-release
     runs-on: windows-latest
-
+    permissions:
+      id-token: write
+      contents: read
     env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
-      DOTNET_NOLOGO: true
-
+      DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+      DOTNET_NOLOGO: 'true'
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
+        with:
+          # MinVer 依 git tag 計算版號，需要完整歷史
+          fetch-depth: 0
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             8.0.x
             10.0.x
 
-      - name: Restore
-        run: dotnet restore .\SpreadsheetExporter.slnx
+      - name: Pack and publish
+        uses: CloudyWing/devops-templates/.github/actions/nuget-publish@v1
+        with:
+          nuget-user: CloudyWing
+          expected-version: ${{ github.ref_name }}
 
-      - name: Build
-        run: dotnet build .\SpreadsheetExporter.slnx --configuration Release --no-restore
+  probe:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
+      DOTNET_NOLOGO: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
-      - name: Test
-        run: dotnet test .\SpreadsheetExporter.slnx --configuration Release --no-build --verbosity normal
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
 
-  create-release:
-    needs: verify
-    uses: CloudyWing/devops-templates/.github/workflows/reusable-create-release.yml@main
-    with:
-      changelog-path: "CHANGELOG.md"
-
-  publish-nuget:
-    needs: create-release
-    uses: CloudyWing/devops-templates/.github/workflows/reusable-nuget-publish.yml@main
-    with:
-      dotnet-version: |
-        8.0.x
-        10.0.x
-    secrets:
-      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      - name: Verify Trusted Publishing binding
+        uses: CloudyWing/devops-templates/.github/actions/nuget-publish@v1
+        with:
+          nuget-user: CloudyWing
+          dry-run: 'true'
