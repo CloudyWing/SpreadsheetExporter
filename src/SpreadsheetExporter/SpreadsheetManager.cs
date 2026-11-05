@@ -16,7 +16,7 @@ public static class SpreadsheetManager {
     private static readonly object RendererFactoryLock = new();
     private static readonly object CellStyleLock = new();
 #endif
-    private static Func<ISpreadsheetRenderer>? rendererFactory;
+    private static volatile Func<ISpreadsheetRenderer>? rendererFactory;
 
     /// <summary>
     /// Gets or sets the default cell styles configuration.
@@ -65,8 +65,10 @@ public static class SpreadsheetManager {
     /// <returns>A new <see cref="SpreadsheetDocument"/> instance.</returns>
     /// <exception cref="InvalidOperationException">The renderer factory has not been set via <see cref="SetRenderer"/>.</exception>
     public static SpreadsheetDocument CreateDocument() {
-        return rendererFactory is null
+        // 只讀取一次，避免檢查與呼叫之間被其他執行緒替換
+        Func<ISpreadsheetRenderer>? factory = rendererFactory;
+        return factory is null
             ? throw new InvalidOperationException("Renderer factory is not set. Call SetRenderer first.")
-            : new SpreadsheetDocument(rendererFactory());
+            : new SpreadsheetDocument(factory());
     }
 }

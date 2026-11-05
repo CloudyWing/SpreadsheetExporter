@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Text.Json;
 using CloudyWing.SpreadsheetExporter.Templates.Json.Parsers;
 
@@ -9,8 +9,12 @@ namespace CloudyWing.SpreadsheetExporter.Templates.Json;
 /// Manages the registration of <see cref="ITemplateJsonParser"/> instances
 /// used by <see cref="SpreadsheetDocument.FromJson(string)"/>.
 /// </summary>
+/// <remarks>
+/// All members are thread-safe. Parsing that runs concurrently with <see cref="Clear"/> may observe
+/// either the previous or the cleared registrations.
+/// </remarks>
 public static class JsonTemplateRegistry {
-    private static readonly Dictionary<string, ITemplateJsonParser> Parsers
+    private static readonly ConcurrentDictionary<string, ITemplateJsonParser> Parsers
         = new(StringComparer.OrdinalIgnoreCase);
 
     static JsonTemplateRegistry() {

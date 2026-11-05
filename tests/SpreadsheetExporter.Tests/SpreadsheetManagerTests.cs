@@ -105,6 +105,22 @@ internal class SpreadsheetManagerTests {
         });
     }
 
+    [Test]
+    public void CreateDocument_WhileRendererIsReplacedConcurrently_ShouldAlwaysUseRegisteredFactory() {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer("application/a", ".a"));
+        string[] contentTypes = new string[500];
+
+        Parallel.For(0, contentTypes.Length, i => {
+            if (i % 10 == 0) {
+                SpreadsheetManager.SetRenderer(() => new FakeRenderer("application/b", ".b"));
+            }
+
+            contentTypes[i] = SpreadsheetManager.CreateDocument().ContentType;
+        });
+
+        Assert.That(contentTypes, Is.All.AnyOf("application/a", "application/b"));
+    }
+
     private static void ResetRendererFactory() {
         FieldInfo field = typeof(SpreadsheetManager).GetField("rendererFactory", BindingFlags.NonPublic | BindingFlags.Static)!;
         field.SetValue(null, null);
