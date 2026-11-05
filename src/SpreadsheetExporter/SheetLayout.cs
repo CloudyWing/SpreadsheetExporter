@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using CloudyWing.SpreadsheetExporter.Util;
@@ -29,7 +30,7 @@ public class SheetLayout {
         TemplateLayout templateLayout = TemplateLayout.Combine(templateLayouts);
         Cells = templateLayout.Cells;
         RowHeights = templateLayout.RowHeights.AsReadOnly();
-        ColumnWidths = sheet.ColumnWidths.AsReadOnly();
+        ColumnWidths = GetColumnWidths(sheet);
         Password = sheet.Password;
         PageSettings = sheet.PageSettings;
         FreezePanes = sheet.FreezePanes;
@@ -114,6 +115,31 @@ public class SheetLayout {
         return sheet.Templates
             .Select(template => template.GetLayout())
             .ToList();
+    }
+
+    private static IReadOnlyDictionary<int, double> GetColumnWidths(SheetDefinition sheet) {
+        Dictionary<int, double>? templateWidths = null;
+        foreach (ISheetTemplate template in sheet.Templates) {
+            if (template is not IColumnWidthProvider provider) {
+                continue;
+            }
+
+            foreach (KeyValuePair<int, double> pair in provider.GetColumnWidths()) {
+                templateWidths ??= [];
+                templateWidths.TryAdd(pair.Key, pair.Value);
+            }
+        }
+
+        if (templateWidths is null) {
+            return sheet.ColumnWidths.AsReadOnly();
+        }
+
+        // 工作表明確設定的欄寬優先於 template 欄寬
+        foreach (KeyValuePair<int, double> pair in sheet.ColumnWidths) {
+            templateWidths[pair.Key] = pair.Value;
+        }
+
+        return new ReadOnlyDictionary<int, double>(templateWidths);
     }
 
     private static CellRange? GetDefaultAutoFilterRange(

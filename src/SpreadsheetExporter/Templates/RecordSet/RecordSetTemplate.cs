@@ -10,7 +10,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet;
 /// </summary>
 /// <seealso cref="ISheetTemplate" />
 /// <typeparam name="T">The type of the record.</typeparam>
-public class RecordSetTemplate<T> : ISheetTemplate, ITableTemplate {
+public class RecordSetTemplate<T> : ISheetTemplate, ITableTemplate, IColumnWidthProvider {
     private IEnumerable<T> dataSourceField;
 
     /// <summary>
@@ -132,6 +132,20 @@ public class RecordSetTemplate<T> : ISheetTemplate, ITableTemplate {
 
     private IEnumerable<Cell> GetCells() {
         return GetHeaderCells(Columns).Concat(GetRecordCells());
+    }
+
+    IReadOnlyDictionary<int, double> IColumnWidthProvider.GetColumnWidths() {
+        Dictionary<int, double> widths = [];
+        int columnIndex = 0;
+        foreach (RecordSetColumnBase<T> column in Columns.LeafColumns) {
+            if (column.Width.HasValue) {
+                widths[columnIndex] = column.Width.Value;
+            }
+
+            columnIndex += column.ColumnSpan;
+        }
+
+        return widths;
     }
 
     private Dictionary<int, double?> GetRowHeights() {

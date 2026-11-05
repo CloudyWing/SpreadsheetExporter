@@ -191,6 +191,22 @@ template.Columns.Add<decimal>(
 );
 ```
 
+### 欄寬
+
+`Add` 提供帶 `width` 參數的多載，可直接指定欄寬（字元單位），也可使用 `Constants.HiddenColumn` 隱藏欄位或 `Constants.AutoFitColumnWidth` 自動調整：
+
+```csharp
+template.Columns
+    .Add("編號", order => order.Id, 8)
+    .Add("客戶", order => order.Customer, 30)
+    .Add<decimal>("金額", "Amount", Constants.AutoFitColumnWidth);
+
+// 需要同時指定樣式時，可直接設定欄位的 Width 屬性
+template.Columns.GetLastColumn().Width = 16;
+```
+
+只有最底層的欄位會套用欄寬。同一欄若也以 `SheetDefinition.SetColumnWidth` 設定，以工作表設定為準；同一工作表有多個 `RecordSetTemplate<T>` 指定同一欄時，以先加入的 template 為準。
+
 ### 多層標題
 
 ```csharp

@@ -22,6 +22,15 @@ public record struct CellStyle(
     bool IsLocked = false
 ) {
     /// <summary>
+    /// Gets the line style of the outside border.
+    /// </summary>
+    /// <value>
+    /// The border line style. When it is not <see cref="BorderLineStyle.None"/>, an outside border with this style is drawn
+    /// regardless of <see cref="HasBorder"/>. Default is <see cref="BorderLineStyle.None"/>.
+    /// </value>
+    public BorderLineStyle BorderStyle { get; init; }
+
+    /// <summary>
     /// Gets an empty <see cref="CellStyle"/> with all default values.
     /// </summary>
     public static CellStyle Empty { get; } = new() {

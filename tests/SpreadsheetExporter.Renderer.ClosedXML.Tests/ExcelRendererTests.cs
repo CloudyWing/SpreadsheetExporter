@@ -263,6 +263,68 @@ internal sealed class ExcelRendererTests {
         );
     }
 
+    [TestCase(BorderLineStyle.Thin, XLBorderStyleValues.Thin)]
+    [TestCase(BorderLineStyle.Medium, XLBorderStyleValues.Medium)]
+    [TestCase(BorderLineStyle.Thick, XLBorderStyleValues.Thick)]
+    [TestCase(BorderLineStyle.Dashed, XLBorderStyleValues.Dashed)]
+    [TestCase(BorderLineStyle.Dotted, XLBorderStyleValues.Dotted)]
+    [TestCase(BorderLineStyle.Double, XLBorderStyleValues.Double)]
+    public void Render_CellStyleWithBorderStyle_ShouldApplyOutsideBorder(
+        BorderLineStyle borderStyle, XLBorderStyleValues expected
+    ) {
+        IXLBorder border = RenderSingleCellBorder(CellStyle.Empty with { BorderStyle = borderStyle });
+
+        Assert.Multiple(() => {
+            Assert.That(border.TopBorder, Is.EqualTo(expected));
+            Assert.That(border.BottomBorder, Is.EqualTo(expected));
+            Assert.That(border.LeftBorder, Is.EqualTo(expected));
+            Assert.That(border.RightBorder, Is.EqualTo(expected));
+        });
+    }
+
+    [TestCase(true, XLBorderStyleValues.Thin)]
+    [TestCase(false, XLBorderStyleValues.None)]
+    public void Render_CellStyleWithoutBorderStyle_ShouldUseHasBorder(bool hasBorder, XLBorderStyleValues expected) {
+        IXLBorder border = RenderSingleCellBorder(CellStyle.Empty with { HasBorder = hasBorder });
+
+        Assert.That(border.TopBorder, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void Render_BorderStyleAndHasBorderFalse_ShouldUseBorderStyle() {
+        IXLBorder border = RenderSingleCellBorder(CellStyle.Empty with { HasBorder = false, BorderStyle = BorderLineStyle.Thick });
+
+        Assert.That(border.TopBorder, Is.EqualTo(XLBorderStyleValues.Thick));
+    }
+
+    [Test]
+    public void Render_RecordSetColumnWidth_ShouldSetSheetColumnWidth() {
+        Templates.RecordSet.RecordSetTemplate<(int Id, string Name)> template = new([(1, "A")]);
+        template.Columns
+            .Add("Id", x => x.Id, 9)
+            .Add("Name", x => x.Name, Constants.HiddenColumn);
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        document.CreateSheet("Width").AddTemplate(template);
+
+        using MemoryStream stream = new(document.Export());
+        using XLWorkbook workbook = new(stream);
+        IXLWorksheet worksheet = workbook.Worksheet(1);
+
+        Assert.Multiple(() => {
+            Assert.That(worksheet.Column(1).Width, Is.EqualTo(9).Within(0.01));
+            Assert.That(worksheet.Column(2).IsHidden, Is.True);
+        });
+    }
+
+    private static IXLBorder RenderSingleCellBorder(CellStyle style) {
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        document.CreateSheet("Border").AddTemplate(new GridTemplate().CreateCell("A", cellStyle: style));
+
+        using MemoryStream stream = new(document.Export());
+        using XLWorkbook workbook = new(stream);
+        return workbook.Worksheet(1).Cell("A1").Style.Border;
+    }
+
     private static SpreadsheetDocument CreateRecordSetDocument() {
         SpreadsheetDocument document = new(new ExcelRenderer());
         document.CreateSheet("Data").AddTemplate(CreateRecordSetTemplate());

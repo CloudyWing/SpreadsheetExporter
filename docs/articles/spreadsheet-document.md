@@ -499,6 +499,7 @@ template 使用 `StyleName`、`HeaderStyleName` 或 `FieldStyleName` 引用時�
 | `HorizontalAlignment` | `string` / `number` | 水平對齊 |
 | `VerticalAlignment` | `string` / `number` | 垂直對齊 |
 | `HasBorder` | `boolean` | 是否套用框線 |
+| `BorderStyle` | `string` / `number` | 外框線樣式，對應 `BorderLineStyle`（例如 `"Medium"`、`"Double"`） |
 | `WrapText` | `boolean` | 是否自動換行 |
 | `BackgroundColor` | `string` / `object` | 背景色 |
 | `DataFormat` | `string` / `null` | Excel 格式字串 |

@@ -125,6 +125,36 @@ internal class SheetLayoutTests {
         Assert.That(sut.AutoFilterRange, Is.Null);
     }
 
+    [Test]
+    public void Constructor_RecordSetColumnsHaveWidth_ShouldMergeWidthsWithSheetWidthsTakingPrecedence() {
+        RecordSetTemplate<(int Id, string Name, int Age)> template = new([(1, "A", 20)]);
+        template.Columns
+            .Add("Id", x => x.Id, 8)
+            .Add("Name", x => x.Name, 30)
+            .Add("Age", x => x.Age);
+        SheetDefinition sheet = new SpreadsheetDocument(new NullRenderer()).CreateSheet("Sheet1");
+        sheet.SetColumnWidth(1, 40).SetColumnWidth(5, 10);
+        sheet.AddTemplate(template);
+
+        SheetLayout sut = new(sheet);
+
+        Assert.That(
+            sut.ColumnWidths,
+            Is.EquivalentTo(new Dictionary<int, double> { [0] = 8, [1] = 40, [5] = 10 })
+        );
+    }
+
+    [Test]
+    public void Constructor_NoTemplateWidths_ShouldExposeSheetWidths() {
+        SheetDefinition sheet = new SpreadsheetDocument(new NullRenderer()).CreateSheet("Sheet1");
+        sheet.SetColumnWidth(0, 15);
+        sheet.AddTemplate(CreateRecordSet());
+
+        SheetLayout sut = new(sheet);
+
+        Assert.That(sut.ColumnWidths, Is.EquivalentTo(new Dictionary<int, double> { [0] = 15 }));
+    }
+
     private static GridTemplate CreateTitleGrid() {
         return new GridTemplate().CreateCell("Title", columnSpan: 2);
     }

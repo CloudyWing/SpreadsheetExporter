@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
@@ -101,6 +102,11 @@ public class RecordSetColumnCollection<T> : Collection<RecordSetColumnBase<T>> {
     /// <param name="headerStyle">The header style.</param>
     /// <param name="fieldStyleGenerator">The field style generator.</param>
     /// <returns>The collection instance for chaining.</returns>
+    [SuppressMessage(
+        "ApiDesign",
+        "RS0027:API with optional parameter(s) should have the most parameters amongst its public overloads",
+        Justification = "既有公開 API 無法調整參數；新增的 width 多載沒有選擇性參數，且 double 不接受 null，不會與既有呼叫產生多載歧義。"
+    )]
     public RecordSetColumnCollection<T> Add(
         string headerText, CellStyle? headerStyle = null,
         Func<RecordContext<T>, CellStyle>? fieldStyleGenerator = null
@@ -217,6 +223,50 @@ public class RecordSetColumnCollection<T> : Collection<RecordSetColumnBase<T>> {
         ApplyDefaultStyles(dataColumn, headerText, headerStyle, fieldStyleGenerator);
         provider.SetGeneratorForColumn(dataColumn);
         Add(dataColumn);
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a field column with the specified field key and column width.
+    /// </summary>
+    /// <typeparam name="TField">The type of the field.</typeparam>
+    /// <param name="headerText">The header text.</param>
+    /// <param name="fieldKey">The field key.</param>
+    /// <param name="width">
+    /// The column width in character units, <see cref="Constants.HiddenColumn"/> to hide the column,
+    /// or <see cref="Constants.AutoFitColumnWidth"/> to auto-fit it.
+    /// </param>
+    /// <returns>The collection instance for chaining.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="width"/> is not a valid column width.</exception>
+    public RecordSetColumnCollection<T> Add<TField>(string headerText, string fieldKey, double width) {
+        FieldColumn<T, TField> column = new(fieldKey) {
+            Width = width
+        };
+        ApplyDefaultStyles(column, headerText, null, null);
+        Add(column);
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a field column using a property expression and column width.
+    /// </summary>
+    /// <typeparam name="TField">The type of the field.</typeparam>
+    /// <param name="headerText">The header text.</param>
+    /// <param name="fieldKeyExpression">The field key expression.</param>
+    /// <param name="width">
+    /// The column width in character units, <see cref="Constants.HiddenColumn"/> to hide the column,
+    /// or <see cref="Constants.AutoFitColumnWidth"/> to auto-fit it.
+    /// </param>
+    /// <returns>The collection instance for chaining.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="width"/> is not a valid column width.</exception>
+    public RecordSetColumnCollection<T> Add<TField>(
+        string headerText, Expression<Func<T, TField>> fieldKeyExpression, double width
+    ) {
+        FieldColumn<T, TField> column = new(fieldKeyExpression) {
+            Width = width
+        };
+        ApplyDefaultStyles(column, headerText, null, null);
+        Add(column);
         return this;
     }
 

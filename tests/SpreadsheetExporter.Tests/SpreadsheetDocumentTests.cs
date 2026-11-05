@@ -1394,6 +1394,30 @@ internal class SpreadsheetDocumentTests {
         }
     }
 
+    [TestCase("\"Medium\"", BorderLineStyle.Medium)]
+    [TestCase("\"double\"", BorderLineStyle.Double)]
+    [TestCase("3", BorderLineStyle.Thick)]
+    public void FromJson_WithBorderStyle_ShouldPopulateCellStyle(string borderStyleJson, BorderLineStyle expected) {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+        string json = $$"""
+            [
+              {
+                "Templates": [
+                  {
+                    "Type": "Grid",
+                    "Rows": [ { "Cells": [ { "Value": "A", "Style": { "BorderStyle": {{borderStyleJson}} } } ] } ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        SpreadsheetDocument document = SpreadsheetDocument.FromJson(json);
+        Cell cell = document.GetSheet(0).Templates[0].GetLayout().Cells[0];
+
+        Assert.That(cell.GetCellStyle().BorderStyle, Is.EqualTo(expected));
+    }
+
     private static SpreadsheetDocument CreateDocumentWithEmptySheet(ISpreadsheetRenderer renderer) {
         SpreadsheetDocument document = new(renderer);
         document.CreateSheet("Sheet1").AddTemplate(new StubSheetTemplate(new TemplateLayout([], 0, new Dictionary<int, double?>())));

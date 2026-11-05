@@ -68,6 +68,28 @@ SpreadsheetManager.DefaultCellStyles = new CellStyleConfiguration {
 };
 ```
 
+## 框線樣式
+
+`HasBorder = true` 會套用細外框線。需要其他線條樣式時，設定 `BorderStyle` 屬性（`BorderLineStyle` 列舉），設定後不論 `HasBorder` 為何都會以該樣式繪製外框線：
+
+```csharp
+CellStyle totalStyle = SpreadsheetManager.DefaultCellStyles.FieldStyle with {
+    BorderStyle = BorderLineStyle.Double
+};
+```
+
+| 值 | 說明 |
+| --- | --- |
+| `None` | 預設值，依 `HasBorder` 決定是否繪製細框線 |
+| `Thin` | 細實線 |
+| `Medium` | 中等實線 |
+| `Thick` | 粗實線 |
+| `Dashed` | 虛線 |
+| `Dotted` | 點線 |
+| `Double` | 雙線 |
+
+`BorderStyle` 是 `init` 屬性，不屬於 `CellStyle` 的建構子參數，請以物件初始化器或 `with` 運算式設定。
+
 ## 從設定檔讀取樣式
 
 ### 設定檔結構

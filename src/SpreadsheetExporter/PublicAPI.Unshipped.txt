@@ -1,4 +1,14 @@
 #nullable enable
+CloudyWing.SpreadsheetExporter.BorderLineStyle
+CloudyWing.SpreadsheetExporter.BorderLineStyle.Dashed = 4 -> CloudyWing.SpreadsheetExporter.BorderLineStyle
+CloudyWing.SpreadsheetExporter.BorderLineStyle.Dotted = 5 -> CloudyWing.SpreadsheetExporter.BorderLineStyle
+CloudyWing.SpreadsheetExporter.BorderLineStyle.Double = 6 -> CloudyWing.SpreadsheetExporter.BorderLineStyle
+CloudyWing.SpreadsheetExporter.BorderLineStyle.Medium = 2 -> CloudyWing.SpreadsheetExporter.BorderLineStyle
+CloudyWing.SpreadsheetExporter.BorderLineStyle.None = 0 -> CloudyWing.SpreadsheetExporter.BorderLineStyle
+CloudyWing.SpreadsheetExporter.BorderLineStyle.Thick = 3 -> CloudyWing.SpreadsheetExporter.BorderLineStyle
+CloudyWing.SpreadsheetExporter.BorderLineStyle.Thin = 1 -> CloudyWing.SpreadsheetExporter.BorderLineStyle
+CloudyWing.SpreadsheetExporter.CellStyle.BorderStyle.get -> CloudyWing.SpreadsheetExporter.BorderLineStyle
+CloudyWing.SpreadsheetExporter.CellStyle.BorderStyle.init -> void
 CloudyWing.SpreadsheetExporter.ExportOptions
 CloudyWing.SpreadsheetExporter.ExportOptions.<Clone>$() -> CloudyWing.SpreadsheetExporter.ExportOptions!
 CloudyWing.SpreadsheetExporter.ExportOptions.Equals(CloudyWing.SpreadsheetExporter.ExportOptions? other) -> bool
@@ -17,6 +27,10 @@ CloudyWing.SpreadsheetExporter.SpreadsheetDocument.Export(CloudyWing.Spreadsheet
 CloudyWing.SpreadsheetExporter.SpreadsheetDocument.Export(System.IO.Stream! stream) -> void
 CloudyWing.SpreadsheetExporter.SpreadsheetDocument.ExportAsync(System.IO.Stream! stream, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
 CloudyWing.SpreadsheetExporter.SpreadsheetDocument.ExportFileAsync(string! path, CloudyWing.SpreadsheetExporter.SpreadsheetFileMode fileMode = CloudyWing.SpreadsheetExporter.SpreadsheetFileMode.Create, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.Width.get -> double?
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.Width.set -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.Add<TField>(string! headerText, System.Linq.Expressions.Expression<System.Func<T, TField>!>! fieldKeyExpression, double width) -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.Add<TField>(string! headerText, string! fieldKey, double width) -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!
 const CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes.DuplicateSheetName = "SE-LAYOUT-006" -> string!
 const CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes.InvalidSheetName = "SE-LAYOUT-005" -> string!
 override CloudyWing.SpreadsheetExporter.ExportOptions.Equals(object? obj) -> bool

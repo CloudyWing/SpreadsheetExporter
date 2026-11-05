@@ -205,6 +205,31 @@ internal class RecordSetColumnCollectionTests {
         }
     }
 
+    [Test]
+    public void Add_WithFieldKeyAndWidth_ShouldSetColumnWidth() {
+        columns.Add<int>("Id", "Id", 12.5);
+
+        Assert.That(columns.Single().Width, Is.EqualTo(12.5));
+    }
+
+    [TestCase(20d)]
+    [TestCase(Constants.HiddenColumn)]
+    [TestCase(Constants.AutoFitColumnWidth)]
+    public void Add_WithExpressionAndWidth_ShouldSetColumnWidth(double width) {
+        columns.Add("Name", x => x.Name, width);
+
+        Assert.Multiple(() => {
+            Assert.That(columns.Single().Width, Is.EqualTo(width));
+            Assert.That(columns.Single().HeaderStyle, Is.EqualTo(SpreadsheetManager.DefaultCellStyles.HeaderStyle));
+        });
+    }
+
+    [TestCase(-2d)]
+    [TestCase(-0.5d)]
+    public void Add_WithInvalidWidth_ShouldThrowArgumentOutOfRangeException(double width) {
+        Assert.That(() => columns.Add("Name", x => x.Name, width), Throws.TypeOf<ArgumentOutOfRangeException>());
+    }
+
     private sealed class Record {
         public int Id { get; init; }
 

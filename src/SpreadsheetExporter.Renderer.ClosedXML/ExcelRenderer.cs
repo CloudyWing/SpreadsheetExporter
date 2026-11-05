@@ -162,7 +162,9 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities, ISpreadsheetS
         xlStyle.Alignment.SetWrapText(style.WrapText);
         xlStyle.Protection.SetLocked(style.IsLocked);
 
-        if (style.HasBorder) {
+        if (style.BorderStyle != BorderLineStyle.None) {
+            xlStyle.Border.SetOutsideBorder(ToBorderStyle(style.BorderStyle));
+        } else if (style.HasBorder) {
             xlStyle.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
         }
 
@@ -583,6 +585,18 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities, ISpreadsheetS
             VerticalAlignment.Middle => XLAlignmentVerticalValues.Center,
             VerticalAlignment.Bottom => XLAlignmentVerticalValues.Bottom,
             _ => XLAlignmentVerticalValues.Top
+        };
+    }
+
+    private static XLBorderStyleValues ToBorderStyle(BorderLineStyle borderStyle) {
+        return borderStyle switch {
+            BorderLineStyle.Thin => XLBorderStyleValues.Thin,
+            BorderLineStyle.Medium => XLBorderStyleValues.Medium,
+            BorderLineStyle.Thick => XLBorderStyleValues.Thick,
+            BorderLineStyle.Dashed => XLBorderStyleValues.Dashed,
+            BorderLineStyle.Dotted => XLBorderStyleValues.Dotted,
+            BorderLineStyle.Double => XLBorderStyleValues.Double,
+            _ => XLBorderStyleValues.None
         };
     }
 
