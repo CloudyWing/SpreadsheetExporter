@@ -46,12 +46,23 @@ public class TemplateLayout(
             return templatesList.Single().GetLayout();
         }
 
+        return CombineCore(templatesList.Select(x => x.GetLayout()));
+    }
+
+    /// <summary>
+    /// Stacks the specified template layouts vertically. A single layout is returned as-is.
+    /// </summary>
+    internal static TemplateLayout Combine(IReadOnlyList<TemplateLayout> layouts) {
+        return layouts.Count == 1 ? layouts[0] : CombineCore(layouts);
+    }
+
+    private static TemplateLayout CombineCore(IEnumerable<TemplateLayout> layouts) {
         List<Cell> cells = [];
         Dictionary<int, double?> rowHeights = [];
         int rowSpan = 0;
         int rowIndex = 0;
 
-        foreach (TemplateLayout layout in templatesList.Select(x => x.GetLayout())) {
+        foreach (TemplateLayout layout in layouts) {
             foreach (KeyValuePair<int, double?> pair in layout.RowHeights) {
                 rowHeights[rowIndex + pair.Key] = pair.Value;
             }

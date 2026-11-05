@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using CloudyWing.SpreadsheetExporter.Util;
 using CloudyWing.SpreadsheetExporter.Templates;
 
@@ -16,12 +17,16 @@ public class SheetLayout {
     /// </summary>
     /// <param name="sheet">The sheet definition to resolve.</param>
     /// <param name="defaultFont">The default font for the workbook.</param>
-    public SheetLayout(SheetDefinition sheet, CellFont? defaultFont = null) {
+    public SheetLayout(SheetDefinition sheet, CellFont? defaultFont = null)
+        : this(sheet, defaultFont, GetTemplateLayouts(sheet)) {
+    }
+
+    internal SheetLayout(SheetDefinition sheet, CellFont? defaultFont, IReadOnlyList<TemplateLayout> templateLayouts) {
         ArgumentNullException.ThrowIfNull(sheet);
 
         SheetName = sheet.SheetName;
         DefaultRowHeight = sheet.DefaultRowHeight;
-        TemplateLayout templateLayout = TemplateLayout.Create(sheet.Templates);
+        TemplateLayout templateLayout = TemplateLayout.Combine(templateLayouts);
         Cells = templateLayout.Cells;
         RowHeights = templateLayout.RowHeights.AsReadOnly();
         ColumnWidths = sheet.ColumnWidths.AsReadOnly();
@@ -29,6 +34,7 @@ public class SheetLayout {
         PageSettings = sheet.PageSettings;
         FreezePanes = sheet.FreezePanes;
         IsAutoFilterEnabled = sheet.IsAutoFilterEnabled;
+        AutoFilterRange = sheet.AutoFilterRange ?? GetDefaultAutoFilterRange(sheet.Templates, templateLayouts);
         Metadata = sheet.Metadata;
         DefaultFont = defaultFont;
     }
@@ -84,6 +90,16 @@ public class SheetLayout {
     public bool IsAutoFilterEnabled { get; }
 
     /// <summary>
+    /// Gets the zero-based range to apply the auto filter to.
+    /// </summary>
+    /// <value>
+    /// <see cref="SheetDefinition.AutoFilterRange"/> when it is set. Otherwise, when the sheet contains more than one template,
+    /// the full range of the first record set or data table template, so that rows such as a title above the table
+    /// are excluded. <see langword="null"/> means the renderer uses the used range of the sheet.
+    /// </value>
+    public CellRange? AutoFilterRange { get; }
+
+    /// <summary>
     /// Gets the metadata dictionary from the sheet definition.
     /// </summary>
     public IDictionary<string, object?> Metadata { get; }
@@ -93,4 +109,32 @@ public class SheetLayout {
     /// </summary>
     public CellFont? DefaultFont { get; }
 
+    internal static IReadOnlyList<TemplateLayout> GetTemplateLayouts(SheetDefinition sheet) {
+        ArgumentNullException.ThrowIfNull(sheet);
+        return sheet.Templates
+            .Select(template => template.GetLayout())
+            .ToList();
+    }
+
+    private static CellRange? GetDefaultAutoFilterRange(
+        IReadOnlyList<ISheetTemplate> templates, IReadOnlyList<TemplateLayout> templateLayouts
+    ) {
+        // 只有單一模板時沿用 renderer 的已使用範圍，維持既有輸出
+        if (templates.Count <= 1) {
+            return null;
+        }
+
+        int rowOffset = 0;
+        for (int i = 0; i < templates.Count; i++) {
+            TemplateLayout layout = templateLayouts[i];
+            if (templates[i] is ITableTemplate table) {
+                CellRange range = new(0, rowOffset, table.ColumnSpan, layout.RowSpan);
+                return range.IsValid ? range : null;
+            }
+
+            rowOffset += layout.RowSpan;
+        }
+
+        return null;
+    }
 }

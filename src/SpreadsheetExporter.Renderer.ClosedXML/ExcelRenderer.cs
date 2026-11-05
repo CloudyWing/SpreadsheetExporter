@@ -238,7 +238,11 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
             return;
         }
 
-        if (worksheet.RangeUsed() is IXLRange usedRange) {
+        if (context.AutoFilterRange is CellRange range) {
+            worksheet
+                .Range(range.Row + 1, range.Column + 1, range.LastRow + 1, range.LastColumn + 1)
+                .SetAutoFilter();
+        } else if (worksheet.RangeUsed() is IXLRange usedRange) {
             usedRange.SetAutoFilter();
         }
     }

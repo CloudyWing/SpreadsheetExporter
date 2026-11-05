@@ -31,6 +31,7 @@ internal static class SheetLayoutValidator {
 
         AppendSheetNameDiagnostics(diagnostics, sheetNameIndexes, sheet, sheetIndex);
         AppendColumnWidthDiagnostics(diagnostics, sheet, sheetIndex);
+        AppendAutoFilterDiagnostics(diagnostics, sheet, sheetIndex);
 
         for (int templateIndex = 0; templateIndex < sheet.Templates.Count; templateIndex++) {
             ISheetTemplate template = sheet.Templates[templateIndex];
@@ -102,6 +103,21 @@ internal static class SheetLayoutValidator {
         }
 
         return null;
+    }
+
+    private static void AppendAutoFilterDiagnostics(
+        List<LayoutDiagnostic> diagnostics, SheetDefinition sheet, int sheetIndex
+    ) {
+        if (sheet.AutoFilterRange is not CellRange range || range.IsValid) {
+            return;
+        }
+
+        diagnostics.Add(new LayoutDiagnostic(
+            LayoutDiagnosticCodes.InvalidCellRange,
+            $"Auto filter range ({range.Column}, {range.Row}, {range.ColumnSpan}, {range.RowSpan}) is invalid.",
+            range,
+            new CellSource(sheetIndex, sheet.SheetName, -1, nameof(SheetDefinition), $"Sheets[{sheetIndex}].AutoFilterRange")
+        ));
     }
 
     private static void AppendColumnWidthDiagnostics(

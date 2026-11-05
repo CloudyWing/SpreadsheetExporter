@@ -57,6 +57,29 @@ sheet.PageSettings.PaperSize = PaperSize.A4;
 - `Portrait` - 直向（預設）
 - `Landscape` - 橫向
 
+## 凍結窗格與自動篩選
+
+`SetFreezePanes(column, row)` 指定第一個不凍結的儲存格（零基索引）；`SetAutoFilterEnabled()` 啟用自動篩選：
+
+```csharp
+sheet
+    .SetFreezePanes(0, 1)
+    .SetAutoFilterEnabled();
+```
+
+自動篩選的範圍依下列順序決定：
+
+1. 以 `SetAutoFilterRange(CellRange)` 或 `AutoFilterRange` 屬性指定的範圍，範圍第一列即篩選標題列。
+2. 工作表有多個 templates 時，使用第一個 `RecordSetTemplate<T>` 或 `DataTableTemplate` 的完整範圍（表頭到最後一筆資料），上方的標題 Grid 不會被當成篩選標題列。
+3. 其他情況使用工作表已使用的範圍，例如只有單一 template 的工作表。
+
+```csharp
+// 指定從 B3 開始、2 欄 10 列的篩選範圍（第 3 列為篩選標題列）
+sheet.SetAutoFilterRange(new CellRange(Column: 1, Row: 2, ColumnSpan: 2, RowSpan: 10));
+```
+
+`SetAutoFilterRange` 會同時啟用自動篩選。指定的範圍無效時，`GetLayoutDiagnostics()` 會回報 `InvalidCellRange`。範圍判定只看工作表直接加入的 templates，`MergedTemplate` 內的表格需以 `SetAutoFilterRange` 指定。
+
 ## 使用 Templates
 
 Templates 會依加入順序**垂直堆疊**。若 `template1` 佔用 3 列，`template2` 將從第 4 列開始。

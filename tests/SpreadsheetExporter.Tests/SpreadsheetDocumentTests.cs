@@ -345,6 +345,20 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void GetLayoutDiagnostics_WithInvalidAutoFilterRange_ShouldReturnInvalidCellRangeDiagnostic() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        sut.CreateSheet("Filter").SetAutoFilterRange(new CellRange(0, -1, 2, 2));
+
+        IReadOnlyList<LayoutDiagnostic> diagnostics = sut.GetLayoutDiagnostics();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(diagnostics, Has.Count.EqualTo(1));
+            Assert.That(diagnostics[0].Code, Is.EqualTo(LayoutDiagnosticCodes.InvalidCellRange));
+            Assert.That(diagnostics[0].Source!.Path, Is.EqualTo("Sheets[0].AutoFilterRange"));
+        }
+    }
+
+    [Test]
     public void Export_WithLayoutDiagnostics_ShouldNotRunValidation() {
         FakeRenderer renderer = new();
         SpreadsheetDocument sut = new(renderer);

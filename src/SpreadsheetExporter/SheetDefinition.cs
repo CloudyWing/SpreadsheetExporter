@@ -77,6 +77,15 @@ public class SheetDefinition {
     public bool IsAutoFilterEnabled { get; set; }
 
     /// <summary>
+    /// Gets or sets the zero-based range to apply the auto filter to. The first row of the range is the filter header row.
+    /// </summary>
+    /// <value>
+    /// The auto filter range, or <see langword="null"/> to let <see cref="SheetLayout.AutoFilterRange"/> determine it.
+    /// The range is used only when <see cref="IsAutoFilterEnabled"/> is <see langword="true"/>.
+    /// </value>
+    public CellRange? AutoFilterRange { get; set; }
+
+    /// <summary>
     /// Gets a dictionary of arbitrary metadata for renderer-specific extensions.
     /// </summary>
     /// <value>The metadata dictionary.</value>
@@ -139,6 +148,17 @@ public class SheetDefinition {
     /// <returns>The current <see cref="SheetDefinition"/> instance.</returns>
     public SheetDefinition SetAutoFilterEnabled(bool enabled = true) {
         IsAutoFilterEnabled = enabled;
+        return this;
+    }
+
+    /// <summary>
+    /// Enables auto filter for this sheet and applies it to the specified range.
+    /// </summary>
+    /// <param name="range">The zero-based range. The first row of the range is the filter header row.</param>
+    /// <returns>The current <see cref="SheetDefinition"/> instance.</returns>
+    public SheetDefinition SetAutoFilterRange(CellRange range) {
+        AutoFilterRange = range;
+        IsAutoFilterEnabled = true;
         return this;
     }
 

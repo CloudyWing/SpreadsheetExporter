@@ -19,7 +19,7 @@
         "Row": 3,
         "Column": 0
       },
-      "AutoFilterRange": "$A$1:$E$11",
+      "AutoFilterRange": "$A$5:$E$11",
       "Columns": [
         {
           "Index": 1,

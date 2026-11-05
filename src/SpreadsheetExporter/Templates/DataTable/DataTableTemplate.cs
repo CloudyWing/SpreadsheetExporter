@@ -12,7 +12,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.DataTable;
 /// <seealso cref="ISheetTemplate" />
 /// <param name="dataTable">The data table.</param>
 /// <exception cref="ArgumentNullException">dataTable</exception>
-public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate {
+public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate, ITableTemplate {
     /// <summary>
     /// Gets or sets the data table.
     /// </summary>

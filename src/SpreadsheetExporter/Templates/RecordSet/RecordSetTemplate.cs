@@ -10,7 +10,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet;
 /// </summary>
 /// <seealso cref="ISheetTemplate" />
 /// <typeparam name="T">The type of the record.</typeparam>
-public class RecordSetTemplate<T> : ISheetTemplate {
+public class RecordSetTemplate<T> : ISheetTemplate, ITableTemplate {
     private IEnumerable<T> dataSourceField;
 
     /// <summary>

@@ -1,3 +1,7 @@
 #nullable enable
+CloudyWing.SpreadsheetExporter.SheetDefinition.AutoFilterRange.get -> CloudyWing.SpreadsheetExporter.CellRange?
+CloudyWing.SpreadsheetExporter.SheetDefinition.AutoFilterRange.set -> void
+CloudyWing.SpreadsheetExporter.SheetDefinition.SetAutoFilterRange(CloudyWing.SpreadsheetExporter.CellRange range) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SheetLayout.AutoFilterRange.get -> CloudyWing.SpreadsheetExporter.CellRange?
 const CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes.DuplicateSheetName = "SE-LAYOUT-006" -> string!
 const CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes.InvalidSheetName = "SE-LAYOUT-005" -> string!

@@ -170,6 +170,51 @@ internal sealed class ExcelRendererTests {
         );
     }
 
+    [Test]
+    public void Render_TitleGridAboveRecordSetWithAutoFilter_ShouldFilterRecordSetHeaderRow() {
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        document.CreateSheet("Filter")
+            .SetAutoFilterEnabled()
+            .AddTemplate(new GridTemplate().CreateCell("Title", columnSpan: 2))
+            .AddTemplate(CreateRecordSetTemplate());
+
+        Assert.That(RenderAutoFilterAddress(document), Is.EqualTo("$A$2:$B$4"));
+    }
+
+    [Test]
+    public void Render_SingleRecordSetWithAutoFilter_ShouldFilterUsedRange() {
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        document.CreateSheet("Filter")
+            .SetAutoFilterEnabled()
+            .AddTemplate(CreateRecordSetTemplate());
+
+        Assert.That(RenderAutoFilterAddress(document), Is.EqualTo("$A$1:$B$3"));
+    }
+
+    [Test]
+    public void Render_AutoFilterRangeIsSet_ShouldFilterConfiguredRange() {
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        document.CreateSheet("Filter")
+            .SetAutoFilterRange(new CellRange(1, 0, 1, 3))
+            .AddTemplate(CreateRecordSetTemplate());
+
+        Assert.That(RenderAutoFilterAddress(document), Is.EqualTo("$B$1:$B$3"));
+    }
+
+    private static Templates.RecordSet.RecordSetTemplate<(int Id, string Name)> CreateRecordSetTemplate() {
+        Templates.RecordSet.RecordSetTemplate<(int Id, string Name)> template = new([(1, "A"), (2, "B")]);
+        template.Columns
+            .Add("Id", x => x.Id)
+            .Add("Name", x => x.Name);
+        return template;
+    }
+
+    private static string RenderAutoFilterAddress(SpreadsheetDocument document) {
+        using MemoryStream stream = new(document.Export());
+        using XLWorkbook workbook = new(stream);
+        return workbook.Worksheet(1).AutoFilter.Range.RangeAddress.ToStringFixed();
+    }
+
     private static IXLDataValidation RenderSingleListValidation(IEnumerable<string> listItems) {
         SpreadsheetDocument document = new(new ExcelRenderer());
         GridTemplate grid = new();
