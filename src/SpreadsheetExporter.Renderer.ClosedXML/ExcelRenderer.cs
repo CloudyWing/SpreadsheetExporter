@@ -12,6 +12,7 @@ namespace CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
 /// Renders spreadsheet data to Excel (.xlsx) format using ClosedXML.
 /// </summary>
 public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
+    private const int MaxListFormulaLength = 255;
     private static readonly RendererCapabilities excelCapabilities = new() {
         SupportsStyles = true,
         SupportsMergedCells = true,
@@ -254,8 +255,7 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
 
         switch (validation.ValidationType) {
             case DataValidationType.List:
-                string listString = string.Join(",", validation.ListItems ?? []);
-                xlValidation.List($"\"{listString}\"", validation.IsDropdownShown);
+                xlValidation.List(CreateListFormula(validation.ListItems), validation.IsDropdownShown);
                 break;
             case DataValidationType.Integer:
                 SetWholeNumberValidation(xlValidation, validation);
@@ -301,6 +301,23 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
         if (!string.IsNullOrWhiteSpace(validation.PromptMessage)) {
             xlValidation.InputMessage = validation.PromptMessage;
         }
+    }
+
+    private static string CreateListFormula(IEnumerable<string>? listItems) {
+        // Excel 清單來源以逗號分隔項目且無法跳脫逗號；雙引號需重複一次才能放進字串常值
+        string listString = string.Join(",", (listItems ?? []).Select(item => item?.Replace("\"", "\"\"")));
+        string formula = $"\"{listString}\"";
+
+        if (formula.Length > MaxListFormulaLength) {
+            throw new ArgumentOutOfRangeException(
+                nameof(listItems),
+                $"The data validation list source is {formula.Length} characters including the surrounding quotes, "
+                + $"which exceeds the Excel limit of {MaxListFormulaLength} characters. "
+                + "Reduce the number or length of list items."
+            );
+        }
+
+        return formula;
     }
 
     private static void SetWholeNumberValidation(IXLDataValidation xlValidation, DataValidation validation) {

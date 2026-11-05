@@ -2,6 +2,7 @@ using System.Drawing;
 using System.Text.Json;
 using ClosedXML.Excel;
 using CloudyWing.SpreadsheetExporter.Templates;
+using CloudyWing.SpreadsheetExporter.Templates.Grid;
 
 namespace CloudyWing.SpreadsheetExporter.Renderer.ClosedXML.Tests;
 
@@ -143,6 +144,44 @@ internal sealed class ExcelRendererTests {
             Assert.That(validation.ErrorTitle, Is.EqualTo("Invalid option"));
             Assert.That(validation.ErrorMessage, Is.EqualTo("Choose a configured option."));
         });
+    }
+
+    [Test]
+    public void Render_ListValidationItemsContainQuotes_ShouldEscapeQuotes() {
+        IXLDataValidation validation = RenderSingleListValidation(["Say \"Hi\"", "Plain"]);
+
+        Assert.That(validation.Value, Is.EqualTo("\"Say \"\"Hi\"\",Plain\""));
+    }
+
+    [TestCase(253)]
+    public void Render_ListValidationAtLengthLimit_ShouldRender(int itemLength) {
+        IXLDataValidation validation = RenderSingleListValidation([new string('a', itemLength)]);
+
+        Assert.That(validation.Value, Has.Length.EqualTo(itemLength + 2));
+    }
+
+    [TestCase(254)]
+    [TestCase(400)]
+    public void Render_ListValidationExceedsLengthLimit_ShouldThrowArgumentOutOfRangeException(int itemLength) {
+        Assert.That(
+            () => RenderSingleListValidation([new string('a', itemLength)]),
+            Throws.TypeOf<ArgumentOutOfRangeException>()
+                .With.Message.Contains("exceeds the Excel limit of 255 characters")
+        );
+    }
+
+    private static IXLDataValidation RenderSingleListValidation(IEnumerable<string> listItems) {
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        GridTemplate grid = new();
+        grid.CreateCell(cell => cell.DataValidationGenerator = (_, _) => new DataValidation {
+            ValidationType = DataValidationType.List,
+            ListItems = listItems
+        });
+        document.CreateSheet("List").AddTemplate(grid);
+
+        using MemoryStream stream = new(document.Export());
+        using XLWorkbook workbook = new(stream);
+        return workbook.Worksheet("List").Cell("A1").GetDataValidation();
     }
 
     private static string CreateWorkbookSnapshotJson(XLWorkbook workbook) {
