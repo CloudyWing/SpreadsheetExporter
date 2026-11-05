@@ -97,7 +97,10 @@ public sealed class SpreadsheetDocument {
     /// <summary>
     /// Creates a new sheet definition and adds it to this document.
     /// </summary>
-    /// <param name="sheetName">The sheet name. If <see langword="null"/> or whitespace, a default name is generated.</param>
+    /// <param name="sheetName">
+    /// The sheet name. If <see langword="null"/> or whitespace, a default name is generated.
+    /// If another sheet already uses the name (compared case-insensitively), a numeric suffix such as <c>(1)</c> is appended.
+    /// </param>
     /// <param name="defaultRowHeight">The default row height for the sheet.</param>
     /// <returns>The created sheet definition.</returns>
     public SheetDefinition CreateSheet(string? sheetName = null, double? defaultRowHeight = null) {
@@ -146,6 +149,10 @@ public sealed class SpreadsheetDocument {
     /// Gets layout diagnostics for the current document without rendering it.
     /// </summary>
     /// <returns>The layout diagnostics.</returns>
+    /// <remarks>
+    /// Diagnostics include invalid or overlapping cell ranges, value and formula conflicts, invalid dimensions,
+    /// sheet names that violate the Excel naming rules, and case-insensitive duplicate sheet names.
+    /// </remarks>
     public IReadOnlyList<LayoutDiagnostic> GetLayoutDiagnostics() {
         return SheetLayoutValidator.GetDiagnostics(sheets);
     }
@@ -297,7 +304,8 @@ public sealed class SpreadsheetDocument {
     }
 
     private bool IsSheetNameExists(string sheetName) {
-        return sheets.Select(x => x.SheetName).Contains(sheetName);
+        // Excel 的工作表名稱不分大小寫
+        return sheets.Any(x => string.Equals(x.SheetName, sheetName, StringComparison.OrdinalIgnoreCase));
     }
 
     private static void PopulateSheet(

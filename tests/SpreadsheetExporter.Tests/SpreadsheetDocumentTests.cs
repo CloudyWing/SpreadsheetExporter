@@ -52,6 +52,16 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void CreateSheet_WhenNameDiffersOnlyByCase_ShouldGenerateUniqueName() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+
+        sut.CreateSheet("Sales");
+        SheetDefinition secondSheet = sut.CreateSheet("SALES");
+
+        Assert.That(secondSheet.SheetName, Is.EqualTo("SALES(1)"));
+    }
+
+    [Test]
     public void GetSheet_WhenIndexIsOutOfRange_ShouldThrowArgumentOutOfRangeException() {
         SpreadsheetDocument sut = new(new FakeRenderer());
         sut.CreateSheet("Sheet1");
@@ -281,6 +291,56 @@ internal class SpreadsheetDocumentTests {
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception!.Diagnostics, Has.Count.EqualTo(1));
             Assert.That(exception.Diagnostics[0].Code, Is.EqualTo(LayoutDiagnosticCodes.InvalidCellRange));
+        }
+    }
+
+    [TestCase("")]
+    [TestCase("   ")]
+    [TestCase("1234567890123456789012345678901X")]
+    [TestCase("Q1[Sales]")]
+    [TestCase("A:B")]
+    [TestCase("A*B")]
+    [TestCase("A?B")]
+    [TestCase("A/B")]
+    [TestCase("A\\B")]
+    [TestCase("'Quoted")]
+    [TestCase("Quoted'")]
+    public void GetLayoutDiagnostics_WithInvalidSheetName_ShouldReturnInvalidSheetNameDiagnostic(string sheetName) {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        sut.CreateSheet("Valid").SetSheetName(sheetName);
+
+        IReadOnlyList<LayoutDiagnostic> diagnostics = sut.GetLayoutDiagnostics();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(diagnostics, Has.Count.EqualTo(1));
+            Assert.That(diagnostics[0].Code, Is.EqualTo(LayoutDiagnosticCodes.InvalidSheetName));
+            Assert.That(diagnostics[0].Source!.Path, Is.EqualTo("Sheets[0].SheetName"));
+        }
+    }
+
+    [TestCase("Sales")]
+    [TestCase("1234567890123456789012345678901")]
+    [TestCase("It's fine")]
+    public void GetLayoutDiagnostics_WithValidSheetName_ShouldReturnEmpty(string sheetName) {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        sut.CreateSheet(sheetName);
+
+        Assert.That(sut.GetLayoutDiagnostics(), Is.Empty);
+    }
+
+    [Test]
+    public void GetLayoutDiagnostics_WithSheetRenamedToCaseInsensitiveDuplicate_ShouldReturnDuplicateSheetNameDiagnostic() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        sut.CreateSheet("Sales");
+        sut.CreateSheet("Orders").SetSheetName("sales");
+
+        IReadOnlyList<LayoutDiagnostic> diagnostics = sut.GetLayoutDiagnostics();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(diagnostics, Has.Count.EqualTo(1));
+            Assert.That(diagnostics[0].Code, Is.EqualTo(LayoutDiagnosticCodes.DuplicateSheetName));
+            Assert.That(diagnostics[0].Source!.SheetIndex, Is.EqualTo(1));
+            Assert.That(diagnostics[0].Message, Does.Contain("index 0"));
         }
     }
 

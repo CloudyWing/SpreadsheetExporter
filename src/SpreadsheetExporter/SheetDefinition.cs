@@ -24,6 +24,12 @@ public class SheetDefinition {
     /// Gets or sets the name of the sheet.
     /// </summary>
     /// <value>The sheet name.</value>
+    /// <remarks>
+    /// Changing the name does not check it against other sheets. Use
+    /// <see cref="SpreadsheetDocument.GetLayoutDiagnostics"/> to detect invalid names
+    /// (<see cref="LayoutDiagnosticCodes.InvalidSheetName"/>) and case-insensitive duplicates
+    /// (<see cref="LayoutDiagnosticCodes.DuplicateSheetName"/>).
+    /// </remarks>
     public string SheetName { get; set; }
 
     /// <summary>
@@ -86,6 +92,10 @@ public class SheetDefinition {
     /// </summary>
     /// <param name="sheetName">The sheet name.</param>
     /// <returns>The current <see cref="SheetDefinition"/> instance.</returns>
+    /// <remarks>
+    /// Uniqueness and naming rules are reported by <see cref="SpreadsheetDocument.GetLayoutDiagnostics"/>
+    /// instead of being enforced here, so sheets can be renamed in any order.
+    /// </remarks>
     public SheetDefinition SetSheetName(string sheetName) {
         SheetName = sheetName;
         return this;

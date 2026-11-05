@@ -13,6 +13,8 @@ SheetDefinition sheet = document.CreateSheet("銷售報表");
 sheet.SheetName = "Q1 銷售報表";
 ```
 
+改名時不會檢查名稱是否合法或與其他工作表重複。名稱需符合 Excel 規則（最多 31 個字元、不可包含 `[ ] : * ? / \`、不可以單引號開頭或結尾，且不分大小寫不可重複），可透過 `SpreadsheetDocument.GetLayoutDiagnostics()` 的 `InvalidSheetName` 與 `DuplicateSheetName` 診斷檢查。
+
 ### 預設列高
 
 ```csharp

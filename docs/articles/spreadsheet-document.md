@@ -70,7 +70,7 @@ SheetDefinition sheet = document.CreateSheet("銷售報表", defaultRowHeight: 2
 SheetDefinition sheet = document.CreateSheet();
 ```
 
-若傳入重複名稱，會自動加上序號後綴（例如 `銷售報表(1)`）。
+若傳入重複名稱，會自動加上序號後綴（例如 `銷售報表(1)`）。名稱比對不分大小寫，與 Excel 規則一致，因此 `Sales` 與 `SALES` 也視為重複。
 
 ### 存取工作表
 
@@ -118,6 +118,21 @@ try {
 - 儲存格 range 是否重疊。
 - 同一儲存格是否同時定義 value 與 formula。
 - 欄寬與列高是否使用有效值。
+- 工作表名稱是否符合 Excel 規則（`SE-LAYOUT-005`）：不可空白、最多 31 個字元、不可包含 `[ ] : * ? / \`，也不可以單引號開頭或結尾。
+- 工作表名稱是否重複（`SE-LAYOUT-006`），比對時不分大小寫。
+
+診斷代碼定義於 `LayoutDiagnosticCodes`：
+
+| 代碼 | 常數 | 說明 |
+| --- | --- | --- |
+| `SE-LAYOUT-001` | `InvalidCellRange` | 儲存格 range 座標或大小無效 |
+| `SE-LAYOUT-002` | `OverlappingCellRange` | 儲存格 range 重疊 |
+| `SE-LAYOUT-003` | `ValueAndFormulaConflict` | 同時定義 value 與 formula |
+| `SE-LAYOUT-004` | `InvalidDimension` | 欄寬或列高無效 |
+| `SE-LAYOUT-005` | `InvalidSheetName` | 工作表名稱不符合 Excel 規則 |
+| `SE-LAYOUT-006` | `DuplicateSheetName` | 工作表名稱重複（不分大小寫） |
+
+`CreateSheet` 只會在建立時避開重複名稱；透過 `SheetName` 或 `SetSheetName` 改名時不會檢查，以便依任意順序調換名稱，請在匯出前以診斷 API 確認。
 
 `Export()` 不會自動呼叫 `ValidateLayout()`，因此既有匯出流程維持原本行為。需要 render 前驗證時，由呼叫端明確呼叫診斷 API。
 

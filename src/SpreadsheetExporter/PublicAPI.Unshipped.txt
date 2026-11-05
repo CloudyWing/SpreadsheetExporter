@@ -1,1 +1,3 @@
 #nullable enable
+const CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes.DuplicateSheetName = "SE-LAYOUT-006" -> string!
+const CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes.InvalidSheetName = "SE-LAYOUT-005" -> string!

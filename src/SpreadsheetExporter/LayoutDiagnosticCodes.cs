@@ -25,6 +25,18 @@ public static class LayoutDiagnosticCodes {
     public const string InvalidDimension = "SE-LAYOUT-004";
 
     /// <summary>
+    /// Indicates that a sheet name violates the Excel naming rules: it is blank, longer than 31 characters,
+    /// contains any of the characters <c>[ ] : * ? / \</c>, or begins or ends with an apostrophe.
+    /// </summary>
+    public const string InvalidSheetName = "SE-LAYOUT-005";
+
+    /// <summary>
+    /// Indicates that a sheet name duplicates another sheet name in the same document.
+    /// Sheet names are compared case-insensitively.
+    /// </summary>
+    public const string DuplicateSheetName = "SE-LAYOUT-006";
+
+    /// <summary>
     /// Indicates that the renderer does not support a feature used by the document.
     /// </summary>
     public const string UnsupportedRendererCapability = "SE-RENDERER-001";
