@@ -134,7 +134,21 @@ try {
 
 `CreateSheet` 只會在建立時避開重複名稱；透過 `SheetName` 或 `SetSheetName` 改名時不會檢查，以便依任意順序調換名稱，請在匯出前以診斷 API 確認。
 
-`Export()` 不會自動呼叫 `ValidateLayout()`，因此既有匯出流程維持原本行為。需要 render 前驗證時，由呼叫端明確呼叫診斷 API。
+`Export()` 不會自動呼叫 `ValidateLayout()`，因此既有匯出流程維持原本行為。需要 render 前驗證時，由呼叫端明確呼叫診斷 API，或改用 `Export(ExportOptions)`：
+
+```csharp
+byte[] bytes = document.Export(new ExportOptions {
+    ValidateLayout = true,
+    ValidateCapabilities = true
+});
+```
+
+| 選項 | 預設值 | 說明 |
+| --- | --- | --- |
+| `ValidateLayout` | `false` | render 前檢查 `GetLayoutDiagnostics()` 的診斷 |
+| `ValidateCapabilities` | `false` | render 前檢查 `GetRendererCapabilityDiagnostics()` 的診斷 |
+
+發現診斷時拋出 `SpreadsheetLayoutException`，`Diagnostics` 會同時包含版面與 renderer 能力的診斷，且不會呼叫 renderer。啟用驗證時每個 template 的 `GetLayout()` 只計算一次，驗證與 render 共用同一份結果。`ExportOptions.Default` 不做任何驗證，與 `Export()` 相同。`Export(Stream)` 與非同步匯出不提供此選項，需要時請先呼叫 `ValidateLayout()`。
 
 ## 匯出
 

@@ -1276,6 +1276,124 @@ internal class SpreadsheetDocumentTests {
         Assert.That(File.Exists(path), Is.False);
     }
 
+    [Test]
+    public void ExportWithOptions_DefaultOptions_ShouldExportWithoutValidation() {
+        FakeRenderer renderer = new();
+        SpreadsheetDocument sut = new(renderer);
+        sut.CreateSheet("Diagnostics").AddTemplate(CreateInvalidRangeTemplate());
+
+        byte[] result = sut.Export(ExportOptions.Default);
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(result, Is.EqualTo(ExportedBytes));
+            Assert.That(renderer.RenderedLayouts, Has.Count.EqualTo(1));
+        }
+    }
+
+    [Test]
+    public void ExportWithOptions_ValidateLayoutWithDiagnostics_ShouldThrowWithoutRendering() {
+        FakeRenderer renderer = new();
+        SpreadsheetDocument sut = new(renderer);
+        sut.CreateSheet("Diagnostics").AddTemplate(CreateInvalidRangeTemplate());
+
+        SpreadsheetLayoutException? exception = Assert.Throws<SpreadsheetLayoutException>(
+            () => sut.Export(new ExportOptions { ValidateLayout = true })
+        );
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(exception!.Diagnostics.Select(x => x.Code), Is.EqualTo(new[] { LayoutDiagnosticCodes.InvalidCellRange }));
+            Assert.That(renderer.RenderedLayouts, Is.Empty);
+        }
+    }
+
+    [Test]
+    public void ExportWithOptions_ValidateCapabilitiesWithUnsupportedFeatures_ShouldThrow() {
+        SpreadsheetDocument sut = CreateDocumentUsingAllCapabilities(new CapabilityRenderer(new RendererCapabilities()));
+
+        SpreadsheetLayoutException? exception = Assert.Throws<SpreadsheetLayoutException>(
+            () => sut.Export(new ExportOptions { ValidateCapabilities = true })
+        );
+
+        Assert.That(
+            exception!.Diagnostics.Select(x => x.Code),
+            Is.All.EqualTo(LayoutDiagnosticCodes.UnsupportedRendererCapability)
+        );
+    }
+
+    [Test]
+    public void ExportWithOptions_ValidateLayoutOnly_ShouldIgnoreCapabilityDiagnostics() {
+        SpreadsheetDocument sut = CreateDocumentUsingAllCapabilities(new CapabilityRenderer(new RendererCapabilities()));
+
+        byte[] result = sut.Export(new ExportOptions { ValidateLayout = true });
+
+        Assert.That(result, Is.EqualTo(ExportedBytes));
+    }
+
+    [Test]
+    public void ExportWithOptions_ValidateAll_ShouldComputeEachTemplateLayoutOnce() {
+        FakeRenderer renderer = new();
+        SpreadsheetDocument sut = new(renderer);
+        CountingSheetTemplate first = new();
+        CountingSheetTemplate second = new();
+        sut.CreateSheet("Counting").AddTemplates(first, second);
+
+        sut.Export(new ExportOptions { ValidateLayout = true, ValidateCapabilities = true });
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(first.GetLayoutCount, Is.EqualTo(1));
+            Assert.That(second.GetLayoutCount, Is.EqualTo(1));
+            Assert.That(renderer.RenderedLayouts.Single().Cells, Has.Count.EqualTo(2));
+        }
+    }
+
+    [Test]
+    public void ExportWithOptions_OptionsIsNull_ShouldThrowArgumentNullException() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeRenderer());
+
+        Assert.That(() => sut.Export((ExportOptions)null!), Throws.ArgumentNullException);
+    }
+
+    [Test]
+    public void ExportWithOptions_WhenNoSheetsExist_ShouldThrowSheetDefinitionNotFoundException() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+
+        Assert.That(
+            () => sut.Export(new ExportOptions { ValidateLayout = true }),
+            Throws.TypeOf<SheetDefinitionNotFoundException>()
+        );
+    }
+
+    private static StubSheetTemplate CreateInvalidRangeTemplate() {
+        return new StubSheetTemplate(new TemplateLayout(
+            [
+                new Cell {
+                    Point = new Point(0, 0),
+                    Size = new Size(0, 1),
+                    ValueGenerator = (_, _) => "A"
+                }
+            ],
+            1,
+            new Dictionary<int, double?>()
+        ));
+    }
+
+    private sealed class CountingSheetTemplate : ISheetTemplate {
+        public int GetLayoutCount { get; private set; }
+
+        public int ColumnSpan => 1;
+
+        public int RowSpan => 1;
+
+        public TemplateLayout GetLayout() {
+            GetLayoutCount++;
+            return new TemplateLayout(
+                [new Cell { Point = new Point(0, 0), ValueGenerator = (_, _) => GetLayoutCount }],
+                1,
+                new Dictionary<int, double?>()
+            );
+        }
+    }
+
     private static SpreadsheetDocument CreateDocumentWithEmptySheet(ISpreadsheetRenderer renderer) {
         SpreadsheetDocument document = new(renderer);
         document.CreateSheet("Sheet1").AddTemplate(new StubSheetTemplate(new TemplateLayout([], 0, new Dictionary<int, double?>())));

@@ -193,6 +193,54 @@ public sealed class SpreadsheetDocument {
     }
 
     /// <summary>
+    /// Exports this document as a byte array, optionally validating it before rendering.
+    /// </summary>
+    /// <param name="options">The export options.</param>
+    /// <returns>The rendered spreadsheet bytes.</returns>
+    /// <remarks>
+    /// When validation is enabled, each template layout is computed once and shared by validation and rendering.
+    /// Layout and renderer capability diagnostics are combined into a single <see cref="SpreadsheetLayoutException"/>.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="options"/> is <see langword="null"/>.</exception>
+    /// <exception cref="SheetDefinitionNotFoundException">No sheets have been created.</exception>
+    /// <exception cref="SpreadsheetLayoutException">Validation is enabled and diagnostics are found.</exception>
+    public byte[] Export(ExportOptions options) {
+        ArgumentNullException.ThrowIfNull(options);
+
+        if (!options.ValidateLayout && !options.ValidateCapabilities) {
+            return Export();
+        }
+
+        if (sheets.Count == 0) {
+            throw new SheetDefinitionNotFoundException();
+        }
+
+        List<IReadOnlyList<TemplateLayout>> templateLayouts = sheets
+            .Select(SheetLayout.GetTemplateLayouts)
+            .ToList();
+        List<SheetLayout> layouts = sheets
+            .Select((sheet, index) => new SheetLayout(sheet, DefaultFont, templateLayouts[index]))
+            .ToList();
+        List<LayoutDiagnostic> diagnostics = [];
+
+        if (options.ValidateLayout) {
+            diagnostics.AddRange(SheetLayoutValidator.GetDiagnostics(sheets, templateLayouts));
+        }
+
+        if (options.ValidateCapabilities && renderer is ISpreadsheetRendererWithCapabilities capableRenderer) {
+            diagnostics.AddRange(
+                RendererCapabilityValidator.GetDiagnostics(layouts, DefaultFont, capableRenderer.Capabilities)
+            );
+        }
+
+        if (diagnostics.Count > 0) {
+            throw new SpreadsheetLayoutException(diagnostics);
+        }
+
+        return renderer.Render(layouts);
+    }
+
+    /// <summary>
     /// Exports this document to a file at the specified path.
     /// </summary>
     /// <param name="path">The output file path.</param>

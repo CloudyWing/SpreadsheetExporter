@@ -10,11 +10,26 @@ internal static class SheetLayoutValidator {
     private static readonly char[] InvalidSheetNameChars = ['[', ']', ':', '*', '?', '/', '\\'];
 
     internal static IReadOnlyList<LayoutDiagnostic> GetDiagnostics(IReadOnlyList<SheetDefinition> sheets) {
+        return GetDiagnostics(sheets, null);
+    }
+
+    /// <summary>
+    /// Gets layout diagnostics, reusing precomputed template layouts when provided.
+    /// </summary>
+    /// <param name="sheets">The sheets to validate.</param>
+    /// <param name="templateLayouts">
+    /// The template layouts of each sheet in template order, or <see langword="null"/> to compute them.
+    /// </param>
+    internal static IReadOnlyList<LayoutDiagnostic> GetDiagnostics(
+        IReadOnlyList<SheetDefinition> sheets, IReadOnlyList<IReadOnlyList<TemplateLayout>>? templateLayouts
+    ) {
         List<LayoutDiagnostic> diagnostics = [];
         Dictionary<string, int> sheetNameIndexes = new(StringComparer.OrdinalIgnoreCase);
 
         for (int sheetIndex = 0; sheetIndex < sheets.Count; sheetIndex++) {
-            AppendSheetDiagnostics(diagnostics, sheetNameIndexes, sheets[sheetIndex], sheetIndex);
+            AppendSheetDiagnostics(
+                diagnostics, sheetNameIndexes, sheets[sheetIndex], sheetIndex, templateLayouts?[sheetIndex]
+            );
         }
 
         return diagnostics.AsReadOnly();
@@ -24,7 +39,8 @@ internal static class SheetLayoutValidator {
         List<LayoutDiagnostic> diagnostics,
         Dictionary<string, int> sheetNameIndexes,
         SheetDefinition sheet,
-        int sheetIndex
+        int sheetIndex,
+        IReadOnlyList<TemplateLayout>? templateLayouts
     ) {
         Dictionary<Point, OccupiedCell> occupiedPoints = [];
         int rowOffset = 0;
@@ -35,7 +51,7 @@ internal static class SheetLayoutValidator {
 
         for (int templateIndex = 0; templateIndex < sheet.Templates.Count; templateIndex++) {
             ISheetTemplate template = sheet.Templates[templateIndex];
-            TemplateLayout layout = template.GetLayout();
+            TemplateLayout layout = templateLayouts?[templateIndex] ?? template.GetLayout();
             CellSource source = CreateSource(sheet, sheetIndex, templateIndex, template);
 
             AppendRowHeightDiagnostics(diagnostics, layout, rowOffset, source);

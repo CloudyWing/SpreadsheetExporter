@@ -1,12 +1,27 @@
 #nullable enable
+CloudyWing.SpreadsheetExporter.ExportOptions
+CloudyWing.SpreadsheetExporter.ExportOptions.<Clone>$() -> CloudyWing.SpreadsheetExporter.ExportOptions!
+CloudyWing.SpreadsheetExporter.ExportOptions.Equals(CloudyWing.SpreadsheetExporter.ExportOptions? other) -> bool
+CloudyWing.SpreadsheetExporter.ExportOptions.ExportOptions() -> void
+CloudyWing.SpreadsheetExporter.ExportOptions.ValidateCapabilities.get -> bool
+CloudyWing.SpreadsheetExporter.ExportOptions.ValidateCapabilities.init -> void
+CloudyWing.SpreadsheetExporter.ExportOptions.ValidateLayout.get -> bool
+CloudyWing.SpreadsheetExporter.ExportOptions.ValidateLayout.init -> void
 CloudyWing.SpreadsheetExporter.ISpreadsheetStreamRenderer
 CloudyWing.SpreadsheetExporter.ISpreadsheetStreamRenderer.Render(System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.SheetLayout!>! layouts, System.IO.Stream! stream) -> void
 CloudyWing.SpreadsheetExporter.SheetDefinition.AutoFilterRange.get -> CloudyWing.SpreadsheetExporter.CellRange?
 CloudyWing.SpreadsheetExporter.SheetDefinition.AutoFilterRange.set -> void
 CloudyWing.SpreadsheetExporter.SheetDefinition.SetAutoFilterRange(CloudyWing.SpreadsheetExporter.CellRange range) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
 CloudyWing.SpreadsheetExporter.SheetLayout.AutoFilterRange.get -> CloudyWing.SpreadsheetExporter.CellRange?
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.Export(CloudyWing.SpreadsheetExporter.ExportOptions! options) -> byte[]!
 CloudyWing.SpreadsheetExporter.SpreadsheetDocument.Export(System.IO.Stream! stream) -> void
 CloudyWing.SpreadsheetExporter.SpreadsheetDocument.ExportAsync(System.IO.Stream! stream, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
 CloudyWing.SpreadsheetExporter.SpreadsheetDocument.ExportFileAsync(string! path, CloudyWing.SpreadsheetExporter.SpreadsheetFileMode fileMode = CloudyWing.SpreadsheetExporter.SpreadsheetFileMode.Create, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
 const CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes.DuplicateSheetName = "SE-LAYOUT-006" -> string!
 const CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes.InvalidSheetName = "SE-LAYOUT-005" -> string!
+override CloudyWing.SpreadsheetExporter.ExportOptions.Equals(object? obj) -> bool
+override CloudyWing.SpreadsheetExporter.ExportOptions.GetHashCode() -> int
+override CloudyWing.SpreadsheetExporter.ExportOptions.ToString() -> string!
+static CloudyWing.SpreadsheetExporter.ExportOptions.Default.get -> CloudyWing.SpreadsheetExporter.ExportOptions!
+static CloudyWing.SpreadsheetExporter.ExportOptions.operator !=(CloudyWing.SpreadsheetExporter.ExportOptions? left, CloudyWing.SpreadsheetExporter.ExportOptions? right) -> bool
+static CloudyWing.SpreadsheetExporter.ExportOptions.operator ==(CloudyWing.SpreadsheetExporter.ExportOptions? left, CloudyWing.SpreadsheetExporter.ExportOptions? right) -> bool
