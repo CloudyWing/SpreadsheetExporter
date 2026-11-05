@@ -92,11 +92,8 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
         foreach (Cell cell in cells) {
             int firstRow = cell.Point.Y + 1;
             int firstColumn = cell.Point.X + 1;
-            int lastRow = firstRow + cell.Size.Height - 1;
-            int lastColumn = firstColumn + cell.Size.Width - 1;
 
             IXLCell xlCell = worksheet.Cell(firstRow, firstColumn);
-            IXLRange range = worksheet.Range(firstRow, firstColumn, lastRow, lastColumn);
 
             string? formula = cell.GetFormula();
             if (!string.IsNullOrWhiteSpace(formula)) {
@@ -105,14 +102,26 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
                 SetCellValue(xlCell, cell.GetValue());
             }
 
-            if (cell.Size.Width > 1 || cell.Size.Height > 1) {
-                range.Merge();
+            // 單一儲存格直接操作 cell，避免每格都建立並追蹤一個 IXLRange
+            if (cell.Size.Width == 1 && cell.Size.Height == 1) {
+                SetCellStyle(xlCell.Style, cell.GetCellStyle());
+
+                if (cell.GetDataValidation() is DataValidation cellValidation) {
+                    SetDataValidation(xlCell.CreateDataValidation(), cellValidation);
+                }
+
+                continue;
             }
+
+            int lastRow = firstRow + cell.Size.Height - 1;
+            int lastColumn = firstColumn + cell.Size.Width - 1;
+            IXLRange range = worksheet.Range(firstRow, firstColumn, lastRow, lastColumn);
+            range.Merge();
 
             SetCellStyle(range.Style, cell.GetCellStyle());
 
-            if (cell.GetDataValidation() is DataValidation dataValidation) {
-                SetDataValidation(range, dataValidation);
+            if (cell.GetDataValidation() is DataValidation rangeValidation) {
+                SetDataValidation(range.CreateDataValidation(), rangeValidation);
             }
         }
     }
@@ -241,8 +250,7 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
         worksheet.Protect(context.Password, XLProtectionAlgorithm.Algorithm.SHA512);
     }
 
-    private static void SetDataValidation(IXLRange range, DataValidation validation) {
-        IXLDataValidation xlValidation = range.CreateDataValidation();
+    private static void SetDataValidation(IXLDataValidation xlValidation, DataValidation validation) {
 
         switch (validation.ValidationType) {
             case DataValidationType.List:
