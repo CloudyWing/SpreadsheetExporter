@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using CloudyWing.SpreadsheetExporter.Util;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet;
@@ -12,7 +13,7 @@ namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet;
 /// <typeparam name="TRecord">The type of the record.</typeparam>
 /// <typeparam name="TField">The type of the field.</typeparam>
 internal class FieldColumn<TRecord, TField> : RecordSetColumnBase<TRecord> {
-    private readonly Dictionary<RecordContext<TRecord>, FieldContext<TRecord, TField>> contextMap = [];
+    private readonly Func<TRecord, object?>? expressionAccessor;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FieldColumn{TRecord, TField}"/> class.
@@ -26,8 +27,11 @@ internal class FieldColumn<TRecord, TField> : RecordSetColumnBase<TRecord> {
     /// Initializes a new instance of the <see cref="FieldColumn{TRecord, TField}"/> class.
     /// </summary>
     /// <param name="fieldKeyExpression">The field key expression.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="fieldKeyExpression"/> is <see langword="null"/>.</exception>
     public FieldColumn(Expression<Func<TRecord, TField>> fieldKeyExpression) {
+        ArgumentNullException.ThrowIfNull(fieldKeyExpression);
         FieldKey = GetFieldKeyByExpression(fieldKeyExpression);
+        expressionAccessor = CreateExpressionAccessor(fieldKeyExpression);
     }
 
     /// <summary>
@@ -84,6 +88,44 @@ internal class FieldColumn<TRecord, TField> : RecordSetColumnBase<TRecord> {
         return string.Join(".", memberExpressions);
     }
 
+    /// <summary>
+    /// Creates a null-propagating accessor from a member access chain rooted at the lambda parameter.
+    /// Returns <see langword="null"/> for expressions that must be resolved by <see cref="FieldKey"/> instead.
+    /// </summary>
+    private static Func<TRecord, object?>? CreateExpressionAccessor(Expression<Func<TRecord, TField>> expression) {
+        if (expression.Body is ConstantExpression) {
+            return null;
+        }
+
+        Stack<MemberInfo> members = [];
+        Expression? current = GetMemberExpression(expression);
+        while (current is MemberExpression memberExpression) {
+            members.Push(memberExpression.Member);
+            current = memberExpression.Expression;
+        }
+
+        if (members.Count == 0 || current != expression.Parameters[0]) {
+            return null;
+        }
+
+        Func<object, object?>[] getters = members
+            .Select(MemberAccessorCache.GetGetter)
+            .ToArray();
+
+        return record => {
+            object? value = record;
+            foreach (Func<object, object?> getter in getters) {
+                if (value is null) {
+                    return null;
+                }
+
+                value = getter(value);
+            }
+
+            return value;
+        };
+    }
+
     private static MemberExpression? GetMemberExpression(Expression? expression) {
         return expression switch {
             MemberExpression member => member,
@@ -99,7 +141,7 @@ internal class FieldColumn<TRecord, TField> : RecordSetColumnBase<TRecord> {
             return FieldValueGenerator?.Invoke(default!) ?? "";
         }
 
-        FieldContext<TRecord, TField> fieldContext = GetFieldContextFromRecordContext(recordContext);
+        FieldContext<TRecord, TField> fieldContext = CreateFieldContext(recordContext);
 
         return FieldValueGenerator?.Invoke(fieldContext) ?? fieldContext.Value;
     }
@@ -115,28 +157,30 @@ internal class FieldColumn<TRecord, TField> : RecordSetColumnBase<TRecord> {
             return generator(default!);
         }
 
-        FieldContext<TRecord, TField> fieldContext = GetFieldContextFromRecordContext(recordContext);
+        FieldContext<TRecord, TField> fieldContext = CreateFieldContext(recordContext);
 
         return generator(fieldContext);
     }
 
-    private FieldContext<TRecord, TField> GetFieldContextFromRecordContext(RecordContext<TRecord> recordContext) {
-        if (!contextMap.TryGetValue(recordContext, out FieldContext<TRecord, TField>? fieldContext)) {
-            int maxNestedLevel = FieldKey.Split('.').Length;
-            IDictionary<string, object?> maps = DictionaryUtils.ConvertFrom(recordContext.Record, maxNestedLevel);
+    private FieldContext<TRecord, TField> CreateFieldContext(RecordContext<TRecord> recordContext) {
+        object? rawValue = expressionAccessor is null
+            ? GetValueByFieldKey(recordContext.Record)
+            : expressionAccessor(recordContext.Record);
 
-            if (!maps.TryGetValue(FieldKey, out object? value1)) {
-                string availableProperties = string.Join(", ", maps.Keys.OrderBy(k => k));
-                throw new ArgumentException(
-                    $"Data source does not contain property '{FieldKey}'. Available properties: {availableProperties}"
-                );
-            }
+        return new FieldContext<TRecord, TField>(recordContext, FieldKey, ChangeFieldValueType(rawValue));
+    }
 
-            TField value = ChangeFieldValueType(value1);
-            fieldContext = new FieldContext<TRecord, TField>(recordContext, FieldKey, value);
-            contextMap[recordContext] = fieldContext;
+    private object? GetValueByFieldKey(TRecord record) {
+        if (DictionaryUtils.TryGetPathValue(record, FieldKey, out object? value, out IReadOnlyList<string> availablePaths)) {
+            return value;
         }
-        return fieldContext;
+
+        string availableProperties = string.Join(
+            ", ", availablePaths.OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
+        );
+        throw new ArgumentException(
+            $"Data source does not contain property '{FieldKey}'. Available properties: {availableProperties}"
+        );
     }
 
     private static TField ChangeFieldValueType(object? value) {
