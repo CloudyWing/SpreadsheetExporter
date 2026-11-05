@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
@@ -102,11 +101,6 @@ public class RecordSetColumnCollection<T> : Collection<RecordSetColumnBase<T>> {
     /// <param name="headerStyle">The header style.</param>
     /// <param name="fieldStyleGenerator">The field style generator.</param>
     /// <returns>The collection instance for chaining.</returns>
-    [SuppressMessage(
-        "ApiDesign",
-        "RS0027:API with optional parameter(s) should have the most parameters amongst its public overloads",
-        Justification = "既有公開 API 無法調整參數；新增的 width 多載沒有選擇性參數，且 double 不接受 null，不會與既有呼叫產生多載歧義。"
-    )]
     public RecordSetColumnCollection<T> Add(
         string headerText, CellStyle? headerStyle = null,
         Func<RecordContext<T>, CellStyle>? fieldStyleGenerator = null
