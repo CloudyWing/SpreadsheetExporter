@@ -283,5 +283,68 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.DataTable {
 
             Assert.That(dataCell.GetDataValidation(), Is.SameAs(validation));
         }
+
+        [Test]
+        public void DataTable_SetTableWithDifferentColumns_RebuildsColumnsAndRendersNewTable() {
+            System.Data.DataTable otherTable = new();
+            otherTable.Columns.Add("Code", typeof(string));
+            otherTable.Rows.Add("A-01");
+            DataTableColumnCollection originalColumns = template.Columns;
+
+            template.DataTable = otherTable;
+            TemplateLayout layout = template.GetLayout();
+
+            Assert.Multiple(() => {
+                Assert.That(template.Columns, Is.SameAs(originalColumns));
+                Assert.That(template.Columns.Select(x => x.ColumnName), Is.EqualTo(new[] { "Code" }));
+                Assert.That(layout.Cells.Select(x => x.GetValue()), Is.EqualTo(new object?[] { "Code", "A-01" }));
+            });
+        }
+
+        [Test]
+        public void DataTable_SetTableContainingConfiguredColumns_KeepsColumnSettings() {
+            template.Columns[1].HeaderText = "姓名";
+            System.Data.DataTable otherTable = dataTable.Clone();
+            otherTable.Columns.Add("Extra", typeof(string));
+            otherTable.Rows.Add(9, "Zoe", 20, "X");
+
+            template.DataTable = otherTable;
+            TemplateLayout layout = template.GetLayout();
+
+            Assert.Multiple(() => {
+                Assert.That(template.Columns, Has.Count.EqualTo(3));
+                Assert.That(template.Columns[1].HeaderText, Is.EqualTo("姓名"));
+                Assert.That(layout.Cells.Select(x => x.GetValue()), Is.EqualTo(new object?[] { "Id", "姓名", "Age", 9, "Zoe", 20 }));
+            });
+        }
+
+        [Test]
+        public void GetLayout_ColumnNameNotInDataTable_ThrowsArgumentExceptionWithAvailableColumns() {
+            template.Columns.Add(new DataTableColumn { ColumnName = "Missing", HeaderText = "Missing" });
+
+            Assert.That(
+                () => template.GetLayout(),
+                Throws.ArgumentException
+                    .With.Message.Contains("does not contain column 'Missing'")
+                    .And.Message.Contains("Available columns: Id, Name, Age")
+            );
+        }
+
+        [Test]
+        public void GetLayout_ColumnNameIsNull_ThrowsArgumentException() {
+            template.Columns.Add(new DataTableColumn { HeaderText = "Unbound" });
+
+            Assert.That(() => template.GetLayout(), Throws.ArgumentException);
+        }
+
+        [Test]
+        public void GetLayout_ColumnNameNotInEmptyDataTable_ReturnsHeaderCells() {
+            dataTable.Rows.Clear();
+            template.Columns.Add(new DataTableColumn { ColumnName = "Missing", HeaderText = "Missing" });
+
+            TemplateLayout layout = template.GetLayout();
+
+            Assert.That(layout.Cells.Select(x => x.GetValue()), Is.EqualTo(new object?[] { "Id", "Name", "Age", "Missing" }));
+        }
     }
 }
