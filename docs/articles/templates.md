@@ -194,11 +194,11 @@ template.Columns.Add(
 ### 公式
 
 ```csharp
-// context.RowIndex 為資料列的零基索引（標題列不計入）
+// context.RowIndex 為儲存格在工作表中的零基列索引（包含標題列與上方的 templates），加 1 即為 Excel 列號
 template.Columns.Add(
     "含稅金額",
     configureGenerators: config => config.UseFormula(
-        context => $"C{context.RowIndex + 2}*1.05"
+        context => $"C{context.RowIndex + 1}*1.05"
     )
 );
 ```

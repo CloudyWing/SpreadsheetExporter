@@ -76,10 +76,24 @@ SpreadsheetDocument document = SpreadsheetDocument.FromJson(json);
 byte[] bytes = document.Export();
 ```
 
+除了 `Export()` 與 `ExportFile(...)`，也可以直接寫入 stream、以非同步方式輸出，或在匯出前一併驗證版面：
+
+```csharp
+document.Export(stream);
+await document.ExportAsync(response.Body, cancellationToken);
+await document.ExportFileAsync("orders.xlsx", SpreadsheetFileMode.Create, cancellationToken);
+
+byte[] validated = document.Export(new ExportOptions {
+    ValidateLayout = true,
+    ValidateCapabilities = true
+});
+```
+
 若你的專案已經使用 DI，也可以在組合根先完成初始化，再建立文件：
 
 ```csharp
 using CloudyWing.SpreadsheetExporter;
+using CloudyWing.SpreadsheetExporter.Config;
 using CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
 using Microsoft.Extensions.DependencyInjection;
 

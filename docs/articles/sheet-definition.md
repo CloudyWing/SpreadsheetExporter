@@ -121,7 +121,7 @@ using CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
 
 public class CustomExcelRenderer : ExcelRenderer {
     protected override void OnSheetCreated(IXLWorksheet worksheet, SheetLayout context) {
-        if (context.Metadata.TryGetValue("reportType", out object reportType)) {
+        if (context.Metadata.TryGetValue("reportType", out object? reportType)) {
             worksheet.Tab.Color = reportType as string == "quarterly"
                 ? XLColor.Blue
                 : XLColor.Gray;

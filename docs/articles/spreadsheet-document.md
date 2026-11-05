@@ -82,8 +82,9 @@ SheetDefinition last = document.LastSheet;
 SheetDefinition first = document.GetSheet(0);
 
 // 安全取得
-if (document.TryGetSheet(0, out SheetDefinition sheet)) {
-    // ...
+if (document.TryGetSheet(0, out SheetDefinition? sheet)) {
+    // 回傳 true 時 sheet 不為 null
+    Console.WriteLine(sheet.SheetName);
 }
 ```
 
@@ -456,6 +457,8 @@ JSON Schema 可參考 [`spreadsheet-exporter.schema.json`](../schemas/spreadshee
 | `IsInputPromptShown` | `boolean` | 選取儲存格時是否顯示輸入提示 |
 
 未設定 `ValidationType` 時，使用 `DataValidation` 的預設驗證類型 `List`。
+
+清單驗證的項目會以逗號串接成 Excel 字串常值。項目中的雙引號會自動跳脫；Excel 無法跳脫逗號，含逗號的項目會被拆成多個選項。ClosedXML renderer 的清單來源（含前後雙引號）上限為 255 個字元，超過時拋出 `ArgumentOutOfRangeException`。
 
 ### Style 與 Font 支援欄位
 
