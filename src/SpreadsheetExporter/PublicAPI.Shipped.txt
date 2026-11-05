@@ -1,0 +1,561 @@
+#nullable enable
+abstract CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.GetFieldDataValidation(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>! context) -> CloudyWing.SpreadsheetExporter.DataValidation?
+abstract CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.GetFieldFormula(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>! context) -> string?
+abstract CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.GetFieldStyle(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>! context) -> CloudyWing.SpreadsheetExporter.CellStyle
+abstract CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.GetFieldValue(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>! context) -> object?
+CloudyWing.SpreadsheetExporter.Cell
+CloudyWing.SpreadsheetExporter.Cell.Cell() -> void
+CloudyWing.SpreadsheetExporter.Cell.CellStyleGenerator.get -> CloudyWing.SpreadsheetExporter.CellGenerator<CloudyWing.SpreadsheetExporter.CellStyle>?
+CloudyWing.SpreadsheetExporter.Cell.CellStyleGenerator.set -> void
+CloudyWing.SpreadsheetExporter.Cell.DataValidationGenerator.get -> CloudyWing.SpreadsheetExporter.CellGenerator<CloudyWing.SpreadsheetExporter.DataValidation?>?
+CloudyWing.SpreadsheetExporter.Cell.DataValidationGenerator.set -> void
+CloudyWing.SpreadsheetExporter.Cell.FormulaGenerator.get -> CloudyWing.SpreadsheetExporter.CellGenerator<string?>?
+CloudyWing.SpreadsheetExporter.Cell.FormulaGenerator.set -> void
+CloudyWing.SpreadsheetExporter.Cell.GetCellStyle() -> CloudyWing.SpreadsheetExporter.CellStyle
+CloudyWing.SpreadsheetExporter.Cell.GetDataValidation() -> CloudyWing.SpreadsheetExporter.DataValidation?
+CloudyWing.SpreadsheetExporter.Cell.GetFormula() -> string?
+CloudyWing.SpreadsheetExporter.Cell.GetValue() -> object?
+CloudyWing.SpreadsheetExporter.Cell.Point.get -> System.Drawing.Point
+CloudyWing.SpreadsheetExporter.Cell.Point.set -> void
+CloudyWing.SpreadsheetExporter.Cell.ShallowCopy() -> CloudyWing.SpreadsheetExporter.Cell!
+CloudyWing.SpreadsheetExporter.Cell.Size.get -> System.Drawing.Size
+CloudyWing.SpreadsheetExporter.Cell.Size.set -> void
+CloudyWing.SpreadsheetExporter.Cell.ValueGenerator.get -> CloudyWing.SpreadsheetExporter.CellGenerator<object?>?
+CloudyWing.SpreadsheetExporter.Cell.ValueGenerator.set -> void
+CloudyWing.SpreadsheetExporter.CellFont
+CloudyWing.SpreadsheetExporter.CellFont.CellFont() -> void
+CloudyWing.SpreadsheetExporter.CellFont.CellFont(string? Name = null, short Size = 0, System.Drawing.Color Color = default(System.Drawing.Color), CloudyWing.SpreadsheetExporter.FontStyles Style = CloudyWing.SpreadsheetExporter.FontStyles.None) -> void
+CloudyWing.SpreadsheetExporter.CellFont.Color.get -> System.Drawing.Color
+CloudyWing.SpreadsheetExporter.CellFont.Color.set -> void
+CloudyWing.SpreadsheetExporter.CellFont.Deconstruct(out string? Name, out short Size, out System.Drawing.Color Color, out CloudyWing.SpreadsheetExporter.FontStyles Style) -> void
+CloudyWing.SpreadsheetExporter.CellFont.Equals(CloudyWing.SpreadsheetExporter.CellFont other) -> bool
+CloudyWing.SpreadsheetExporter.CellFont.Name.get -> string?
+CloudyWing.SpreadsheetExporter.CellFont.Name.set -> void
+CloudyWing.SpreadsheetExporter.CellFont.Size.get -> short
+CloudyWing.SpreadsheetExporter.CellFont.Size.set -> void
+CloudyWing.SpreadsheetExporter.CellFont.Style.get -> CloudyWing.SpreadsheetExporter.FontStyles
+CloudyWing.SpreadsheetExporter.CellFont.Style.set -> void
+CloudyWing.SpreadsheetExporter.CellGenerator<T>
+CloudyWing.SpreadsheetExporter.CellRange
+CloudyWing.SpreadsheetExporter.CellRange.CellRange() -> void
+CloudyWing.SpreadsheetExporter.CellRange.CellRange(int Column, int Row, int ColumnSpan, int RowSpan) -> void
+CloudyWing.SpreadsheetExporter.CellRange.Column.get -> int
+CloudyWing.SpreadsheetExporter.CellRange.Column.init -> void
+CloudyWing.SpreadsheetExporter.CellRange.ColumnSpan.get -> int
+CloudyWing.SpreadsheetExporter.CellRange.ColumnSpan.init -> void
+CloudyWing.SpreadsheetExporter.CellRange.Deconstruct(out int Column, out int Row, out int ColumnSpan, out int RowSpan) -> void
+CloudyWing.SpreadsheetExporter.CellRange.Equals(CloudyWing.SpreadsheetExporter.CellRange other) -> bool
+CloudyWing.SpreadsheetExporter.CellRange.Intersects(CloudyWing.SpreadsheetExporter.CellRange other) -> bool
+CloudyWing.SpreadsheetExporter.CellRange.IsValid.get -> bool
+CloudyWing.SpreadsheetExporter.CellRange.LastColumn.get -> int
+CloudyWing.SpreadsheetExporter.CellRange.LastRow.get -> int
+CloudyWing.SpreadsheetExporter.CellRange.Row.get -> int
+CloudyWing.SpreadsheetExporter.CellRange.Row.init -> void
+CloudyWing.SpreadsheetExporter.CellRange.RowSpan.get -> int
+CloudyWing.SpreadsheetExporter.CellRange.RowSpan.init -> void
+CloudyWing.SpreadsheetExporter.CellSource
+CloudyWing.SpreadsheetExporter.CellSource.<Clone>$() -> CloudyWing.SpreadsheetExporter.CellSource!
+CloudyWing.SpreadsheetExporter.CellSource.CellSource(int SheetIndex, string! SheetName, int TemplateIndex, string! TemplateType, string? Path) -> void
+CloudyWing.SpreadsheetExporter.CellSource.Deconstruct(out int SheetIndex, out string! SheetName, out int TemplateIndex, out string! TemplateType, out string? Path) -> void
+CloudyWing.SpreadsheetExporter.CellSource.Equals(CloudyWing.SpreadsheetExporter.CellSource? other) -> bool
+CloudyWing.SpreadsheetExporter.CellSource.Path.get -> string?
+CloudyWing.SpreadsheetExporter.CellSource.Path.init -> void
+CloudyWing.SpreadsheetExporter.CellSource.SheetIndex.get -> int
+CloudyWing.SpreadsheetExporter.CellSource.SheetIndex.init -> void
+CloudyWing.SpreadsheetExporter.CellSource.SheetName.get -> string!
+CloudyWing.SpreadsheetExporter.CellSource.SheetName.init -> void
+CloudyWing.SpreadsheetExporter.CellSource.TemplateIndex.get -> int
+CloudyWing.SpreadsheetExporter.CellSource.TemplateIndex.init -> void
+CloudyWing.SpreadsheetExporter.CellSource.TemplateType.get -> string!
+CloudyWing.SpreadsheetExporter.CellSource.TemplateType.init -> void
+CloudyWing.SpreadsheetExporter.CellStyle
+CloudyWing.SpreadsheetExporter.CellStyle.BackgroundColor.get -> System.Drawing.Color
+CloudyWing.SpreadsheetExporter.CellStyle.BackgroundColor.set -> void
+CloudyWing.SpreadsheetExporter.CellStyle.CellStyle() -> void
+CloudyWing.SpreadsheetExporter.CellStyle.CellStyle(CloudyWing.SpreadsheetExporter.HorizontalAlignment HorizontalAlignment = CloudyWing.SpreadsheetExporter.HorizontalAlignment.General, CloudyWing.SpreadsheetExporter.VerticalAlignment VerticalAlignment = CloudyWing.SpreadsheetExporter.VerticalAlignment.Top, bool HasBorder = false, bool WrapText = false, System.Drawing.Color BackgroundColor = default(System.Drawing.Color), CloudyWing.SpreadsheetExporter.CellFont Font = default(CloudyWing.SpreadsheetExporter.CellFont), string? DataFormat = null, bool IsLocked = false) -> void
+CloudyWing.SpreadsheetExporter.CellStyle.DataFormat.get -> string?
+CloudyWing.SpreadsheetExporter.CellStyle.DataFormat.set -> void
+CloudyWing.SpreadsheetExporter.CellStyle.Deconstruct(out CloudyWing.SpreadsheetExporter.HorizontalAlignment HorizontalAlignment, out CloudyWing.SpreadsheetExporter.VerticalAlignment VerticalAlignment, out bool HasBorder, out bool WrapText, out System.Drawing.Color BackgroundColor, out CloudyWing.SpreadsheetExporter.CellFont Font, out string? DataFormat, out bool IsLocked) -> void
+CloudyWing.SpreadsheetExporter.CellStyle.Equals(CloudyWing.SpreadsheetExporter.CellStyle other) -> bool
+CloudyWing.SpreadsheetExporter.CellStyle.Font.get -> CloudyWing.SpreadsheetExporter.CellFont
+CloudyWing.SpreadsheetExporter.CellStyle.Font.set -> void
+CloudyWing.SpreadsheetExporter.CellStyle.HasBorder.get -> bool
+CloudyWing.SpreadsheetExporter.CellStyle.HasBorder.set -> void
+CloudyWing.SpreadsheetExporter.CellStyle.HorizontalAlignment.get -> CloudyWing.SpreadsheetExporter.HorizontalAlignment
+CloudyWing.SpreadsheetExporter.CellStyle.HorizontalAlignment.set -> void
+CloudyWing.SpreadsheetExporter.CellStyle.IsLocked.get -> bool
+CloudyWing.SpreadsheetExporter.CellStyle.IsLocked.set -> void
+CloudyWing.SpreadsheetExporter.CellStyle.VerticalAlignment.get -> CloudyWing.SpreadsheetExporter.VerticalAlignment
+CloudyWing.SpreadsheetExporter.CellStyle.VerticalAlignment.set -> void
+CloudyWing.SpreadsheetExporter.CellStyle.WrapText.get -> bool
+CloudyWing.SpreadsheetExporter.CellStyle.WrapText.set -> void
+CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration
+CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.CellStyle.get -> CloudyWing.SpreadsheetExporter.CellStyle
+CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.CellStyle.init -> void
+CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.CellStyleConfiguration() -> void
+CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.FieldStyle.get -> CloudyWing.SpreadsheetExporter.CellStyle
+CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.FieldStyle.init -> void
+CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.GridCellStyle.get -> CloudyWing.SpreadsheetExporter.CellStyle
+CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.GridCellStyle.init -> void
+CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.HeaderStyle.get -> CloudyWing.SpreadsheetExporter.CellStyle
+CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration.HeaderStyle.init -> void
+CloudyWing.SpreadsheetExporter.Constants
+CloudyWing.SpreadsheetExporter.DataValidation
+CloudyWing.SpreadsheetExporter.DataValidation.DataValidation() -> void
+CloudyWing.SpreadsheetExporter.DataValidation.ErrorMessage.get -> string?
+CloudyWing.SpreadsheetExporter.DataValidation.ErrorMessage.set -> void
+CloudyWing.SpreadsheetExporter.DataValidation.ErrorTitle.get -> string?
+CloudyWing.SpreadsheetExporter.DataValidation.ErrorTitle.set -> void
+CloudyWing.SpreadsheetExporter.DataValidation.Formula.get -> string?
+CloudyWing.SpreadsheetExporter.DataValidation.Formula.set -> void
+CloudyWing.SpreadsheetExporter.DataValidation.IsBlankAllowed.get -> bool
+CloudyWing.SpreadsheetExporter.DataValidation.IsBlankAllowed.set -> void
+CloudyWing.SpreadsheetExporter.DataValidation.IsDropdownShown.get -> bool
+CloudyWing.SpreadsheetExporter.DataValidation.IsDropdownShown.set -> void
+CloudyWing.SpreadsheetExporter.DataValidation.IsErrorAlertShown.get -> bool
+CloudyWing.SpreadsheetExporter.DataValidation.IsErrorAlertShown.set -> void
+CloudyWing.SpreadsheetExporter.DataValidation.IsInputPromptShown.get -> bool
+CloudyWing.SpreadsheetExporter.DataValidation.IsInputPromptShown.set -> void
+CloudyWing.SpreadsheetExporter.DataValidation.ListItems.get -> System.Collections.Generic.IEnumerable<string!>?
+CloudyWing.SpreadsheetExporter.DataValidation.ListItems.set -> void
+CloudyWing.SpreadsheetExporter.DataValidation.Operator.get -> CloudyWing.SpreadsheetExporter.DataValidationOperator?
+CloudyWing.SpreadsheetExporter.DataValidation.Operator.set -> void
+CloudyWing.SpreadsheetExporter.DataValidation.PromptMessage.get -> string?
+CloudyWing.SpreadsheetExporter.DataValidation.PromptMessage.set -> void
+CloudyWing.SpreadsheetExporter.DataValidation.PromptTitle.get -> string?
+CloudyWing.SpreadsheetExporter.DataValidation.PromptTitle.set -> void
+CloudyWing.SpreadsheetExporter.DataValidation.ValidationType.get -> CloudyWing.SpreadsheetExporter.DataValidationType
+CloudyWing.SpreadsheetExporter.DataValidation.ValidationType.set -> void
+CloudyWing.SpreadsheetExporter.DataValidation.Value1.get -> object?
+CloudyWing.SpreadsheetExporter.DataValidation.Value1.set -> void
+CloudyWing.SpreadsheetExporter.DataValidation.Value2.get -> object?
+CloudyWing.SpreadsheetExporter.DataValidation.Value2.set -> void
+CloudyWing.SpreadsheetExporter.DataValidationOperator
+CloudyWing.SpreadsheetExporter.DataValidationOperator.Between = 0 -> CloudyWing.SpreadsheetExporter.DataValidationOperator
+CloudyWing.SpreadsheetExporter.DataValidationOperator.Equal = 2 -> CloudyWing.SpreadsheetExporter.DataValidationOperator
+CloudyWing.SpreadsheetExporter.DataValidationOperator.GreaterThan = 4 -> CloudyWing.SpreadsheetExporter.DataValidationOperator
+CloudyWing.SpreadsheetExporter.DataValidationOperator.GreaterThanOrEqual = 6 -> CloudyWing.SpreadsheetExporter.DataValidationOperator
+CloudyWing.SpreadsheetExporter.DataValidationOperator.LessThan = 5 -> CloudyWing.SpreadsheetExporter.DataValidationOperator
+CloudyWing.SpreadsheetExporter.DataValidationOperator.LessThanOrEqual = 7 -> CloudyWing.SpreadsheetExporter.DataValidationOperator
+CloudyWing.SpreadsheetExporter.DataValidationOperator.NotBetween = 1 -> CloudyWing.SpreadsheetExporter.DataValidationOperator
+CloudyWing.SpreadsheetExporter.DataValidationOperator.NotEqual = 3 -> CloudyWing.SpreadsheetExporter.DataValidationOperator
+CloudyWing.SpreadsheetExporter.DataValidationType
+CloudyWing.SpreadsheetExporter.DataValidationType.Custom = 6 -> CloudyWing.SpreadsheetExporter.DataValidationType
+CloudyWing.SpreadsheetExporter.DataValidationType.Date = 3 -> CloudyWing.SpreadsheetExporter.DataValidationType
+CloudyWing.SpreadsheetExporter.DataValidationType.Decimal = 2 -> CloudyWing.SpreadsheetExporter.DataValidationType
+CloudyWing.SpreadsheetExporter.DataValidationType.Integer = 1 -> CloudyWing.SpreadsheetExporter.DataValidationType
+CloudyWing.SpreadsheetExporter.DataValidationType.List = 0 -> CloudyWing.SpreadsheetExporter.DataValidationType
+CloudyWing.SpreadsheetExporter.DataValidationType.TextLength = 5 -> CloudyWing.SpreadsheetExporter.DataValidationType
+CloudyWing.SpreadsheetExporter.DataValidationType.Time = 4 -> CloudyWing.SpreadsheetExporter.DataValidationType
+CloudyWing.SpreadsheetExporter.Exceptions.SheetDefinitionNotFoundException
+CloudyWing.SpreadsheetExporter.Exceptions.SheetDefinitionNotFoundException.SheetDefinitionNotFoundException() -> void
+CloudyWing.SpreadsheetExporter.Exceptions.SheetDefinitionNotFoundException.SheetDefinitionNotFoundException(string! message) -> void
+CloudyWing.SpreadsheetExporter.Exceptions.SheetDefinitionNotFoundException.SheetDefinitionNotFoundException(string! message, System.Exception! innerException) -> void
+CloudyWing.SpreadsheetExporter.Exceptions.SpreadsheetLayoutException
+CloudyWing.SpreadsheetExporter.Exceptions.SpreadsheetLayoutException.Diagnostics.get -> System.Collections.Generic.IReadOnlyList<CloudyWing.SpreadsheetExporter.LayoutDiagnostic!>!
+CloudyWing.SpreadsheetExporter.Exceptions.SpreadsheetLayoutException.SpreadsheetLayoutException(string! message, System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.LayoutDiagnostic!>! diagnostics) -> void
+CloudyWing.SpreadsheetExporter.Exceptions.SpreadsheetLayoutException.SpreadsheetLayoutException(System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.LayoutDiagnostic!>! diagnostics) -> void
+CloudyWing.SpreadsheetExporter.FontStyles
+CloudyWing.SpreadsheetExporter.FontStyles.Bold = 1 -> CloudyWing.SpreadsheetExporter.FontStyles
+CloudyWing.SpreadsheetExporter.FontStyles.Italic = 2 -> CloudyWing.SpreadsheetExporter.FontStyles
+CloudyWing.SpreadsheetExporter.FontStyles.None = 0 -> CloudyWing.SpreadsheetExporter.FontStyles
+CloudyWing.SpreadsheetExporter.FontStyles.Strikeout = 8 -> CloudyWing.SpreadsheetExporter.FontStyles
+CloudyWing.SpreadsheetExporter.FontStyles.Underline = 4 -> CloudyWing.SpreadsheetExporter.FontStyles
+CloudyWing.SpreadsheetExporter.HorizontalAlignment
+CloudyWing.SpreadsheetExporter.HorizontalAlignment.Center = 2 -> CloudyWing.SpreadsheetExporter.HorizontalAlignment
+CloudyWing.SpreadsheetExporter.HorizontalAlignment.General = 0 -> CloudyWing.SpreadsheetExporter.HorizontalAlignment
+CloudyWing.SpreadsheetExporter.HorizontalAlignment.Justify = 4 -> CloudyWing.SpreadsheetExporter.HorizontalAlignment
+CloudyWing.SpreadsheetExporter.HorizontalAlignment.Left = 1 -> CloudyWing.SpreadsheetExporter.HorizontalAlignment
+CloudyWing.SpreadsheetExporter.HorizontalAlignment.Right = 3 -> CloudyWing.SpreadsheetExporter.HorizontalAlignment
+CloudyWing.SpreadsheetExporter.ISpreadsheetRenderer
+CloudyWing.SpreadsheetExporter.ISpreadsheetRenderer.ContentType.get -> string!
+CloudyWing.SpreadsheetExporter.ISpreadsheetRenderer.FileNameExtension.get -> string!
+CloudyWing.SpreadsheetExporter.ISpreadsheetRenderer.Render(System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.SheetLayout!>! layouts) -> byte[]!
+CloudyWing.SpreadsheetExporter.ISpreadsheetRendererWithCapabilities
+CloudyWing.SpreadsheetExporter.ISpreadsheetRendererWithCapabilities.Capabilities.get -> CloudyWing.SpreadsheetExporter.RendererCapabilities!
+CloudyWing.SpreadsheetExporter.JsonDiagnosticCodes
+CloudyWing.SpreadsheetExporter.LayoutDiagnostic
+CloudyWing.SpreadsheetExporter.LayoutDiagnostic.<Clone>$() -> CloudyWing.SpreadsheetExporter.LayoutDiagnostic!
+CloudyWing.SpreadsheetExporter.LayoutDiagnostic.Code.get -> string!
+CloudyWing.SpreadsheetExporter.LayoutDiagnostic.Code.init -> void
+CloudyWing.SpreadsheetExporter.LayoutDiagnostic.Deconstruct(out string! Code, out string! Message, out CloudyWing.SpreadsheetExporter.CellRange? Range, out CloudyWing.SpreadsheetExporter.CellSource? Source) -> void
+CloudyWing.SpreadsheetExporter.LayoutDiagnostic.Equals(CloudyWing.SpreadsheetExporter.LayoutDiagnostic? other) -> bool
+CloudyWing.SpreadsheetExporter.LayoutDiagnostic.LayoutDiagnostic(string! Code, string! Message, CloudyWing.SpreadsheetExporter.CellRange? Range, CloudyWing.SpreadsheetExporter.CellSource? Source) -> void
+CloudyWing.SpreadsheetExporter.LayoutDiagnostic.Message.get -> string!
+CloudyWing.SpreadsheetExporter.LayoutDiagnostic.Message.init -> void
+CloudyWing.SpreadsheetExporter.LayoutDiagnostic.Range.get -> CloudyWing.SpreadsheetExporter.CellRange?
+CloudyWing.SpreadsheetExporter.LayoutDiagnostic.Range.init -> void
+CloudyWing.SpreadsheetExporter.LayoutDiagnostic.Source.get -> CloudyWing.SpreadsheetExporter.CellSource?
+CloudyWing.SpreadsheetExporter.LayoutDiagnostic.Source.init -> void
+CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes
+CloudyWing.SpreadsheetExporter.PageOrientation
+CloudyWing.SpreadsheetExporter.PageOrientation.Landscape = 1 -> CloudyWing.SpreadsheetExporter.PageOrientation
+CloudyWing.SpreadsheetExporter.PageOrientation.Portrait = 0 -> CloudyWing.SpreadsheetExporter.PageOrientation
+CloudyWing.SpreadsheetExporter.PageSettings
+CloudyWing.SpreadsheetExporter.PageSettings.PageOrientation.get -> CloudyWing.SpreadsheetExporter.PageOrientation
+CloudyWing.SpreadsheetExporter.PageSettings.PageOrientation.set -> void
+CloudyWing.SpreadsheetExporter.PageSettings.PageSettings() -> void
+CloudyWing.SpreadsheetExporter.PageSettings.PaperSize.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+CloudyWing.SpreadsheetExporter.PageSettings.PaperSize.set -> void
+CloudyWing.SpreadsheetExporter.PaperSize
+CloudyWing.SpreadsheetExporter.PaperSize.Height.get -> int
+CloudyWing.SpreadsheetExporter.PaperSize.PaperSize(int value) -> void
+CloudyWing.SpreadsheetExporter.PaperSize.PaperSize(int value, string! name) -> void
+CloudyWing.SpreadsheetExporter.PaperSize.Width.get -> int
+CloudyWing.SpreadsheetExporter.RendererCapabilities
+CloudyWing.SpreadsheetExporter.RendererCapabilities.<Clone>$() -> CloudyWing.SpreadsheetExporter.RendererCapabilities!
+CloudyWing.SpreadsheetExporter.RendererCapabilities.Equals(CloudyWing.SpreadsheetExporter.RendererCapabilities? other) -> bool
+CloudyWing.SpreadsheetExporter.RendererCapabilities.RendererCapabilities() -> void
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsAutoFilter.get -> bool
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsAutoFilter.init -> void
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsDataValidation.get -> bool
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsDataValidation.init -> void
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsFormulas.get -> bool
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsFormulas.init -> void
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsFreezePanes.get -> bool
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsFreezePanes.init -> void
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsMergedCells.get -> bool
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsMergedCells.init -> void
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsMultipleSheets.get -> bool
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsMultipleSheets.init -> void
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsPageSettings.get -> bool
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsPageSettings.init -> void
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsStyles.get -> bool
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsStyles.init -> void
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsWorksheetProtection.get -> bool
+CloudyWing.SpreadsheetExporter.RendererCapabilities.SupportsWorksheetProtection.init -> void
+CloudyWing.SpreadsheetExporter.SheetDefinition
+CloudyWing.SpreadsheetExporter.SheetDefinition.AddTemplate(CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate! template) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SheetDefinition.AddTemplates(params CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate![]! templates) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SheetDefinition.AddTemplates(System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate!>! templates) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SheetDefinition.ColumnWidths.get -> System.Collections.Generic.IReadOnlyDictionary<int, double>!
+CloudyWing.SpreadsheetExporter.SheetDefinition.ConfigurePageSettings(System.Action<CloudyWing.SpreadsheetExporter.PageSettings!>! configure) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SheetDefinition.DefaultRowHeight.get -> double?
+CloudyWing.SpreadsheetExporter.SheetDefinition.DefaultRowHeight.set -> void
+CloudyWing.SpreadsheetExporter.SheetDefinition.FreezePanes.get -> System.Drawing.Point?
+CloudyWing.SpreadsheetExporter.SheetDefinition.FreezePanes.set -> void
+CloudyWing.SpreadsheetExporter.SheetDefinition.IsAutoFilterEnabled.get -> bool
+CloudyWing.SpreadsheetExporter.SheetDefinition.IsAutoFilterEnabled.set -> void
+CloudyWing.SpreadsheetExporter.SheetDefinition.Metadata.get -> System.Collections.Generic.IDictionary<string!, object?>!
+CloudyWing.SpreadsheetExporter.SheetDefinition.PageSettings.get -> CloudyWing.SpreadsheetExporter.PageSettings!
+CloudyWing.SpreadsheetExporter.SheetDefinition.Password.get -> string?
+CloudyWing.SpreadsheetExporter.SheetDefinition.Password.set -> void
+CloudyWing.SpreadsheetExporter.SheetDefinition.SetAutoFilterEnabled(bool enabled = true) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SheetDefinition.SetColumnWidth(int index, double width) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SheetDefinition.SetDefaultRowHeight(double? defaultRowHeight) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SheetDefinition.SetFreezePanes(int column, int row) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SheetDefinition.SetPassword(string? password) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SheetDefinition.SetSheetName(string! sheetName) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SheetDefinition.SheetName.get -> string!
+CloudyWing.SpreadsheetExporter.SheetDefinition.SheetName.set -> void
+CloudyWing.SpreadsheetExporter.SheetDefinition.Styles.get -> CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry!
+CloudyWing.SpreadsheetExporter.SheetDefinition.Templates.get -> System.Collections.Generic.IReadOnlyList<CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate!>!
+CloudyWing.SpreadsheetExporter.SheetDefinition.UseStyles(CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry! styles) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SheetLayout
+CloudyWing.SpreadsheetExporter.SheetLayout.Cells.get -> System.Collections.Generic.IReadOnlyList<CloudyWing.SpreadsheetExporter.Cell!>!
+CloudyWing.SpreadsheetExporter.SheetLayout.ColumnWidths.get -> System.Collections.Generic.IReadOnlyDictionary<int, double>!
+CloudyWing.SpreadsheetExporter.SheetLayout.DefaultFont.get -> CloudyWing.SpreadsheetExporter.CellFont?
+CloudyWing.SpreadsheetExporter.SheetLayout.DefaultRowHeight.get -> double?
+CloudyWing.SpreadsheetExporter.SheetLayout.FreezePanes.get -> System.Drawing.Point?
+CloudyWing.SpreadsheetExporter.SheetLayout.IsAutoFilterEnabled.get -> bool
+CloudyWing.SpreadsheetExporter.SheetLayout.IsProtected.get -> bool
+CloudyWing.SpreadsheetExporter.SheetLayout.Metadata.get -> System.Collections.Generic.IDictionary<string!, object?>!
+CloudyWing.SpreadsheetExporter.SheetLayout.PageSettings.get -> CloudyWing.SpreadsheetExporter.PageSettings!
+CloudyWing.SpreadsheetExporter.SheetLayout.Password.get -> string?
+CloudyWing.SpreadsheetExporter.SheetLayout.RowHeights.get -> System.Collections.Generic.IReadOnlyDictionary<int, double?>!
+CloudyWing.SpreadsheetExporter.SheetLayout.SheetLayout(CloudyWing.SpreadsheetExporter.SheetDefinition! sheet, CloudyWing.SpreadsheetExporter.CellFont? defaultFont = null) -> void
+CloudyWing.SpreadsheetExporter.SheetLayout.SheetName.get -> string!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.ContentType.get -> string!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.CreateSheet(string? sheetName = null, double? defaultRowHeight = null) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.DefaultFont.get -> CloudyWing.SpreadsheetExporter.CellFont?
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.DefaultFont.set -> void
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.DefaultSheetName.get -> string!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.DefaultSheetName.set -> void
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.Export() -> byte[]!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.ExportFile(string! path, CloudyWing.SpreadsheetExporter.SpreadsheetFileMode fileMode = CloudyWing.SpreadsheetExporter.SpreadsheetFileMode.Create) -> void
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.FileNameExtension.get -> string!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.GetLayoutDiagnostics() -> System.Collections.Generic.IReadOnlyList<CloudyWing.SpreadsheetExporter.LayoutDiagnostic!>!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.GetRendererCapabilityDiagnostics() -> System.Collections.Generic.IReadOnlyList<CloudyWing.SpreadsheetExporter.LayoutDiagnostic!>!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.GetSheet(int index) -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.LastSheet.get -> CloudyWing.SpreadsheetExporter.SheetDefinition!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.SetDefaultFont(CloudyWing.SpreadsheetExporter.CellFont? defaultFont) -> CloudyWing.SpreadsheetExporter.SpreadsheetDocument!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.SetDefaultSheetName(string! defaultSheetName) -> CloudyWing.SpreadsheetExporter.SpreadsheetDocument!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.SpreadsheetDocument(CloudyWing.SpreadsheetExporter.ISpreadsheetRenderer! renderer) -> void
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.Styles.get -> CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.TryGetSheet(int index, out CloudyWing.SpreadsheetExporter.SheetDefinition? sheet) -> bool
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.UseStyles(CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry! styles) -> CloudyWing.SpreadsheetExporter.SpreadsheetDocument!
+CloudyWing.SpreadsheetExporter.SpreadsheetDocument.ValidateLayout() -> void
+CloudyWing.SpreadsheetExporter.SpreadsheetFileMode
+CloudyWing.SpreadsheetExporter.SpreadsheetFileMode.Create = 0 -> CloudyWing.SpreadsheetExporter.SpreadsheetFileMode
+CloudyWing.SpreadsheetExporter.SpreadsheetFileMode.CreateNew = 1 -> CloudyWing.SpreadsheetExporter.SpreadsheetFileMode
+CloudyWing.SpreadsheetExporter.SpreadsheetManager
+CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry
+CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry.Clear() -> void
+CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry.Import(CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry! registry) -> CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry!
+CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry.Set(string! name, CloudyWing.SpreadsheetExporter.CellStyle style) -> CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry!
+CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry.SpreadsheetStyleRegistry() -> void
+CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry.Styles.get -> System.Collections.Generic.IReadOnlyDictionary<string!, CloudyWing.SpreadsheetExporter.CellStyle>!
+CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry.TryGet(string! name, out CloudyWing.SpreadsheetExporter.CellStyle style) -> bool
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.ColumnName.get -> string?
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.ColumnName.set -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.DataTableColumn() -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.FieldDataValidationGenerator.get -> System.Func<object?, CloudyWing.SpreadsheetExporter.DataValidation?>?
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.FieldDataValidationGenerator.set -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.FieldFormulaGenerator.get -> System.Func<object?, string?>?
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.FieldFormulaGenerator.set -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.FieldStyleGenerator.get -> System.Func<object?, CloudyWing.SpreadsheetExporter.CellStyle>?
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.FieldStyleGenerator.set -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.FieldValueGenerator.get -> System.Func<object?, object?>?
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.FieldValueGenerator.set -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.HeaderStyle.get -> CloudyWing.SpreadsheetExporter.CellStyle
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.HeaderStyle.set -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.HeaderText.get -> string?
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.HeaderText.set -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumnCollection
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumnCollection.DataTableColumnCollection() -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.Columns.get -> CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumnCollection!
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.ColumnSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.DataTable.get -> System.Data.DataTable!
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.DataTable.set -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.DataTableTemplate(System.Data.DataTable! dataTable) -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.GetLayout() -> CloudyWing.SpreadsheetExporter.Templates.TemplateLayout!
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.HeaderHeight.get -> double?
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.HeaderHeight.set -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.RecordHeight.get -> double?
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.RecordHeight.set -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableTemplate.RowSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate
+CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.ColumnSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(CloudyWing.SpreadsheetExporter.CellGenerator<string?>! formulaGenerator, int columnSpan = 1, int rowSpan = 1, CloudyWing.SpreadsheetExporter.CellStyle? cellStyle = null) -> CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(object! value, int columnSpan = 1, int rowSpan = 1, CloudyWing.SpreadsheetExporter.CellStyle? cellStyle = null) -> CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(System.Action<CloudyWing.SpreadsheetExporter.Cell!>! configurator, int columnSpan = 1, int rowSpan = 1, CloudyWing.SpreadsheetExporter.CellStyle? cellStyle = null) -> CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateRow(double? height = null) -> CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.GetLayout() -> CloudyWing.SpreadsheetExporter.Templates.TemplateLayout!
+CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.GridTemplate() -> void
+CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.RowSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate
+CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate.ColumnSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate.GetLayout() -> CloudyWing.SpreadsheetExporter.Templates.TemplateLayout!
+CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate.RowSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.Json.ITemplateJsonParser
+CloudyWing.SpreadsheetExporter.Templates.Json.ITemplateJsonParser.Parse(System.Text.Json.JsonElement element) -> CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Json.ITemplateJsonParser.TypeName.get -> string!
+CloudyWing.SpreadsheetExporter.Templates.Json.ITemplateJsonParserWithContext
+CloudyWing.SpreadsheetExporter.Templates.Json.ITemplateJsonParserWithContext.Parse(System.Text.Json.JsonElement element, CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext! context) -> CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext
+CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext.Index(int index) -> CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext!
+CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext.JsonParseContext(string! path) -> void
+CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext.Path.get -> string!
+CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext.Property(string! name) -> CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext!
+CloudyWing.SpreadsheetExporter.Templates.Json.JsonTemplateRegistry
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.DataTableTemplateJsonParser
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.DataTableTemplateJsonParser.DataTableTemplateJsonParser() -> void
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.DataTableTemplateJsonParser.Parse(System.Text.Json.JsonElement element) -> CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.DataTableTemplateJsonParser.Parse(System.Text.Json.JsonElement element, CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext! context) -> CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.DataTableTemplateJsonParser.TypeName.get -> string!
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.GridTemplateJsonParser
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.GridTemplateJsonParser.GridTemplateJsonParser() -> void
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.GridTemplateJsonParser.Parse(System.Text.Json.JsonElement element) -> CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.GridTemplateJsonParser.Parse(System.Text.Json.JsonElement element, CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext! context) -> CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.GridTemplateJsonParser.TypeName.get -> string!
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.MergedTemplateJsonParser
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.MergedTemplateJsonParser.MergedTemplateJsonParser() -> void
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.MergedTemplateJsonParser.Parse(System.Text.Json.JsonElement element) -> CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.MergedTemplateJsonParser.Parse(System.Text.Json.JsonElement element, CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext! context) -> CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.MergedTemplateJsonParser.TypeName.get -> string!
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.RecordSetTemplateJsonParser
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.RecordSetTemplateJsonParser.Parse(System.Text.Json.JsonElement element) -> CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.RecordSetTemplateJsonParser.Parse(System.Text.Json.JsonElement element, CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext! context) -> CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.RecordSetTemplateJsonParser.RecordSetTemplateJsonParser() -> void
+CloudyWing.SpreadsheetExporter.Templates.Json.Parsers.RecordSetTemplateJsonParser.TypeName.get -> string!
+CloudyWing.SpreadsheetExporter.Templates.MergedTemplate
+CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.ColumnSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.GetLayout() -> CloudyWing.SpreadsheetExporter.Templates.TemplateLayout!
+CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.MergedTemplate(params CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate![]! templates) -> void
+CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.MergedTemplate(System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.Templates.ISheetTemplate!>! templates) -> void
+CloudyWing.SpreadsheetExporter.Templates.MergedTemplate.RowSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TRecord, TField>
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TRecord, TField>.FieldContext(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<TRecord>! recordContext, string! key, TField value) -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TRecord, TField>.Key.get -> string!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<TRecord, TField>.Value.get -> TField
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>.CellIndex.get -> int
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>.Record.get -> T
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>.RecordContext(int cellIndex, int rowIndex, T record) -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>.RowIndex.get -> int
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.ChildColumns.get -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.ColumnSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.HeaderDepth.get -> int
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.HeaderStyle.get -> CloudyWing.SpreadsheetExporter.CellStyle
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.HeaderStyle.set -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.HeaderText.get -> string?
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.HeaderText.set -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.ParentCollection.get -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>?
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.Point.get -> System.Drawing.Point
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.RecordSetColumnBase() -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.RowSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.Add(CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>! dataColumn) -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.Add(string! headerText, CloudyWing.SpreadsheetExporter.CellStyle? headerStyle = null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>!, CloudyWing.SpreadsheetExporter.CellStyle>? fieldStyleGenerator = null) -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.Add(string! headerText, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.ColumnGeneratorConfigurator<T, CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>!>!>! configureGenerators, CloudyWing.SpreadsheetExporter.CellStyle? headerStyle = null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordContext<T>!, CloudyWing.SpreadsheetExporter.CellStyle>? fieldStyleGenerator = null) -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.Add<TField>(string! headerText, string! fieldKey, CloudyWing.SpreadsheetExporter.CellStyle? headerStyle = null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T, TField>!, CloudyWing.SpreadsheetExporter.CellStyle>? fieldStyleGenerator = null) -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.Add<TField>(string! headerText, string! fieldKey, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.ColumnGeneratorConfigurator<T, CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T, TField>!>!>! configureGenerators, CloudyWing.SpreadsheetExporter.CellStyle? headerStyle = null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T, TField>!, CloudyWing.SpreadsheetExporter.CellStyle>? fieldStyleGenerator = null) -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.Add<TField>(string! headerText, System.Linq.Expressions.Expression<System.Func<T, TField>!>! fieldKeyExpression, CloudyWing.SpreadsheetExporter.CellStyle? headerStyle = null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T, TField>!, CloudyWing.SpreadsheetExporter.CellStyle>? fieldStyleGenerator = null) -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.Add<TField>(string! headerText, System.Linq.Expressions.Expression<System.Func<T, TField>!>! fieldKeyExpression, System.Action<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.ColumnGeneratorConfigurator<T, CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T, TField>!>!>! configureGenerators, CloudyWing.SpreadsheetExporter.CellStyle? headerStyle = null, System.Func<CloudyWing.SpreadsheetExporter.Templates.RecordSet.FieldContext<T, TField>!, CloudyWing.SpreadsheetExporter.CellStyle>? fieldStyleGenerator = null) -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.ColumnGeneratorConfigurator<TRecord, TContext>
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.ColumnGeneratorConfigurator<TRecord, TContext>.ColumnGeneratorConfigurator() -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.ColumnGeneratorConfigurator<TRecord, TContext>.UseDataValidation(System.Func<TContext!, CloudyWing.SpreadsheetExporter.DataValidation?>! dataValidationGenerator) -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.ColumnGeneratorConfigurator<TRecord, TContext>.UseFormula(System.Func<TContext!, string?>! generator) -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.ColumnGeneratorConfigurator<TRecord, TContext>.UseValue(System.Func<TContext!, object?>! generator) -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.ColumnSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.GetLastColumn() -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.LeafColumns.get -> System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>!>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.Parent.get -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.RootColumns.get -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.RowSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>.Columns.get -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>.ColumnSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>.DataSource.get -> System.Collections.Generic.IEnumerable<T>!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>.DataSource.set -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>.GetLayout() -> CloudyWing.SpreadsheetExporter.Templates.TemplateLayout!
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>.HeaderHeight.get -> double?
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>.HeaderHeight.set -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>.RecordHeight.get -> double?
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>.RecordHeight.set -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>.RecordSetTemplate(System.Collections.Generic.IEnumerable<T>! dataSource) -> void
+CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetTemplate<T>.RowSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.TemplateLayout
+CloudyWing.SpreadsheetExporter.Templates.TemplateLayout.Cells.get -> System.Collections.Generic.IReadOnlyList<CloudyWing.SpreadsheetExporter.Cell!>!
+CloudyWing.SpreadsheetExporter.Templates.TemplateLayout.RowHeights.get -> System.Collections.Generic.IReadOnlyDictionary<int, double?>!
+CloudyWing.SpreadsheetExporter.Templates.TemplateLayout.RowSpan.get -> int
+CloudyWing.SpreadsheetExporter.Templates.TemplateLayout.TemplateLayout(System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.Cell!>! cells, int rowSpan, System.Collections.Generic.IReadOnlyDictionary<int, double?>! rowHeights) -> void
+CloudyWing.SpreadsheetExporter.VerticalAlignment
+CloudyWing.SpreadsheetExporter.VerticalAlignment.Bottom = 2 -> CloudyWing.SpreadsheetExporter.VerticalAlignment
+CloudyWing.SpreadsheetExporter.VerticalAlignment.Middle = 1 -> CloudyWing.SpreadsheetExporter.VerticalAlignment
+CloudyWing.SpreadsheetExporter.VerticalAlignment.Top = 0 -> CloudyWing.SpreadsheetExporter.VerticalAlignment
+const CloudyWing.SpreadsheetExporter.Constants.AutoFitColumnWidth = -1 -> int
+const CloudyWing.SpreadsheetExporter.Constants.AutoFitRowHeight = -1 -> int
+const CloudyWing.SpreadsheetExporter.Constants.HiddenColumn = 0 -> int
+const CloudyWing.SpreadsheetExporter.Constants.HiddenRow = 0 -> int
+const CloudyWing.SpreadsheetExporter.JsonDiagnosticCodes.InvalidType = "SE-JSON-001" -> string!
+const CloudyWing.SpreadsheetExporter.JsonDiagnosticCodes.InvalidValue = "SE-JSON-003" -> string!
+const CloudyWing.SpreadsheetExporter.JsonDiagnosticCodes.MissingRequiredProperty = "SE-JSON-002" -> string!
+const CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes.InvalidCellRange = "SE-LAYOUT-001" -> string!
+const CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes.InvalidDimension = "SE-LAYOUT-004" -> string!
+const CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes.OverlappingCellRange = "SE-LAYOUT-002" -> string!
+const CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes.UnsupportedRendererCapability = "SE-RENDERER-001" -> string!
+const CloudyWing.SpreadsheetExporter.LayoutDiagnosticCodes.ValueAndFormulaConflict = "SE-LAYOUT-003" -> string!
+override CloudyWing.SpreadsheetExporter.CellFont.GetHashCode() -> int
+override CloudyWing.SpreadsheetExporter.CellRange.GetHashCode() -> int
+override CloudyWing.SpreadsheetExporter.CellSource.Equals(object? obj) -> bool
+override CloudyWing.SpreadsheetExporter.CellSource.GetHashCode() -> int
+override CloudyWing.SpreadsheetExporter.CellSource.ToString() -> string!
+override CloudyWing.SpreadsheetExporter.CellStyle.GetHashCode() -> int
+override CloudyWing.SpreadsheetExporter.LayoutDiagnostic.Equals(object? obj) -> bool
+override CloudyWing.SpreadsheetExporter.LayoutDiagnostic.GetHashCode() -> int
+override CloudyWing.SpreadsheetExporter.LayoutDiagnostic.ToString() -> string!
+override CloudyWing.SpreadsheetExporter.RendererCapabilities.Equals(object? obj) -> bool
+override CloudyWing.SpreadsheetExporter.RendererCapabilities.GetHashCode() -> int
+override CloudyWing.SpreadsheetExporter.RendererCapabilities.ToString() -> string!
+override CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext.ToString() -> string!
+static CloudyWing.SpreadsheetExporter.CellFont.Empty.get -> CloudyWing.SpreadsheetExporter.CellFont
+static CloudyWing.SpreadsheetExporter.CellFont.operator !=(CloudyWing.SpreadsheetExporter.CellFont left, CloudyWing.SpreadsheetExporter.CellFont right) -> bool
+static CloudyWing.SpreadsheetExporter.CellFont.operator ==(CloudyWing.SpreadsheetExporter.CellFont left, CloudyWing.SpreadsheetExporter.CellFont right) -> bool
+static CloudyWing.SpreadsheetExporter.CellRange.operator !=(CloudyWing.SpreadsheetExporter.CellRange left, CloudyWing.SpreadsheetExporter.CellRange right) -> bool
+static CloudyWing.SpreadsheetExporter.CellRange.operator ==(CloudyWing.SpreadsheetExporter.CellRange left, CloudyWing.SpreadsheetExporter.CellRange right) -> bool
+static CloudyWing.SpreadsheetExporter.CellSource.operator !=(CloudyWing.SpreadsheetExporter.CellSource? left, CloudyWing.SpreadsheetExporter.CellSource? right) -> bool
+static CloudyWing.SpreadsheetExporter.CellSource.operator ==(CloudyWing.SpreadsheetExporter.CellSource? left, CloudyWing.SpreadsheetExporter.CellSource? right) -> bool
+static CloudyWing.SpreadsheetExporter.CellStyle.Empty.get -> CloudyWing.SpreadsheetExporter.CellStyle
+static CloudyWing.SpreadsheetExporter.CellStyle.operator !=(CloudyWing.SpreadsheetExporter.CellStyle left, CloudyWing.SpreadsheetExporter.CellStyle right) -> bool
+static CloudyWing.SpreadsheetExporter.CellStyle.operator ==(CloudyWing.SpreadsheetExporter.CellStyle left, CloudyWing.SpreadsheetExporter.CellStyle right) -> bool
+static CloudyWing.SpreadsheetExporter.LayoutDiagnostic.operator !=(CloudyWing.SpreadsheetExporter.LayoutDiagnostic? left, CloudyWing.SpreadsheetExporter.LayoutDiagnostic? right) -> bool
+static CloudyWing.SpreadsheetExporter.LayoutDiagnostic.operator ==(CloudyWing.SpreadsheetExporter.LayoutDiagnostic? left, CloudyWing.SpreadsheetExporter.LayoutDiagnostic? right) -> bool
+static CloudyWing.SpreadsheetExporter.PaperSize.A2.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.A3.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.A3Extra.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.A3ExtraTransverse.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.A3Transverse.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.A4.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.A4Extra.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.A4Plus.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.A4Small.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.A4Transverse.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.A5.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.A5Extra.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.A5Transverse.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.APlus.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.B4.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.B4Envelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.B5.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.B5Envelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.B5Extra.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.B5Transverse.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.B6Envelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.BPlus.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.C3Envelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.C4Envelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.C5Envelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.C65Envelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.C6Envelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.CSheet.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.DLEnvelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.DSheet.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.ESheet.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Executive.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Folio.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.GermanLegalFanfold.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.GermanStandardFanfold.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.InviteEnvelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.IsoB4.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.ItalyEnvelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.JapanesePostcard.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Ledger.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Legal.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.LegalExtra.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Letter.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.LetterExtra.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.LetterExtraTransverse.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.LetterPlus.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.LetterSmall.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.LetterTransverse.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.MonarchEnvelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Note.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Number10Envelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Number11Envelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Number12Envelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Number14Envelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Number9Envelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.PersonalEnvelope.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Quarto.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Standard10x11.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Standard10x14.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Standard11x17.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Standard15x11.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Standard9x11.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Statement.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.Tabloid.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.PaperSize.USStandardFanfold.get -> CloudyWing.SpreadsheetExporter.PaperSize!
+static CloudyWing.SpreadsheetExporter.RendererCapabilities.operator !=(CloudyWing.SpreadsheetExporter.RendererCapabilities? left, CloudyWing.SpreadsheetExporter.RendererCapabilities? right) -> bool
+static CloudyWing.SpreadsheetExporter.RendererCapabilities.operator ==(CloudyWing.SpreadsheetExporter.RendererCapabilities? left, CloudyWing.SpreadsheetExporter.RendererCapabilities? right) -> bool
+static CloudyWing.SpreadsheetExporter.SpreadsheetDocument.FromJson(string! json) -> CloudyWing.SpreadsheetExporter.SpreadsheetDocument!
+static CloudyWing.SpreadsheetExporter.SpreadsheetDocument.FromJson(string! json, CloudyWing.SpreadsheetExporter.SpreadsheetStyleRegistry! styles) -> CloudyWing.SpreadsheetExporter.SpreadsheetDocument!
+static CloudyWing.SpreadsheetExporter.SpreadsheetManager.CreateDocument() -> CloudyWing.SpreadsheetExporter.SpreadsheetDocument!
+static CloudyWing.SpreadsheetExporter.SpreadsheetManager.DefaultCellStyles.get -> CloudyWing.SpreadsheetExporter.Config.CellStyleConfiguration!
+static CloudyWing.SpreadsheetExporter.SpreadsheetManager.DefaultCellStyles.set -> void
+static CloudyWing.SpreadsheetExporter.SpreadsheetManager.SetRenderer(System.Func<CloudyWing.SpreadsheetExporter.ISpreadsheetRenderer!>! rendererFactory) -> void
+static CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext.Root.get -> CloudyWing.SpreadsheetExporter.Templates.Json.JsonParseContext!
+static CloudyWing.SpreadsheetExporter.Templates.Json.JsonTemplateRegistry.Clear() -> void
+static CloudyWing.SpreadsheetExporter.Templates.Json.JsonTemplateRegistry.Register(CloudyWing.SpreadsheetExporter.Templates.Json.ITemplateJsonParser! parser) -> void
+static CloudyWing.SpreadsheetExporter.Templates.Json.JsonTemplateRegistry.RegisterBuiltins() -> void
+virtual CloudyWing.SpreadsheetExporter.CellGenerator<T>.Invoke(int cellIndex, int rowIndex) -> T
+~override CloudyWing.SpreadsheetExporter.CellFont.Equals(object obj) -> bool
+~override CloudyWing.SpreadsheetExporter.CellFont.ToString() -> string
+~override CloudyWing.SpreadsheetExporter.CellRange.Equals(object obj) -> bool
+~override CloudyWing.SpreadsheetExporter.CellRange.ToString() -> string
+~override CloudyWing.SpreadsheetExporter.CellStyle.Equals(object obj) -> bool
+~override CloudyWing.SpreadsheetExporter.CellStyle.ToString() -> string
