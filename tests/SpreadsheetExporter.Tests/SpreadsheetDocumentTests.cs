@@ -1141,6 +1141,175 @@ internal class SpreadsheetDocumentTests {
         }
     }
 
+    [Test]
+    public void ExportStream_RendererSupportsStream_ShouldRenderDirectlyToStream() {
+        FakeStreamRenderer renderer = new();
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(renderer);
+        using MemoryStream stream = new();
+
+        sut.Export(stream);
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(stream.ToArray(), Is.EqualTo(FakeStreamRenderer.StreamBytes));
+            Assert.That(renderer.ByteArrayRenderCount, Is.Zero);
+            Assert.That(renderer.RenderedLayouts.Single().SheetName, Is.EqualTo("Sheet1"));
+        }
+    }
+
+    [Test]
+    public void ExportStream_RendererDoesNotSupportStream_ShouldWriteRenderedBytes() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeRenderer());
+        using MemoryStream stream = new();
+
+        sut.Export(stream);
+
+        Assert.That(stream.ToArray(), Is.EqualTo(ExportedBytes));
+    }
+
+    [Test]
+    public void ExportStream_StreamIsNull_ShouldThrowArgumentNullException() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeRenderer());
+
+        Assert.That(() => sut.Export((Stream)null!), Throws.ArgumentNullException);
+    }
+
+    [Test]
+    public void ExportStream_StreamIsReadOnly_ShouldThrowArgumentException() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeRenderer());
+        using MemoryStream stream = new([], writable: false);
+
+        Assert.That(() => sut.Export(stream), Throws.ArgumentException);
+    }
+
+    [Test]
+    public void ExportStream_WhenNoSheetsExist_ShouldThrowSheetDefinitionNotFoundException() {
+        SpreadsheetDocument sut = new(new FakeStreamRenderer());
+        using MemoryStream stream = new();
+
+        Assert.That(() => sut.Export(stream), Throws.TypeOf<SheetDefinitionNotFoundException>());
+    }
+
+    [Test]
+    public async Task ExportAsync_RendererSupportsStream_ShouldWriteRenderedStreamAsync() {
+        FakeStreamRenderer renderer = new();
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(renderer);
+        using MemoryStream stream = new();
+
+        await sut.ExportAsync(stream);
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(stream.ToArray(), Is.EqualTo(FakeStreamRenderer.StreamBytes));
+            Assert.That(renderer.ByteArrayRenderCount, Is.Zero);
+        }
+    }
+
+    [Test]
+    public async Task ExportAsync_RendererDoesNotSupportStream_ShouldWriteRenderedBytesAsync() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeRenderer());
+        using MemoryStream stream = new();
+
+        await sut.ExportAsync(stream);
+
+        Assert.That(stream.ToArray(), Is.EqualTo(ExportedBytes));
+    }
+
+    [Test]
+    public void ExportAsync_TokenIsCanceled_ShouldThrowOperationCanceledExceptionWithoutRendering() {
+        FakeStreamRenderer renderer = new();
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(renderer);
+        using MemoryStream stream = new();
+        using CancellationTokenSource cancellation = new();
+        cancellation.Cancel();
+
+        Assert.ThrowsAsync<OperationCanceledException>(async () => await sut.ExportAsync(stream, cancellation.Token));
+        Assert.That(renderer.RenderedLayouts, Is.Empty);
+    }
+
+    [Test]
+    public void ExportAsync_RenderFails_ShouldNotWritePartialOutput() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeStreamRenderer { ShouldFailAfterWrite = true });
+        using MemoryStream stream = new();
+
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.ExportAsync(stream));
+        Assert.That(stream.Length, Is.Zero);
+    }
+
+    [Test]
+    public async Task ExportFileAsync_ShouldWriteExportedBytesAsync() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeStreamRenderer());
+        string path = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{Guid.NewGuid():N}.bin");
+
+        try {
+            await sut.ExportFileAsync(path);
+
+            Assert.That(await File.ReadAllBytesAsync(path), Is.EqualTo(FakeStreamRenderer.StreamBytes));
+        } finally {
+            if (File.Exists(path)) {
+                File.Delete(path);
+            }
+        }
+    }
+
+    [Test]
+    public async Task ExportFileAsync_WhenCreateNewAndFileExists_ShouldThrowIOExceptionAndKeepFileAsync() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeStreamRenderer());
+        string path = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{Guid.NewGuid():N}.bin");
+
+        try {
+            await File.WriteAllBytesAsync(path, [0x01]);
+
+            Assert.ThrowsAsync<IOException>(async () => await sut.ExportFileAsync(path, SpreadsheetFileMode.CreateNew));
+            Assert.That(await File.ReadAllBytesAsync(path), Is.EqualTo(new byte[] { 0x01 }));
+        } finally {
+            if (File.Exists(path)) {
+                File.Delete(path);
+            }
+        }
+    }
+
+    [Test]
+    public void ExportFileAsync_RenderFails_ShouldNotCreateFile() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeStreamRenderer { ShouldFailAfterWrite = true });
+        string path = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{Guid.NewGuid():N}.bin");
+
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.ExportFileAsync(path));
+        Assert.That(File.Exists(path), Is.False);
+    }
+
+    private static SpreadsheetDocument CreateDocumentWithEmptySheet(ISpreadsheetRenderer renderer) {
+        SpreadsheetDocument document = new(renderer);
+        document.CreateSheet("Sheet1").AddTemplate(new StubSheetTemplate(new TemplateLayout([], 0, new Dictionary<int, double?>())));
+        return document;
+    }
+
+    private sealed class FakeStreamRenderer : ISpreadsheetStreamRenderer {
+        public static readonly byte[] StreamBytes = [0x53, 0x54, 0x52];
+
+        public string ContentType => FakeRenderer.ExpectedContentType;
+
+        public string FileNameExtension => FakeRenderer.ExpectedFileNameExtension;
+
+        public bool ShouldFailAfterWrite { get; init; }
+
+        public int ByteArrayRenderCount { get; private set; }
+
+        public IReadOnlyList<SheetLayout> RenderedLayouts { get; private set; } = [];
+
+        public byte[] Render(IEnumerable<SheetLayout> layouts) {
+            ByteArrayRenderCount++;
+            RenderedLayouts = layouts.ToList();
+            return ExportedBytes;
+        }
+
+        public void Render(IEnumerable<SheetLayout> layouts, Stream stream) {
+            RenderedLayouts = layouts.ToList();
+            stream.Write(StreamBytes, 0, StreamBytes.Length);
+            if (ShouldFailAfterWrite) {
+                throw new InvalidOperationException("Render failed.");
+            }
+        }
+    }
+
     private sealed class FakeRenderer : ISpreadsheetRenderer {
         public const string ExpectedContentType = "application/test";
         public const string ExpectedFileNameExtension = ".test";

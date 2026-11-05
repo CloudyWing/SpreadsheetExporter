@@ -201,6 +201,80 @@ internal sealed class ExcelRendererTests {
         Assert.That(RenderAutoFilterAddress(document), Is.EqualTo("$B$1:$B$3"));
     }
 
+    [Test]
+    public void RenderStream_ShouldWriteSameWorkbookAsByteArrayRender() {
+        SpreadsheetDocument document = CreateRecordSetDocument();
+        using MemoryStream stream = new();
+
+        document.Export(stream);
+        byte[] bytes = document.Export();
+
+        Assert.That(ReadWorkbookValues(stream.ToArray()), Is.EqualTo(ReadWorkbookValues(bytes)));
+    }
+
+    [Test]
+    public void RenderStream_NonSeekableStream_ShouldWriteReadableWorkbook() {
+        SpreadsheetDocument document = CreateRecordSetDocument();
+        using MemoryStream inner = new();
+        using NonSeekableWriteStream stream = new(inner);
+
+        document.Export(stream);
+
+        Assert.That(ReadWorkbookValues(inner.ToArray()), Is.EqualTo(new[] { "Id", "Name", "1", "A", "2", "B" }));
+    }
+
+    [Test]
+    public async Task ExportAsync_ShouldWriteReadableWorkbookAsync() {
+        SpreadsheetDocument document = CreateRecordSetDocument();
+        using MemoryStream stream = new();
+
+        await document.ExportAsync(stream);
+
+        Assert.That(ReadWorkbookValues(stream.ToArray()), Is.EqualTo(new[] { "Id", "Name", "1", "A", "2", "B" }));
+    }
+
+    [Test]
+    public void Export_SameDocumentTwice_ShouldProduceSameWorkbookContent() {
+        SpreadsheetDocument document = CreateRecordSetDocument();
+
+        byte[] first = document.Export();
+        byte[] second = document.Export();
+
+        Assert.That(ReadWorkbookValues(second), Is.EqualTo(ReadWorkbookValues(first)));
+    }
+
+    [Test]
+    public void Export_DocumentsInParallel_ShouldProduceIndependentWorkbooks() {
+        string[][] results = new string[16][];
+
+        Parallel.For(0, results.Length, i => {
+            SpreadsheetDocument document = new(new ExcelRenderer());
+            Templates.RecordSet.RecordSetTemplate<(int Id, string Name)> template = new([(i, $"N{i}")]);
+            template.Columns
+                .Add("Id", x => x.Id)
+                .Add("Name", x => x.Name);
+            document.CreateSheet($"Sheet{i}").AddTemplate(template);
+            results[i] = ReadWorkbookValues(document.Export());
+        });
+
+        Assert.That(
+            results,
+            Is.EqualTo(Enumerable.Range(0, results.Length).Select(i => new[] { "Id", "Name", $"{i}", $"N{i}" }).ToArray())
+        );
+    }
+
+    private static SpreadsheetDocument CreateRecordSetDocument() {
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        document.CreateSheet("Data").AddTemplate(CreateRecordSetTemplate());
+        return document;
+    }
+
+    private static string[] ReadWorkbookValues(byte[] bytes) {
+        using MemoryStream stream = new(bytes);
+        using XLWorkbook workbook = new(stream);
+        return workbook.Worksheet(1).CellsUsed().Select(cell => cell.GetString()).ToArray();
+    }
+
     private static Templates.RecordSet.RecordSetTemplate<(int Id, string Name)> CreateRecordSetTemplate() {
         Templates.RecordSet.RecordSetTemplate<(int Id, string Name)> template = new([(1, "A"), (2, "B")]);
         template.Columns
@@ -567,4 +641,39 @@ internal sealed class ExcelRendererTests {
         string InputTitle,
         string InputMessage
     );
+
+    private sealed class NonSeekableWriteStream(Stream inner) : Stream {
+        public override bool CanRead => false;
+
+        public override bool CanSeek => false;
+
+        public override bool CanWrite => true;
+
+        public override long Length => throw new NotSupportedException();
+
+        public override long Position {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush() {
+            inner.Flush();
+        }
+
+        public override int Read(byte[] buffer, int offset, int count) {
+            throw new NotSupportedException();
+        }
+
+        public override long Seek(long offset, SeekOrigin origin) {
+            throw new NotSupportedException();
+        }
+
+        public override void SetLength(long value) {
+            throw new NotSupportedException();
+        }
+
+        public override void Write(byte[] buffer, int offset, int count) {
+            inner.Write(buffer, offset, count);
+        }
+    }
 }

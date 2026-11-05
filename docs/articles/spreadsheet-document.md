@@ -174,6 +174,63 @@ document.ExportFile(
 - `Create` - 建立新檔案，若存在則覆寫（預設）
 - `CreateNew` - 建立新檔案，若存在則拋出例外
 
+### 匯出至 Stream
+
+`Export(Stream)` 將結果寫入呼叫端提供的可寫入 stream，方法不會關閉 stream：
+
+```csharp
+using FileStream stream = File.Create($"report{document.FileNameExtension}");
+document.Export(stream);
+```
+
+Renderer 實作 `ISpreadsheetStreamRenderer` 時（例如 `ExcelRenderer`）會直接寫入 stream，不另外建立 `byte[]`；若 render 中途失敗，stream 可能已寫入部分內容。只實作 `ISpreadsheetRenderer` 的 renderer 會先取得 `byte[]` 再寫入 stream。
+
+### 非同步匯出
+
+`ExportAsync` 與 `ExportFileAsync` 先在呼叫端執行緒於記憶體中完成 render，再以非同步方式寫入目標，因此 render 失敗時不會寫入部分內容，也不會建立或覆寫檔案：
+
+```csharp
+public async Task DownloadAsync(HttpResponse response, CancellationToken cancellationToken) {
+    SpreadsheetDocument document = BuildDocument();
+
+    response.ContentType = document.ContentType;
+    await document.ExportAsync(response.Body, cancellationToken);
+}
+
+await document.ExportFileAsync(
+    $"report{document.FileNameExtension}",
+    SpreadsheetFileMode.CreateNew,
+    cancellationToken
+);
+```
+
+`CancellationToken` 會在開始 render 前與寫入時檢查；render 本身為同步運算，不會中途取消。
+
+### 自訂 stream renderer
+
+自訂 renderer 可額外實作 `ISpreadsheetStreamRenderer`，讓 `Export(Stream)` 與非同步匯出直接寫入 stream：
+
+```csharp
+public sealed class CsvRenderer : ISpreadsheetStreamRenderer {
+    public string ContentType => "text/csv";
+
+    public string FileNameExtension => ".csv";
+
+    public byte[] Render(IEnumerable<SheetLayout> layouts) {
+        using MemoryStream stream = new();
+        Render(layouts, stream);
+        return stream.ToArray();
+    }
+
+    public void Render(IEnumerable<SheetLayout> layouts, Stream stream) {
+        using StreamWriter writer = new(stream, leaveOpen: true);
+        foreach (Cell cell in layouts.First().Cells) {
+            writer.WriteLine(Convert.ToString(cell.GetValue(), CultureInfo.InvariantCulture));
+        }
+    }
+}
+```
+
 ## 從 JSON 建立文件
 
 `SpreadsheetDocument.FromJson` 可從 JSON 字串直接建立完整文件，適合將報表結構外部化配置：

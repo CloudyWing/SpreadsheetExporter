@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using CloudyWing.SpreadsheetExporter.Exceptions;
 using CloudyWing.SpreadsheetExporter.Templates;
 using CloudyWing.SpreadsheetExporter.Templates.Json;
@@ -16,6 +18,7 @@ namespace CloudyWing.SpreadsheetExporter;
 /// Represents a spreadsheet document that manages sheet definitions and coordinates rendering.
 /// </summary>
 public sealed class SpreadsheetDocument {
+    private const int FileStreamBufferSize = 81920;
     private static readonly Lazy<Dictionary<string, PaperSize>> KnownPaperSizes = new(CreateKnownPaperSizes);
     private readonly ISpreadsheetRenderer renderer;
     private readonly List<SheetDefinition> sheets = [];
@@ -186,14 +189,7 @@ public sealed class SpreadsheetDocument {
     /// <returns>The rendered spreadsheet bytes.</returns>
     /// <exception cref="SheetDefinitionNotFoundException">No sheets have been created.</exception>
     public byte[] Export() {
-        if (sheets.Count == 0) {
-            throw new SheetDefinitionNotFoundException();
-        }
-
-        IEnumerable<SheetLayout> layouts = sheets.Select(
-            s => new SheetLayout(s, DefaultFont)
-        );
-        return renderer.Render(layouts);
+        return renderer.Render(CreateLayouts());
     }
 
     /// <summary>
@@ -203,12 +199,129 @@ public sealed class SpreadsheetDocument {
     /// <param name="fileMode">The file creation mode.</param>
     public void ExportFile(string path, SpreadsheetFileMode fileMode = SpreadsheetFileMode.Create) {
         byte[] bytes = Export();
-        FileMode mode = fileMode == SpreadsheetFileMode.Create
+
+        using FileStream stream = new(path, ToFileMode(fileMode), FileAccess.Write);
+        stream.Write(bytes, 0, bytes.Length);
+    }
+
+    /// <summary>
+    /// Exports this document to the specified stream using the associated renderer.
+    /// </summary>
+    /// <param name="stream">The writable stream that receives the rendered spreadsheet. The stream is not closed.</param>
+    /// <remarks>
+    /// Renderers that implement <see cref="ISpreadsheetStreamRenderer"/> write directly to <paramref name="stream"/>;
+    /// if rendering fails, the stream may already contain partial output. Other renderers produce a byte array that is
+    /// then written to <paramref name="stream"/>.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException"><paramref name="stream"/> is not writable.</exception>
+    /// <exception cref="SheetDefinitionNotFoundException">No sheets have been created.</exception>
+    public void Export(Stream stream) {
+        ValidateWritableStream(stream);
+        IEnumerable<SheetLayout> layouts = CreateLayouts();
+
+        if (renderer is ISpreadsheetStreamRenderer streamRenderer) {
+            streamRenderer.Render(layouts, stream);
+            return;
+        }
+
+        byte[] bytes = renderer.Render(layouts);
+        stream.Write(bytes, 0, bytes.Length);
+    }
+
+    /// <summary>
+    /// Exports this document and asynchronously writes the result to the specified stream.
+    /// </summary>
+    /// <param name="stream">The writable stream that receives the rendered spreadsheet. The stream is not closed.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>A task that represents the asynchronous export operation.</returns>
+    /// <remarks>
+    /// Rendering runs synchronously on the calling thread into an in-memory buffer, so <paramref name="stream"/> receives
+    /// no partial output when rendering fails. Only writing the buffer to <paramref name="stream"/> is asynchronous.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException"><paramref name="stream"/> is not writable.</exception>
+    /// <exception cref="SheetDefinitionNotFoundException">No sheets have been created.</exception>
+    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> is canceled.</exception>
+    public async Task ExportAsync(Stream stream, CancellationToken cancellationToken = default) {
+        ValidateWritableStream(stream);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        using MemoryStream buffer = RenderToBuffer();
+        await buffer.CopyToAsync(stream, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Exports this document and asynchronously writes the result to a file at the specified path.
+    /// </summary>
+    /// <param name="path">The output file path.</param>
+    /// <param name="fileMode">The file creation mode.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>A task that represents the asynchronous export operation.</returns>
+    /// <remarks>
+    /// The document is rendered before the file is opened, so the file is not created or overwritten when rendering fails.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="path"/> is <see langword="null"/>.</exception>
+    /// <exception cref="SheetDefinitionNotFoundException">No sheets have been created.</exception>
+    /// <exception cref="IOException">
+    /// <paramref name="fileMode"/> is <see cref="SpreadsheetFileMode.CreateNew"/> and the file already exists.
+    /// </exception>
+    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> is canceled.</exception>
+    public async Task ExportFileAsync(
+        string path,
+        SpreadsheetFileMode fileMode = SpreadsheetFileMode.Create,
+        CancellationToken cancellationToken = default
+    ) {
+        ArgumentNullException.ThrowIfNull(path);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        using MemoryStream buffer = RenderToBuffer();
+        FileStream fileStream = new(
+            path, ToFileMode(fileMode), FileAccess.Write, FileShare.Read, FileStreamBufferSize, useAsync: true
+        );
+        await using (fileStream.ConfigureAwait(false)) {
+            await buffer.CopyToAsync(fileStream, cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    private static void ValidateWritableStream(Stream stream) {
+        ArgumentNullException.ThrowIfNull(stream);
+        if (!stream.CanWrite) {
+            throw new ArgumentException("Stream must be writable.", nameof(stream));
+        }
+    }
+
+    private IEnumerable<SheetLayout> CreateLayouts() {
+        if (sheets.Count == 0) {
+            throw new SheetDefinitionNotFoundException();
+        }
+
+        return sheets.Select(s => new SheetLayout(s, DefaultFont));
+    }
+
+    private MemoryStream RenderToBuffer() {
+        IEnumerable<SheetLayout> layouts = CreateLayouts();
+
+        if (renderer is ISpreadsheetStreamRenderer streamRenderer) {
+            MemoryStream buffer = new();
+            try {
+                streamRenderer.Render(layouts, buffer);
+            } catch {
+                buffer.Dispose();
+                throw;
+            }
+
+            buffer.Position = 0;
+            return buffer;
+        }
+
+        return new MemoryStream(renderer.Render(layouts), writable: false);
+    }
+
+    private static FileMode ToFileMode(SpreadsheetFileMode fileMode) {
+        return fileMode == SpreadsheetFileMode.Create
             ? FileMode.Create
             : FileMode.CreateNew;
-
-        using FileStream stream = new(path, mode, FileAccess.Write);
-        stream.Write(bytes, 0, bytes.Length);
     }
 
     /// <summary>

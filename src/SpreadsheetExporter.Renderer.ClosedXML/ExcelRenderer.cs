@@ -11,7 +11,7 @@ namespace CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
 /// <summary>
 /// Renders spreadsheet data to Excel (.xlsx) format using ClosedXML.
 /// </summary>
-public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
+public class ExcelRenderer : ISpreadsheetRendererWithCapabilities, ISpreadsheetStreamRenderer {
     private const int MaxListFormulaLength = 255;
     private static readonly RendererCapabilities excelCapabilities = new() {
         SupportsStyles = true,
@@ -38,26 +38,55 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
     public byte[] Render(IEnumerable<SheetLayout> contexts) {
         ArgumentNullException.ThrowIfNull(contexts);
 
-        SheetLayout[] contextArray = [.. contexts];
-
-        using XLWorkbook workbook = new();
-
-        SheetLayout? firstContext = contextArray.FirstOrDefault();
-        if (firstContext?.DefaultFont.HasValue == true) {
-            SetDefaultFont(workbook, firstContext.DefaultFont.Value);
-        }
-
-        foreach (SheetLayout context in contextArray) {
-            ArgumentNullException.ThrowIfNull(context);
-
-            IXLWorksheet worksheet = workbook.Worksheets.Add(context.SheetName);
-            ConfigureWorksheet(worksheet, context);
-            OnSheetCreated(worksheet, context);
-        }
-
+        using XLWorkbook workbook = CreateWorkbook(contexts);
         using MemoryStream stream = new();
         workbook.SaveAs(stream);
         return stream.ToArray();
+    }
+
+    /// <summary>
+    /// Renders the specified sheet layouts and writes the workbook directly to the specified stream.
+    /// </summary>
+    /// <param name="layouts">The collection of sheet layouts to render.</param>
+    /// <param name="stream">The writable stream that receives the workbook. The stream is not closed.</param>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="layouts"/> or <paramref name="stream"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ArgumentException"><paramref name="stream"/> is not writable.</exception>
+    public void Render(IEnumerable<SheetLayout> layouts, Stream stream) {
+        ArgumentNullException.ThrowIfNull(layouts);
+        ArgumentNullException.ThrowIfNull(stream);
+        if (!stream.CanWrite) {
+            throw new ArgumentException("Stream must be writable.", nameof(stream));
+        }
+
+        using XLWorkbook workbook = CreateWorkbook(layouts);
+        workbook.SaveAs(stream);
+    }
+
+    private XLWorkbook CreateWorkbook(IEnumerable<SheetLayout> contexts) {
+        SheetLayout[] contextArray = [.. contexts];
+
+        XLWorkbook workbook = new();
+        try {
+            SheetLayout? firstContext = contextArray.FirstOrDefault();
+            if (firstContext?.DefaultFont.HasValue == true) {
+                SetDefaultFont(workbook, firstContext.DefaultFont.Value);
+            }
+
+            foreach (SheetLayout context in contextArray) {
+                ArgumentNullException.ThrowIfNull(context);
+
+                IXLWorksheet worksheet = workbook.Worksheets.Add(context.SheetName);
+                ConfigureWorksheet(worksheet, context);
+                OnSheetCreated(worksheet, context);
+            }
+
+            return workbook;
+        } catch {
+            workbook.Dispose();
+            throw;
+        }
     }
 
     /// <summary>

@@ -1,1 +1,2 @@
 #nullable enable
+CloudyWing.SpreadsheetExporter.Renderer.ClosedXML.ExcelRenderer.Render(System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.SheetLayout!>! layouts, System.IO.Stream! stream) -> void
