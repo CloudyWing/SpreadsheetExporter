@@ -16,6 +16,7 @@ namespace CloudyWing.SpreadsheetExporter;
 /// Represents a spreadsheet document that manages sheet definitions and coordinates rendering.
 /// </summary>
 public sealed class SpreadsheetDocument {
+    private static readonly Lazy<Dictionary<string, PaperSize>> KnownPaperSizes = new(CreateKnownPaperSizes);
     private readonly ISpreadsheetRenderer renderer;
     private readonly List<SheetDefinition> sheets = [];
 
@@ -515,13 +516,11 @@ public sealed class SpreadsheetDocument {
                 return ParsePaperSizeFromValue(numericStringValue);
             }
 
-            PaperSize namedPaperSize = GetKnownPaperSizes()
-                .FirstOrDefault(pair => string.Equals(pair.Key, raw, StringComparison.OrdinalIgnoreCase))
-                .Value;
-
-            return namedPaperSize ?? throw JsonParseExceptionFactory.InvalidValue(
-                context, $"contains unknown paper size '{raw}'."
-            );
+            return raw is not null && KnownPaperSizes.Value.TryGetValue(raw, out PaperSize? namedPaperSize)
+                ? namedPaperSize
+                : throw JsonParseExceptionFactory.InvalidValue(
+                    context, $"contains unknown paper size '{raw}'."
+                );
         }
 
         if (element.ValueKind == JsonValueKind.Number && element.TryGetInt32(out int numericValue)) {
@@ -532,13 +531,12 @@ public sealed class SpreadsheetDocument {
     }
 
     private static PaperSize ParsePaperSizeFromValue(int value) {
-        return GetKnownPaperSizes()
-            .Select(pair => pair.Value)
+        return KnownPaperSizes.Value.Values
             .FirstOrDefault(paperSize => paperSize.Value == value)
             ?? new PaperSize(value);
     }
 
-    private static Dictionary<string, PaperSize> GetKnownPaperSizes() {
+    private static Dictionary<string, PaperSize> CreateKnownPaperSizes() {
         return typeof(PaperSize)
             .GetProperties(BindingFlags.Public | BindingFlags.Static)
             .Where(property => property.PropertyType == typeof(PaperSize))
