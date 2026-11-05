@@ -1156,7 +1156,7 @@
         {
           "Address": "$E$3",
           "Value": null,
-          "Formula": "E5*0.35",
+          "Formula": "D3*0.35",
           "MergedRange": null,
           "Style": {
             "HorizontalAlignment": "Right",
@@ -1368,7 +1368,7 @@
         {
           "Address": "$E$4",
           "Value": null,
-          "Formula": "E6*0.35",
+          "Formula": "D4*0.35",
           "MergedRange": null,
           "Style": {
             "HorizontalAlignment": "Right",
@@ -1580,7 +1580,7 @@
         {
           "Address": "$E$5",
           "Value": null,
-          "Formula": "E7*0.35",
+          "Formula": "D5*0.35",
           "MergedRange": null,
           "Style": {
             "HorizontalAlignment": "Right",
@@ -1792,7 +1792,7 @@
         {
           "Address": "$E$6",
           "Value": null,
-          "Formula": "E8*0.35",
+          "Formula": "D6*0.35",
           "MergedRange": null,
           "Style": {
             "HorizontalAlignment": "Right",
@@ -2004,7 +2004,7 @@
         {
           "Address": "$E$7",
           "Value": null,
-          "Formula": "E9*0.35",
+          "Formula": "D7*0.35",
           "MergedRange": null,
           "Style": {
             "HorizontalAlignment": "Right",
@@ -2216,7 +2216,7 @@
         {
           "Address": "$E$8",
           "Value": null,
-          "Formula": "E10*0.35",
+          "Formula": "D8*0.35",
           "MergedRange": null,
           "Style": {
             "HorizontalAlignment": "Right",
