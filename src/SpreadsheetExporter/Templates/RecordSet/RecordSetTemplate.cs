@@ -131,7 +131,7 @@ public class RecordSetTemplate<T> : ISheetTemplate {
     }
 
     private IEnumerable<Cell> GetCells() {
-        return RecordSetTemplate<T>.GetHeaderCells(Columns).Union(GetRecordCells());
+        return GetHeaderCells(Columns).Concat(GetRecordCells());
     }
 
     private Dictionary<int, double?> GetRowHeights() {

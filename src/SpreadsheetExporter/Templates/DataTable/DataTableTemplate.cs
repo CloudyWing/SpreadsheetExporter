@@ -140,7 +140,7 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate
     }
 
     private IEnumerable<Cell> GetCells() {
-        return GetHeaderCells().Union(GetRecordCells());
+        return GetHeaderCells().Concat(GetRecordCells());
     }
 
     private Dictionary<int, double?> GetRowHeights() {
