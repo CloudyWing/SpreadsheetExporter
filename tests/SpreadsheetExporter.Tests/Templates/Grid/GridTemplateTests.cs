@@ -22,6 +22,15 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.Grid {
         }
 
         [Test]
+        public void CreateCell_NullValue_ShouldCreateEmptyCell() {
+            GridTemplate template = new();
+
+            template.CreateCell((object?)null);
+
+            Assert.That(template.GetLayout().Cells.Single().GetValue(), Is.Null);
+        }
+
+        [Test]
         public void CreateCell_ShouldAddCellToLastRow() {
             GridTemplate template = new();
             template.CreateRow()

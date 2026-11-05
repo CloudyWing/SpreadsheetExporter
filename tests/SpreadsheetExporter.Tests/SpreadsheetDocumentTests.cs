@@ -89,6 +89,16 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void TryGetSheet_WhenReturnsTrue_ShouldExposeNonNullSheet() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        sut.CreateSheet("Sheet1");
+
+        string? sheetName = sut.TryGetSheet(0, out SheetDefinition? sheet) ? sheet.SheetName : null;
+
+        Assert.That(sheetName, Is.EqualTo("Sheet1"));
+    }
+
+    [Test]
     public void TryGetSheet_WhenIndexIsInvalid_ShouldReturnFalseAndNull() {
         SpreadsheetDocument sut = new(new FakeRenderer());
 

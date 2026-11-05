@@ -49,3 +49,5 @@ override CloudyWing.SpreadsheetExporter.ExportOptions.ToString() -> string!
 static CloudyWing.SpreadsheetExporter.ExportOptions.Default.get -> CloudyWing.SpreadsheetExporter.ExportOptions!
 static CloudyWing.SpreadsheetExporter.ExportOptions.operator !=(CloudyWing.SpreadsheetExporter.ExportOptions? left, CloudyWing.SpreadsheetExporter.ExportOptions? right) -> bool
 static CloudyWing.SpreadsheetExporter.ExportOptions.operator ==(CloudyWing.SpreadsheetExporter.ExportOptions? left, CloudyWing.SpreadsheetExporter.ExportOptions? right) -> bool
+*REMOVED*CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(object! value, int columnSpan = 1, int rowSpan = 1, CloudyWing.SpreadsheetExporter.CellStyle? cellStyle = null) -> CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate!
+CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate.CreateCell(object? value, int columnSpan = 1, int rowSpan = 1, CloudyWing.SpreadsheetExporter.CellStyle? cellStyle = null) -> CloudyWing.SpreadsheetExporter.Templates.Grid.GridTemplate!

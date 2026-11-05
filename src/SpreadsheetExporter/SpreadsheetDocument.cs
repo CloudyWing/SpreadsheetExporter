@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -139,7 +140,7 @@ public sealed class SpreadsheetDocument {
     /// <param name="index">The zero-based index.</param>
     /// <param name="sheet">The sheet definition if found; otherwise, <see langword="null"/>.</param>
     /// <returns><see langword="true"/> if the index is valid; otherwise, <see langword="false"/>.</returns>
-    public bool TryGetSheet(int index, out SheetDefinition? sheet) {
+    public bool TryGetSheet(int index, [NotNullWhen(true)] out SheetDefinition? sheet) {
         if (index >= 0 && index < sheets.Count) {
             sheet = sheets[index];
             return true;
