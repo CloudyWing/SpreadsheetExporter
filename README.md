@@ -120,10 +120,11 @@ Sample 會在執行輸出目錄下的 `artifacts` 目錄建立：
 dotnet run -c Release --project .\benchmarks\SpreadsheetExporter.Benchmarks -- --filter *
 ```
 
-目前 benchmark 聚焦於兩類工作負載：
+目前 benchmark 聚焦於下列工作負載：
 
 - `TemplateBenchmarks`：量測模板建立與 JSON 解析成本。
 - `ExporterBenchmarks`：量測 ClosedXML 匯出基本版與含樣式版活頁簿的成本。
+- `LargeDataBenchmarks`：量測大量資料時欄位取值，以及匯出至 `byte[]` 與 `Stream` 的成本。
 
 ## Documentation
 
