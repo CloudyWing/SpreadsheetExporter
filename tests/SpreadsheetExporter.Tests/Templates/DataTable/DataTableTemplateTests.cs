@@ -346,5 +346,62 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.DataTable {
 
             Assert.That(layout.Cells.Select(x => x.GetValue()), Is.EqualTo(new object?[] { "Id", "Name", "Age", "Missing" }));
         }
+
+        [Test]
+        public void GetLayout_FieldStyleContextGenerator_ShouldReceiveRowContext() {
+            List<DataRowContext> contexts = [];
+            CellStyle highlight = CellStyle.Empty with { BackgroundColor = Color.Yellow };
+            template.Columns[1].FieldStyleContextGenerator = context => {
+                contexts.Add(context);
+                return (int)context.DataRow["Age"] > 30 ? highlight : CellStyle.Empty;
+            };
+
+            TemplateLayout layout = template.GetLayout();
+            CellStyle[] nameStyles = layout.Cells
+                .Where(x => x.Point.X == 1 && x.Point.Y > 0)
+                .Select(x => x.GetCellStyle())
+                .ToArray();
+
+            Assert.Multiple(() => {
+                Assert.That(nameStyles, Is.EqualTo(new[] { CellStyle.Empty, CellStyle.Empty, highlight }));
+                Assert.That(contexts.Select(x => x.DataRowIndex), Is.EqualTo(new[] { 0, 1, 2 }));
+                Assert.That(contexts.Select(x => x.RowIndex), Is.EqualTo(new[] { 1, 2, 3 }));
+                Assert.That(contexts.Select(x => x.CellIndex), Is.All.EqualTo(1));
+                Assert.That(contexts.Select(x => x.Value), Is.EqualTo(new object[] { "Alice", "Bob", "Charlie" }));
+                Assert.That(contexts.Select(x => x.ColumnName), Is.All.EqualTo("Name"));
+                Assert.That(contexts[2].DataRow, Is.SameAs(dataTable.Rows[2]));
+            });
+        }
+
+        [Test]
+        public void GetLayout_BothStyleGeneratorsSet_ShouldPreferContextGenerator() {
+            CellStyle legacyStyle = CellStyle.Empty with { WrapText = true };
+            CellStyle contextStyle = CellStyle.Empty with { IsLocked = true };
+            template.Columns[0].FieldStyleGenerator = _ => legacyStyle;
+            template.Columns[0].FieldStyleContextGenerator = _ => contextStyle;
+
+            Cell dataCell = template.GetLayout().Cells.First(x => x.Point == new Point(0, 1));
+
+            Assert.That(dataCell.GetCellStyle(), Is.EqualTo(contextStyle));
+        }
+
+        [Test]
+        public void GetLayout_DbNullValue_ShouldPassNullValueToContext() {
+            dataTable.Rows.Add(4, DBNull.Value, 40);
+            object? capturedValue = "not-set";
+            template.Columns[1].FieldStyleContextGenerator = context => {
+                if (context.DataRowIndex == 3) {
+                    capturedValue = context.Value;
+                }
+
+                return CellStyle.Empty;
+            };
+
+            foreach (Cell cell in template.GetLayout().Cells) {
+                cell.GetCellStyle();
+            }
+
+            Assert.That(capturedValue, Is.Null);
+        }
     }
 }

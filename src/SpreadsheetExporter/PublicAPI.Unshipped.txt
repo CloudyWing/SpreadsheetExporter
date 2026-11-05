@@ -27,6 +27,16 @@ CloudyWing.SpreadsheetExporter.SpreadsheetDocument.Export(CloudyWing.Spreadsheet
 CloudyWing.SpreadsheetExporter.SpreadsheetDocument.Export(System.IO.Stream! stream) -> void
 CloudyWing.SpreadsheetExporter.SpreadsheetDocument.ExportAsync(System.IO.Stream! stream, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
 CloudyWing.SpreadsheetExporter.SpreadsheetDocument.ExportFileAsync(string! path, CloudyWing.SpreadsheetExporter.SpreadsheetFileMode fileMode = CloudyWing.SpreadsheetExporter.SpreadsheetFileMode.Create, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataRowContext
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataRowContext.CellIndex.get -> int
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataRowContext.ColumnName.get -> string!
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataRowContext.DataRow.get -> System.Data.DataRow!
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataRowContext.DataRowContext(int cellIndex, int rowIndex, int dataRowIndex, System.Data.DataRow! dataRow, string! columnName, object? value) -> void
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataRowContext.DataRowIndex.get -> int
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataRowContext.RowIndex.get -> int
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataRowContext.Value.get -> object?
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.FieldStyleContextGenerator.get -> System.Func<CloudyWing.SpreadsheetExporter.Templates.DataTable.DataRowContext!, CloudyWing.SpreadsheetExporter.CellStyle>?
+CloudyWing.SpreadsheetExporter.Templates.DataTable.DataTableColumn.FieldStyleContextGenerator.set -> void
 CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.Width.get -> double?
 CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnBase<T>.Width.set -> void
 CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>.Add<TField>(string! headerText, System.Linq.Expressions.Expression<System.Func<T, TField>!>! fieldKeyExpression, double width) -> CloudyWing.SpreadsheetExporter.Templates.RecordSet.RecordSetColumnCollection<T>!

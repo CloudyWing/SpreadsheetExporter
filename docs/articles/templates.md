@@ -117,6 +117,35 @@ template.Columns[1].FieldDataValidationGenerator = value => new DataValidation {
 };
 ```
 
+### 依整列資料設定樣式
+
+`FieldStyleGenerator` 只能取得該欄的值。需要依同一列其他欄位決定樣式時，改用 `FieldStyleContextGenerator`，它會收到 `DataRowContext`：
+
+```csharp
+CellStyle overdueStyle = SpreadsheetManager.DefaultCellStyles.FieldStyle with {
+    BackgroundColor = Color.MistyRose
+};
+
+template.Columns[0].FieldStyleContextGenerator = context =>
+    context.DataRow["Status"] as string == "Overdue"
+        ? overdueStyle
+        : SpreadsheetManager.DefaultCellStyles.FieldStyle;
+```
+
+| 屬性 | 說明 |
+| --- | --- |
+| `DataRow` | 該儲存格所在的 `DataRow` |
+| `DataRowIndex` | 在 `DataTable.Rows` 中的零基索引 |
+| `ColumnName` | 綁定的欄位名稱 |
+| `Value` | 儲存格值，`DBNull` 會轉為 `null` |
+| `CellIndex`、`RowIndex` | 儲存格的零基欄、列索引（與其他 cell generator 相同） |
+
+同時設定兩者時以 `FieldStyleContextGenerator` 為準。
+
+### 更換 DataTable
+
+設定 `DataTable` 屬性時，若新資料表包含 `Columns` 目前引用的所有欄位，`Columns` 的設定（標題文字、generator 等）會保留；若缺少任一欄位，`Columns` 會依新資料表的欄位重新建立，原本的設定會被清除。
+
 ## RecordSetTemplate
 
 適用於強型別資料集合，支援欄位綁定、資料轉換、條件樣式、多層標題與資料驗證。

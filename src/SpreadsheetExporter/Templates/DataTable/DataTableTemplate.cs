@@ -116,15 +116,20 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate
         foreach (DataRow row in DataTable.Rows) {
             for (int colIndex = 0; colIndex < Columns.Count; colIndex++) {
                 DataTableColumn column = Columns[colIndex];
-                object? value = row[dataColumns[colIndex]];
+                DataColumn dataColumn = dataColumns[colIndex];
+                int dataRowIndex = rowIndex - 1;
+                object? value = row[dataColumn];
 
                 if (value == DBNull.Value) {
                     value = null;
                 }
 
                 Cell cell = new() {
-                    CellStyleGenerator = (cellIndex, rowIdx) => column.FieldStyleGenerator?.Invoke(value)
-                        ?? SpreadsheetManager.DefaultCellStyles.FieldStyle,
+                    CellStyleGenerator = (cellIndex, rowIdx) => column.FieldStyleContextGenerator is not null
+                        ? column.FieldStyleContextGenerator(
+                            new DataRowContext(cellIndex, rowIdx, dataRowIndex, row, dataColumn.ColumnName, value)
+                        )
+                        : column.FieldStyleGenerator?.Invoke(value) ?? SpreadsheetManager.DefaultCellStyles.FieldStyle,
                     Point = new Point(colIndex, rowIndex),
                     Size = new Size(1, 1)
                 };
