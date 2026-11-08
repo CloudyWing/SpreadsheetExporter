@@ -16,6 +16,8 @@ dotnet add package CloudyWing.SpreadsheetExporter
 dotnet add package CloudyWing.SpreadsheetExporter.Renderer.ClosedXML
 ```
 
+核心套件與 ClosedXML Renderer 套件皆支援 `net8.0` 與 `net10.0`。
+
 ## 設定
 
 SpreadsheetExporter 目前有兩種啟動方式：
@@ -58,6 +60,8 @@ SpreadsheetDocument document = new SpreadsheetDocument(renderer);
 若需要初始化預設值，也可以在組合根先設定：
 
 ```csharp
+using CloudyWing.SpreadsheetExporter.Config;
+
 SpreadsheetManager.DefaultCellStyles = new CellStyleConfiguration {
     HeaderStyle = SpreadsheetManager.DefaultCellStyles.HeaderStyle with {
         HasBorder = true

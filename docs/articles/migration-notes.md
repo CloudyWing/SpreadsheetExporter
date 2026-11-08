@@ -76,6 +76,28 @@ template.Columns
 
 多數直接寫 lambda 的情境通常不需要改寫，但若有明確宣告舊 delegate 型別，請一併更新。
 
+## v3.1 → v3.2
+
+本節整理既有程式碼升級後可能觀察到的行為變更。新增的 API 請參考各主題文件。
+
+### 自動篩選的預設範圍
+
+工作表有多個 templates，且其中包含 `RecordSetTemplate<T>` 或 `DataTableTemplate` 時，`SetAutoFilterEnabled()` 的篩選範圍為第一個 `RecordSetTemplate<T>` 或 `DataTableTemplate` 的範圍（表頭到最後一筆資料），不再使用工作表已使用的範圍。只有單一 template 的工作表維持原行為。需要指定其他範圍時，使用 `SetAutoFilterRange(...)`，詳見 [SheetDefinition](sheet-definition.md)。
+
+### 工作表名稱
+
+- `CreateSheet` 比對重複名稱時不分大小寫。已有 `Sales` 時再建立 `SALES`，會得到 `SALES(1)`。
+- `GetLayoutDiagnostics()` 與 `ValidateLayout()` 新增 `SE-LAYOUT-005`（名稱不符合 Excel 規則）與 `SE-LAYOUT-006`（名稱重複）。呼叫這兩個 API 的既有程式碼，若工作表名稱違反規則，升級後會收到診斷或 `SpreadsheetLayoutException`。
+
+### 巢狀欄位路徑
+
+`RecordSetTemplate<T>` 的欄位以巢狀屬性運算式或字串路徑取值時，路徑中途的物件為 `null`，欄位值為 `null`。先前會拋出 `ArgumentException`。`FromJson(...)` 建立的 `RecordSet` 不在此變更範圍，`FieldKey` 路徑中途為 `null` 時仍會拋出 `ArgumentException`。
+
+### 清單資料驗證
+
+- 清單項目含雙引號時會自動跳脫，先前會產生無效的公式。
+- 清單來源（含前後雙引號）超過 255 個字元時，ClosedXML renderer 會拋出 `ArgumentOutOfRangeException`。
+
 ## 相關文件
 
 - [入門指南](getting-started.md)

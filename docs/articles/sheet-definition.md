@@ -80,6 +80,8 @@ sheet.SetAutoFilterRange(new CellRange(Column: 1, Row: 2, ColumnSpan: 2, RowSpan
 
 `SetAutoFilterRange` 會同時啟用自動篩選。指定的範圍無效時，`GetLayoutDiagnostics()` 會回報 `InvalidCellRange`。範圍判定只看工作表直接加入的 templates，`MergedTemplate` 內的表格需以 `SetAutoFilterRange` 指定。
 
+自訂 renderer 透過 `SheetLayout.AutoFilterRange` 取得上述判定結果。值為 `null` 時，表示應使用工作表已使用的範圍。`IsAutoFilterEnabled` 為 `false` 時不需套用自動篩選。
+
 ## 使用 Templates
 
 Templates 會依加入順序**垂直堆疊**。若 `template1` 佔用 3 列，`template2` 將從第 4 列開始。

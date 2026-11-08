@@ -132,6 +132,7 @@ try {
 | `SE-LAYOUT-004` | `InvalidDimension` | 欄寬或列高無效 |
 | `SE-LAYOUT-005` | `InvalidSheetName` | 工作表名稱不符合 Excel 規則 |
 | `SE-LAYOUT-006` | `DuplicateSheetName` | 工作表名稱重複（不分大小寫） |
+| `SE-RENDERER-001` | `UnsupportedRendererCapability` | renderer 不支援文件使用的功能，由 `GetRendererCapabilityDiagnostics()` 回報 |
 
 `CreateSheet` 只會在建立時避開重複名稱；透過 `SheetName` 或 `SetSheetName` 改名時不會檢查，以便依任意順序調換名稱，請在匯出前以診斷 API 確認。
 
@@ -199,6 +200,8 @@ document.Export(stream);
 ```
 
 Renderer 實作 `ISpreadsheetStreamRenderer` 時（例如 `ExcelRenderer`）會直接寫入 stream，不另外建立 `byte[]`；若 render 中途失敗，stream 可能已寫入部分內容。只實作 `ISpreadsheetRenderer` 的 renderer 會先取得 `byte[]` 再寫入 stream。
+
+`stream` 為 `null` 時拋出 `ArgumentNullException`，stream 不可寫入時拋出 `ArgumentException`，尚未建立任何工作表時拋出 `SheetDefinitionNotFoundException`。非同步匯出的 `ExportAsync` 同樣適用。
 
 ### 非同步匯出
 
@@ -627,6 +630,8 @@ template 使用 `StyleName`、`HeaderStyleName` 或 `FieldStyleName` 引用時�
 
 - 需要以程式碼動態計算的 generator 邏輯。
 - 自訂 template 型別，除非先自行註冊對應的 JSON parser。
+- 指定自動篩選範圍（`SheetDefinition.AutoFilterRange`）。`IsAutoFilterEnabled` 為 `true` 時，範圍依 [SheetDefinition](sheet-definition.md) 的自動篩選判定順序決定。
+- `RecordSet` 欄位的 `Width`。欄寬請改用工作表層級的 `ColumnWidths`。
 
 ### JSON 錯誤診斷
 
@@ -684,6 +689,8 @@ SpreadsheetDocument document = SpreadsheetDocument.FromJson(json);
 ```
 
 若需要完全重設註冊內容，可先呼叫 `JsonTemplateRegistry.Clear()`，再視需要呼叫 `JsonTemplateRegistry.RegisterBuiltins()` 與自訂 parser 註冊。
+
+`JsonTemplateRegistry` 的成員皆為 thread-safe。與 `Clear()` 並行執行的 `FromJson(...)`，可能看到清除前或清除後的註冊內容。
 
 ## 自訂 renderer 行為
 

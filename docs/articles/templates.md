@@ -170,6 +170,8 @@ template.Columns.Add<string>("客戶", order => order.Customer);
 template.Columns.Add<decimal>("金額", order => order.Amount);
 ```
 
+欄位可以指向巢狀屬性。假設 `Order` 具有 `Shipping` 物件屬性，可使用 `order => order.Shipping.City`，或字串路徑 `"Shipping.City"`。路徑中途的物件為 `null` 時，欄位值為 `null`，不會拋出例外。
+
 ### 資料轉換
 
 使用 `configureGenerators` 參數自訂值或公式產生方式：
@@ -236,6 +238,8 @@ template.Columns.GetLastColumn().Width = 16;
 
 只有最底層的欄位會套用欄寬。同一欄若也以 `SheetDefinition.SetColumnWidth` 設定，以工作表設定為準；同一工作表有多個 `RecordSetTemplate<T>` 指定同一欄時，以先加入的 template 為準。
 
+欄寬只對直接加入工作表的 `RecordSetTemplate<T>` 生效，放進 `MergedTemplate` 的 `RecordSetTemplate<T>` 不會套用，需改用 `SheetDefinition.SetColumnWidth`。欄寬為負值（`Constants.AutoFitColumnWidth` 除外）時，會拋出 `ArgumentOutOfRangeException`。
+
 ### 多層標題
 
 ```csharp
@@ -281,6 +285,8 @@ template.Columns.Add<string>(
     })
 );
 ```
+
+清單驗證的 `ListItems` 會以逗號串接成 Excel 字串常值。項目中的雙引號會自動跳脫；Excel 無法跳脫逗號，含逗號的項目會被拆成多個選項。ClosedXML renderer 的清單來源（含前後雙引號）上限為 255 個字元，超過時拋出 `ArgumentOutOfRangeException`。
 
 ## MergedTemplate
 

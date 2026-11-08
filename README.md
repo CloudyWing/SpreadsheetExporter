@@ -28,6 +28,8 @@ dotnet add package CloudyWing.SpreadsheetExporter
 dotnet add package CloudyWing.SpreadsheetExporter.Renderer.ClosedXML
 ```
 
+核心套件與 ClosedXML Renderer 套件皆支援 `net8.0` 與 `net10.0`。
+
 ## Quick Start
 
 若是 Console、腳本或沒有導入 DI 的專案，建議直接用 `SpreadsheetManager.SetRenderer(...)` 作為最短路徑：
