@@ -1,5 +1,59 @@
 # Changelog
 
+## v3.2.0 (2026-11-09)
+
+### Behavior Changes
+
+3.1 升級至 3.2 時可能觀察到下列行為變更，完整說明見 [Migration Notes](docs/articles/migration-notes.md#v31--v32)。
+
+- 工作表有多個 templates 且包含 `RecordSetTemplate<T>` 或 `DataTableTemplate` 時，自動篩選的預設範圍改為第一個 `RecordSetTemplate<T>` 或 `DataTableTemplate` 的範圍，不再使用工作表已使用的範圍。只有單一 template 的工作表維持原行為。
+- `CreateSheet` 產生唯一工作表名稱時改為不分大小寫比對，已有 `Sales` 時再建立 `SALES` 會得到 `SALES(1)`。
+- `GetLayoutDiagnostics()` 與 `ValidateLayout()` 新增工作表名稱檢查，名稱不符合 Excel 規則時回報 `SE-LAYOUT-005`，名稱重複時回報 `SE-LAYOUT-006`。
+- `RecordSetTemplate<T>` 的欄位以巢狀屬性路徑取值時，路徑中途的物件為 `null`，欄位值改為 `null`，先前會拋出 `ArgumentException`。`FromJson(...)` 建立的 RecordSet 不受影響，仍會拋出 `ArgumentException`。
+- 清單資料驗證的項目含雙引號時自動跳脫，先前會產生無效的公式。清單來源超過 255 個字元時，ClosedXML renderer 會拋出說明長度與上限的 `ArgumentOutOfRangeException`。
+
+### New Features
+
+- 新增 Stream 與非同步匯出，`SpreadsheetDocument` 提供 `Export(Stream)`、`ExportAsync` 與 `ExportFileAsync`。非同步匯出先在記憶體完成 render 再寫入，失敗時不會寫入部分內容，也不會建立檔案。
+- 新增 `ISpreadsheetStreamRenderer`，renderer 可直接將內容寫入 stream，未實作時退回 `byte[]` 輸出。`ExcelRenderer` 已實作此介面。
+- 新增 `Export(ExportOptions)`，以 `ValidateLayout` 與 `ValidateCapabilities` 在匯出前驗證版面與 renderer 能力。版面與能力診斷合併為單一 `SpreadsheetLayoutException`，且不會呼叫 renderer。
+- 新增 `BorderLineStyle` 與 `CellStyle.BorderStyle`，可指定外框線樣式。JSON style 與 JSON Schema 同步支援 `BorderStyle`。
+- 新增 RecordSet 欄寬設定，`RecordSetColumnBase<T>.Width` 與 `RecordSetColumnCollection<T>.Add(..., double width)` 可指定欄寬。工作表以 `SetColumnWidth` 設定的欄寬優先，`MergedTemplate` 內的 RecordSet 不套用。
+- 新增 `DataRowContext` 與 `DataTableColumn.FieldStyleContextGenerator`，DataTable 欄位樣式可取得整列資料。同時設定時優先於 `FieldStyleGenerator`。
+- 新增 `SheetDefinition.AutoFilterRange`、`SetAutoFilterRange` 與 `SheetLayout.AutoFilterRange`，可明確指定自動篩選範圍。指定的範圍無效時，`GetLayoutDiagnostics()` 回報 `SE-LAYOUT-001`。
+- 補上 `TryGetSheet` 的 `[NotNullWhen(true)]` 與 `GridTemplate.CreateCell` 的 `object?` nullable 標註。
+
+### Bug Fixes
+
+- 修正工作表上方有其他 templates 時，自動篩選套用到錯誤列的問題。
+- 修正清單資料驗證項目含雙引號時產生無效公式的問題。
+- 修正 `DataTableTemplate` 更換為欄位不同的 `DataTable` 後，匯出拋出例外的問題。更換後缺少既有欄位時會重建 `Columns`，資料列引用不存在的欄位時，改拋出列出可用欄位的 `ArgumentException`。
+- 修正 `JsonTemplateRegistry` 與 `SpreadsheetManager` 並行存取時的執行緒安全問題。
+- 修正 `DictionaryUtils` 遇到 indexer 與以 `new` 隱藏的屬性時拋出例外的問題。
+
+### Performance
+
+- 移除 `FieldColumn` 無限成長的快取，並以快取的成員存取器取值。
+- `ExcelRenderer` 對單一儲存格套用樣式與資料驗證時不再建立 `IXLRange`。
+- 模板組合表頭與資料儲存格改用 `Concat`，避免 `Union` 的雜湊去重。
+- 快取 JSON 解析使用的已知紙張大小對照表。
+
+### 文件
+
+- 新增 NuGet 套件專用 README。
+- README 補充 Stream、非同步與 `ExportOptions` 匯出用法。
+- 補充目標框架、自動篩選範圍、清單驗證限制、巢狀欄位路徑為 `null`、欄寬限制、JSON 未支援項目與執行緒安全的說明。
+- 新增 `SE-RENDERER-001` 診斷代碼說明與 v3.1 升級至 v3.2 的遷移說明。
+- 修正文件範例錯誤，包含 `RecordContext.RowIndex` 的說明與公式範例列號、DI 範例缺少的 `using`。
+
+### Build / CI
+
+- 新增 `PublicApiAnalyzers`，並以 v3.1.0 的公開 API 建立 Shipped 基準。套件啟用 PackageValidation（以 3.1.0 為基準）、SourceLink 與 snupkg 符號套件。
+- 發佈流程改為推送版本標籤時，驗證 nupkg 版號與標籤一致後建立 GitHub Release，並以 Trusted Publishing 發佈至 NuGet，不再使用 API Key。
+- CI 改用 devops-templates 的 reusable workflow，並新增 ubuntu 建置矩陣。
+- 文件網站改以 GitHub Pages artifact 部署。
+- 新增 Dependabot 設定。
+
 ## v3.1.0 (2026-05-24)
 
 ### New Features
