@@ -28,6 +28,8 @@ dotnet add package CloudyWing.SpreadsheetExporter
 dotnet add package CloudyWing.SpreadsheetExporter.Renderer.ClosedXML
 ```
 
+核心套件與 ClosedXML Renderer 套件皆支援 `net8.0` 與 `net10.0`。
+
 ## Quick Start
 
 若是 Console、腳本或沒有導入 DI 的專案，建議直接用 `SpreadsheetManager.SetRenderer(...)` 作為最短路徑：
@@ -76,10 +78,24 @@ SpreadsheetDocument document = SpreadsheetDocument.FromJson(json);
 byte[] bytes = document.Export();
 ```
 
+除了 `Export()` 與 `ExportFile(...)`，也可以直接寫入 stream、以非同步方式輸出，或在匯出前一併驗證版面：
+
+```csharp
+document.Export(stream);
+await document.ExportAsync(response.Body, cancellationToken);
+await document.ExportFileAsync("orders.xlsx", SpreadsheetFileMode.Create, cancellationToken);
+
+byte[] validated = document.Export(new ExportOptions {
+    ValidateLayout = true,
+    ValidateCapabilities = true
+});
+```
+
 若你的專案已經使用 DI，也可以在組合根先完成初始化，再建立文件：
 
 ```csharp
 using CloudyWing.SpreadsheetExporter;
+using CloudyWing.SpreadsheetExporter.Config;
 using CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -120,10 +136,11 @@ Sample 會在執行輸出目錄下的 `artifacts` 目錄建立：
 dotnet run -c Release --project .\benchmarks\SpreadsheetExporter.Benchmarks -- --filter *
 ```
 
-目前 benchmark 聚焦於兩類工作負載：
+目前 benchmark 聚焦於下列工作負載：
 
 - `TemplateBenchmarks`：量測模板建立與 JSON 解析成本。
 - `ExporterBenchmarks`：量測 ClosedXML 匯出基本版與含樣式版活頁簿的成本。
+- `LargeDataBenchmarks`：量測大量資料時欄位取值，以及匯出至 `byte[]` 與 `Stream` 的成本。
 
 ## Documentation
 

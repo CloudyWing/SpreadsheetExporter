@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 
 namespace CloudyWing.SpreadsheetExporter.Templates.RecordSet;
@@ -18,6 +19,30 @@ public abstract class RecordSetColumnBase<T> {
     /// </summary>
     /// <value>The header style.</value>
     public CellStyle HeaderStyle { get; set; }
+
+    /// <summary>
+    /// Gets or sets the width of the sheet column occupied by this column.
+    /// </summary>
+    /// <value>
+    /// The width in character units, <see cref="Constants.HiddenColumn"/> to hide the column,
+    /// <see cref="Constants.AutoFitColumnWidth"/> to auto-fit it, or <see langword="null"/> to leave the width unchanged.
+    /// Only leaf columns apply their width. A width set by <see cref="SheetDefinition.SetColumnWidth"/> takes precedence.
+    /// </value>
+    /// <exception cref="ArgumentOutOfRangeException">The value is negative and not <see cref="Constants.AutoFitColumnWidth"/>.</exception>
+    public double? Width {
+        get;
+        set {
+            if (value.HasValue && !IsAllowedWidth(value.Value)) {
+                throw new ArgumentOutOfRangeException(
+                    nameof(value),
+                    value,
+                    $"Width must be greater than or equal to 0, or {Constants.AutoFitColumnWidth} to auto-fit."
+                );
+            }
+
+            field = value;
+        }
+    }
 
     /// <summary>
     /// Gets the point.
@@ -60,6 +85,10 @@ public abstract class RecordSetColumnBase<T> {
         ? 1 : ChildColumns.RowSpan + 1;
 
     internal virtual bool HasFieldValue => true;
+
+    private static bool IsAllowedWidth(double width) {
+        return width >= 0 || width == Constants.AutoFitColumnWidth;
+    }
 
     internal virtual bool HasFieldFormula => true;
 

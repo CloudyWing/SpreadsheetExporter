@@ -2,6 +2,7 @@ using System.Drawing;
 using System.Text.Json;
 using ClosedXML.Excel;
 using CloudyWing.SpreadsheetExporter.Templates;
+using CloudyWing.SpreadsheetExporter.Templates.Grid;
 
 namespace CloudyWing.SpreadsheetExporter.Renderer.ClosedXML.Tests;
 
@@ -143,6 +144,225 @@ internal sealed class ExcelRendererTests {
             Assert.That(validation.ErrorTitle, Is.EqualTo("Invalid option"));
             Assert.That(validation.ErrorMessage, Is.EqualTo("Choose a configured option."));
         });
+    }
+
+    [Test]
+    public void Render_ListValidationItemsContainQuotes_ShouldEscapeQuotes() {
+        IXLDataValidation validation = RenderSingleListValidation(["Say \"Hi\"", "Plain"]);
+
+        Assert.That(validation.Value, Is.EqualTo("\"Say \"\"Hi\"\",Plain\""));
+    }
+
+    [TestCase(253)]
+    public void Render_ListValidationAtLengthLimit_ShouldRender(int itemLength) {
+        IXLDataValidation validation = RenderSingleListValidation([new string('a', itemLength)]);
+
+        Assert.That(validation.Value, Has.Length.EqualTo(itemLength + 2));
+    }
+
+    [TestCase(254)]
+    [TestCase(400)]
+    public void Render_ListValidationExceedsLengthLimit_ShouldThrowArgumentOutOfRangeException(int itemLength) {
+        Assert.That(
+            () => RenderSingleListValidation([new string('a', itemLength)]),
+            Throws.TypeOf<ArgumentOutOfRangeException>()
+                .With.Message.Contains("exceeds the Excel limit of 255 characters")
+        );
+    }
+
+    [Test]
+    public void Render_TitleGridAboveRecordSetWithAutoFilter_ShouldFilterRecordSetHeaderRow() {
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        document.CreateSheet("Filter")
+            .SetAutoFilterEnabled()
+            .AddTemplate(new GridTemplate().CreateCell("Title", columnSpan: 2))
+            .AddTemplate(CreateRecordSetTemplate());
+
+        Assert.That(RenderAutoFilterAddress(document), Is.EqualTo("$A$2:$B$4"));
+    }
+
+    [Test]
+    public void Render_SingleRecordSetWithAutoFilter_ShouldFilterUsedRange() {
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        document.CreateSheet("Filter")
+            .SetAutoFilterEnabled()
+            .AddTemplate(CreateRecordSetTemplate());
+
+        Assert.That(RenderAutoFilterAddress(document), Is.EqualTo("$A$1:$B$3"));
+    }
+
+    [Test]
+    public void Render_AutoFilterRangeIsSet_ShouldFilterConfiguredRange() {
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        document.CreateSheet("Filter")
+            .SetAutoFilterRange(new CellRange(1, 0, 1, 3))
+            .AddTemplate(CreateRecordSetTemplate());
+
+        Assert.That(RenderAutoFilterAddress(document), Is.EqualTo("$B$1:$B$3"));
+    }
+
+    [Test]
+    public void RenderStream_ShouldWriteSameWorkbookAsByteArrayRender() {
+        SpreadsheetDocument document = CreateRecordSetDocument();
+        using MemoryStream stream = new();
+
+        document.Export(stream);
+        byte[] bytes = document.Export();
+
+        Assert.That(ReadWorkbookValues(stream.ToArray()), Is.EqualTo(ReadWorkbookValues(bytes)));
+    }
+
+    [Test]
+    public void RenderStream_NonSeekableStream_ShouldWriteReadableWorkbook() {
+        SpreadsheetDocument document = CreateRecordSetDocument();
+        using MemoryStream inner = new();
+        using NonSeekableWriteStream stream = new(inner);
+
+        document.Export(stream);
+
+        Assert.That(ReadWorkbookValues(inner.ToArray()), Is.EqualTo(new[] { "Id", "Name", "1", "A", "2", "B" }));
+    }
+
+    [Test]
+    public async Task ExportAsync_ShouldWriteReadableWorkbookAsync() {
+        SpreadsheetDocument document = CreateRecordSetDocument();
+        using MemoryStream stream = new();
+
+        await document.ExportAsync(stream);
+
+        Assert.That(ReadWorkbookValues(stream.ToArray()), Is.EqualTo(new[] { "Id", "Name", "1", "A", "2", "B" }));
+    }
+
+    [Test]
+    public void Export_SameDocumentTwice_ShouldProduceSameWorkbookContent() {
+        SpreadsheetDocument document = CreateRecordSetDocument();
+
+        byte[] first = document.Export();
+        byte[] second = document.Export();
+
+        Assert.That(ReadWorkbookValues(second), Is.EqualTo(ReadWorkbookValues(first)));
+    }
+
+    [Test]
+    public void Export_DocumentsInParallel_ShouldProduceIndependentWorkbooks() {
+        string[][] results = new string[16][];
+
+        Parallel.For(0, results.Length, i => {
+            SpreadsheetDocument document = new(new ExcelRenderer());
+            Templates.RecordSet.RecordSetTemplate<(int Id, string Name)> template = new([(i, $"N{i}")]);
+            template.Columns
+                .Add("Id", x => x.Id)
+                .Add("Name", x => x.Name);
+            document.CreateSheet($"Sheet{i}").AddTemplate(template);
+            results[i] = ReadWorkbookValues(document.Export());
+        });
+
+        Assert.That(
+            results,
+            Is.EqualTo(Enumerable.Range(0, results.Length).Select(i => new[] { "Id", "Name", $"{i}", $"N{i}" }).ToArray())
+        );
+    }
+
+    [TestCase(BorderLineStyle.Thin, XLBorderStyleValues.Thin)]
+    [TestCase(BorderLineStyle.Medium, XLBorderStyleValues.Medium)]
+    [TestCase(BorderLineStyle.Thick, XLBorderStyleValues.Thick)]
+    [TestCase(BorderLineStyle.Dashed, XLBorderStyleValues.Dashed)]
+    [TestCase(BorderLineStyle.Dotted, XLBorderStyleValues.Dotted)]
+    [TestCase(BorderLineStyle.Double, XLBorderStyleValues.Double)]
+    public void Render_CellStyleWithBorderStyle_ShouldApplyOutsideBorder(
+        BorderLineStyle borderStyle, XLBorderStyleValues expected
+    ) {
+        IXLBorder border = RenderSingleCellBorder(CellStyle.Empty with { BorderStyle = borderStyle });
+
+        Assert.Multiple(() => {
+            Assert.That(border.TopBorder, Is.EqualTo(expected));
+            Assert.That(border.BottomBorder, Is.EqualTo(expected));
+            Assert.That(border.LeftBorder, Is.EqualTo(expected));
+            Assert.That(border.RightBorder, Is.EqualTo(expected));
+        });
+    }
+
+    [TestCase(true, XLBorderStyleValues.Thin)]
+    [TestCase(false, XLBorderStyleValues.None)]
+    public void Render_CellStyleWithoutBorderStyle_ShouldUseHasBorder(bool hasBorder, XLBorderStyleValues expected) {
+        IXLBorder border = RenderSingleCellBorder(CellStyle.Empty with { HasBorder = hasBorder });
+
+        Assert.That(border.TopBorder, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void Render_BorderStyleAndHasBorderFalse_ShouldUseBorderStyle() {
+        IXLBorder border = RenderSingleCellBorder(CellStyle.Empty with { HasBorder = false, BorderStyle = BorderLineStyle.Thick });
+
+        Assert.That(border.TopBorder, Is.EqualTo(XLBorderStyleValues.Thick));
+    }
+
+    [Test]
+    public void Render_RecordSetColumnWidth_ShouldSetSheetColumnWidth() {
+        Templates.RecordSet.RecordSetTemplate<(int Id, string Name)> template = new([(1, "A")]);
+        template.Columns
+            .Add("Id", x => x.Id, 9)
+            .Add("Name", x => x.Name, Constants.HiddenColumn);
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        document.CreateSheet("Width").AddTemplate(template);
+
+        using MemoryStream stream = new(document.Export());
+        using XLWorkbook workbook = new(stream);
+        IXLWorksheet worksheet = workbook.Worksheet(1);
+
+        Assert.Multiple(() => {
+            Assert.That(worksheet.Column(1).Width, Is.EqualTo(9).Within(0.01));
+            Assert.That(worksheet.Column(2).IsHidden, Is.True);
+        });
+    }
+
+    private static IXLBorder RenderSingleCellBorder(CellStyle style) {
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        document.CreateSheet("Border").AddTemplate(new GridTemplate().CreateCell("A", cellStyle: style));
+
+        using MemoryStream stream = new(document.Export());
+        using XLWorkbook workbook = new(stream);
+        return workbook.Worksheet(1).Cell("A1").Style.Border;
+    }
+
+    private static SpreadsheetDocument CreateRecordSetDocument() {
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        document.CreateSheet("Data").AddTemplate(CreateRecordSetTemplate());
+        return document;
+    }
+
+    private static string[] ReadWorkbookValues(byte[] bytes) {
+        using MemoryStream stream = new(bytes);
+        using XLWorkbook workbook = new(stream);
+        return workbook.Worksheet(1).CellsUsed().Select(cell => cell.GetString()).ToArray();
+    }
+
+    private static Templates.RecordSet.RecordSetTemplate<(int Id, string Name)> CreateRecordSetTemplate() {
+        Templates.RecordSet.RecordSetTemplate<(int Id, string Name)> template = new([(1, "A"), (2, "B")]);
+        template.Columns
+            .Add("Id", x => x.Id)
+            .Add("Name", x => x.Name);
+        return template;
+    }
+
+    private static string RenderAutoFilterAddress(SpreadsheetDocument document) {
+        using MemoryStream stream = new(document.Export());
+        using XLWorkbook workbook = new(stream);
+        return workbook.Worksheet(1).AutoFilter.Range.RangeAddress.ToStringFixed();
+    }
+
+    private static IXLDataValidation RenderSingleListValidation(IEnumerable<string> listItems) {
+        SpreadsheetDocument document = new(new ExcelRenderer());
+        GridTemplate grid = new();
+        grid.CreateCell(cell => cell.DataValidationGenerator = (_, _) => new DataValidation {
+            ValidationType = DataValidationType.List,
+            ListItems = listItems
+        });
+        document.CreateSheet("List").AddTemplate(grid);
+
+        using MemoryStream stream = new(document.Export());
+        using XLWorkbook workbook = new(stream);
+        return workbook.Worksheet("List").Cell("A1").GetDataValidation();
     }
 
     private static string CreateWorkbookSnapshotJson(XLWorkbook workbook) {
@@ -483,4 +703,39 @@ internal sealed class ExcelRendererTests {
         string InputTitle,
         string InputMessage
     );
+
+    private sealed class NonSeekableWriteStream(Stream inner) : Stream {
+        public override bool CanRead => false;
+
+        public override bool CanSeek => false;
+
+        public override bool CanWrite => true;
+
+        public override long Length => throw new NotSupportedException();
+
+        public override long Position {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush() {
+            inner.Flush();
+        }
+
+        public override int Read(byte[] buffer, int offset, int count) {
+            throw new NotSupportedException();
+        }
+
+        public override long Seek(long offset, SeekOrigin origin) {
+            throw new NotSupportedException();
+        }
+
+        public override void SetLength(long value) {
+            throw new NotSupportedException();
+        }
+
+        public override void Write(byte[] buffer, int offset, int count) {
+            inner.Write(buffer, offset, count);
+        }
+    }
 }

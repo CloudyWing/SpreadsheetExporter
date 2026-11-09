@@ -220,6 +220,50 @@ public class RecordSetColumnCollection<T> : Collection<RecordSetColumnBase<T>> {
         return this;
     }
 
+    /// <summary>
+    /// Adds a field column with the specified field key and column width.
+    /// </summary>
+    /// <typeparam name="TField">The type of the field.</typeparam>
+    /// <param name="headerText">The header text.</param>
+    /// <param name="fieldKey">The field key.</param>
+    /// <param name="width">
+    /// The column width in character units, <see cref="Constants.HiddenColumn"/> to hide the column,
+    /// or <see cref="Constants.AutoFitColumnWidth"/> to auto-fit it.
+    /// </param>
+    /// <returns>The collection instance for chaining.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="width"/> is not a valid column width.</exception>
+    public RecordSetColumnCollection<T> Add<TField>(string headerText, string fieldKey, double width) {
+        FieldColumn<T, TField> column = new(fieldKey) {
+            Width = width
+        };
+        ApplyDefaultStyles(column, headerText, null, null);
+        Add(column);
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a field column using a property expression and column width.
+    /// </summary>
+    /// <typeparam name="TField">The type of the field.</typeparam>
+    /// <param name="headerText">The header text.</param>
+    /// <param name="fieldKeyExpression">The field key expression.</param>
+    /// <param name="width">
+    /// The column width in character units, <see cref="Constants.HiddenColumn"/> to hide the column,
+    /// or <see cref="Constants.AutoFitColumnWidth"/> to auto-fit it.
+    /// </param>
+    /// <returns>The collection instance for chaining.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="width"/> is not a valid column width.</exception>
+    public RecordSetColumnCollection<T> Add<TField>(
+        string headerText, Expression<Func<T, TField>> fieldKeyExpression, double width
+    ) {
+        FieldColumn<T, TField> column = new(fieldKeyExpression) {
+            Width = width
+        };
+        ApplyDefaultStyles(column, headerText, null, null);
+        Add(column);
+        return this;
+    }
+
     private static void ApplyDefaultStyles(
         GeneratorColumn<T> column, string headerText,
         CellStyle? headerStyle, Func<RecordContext<T>, CellStyle>? fieldStyleGenerator

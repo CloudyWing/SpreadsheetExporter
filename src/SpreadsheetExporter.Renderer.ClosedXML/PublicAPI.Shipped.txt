@@ -1,0 +1,8 @@
+#nullable enable
+CloudyWing.SpreadsheetExporter.Renderer.ClosedXML.ExcelRenderer
+CloudyWing.SpreadsheetExporter.Renderer.ClosedXML.ExcelRenderer.Capabilities.get -> CloudyWing.SpreadsheetExporter.RendererCapabilities!
+CloudyWing.SpreadsheetExporter.Renderer.ClosedXML.ExcelRenderer.ContentType.get -> string!
+CloudyWing.SpreadsheetExporter.Renderer.ClosedXML.ExcelRenderer.ExcelRenderer() -> void
+CloudyWing.SpreadsheetExporter.Renderer.ClosedXML.ExcelRenderer.FileNameExtension.get -> string!
+CloudyWing.SpreadsheetExporter.Renderer.ClosedXML.ExcelRenderer.Render(System.Collections.Generic.IEnumerable<CloudyWing.SpreadsheetExporter.SheetLayout!>! contexts) -> byte[]!
+virtual CloudyWing.SpreadsheetExporter.Renderer.ClosedXML.ExcelRenderer.OnSheetCreated(ClosedXML.Excel.IXLWorksheet! worksheet, CloudyWing.SpreadsheetExporter.SheetLayout! context) -> void

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 
@@ -48,7 +49,7 @@ public class GridTemplate : ISheetTemplate {
     /// <summary>
     /// Creates the cell.
     /// </summary>
-    /// <param name="value">The value.</param>
+    /// <param name="value">The value, or <see langword="null"/> for an empty cell.</param>
     /// <param name="columnSpan">The column span.</param>
     /// <param name="rowSpan">The row span.</param>
     /// <param name="cellStyle">The cell style. The default is <c>SpreadsheetManager.DefaultCellStyles.GridCellStyle</c>.</param>
@@ -59,8 +60,13 @@ public class GridTemplate : ISheetTemplate {
     /// <exception cref="ArgumentOutOfRangeException">
     /// <paramref name="rowSpan"/> must be greater than 0.
     /// </exception>
+    [SuppressMessage(
+        "ApiDesign",
+        "RS0026:Do not add multiple public overloads with optional parameters",
+        Justification = "只將既有多載的參數標註為可為 null，簽章未變更，分析器將其視為新增多載。"
+    )]
     public GridTemplate CreateCell(
-        object value, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
+        object? value, int columnSpan = 1, int rowSpan = 1, CellStyle? cellStyle = null
     ) {
         return CreateCell(
             cell => cell.ValueGenerator = (cellIndex, rowIndex) => value,

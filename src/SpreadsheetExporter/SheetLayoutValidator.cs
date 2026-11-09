@@ -6,27 +6,52 @@ using CloudyWing.SpreadsheetExporter.Templates;
 namespace CloudyWing.SpreadsheetExporter;
 
 internal static class SheetLayoutValidator {
+    private const int MaxSheetNameLength = 31;
+    private static readonly char[] InvalidSheetNameChars = ['[', ']', ':', '*', '?', '/', '\\'];
+
     internal static IReadOnlyList<LayoutDiagnostic> GetDiagnostics(IReadOnlyList<SheetDefinition> sheets) {
+        return GetDiagnostics(sheets, null);
+    }
+
+    /// <summary>
+    /// Gets layout diagnostics, reusing precomputed template layouts when provided.
+    /// </summary>
+    /// <param name="sheets">The sheets to validate.</param>
+    /// <param name="templateLayouts">
+    /// The template layouts of each sheet in template order, or <see langword="null"/> to compute them.
+    /// </param>
+    internal static IReadOnlyList<LayoutDiagnostic> GetDiagnostics(
+        IReadOnlyList<SheetDefinition> sheets, IReadOnlyList<IReadOnlyList<TemplateLayout>>? templateLayouts
+    ) {
         List<LayoutDiagnostic> diagnostics = [];
+        Dictionary<string, int> sheetNameIndexes = new(StringComparer.OrdinalIgnoreCase);
 
         for (int sheetIndex = 0; sheetIndex < sheets.Count; sheetIndex++) {
-            AppendSheetDiagnostics(diagnostics, sheets[sheetIndex], sheetIndex);
+            AppendSheetDiagnostics(
+                diagnostics, sheetNameIndexes, sheets[sheetIndex], sheetIndex, templateLayouts?[sheetIndex]
+            );
         }
 
         return diagnostics.AsReadOnly();
     }
 
     private static void AppendSheetDiagnostics(
-        List<LayoutDiagnostic> diagnostics, SheetDefinition sheet, int sheetIndex
+        List<LayoutDiagnostic> diagnostics,
+        Dictionary<string, int> sheetNameIndexes,
+        SheetDefinition sheet,
+        int sheetIndex,
+        IReadOnlyList<TemplateLayout>? templateLayouts
     ) {
         Dictionary<Point, OccupiedCell> occupiedPoints = [];
         int rowOffset = 0;
 
+        AppendSheetNameDiagnostics(diagnostics, sheetNameIndexes, sheet, sheetIndex);
         AppendColumnWidthDiagnostics(diagnostics, sheet, sheetIndex);
+        AppendAutoFilterDiagnostics(diagnostics, sheet, sheetIndex);
 
         for (int templateIndex = 0; templateIndex < sheet.Templates.Count; templateIndex++) {
             ISheetTemplate template = sheet.Templates[templateIndex];
-            TemplateLayout layout = template.GetLayout();
+            TemplateLayout layout = templateLayouts?[templateIndex] ?? template.GetLayout();
             CellSource source = CreateSource(sheet, sheetIndex, templateIndex, template);
 
             AppendRowHeightDiagnostics(diagnostics, layout, rowOffset, source);
@@ -34,6 +59,81 @@ internal static class SheetLayoutValidator {
 
             rowOffset += layout.RowSpan;
         }
+    }
+
+    private static void AppendSheetNameDiagnostics(
+        List<LayoutDiagnostic> diagnostics,
+        Dictionary<string, int> sheetNameIndexes,
+        SheetDefinition sheet,
+        int sheetIndex
+    ) {
+        string? sheetName = sheet.SheetName;
+        CellSource source = new(
+            sheetIndex, sheetName ?? "", -1, nameof(SheetDefinition), $"Sheets[{sheetIndex}].SheetName"
+        );
+
+        string? invalidReason = GetInvalidSheetNameReason(sheetName);
+        if (invalidReason is not null) {
+            diagnostics.Add(new LayoutDiagnostic(
+                LayoutDiagnosticCodes.InvalidSheetName,
+                $"Sheet name '{sheetName}' at index {sheetIndex} is invalid: {invalidReason}",
+                null,
+                source
+            ));
+        }
+
+        if (string.IsNullOrEmpty(sheetName)) {
+            return;
+        }
+
+        if (sheetNameIndexes.TryGetValue(sheetName, out int existingIndex)) {
+            diagnostics.Add(new LayoutDiagnostic(
+                LayoutDiagnosticCodes.DuplicateSheetName,
+                $"Sheet name '{sheetName}' at index {sheetIndex} duplicates the sheet name at index {existingIndex}. "
+                + "Sheet names are compared case-insensitively.",
+                null,
+                source
+            ));
+            return;
+        }
+
+        sheetNameIndexes.Add(sheetName, sheetIndex);
+    }
+
+    private static string? GetInvalidSheetNameReason(string? sheetName) {
+        if (string.IsNullOrWhiteSpace(sheetName)) {
+            return "it must not be empty or whitespace.";
+        }
+
+        if (sheetName.Length > MaxSheetNameLength) {
+            return $"it has {sheetName.Length} characters, but the maximum is {MaxSheetNameLength}.";
+        }
+
+        int invalidCharIndex = sheetName.IndexOfAny(InvalidSheetNameChars);
+        if (invalidCharIndex >= 0) {
+            return $"it contains the invalid character '{sheetName[invalidCharIndex]}' at position {invalidCharIndex}.";
+        }
+
+        if (sheetName.StartsWith('\'') || sheetName.EndsWith('\'')) {
+            return "it must not begin or end with an apostrophe (').";
+        }
+
+        return null;
+    }
+
+    private static void AppendAutoFilterDiagnostics(
+        List<LayoutDiagnostic> diagnostics, SheetDefinition sheet, int sheetIndex
+    ) {
+        if (sheet.AutoFilterRange is not CellRange range || range.IsValid) {
+            return;
+        }
+
+        diagnostics.Add(new LayoutDiagnostic(
+            LayoutDiagnosticCodes.InvalidCellRange,
+            $"Auto filter range ({range.Column}, {range.Row}, {range.ColumnSpan}, {range.RowSpan}) is invalid.",
+            range,
+            new CellSource(sheetIndex, sheet.SheetName, -1, nameof(SheetDefinition), $"Sheets[{sheetIndex}].AutoFilterRange")
+        ));
     }
 
     private static void AppendColumnWidthDiagnostics(

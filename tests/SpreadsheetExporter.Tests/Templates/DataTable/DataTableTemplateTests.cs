@@ -283,5 +283,125 @@ namespace CloudyWing.SpreadsheetExporter.Tests.Templates.DataTable {
 
             Assert.That(dataCell.GetDataValidation(), Is.SameAs(validation));
         }
+
+        [Test]
+        public void DataTable_SetTableWithDifferentColumns_RebuildsColumnsAndRendersNewTable() {
+            System.Data.DataTable otherTable = new();
+            otherTable.Columns.Add("Code", typeof(string));
+            otherTable.Rows.Add("A-01");
+            DataTableColumnCollection originalColumns = template.Columns;
+
+            template.DataTable = otherTable;
+            TemplateLayout layout = template.GetLayout();
+
+            Assert.Multiple(() => {
+                Assert.That(template.Columns, Is.SameAs(originalColumns));
+                Assert.That(template.Columns.Select(x => x.ColumnName), Is.EqualTo(new[] { "Code" }));
+                Assert.That(layout.Cells.Select(x => x.GetValue()), Is.EqualTo(new object?[] { "Code", "A-01" }));
+            });
+        }
+
+        [Test]
+        public void DataTable_SetTableContainingConfiguredColumns_KeepsColumnSettings() {
+            template.Columns[1].HeaderText = "姓名";
+            System.Data.DataTable otherTable = dataTable.Clone();
+            otherTable.Columns.Add("Extra", typeof(string));
+            otherTable.Rows.Add(9, "Zoe", 20, "X");
+
+            template.DataTable = otherTable;
+            TemplateLayout layout = template.GetLayout();
+
+            Assert.Multiple(() => {
+                Assert.That(template.Columns, Has.Count.EqualTo(3));
+                Assert.That(template.Columns[1].HeaderText, Is.EqualTo("姓名"));
+                Assert.That(layout.Cells.Select(x => x.GetValue()), Is.EqualTo(new object?[] { "Id", "姓名", "Age", 9, "Zoe", 20 }));
+            });
+        }
+
+        [Test]
+        public void GetLayout_ColumnNameNotInDataTable_ThrowsArgumentExceptionWithAvailableColumns() {
+            template.Columns.Add(new DataTableColumn { ColumnName = "Missing", HeaderText = "Missing" });
+
+            Assert.That(
+                () => template.GetLayout(),
+                Throws.ArgumentException
+                    .With.Message.Contains("does not contain column 'Missing'")
+                    .And.Message.Contains("Available columns: Id, Name, Age")
+            );
+        }
+
+        [Test]
+        public void GetLayout_ColumnNameIsNull_ThrowsArgumentException() {
+            template.Columns.Add(new DataTableColumn { HeaderText = "Unbound" });
+
+            Assert.That(() => template.GetLayout(), Throws.ArgumentException);
+        }
+
+        [Test]
+        public void GetLayout_ColumnNameNotInEmptyDataTable_ReturnsHeaderCells() {
+            dataTable.Rows.Clear();
+            template.Columns.Add(new DataTableColumn { ColumnName = "Missing", HeaderText = "Missing" });
+
+            TemplateLayout layout = template.GetLayout();
+
+            Assert.That(layout.Cells.Select(x => x.GetValue()), Is.EqualTo(new object?[] { "Id", "Name", "Age", "Missing" }));
+        }
+
+        [Test]
+        public void GetLayout_FieldStyleContextGenerator_ShouldReceiveRowContext() {
+            List<DataRowContext> contexts = [];
+            CellStyle highlight = CellStyle.Empty with { BackgroundColor = Color.Yellow };
+            template.Columns[1].FieldStyleContextGenerator = context => {
+                contexts.Add(context);
+                return (int)context.DataRow["Age"] > 30 ? highlight : CellStyle.Empty;
+            };
+
+            TemplateLayout layout = template.GetLayout();
+            CellStyle[] nameStyles = layout.Cells
+                .Where(x => x.Point.X == 1 && x.Point.Y > 0)
+                .Select(x => x.GetCellStyle())
+                .ToArray();
+
+            Assert.Multiple(() => {
+                Assert.That(nameStyles, Is.EqualTo(new[] { CellStyle.Empty, CellStyle.Empty, highlight }));
+                Assert.That(contexts.Select(x => x.DataRowIndex), Is.EqualTo(new[] { 0, 1, 2 }));
+                Assert.That(contexts.Select(x => x.RowIndex), Is.EqualTo(new[] { 1, 2, 3 }));
+                Assert.That(contexts.Select(x => x.CellIndex), Is.All.EqualTo(1));
+                Assert.That(contexts.Select(x => x.Value), Is.EqualTo(new object[] { "Alice", "Bob", "Charlie" }));
+                Assert.That(contexts.Select(x => x.ColumnName), Is.All.EqualTo("Name"));
+                Assert.That(contexts[2].DataRow, Is.SameAs(dataTable.Rows[2]));
+            });
+        }
+
+        [Test]
+        public void GetLayout_BothStyleGeneratorsSet_ShouldPreferContextGenerator() {
+            CellStyle legacyStyle = CellStyle.Empty with { WrapText = true };
+            CellStyle contextStyle = CellStyle.Empty with { IsLocked = true };
+            template.Columns[0].FieldStyleGenerator = _ => legacyStyle;
+            template.Columns[0].FieldStyleContextGenerator = _ => contextStyle;
+
+            Cell dataCell = template.GetLayout().Cells.First(x => x.Point == new Point(0, 1));
+
+            Assert.That(dataCell.GetCellStyle(), Is.EqualTo(contextStyle));
+        }
+
+        [Test]
+        public void GetLayout_DbNullValue_ShouldPassNullValueToContext() {
+            dataTable.Rows.Add(4, DBNull.Value, 40);
+            object? capturedValue = "not-set";
+            template.Columns[1].FieldStyleContextGenerator = context => {
+                if (context.DataRowIndex == 3) {
+                    capturedValue = context.Value;
+                }
+
+                return CellStyle.Empty;
+            };
+
+            foreach (Cell cell in template.GetLayout().Cells) {
+                cell.GetCellStyle();
+            }
+
+            Assert.That(capturedValue, Is.Null);
+        }
     }
 }

@@ -13,6 +13,8 @@ SheetDefinition sheet = document.CreateSheet("銷售報表");
 sheet.SheetName = "Q1 銷售報表";
 ```
 
+改名時不會檢查名稱是否合法或與其他工作表重複。名稱需符合 Excel 規則（最多 31 個字元、不可包含 `[ ] : * ? / \`、不可以單引號開頭或結尾，且不分大小寫不可重複），可透過 `SpreadsheetDocument.GetLayoutDiagnostics()` 的 `InvalidSheetName` 與 `DuplicateSheetName` 診斷檢查。
+
 ### 預設列高
 
 ```csharp
@@ -55,6 +57,31 @@ sheet.PageSettings.PaperSize = PaperSize.A4;
 - `Portrait` - 直向（預設）
 - `Landscape` - 橫向
 
+## 凍結窗格與自動篩選
+
+`SetFreezePanes(column, row)` 指定第一個不凍結的儲存格（零基索引）；`SetAutoFilterEnabled()` 啟用自動篩選：
+
+```csharp
+sheet
+    .SetFreezePanes(0, 1)
+    .SetAutoFilterEnabled();
+```
+
+自動篩選的範圍依下列順序決定：
+
+1. 以 `SetAutoFilterRange(CellRange)` 或 `AutoFilterRange` 屬性指定的範圍，範圍第一列即篩選標題列。
+2. 工作表有多個 templates 時，使用第一個 `RecordSetTemplate<T>` 或 `DataTableTemplate` 的完整範圍（表頭到最後一筆資料），上方的標題 Grid 不會被當成篩選標題列。
+3. 其他情況使用工作表已使用的範圍，例如只有單一 template 的工作表。
+
+```csharp
+// 指定從 B3 開始、2 欄 10 列的篩選範圍（第 3 列為篩選標題列）
+sheet.SetAutoFilterRange(new CellRange(Column: 1, Row: 2, ColumnSpan: 2, RowSpan: 10));
+```
+
+`SetAutoFilterRange` 會同時啟用自動篩選。指定的範圍無效時，`GetLayoutDiagnostics()` 會回報 `InvalidCellRange`。範圍判定只看工作表直接加入的 templates，`MergedTemplate` 內的表格需以 `SetAutoFilterRange` 指定。
+
+自訂 renderer 透過 `SheetLayout.AutoFilterRange` 取得上述判定結果。值為 `null` 時，表示應使用工作表已使用的範圍。`IsAutoFilterEnabled` 為 `false` 時不需套用自動篩選。
+
 ## 使用 Templates
 
 Templates 會依加入順序**垂直堆疊**。若 `template1` 佔用 3 列，`template2` 將從第 4 列開始。
@@ -96,7 +123,7 @@ using CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
 
 public class CustomExcelRenderer : ExcelRenderer {
     protected override void OnSheetCreated(IXLWorksheet worksheet, SheetLayout context) {
-        if (context.Metadata.TryGetValue("reportType", out object reportType)) {
+        if (context.Metadata.TryGetValue("reportType", out object? reportType)) {
             worksheet.Tab.Color = reportType as string == "quarterly"
                 ? XLColor.Blue
                 : XLColor.Gray;

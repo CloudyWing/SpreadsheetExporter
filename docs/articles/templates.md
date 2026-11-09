@@ -117,6 +117,35 @@ template.Columns[1].FieldDataValidationGenerator = value => new DataValidation {
 };
 ```
 
+### 依整列資料設定樣式
+
+`FieldStyleGenerator` 只能取得該欄的值。需要依同一列其他欄位決定樣式時，改用 `FieldStyleContextGenerator`，它會收到 `DataRowContext`：
+
+```csharp
+CellStyle overdueStyle = SpreadsheetManager.DefaultCellStyles.FieldStyle with {
+    BackgroundColor = Color.MistyRose
+};
+
+template.Columns[0].FieldStyleContextGenerator = context =>
+    context.DataRow["Status"] as string == "Overdue"
+        ? overdueStyle
+        : SpreadsheetManager.DefaultCellStyles.FieldStyle;
+```
+
+| 屬性 | 說明 |
+| --- | --- |
+| `DataRow` | 該儲存格所在的 `DataRow` |
+| `DataRowIndex` | 在 `DataTable.Rows` 中的零基索引 |
+| `ColumnName` | 綁定的欄位名稱 |
+| `Value` | 儲存格值，`DBNull` 會轉為 `null` |
+| `CellIndex`、`RowIndex` | 儲存格的零基欄、列索引（與其他 cell generator 相同） |
+
+同時設定兩者時以 `FieldStyleContextGenerator` 為準。
+
+### 更換 DataTable
+
+設定 `DataTable` 屬性時，若新資料表包含 `Columns` 目前引用的所有欄位，`Columns` 的設定（標題文字、generator 等）會保留；若缺少任一欄位，`Columns` 會依新資料表的欄位重新建立，原本的設定會被清除。
+
 ## RecordSetTemplate
 
 適用於強型別資料集合，支援欄位綁定、資料轉換、條件樣式、多層標題與資料驗證。
@@ -140,6 +169,8 @@ template.Columns.Add<int>("編號", order => order.Id);
 template.Columns.Add<string>("客戶", order => order.Customer);
 template.Columns.Add<decimal>("金額", order => order.Amount);
 ```
+
+欄位可以指向巢狀屬性。假設 `Order` 具有 `Shipping` 物件屬性，可使用 `order => order.Shipping.City`，或字串路徑 `"Shipping.City"`。路徑中途的物件為 `null` 時，欄位值為 `null`，不會拋出例外。
 
 ### 資料轉換
 
@@ -165,11 +196,11 @@ template.Columns.Add(
 ### 公式
 
 ```csharp
-// context.RowIndex 為資料列的零基索引（標題列不計入）
+// context.RowIndex 為儲存格在工作表中的零基列索引（包含標題列與上方的 templates），加 1 即為 Excel 列號
 template.Columns.Add(
     "含稅金額",
     configureGenerators: config => config.UseFormula(
-        context => $"C{context.RowIndex + 2}*1.05"
+        context => $"C{context.RowIndex + 1}*1.05"
     )
 );
 ```
@@ -190,6 +221,24 @@ template.Columns.Add<decimal>(
         : currencyStyle
 );
 ```
+
+### 欄寬
+
+`Add` 提供帶 `width` 參數的多載，可直接指定欄寬（字元單位），也可使用 `Constants.HiddenColumn` 隱藏欄位或 `Constants.AutoFitColumnWidth` 自動調整：
+
+```csharp
+template.Columns
+    .Add("編號", order => order.Id, 8)
+    .Add("客戶", order => order.Customer, 30)
+    .Add<decimal>("金額", "Amount", Constants.AutoFitColumnWidth);
+
+// 需要同時指定樣式時，可直接設定欄位的 Width 屬性
+template.Columns.GetLastColumn().Width = 16;
+```
+
+只有最底層的欄位會套用欄寬。同一欄若也以 `SheetDefinition.SetColumnWidth` 設定，以工作表設定為準；同一工作表有多個 `RecordSetTemplate<T>` 指定同一欄時，以先加入的 template 為準。
+
+欄寬只對直接加入工作表的 `RecordSetTemplate<T>` 生效，放進 `MergedTemplate` 的 `RecordSetTemplate<T>` 不會套用，需改用 `SheetDefinition.SetColumnWidth`。欄寬為負值（`Constants.AutoFitColumnWidth` 除外）時，會拋出 `ArgumentOutOfRangeException`。
 
 ### 多層標題
 
@@ -236,6 +285,8 @@ template.Columns.Add<string>(
     })
 );
 ```
+
+清單驗證的 `ListItems` 會以逗號串接成 Excel 字串常值。項目中的雙引號會自動跳脫；Excel 無法跳脫逗號，含逗號的項目會被拆成多個選項。ClosedXML renderer 的清單來源（含前後雙引號）上限為 255 個字元，超過時拋出 `ArgumentOutOfRangeException`。
 
 ## MergedTemplate
 

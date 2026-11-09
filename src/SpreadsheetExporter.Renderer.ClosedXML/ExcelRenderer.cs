@@ -11,7 +11,8 @@ namespace CloudyWing.SpreadsheetExporter.Renderer.ClosedXML;
 /// <summary>
 /// Renders spreadsheet data to Excel (.xlsx) format using ClosedXML.
 /// </summary>
-public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
+public class ExcelRenderer : ISpreadsheetRendererWithCapabilities, ISpreadsheetStreamRenderer {
+    private const int MaxListFormulaLength = 255;
     private static readonly RendererCapabilities excelCapabilities = new() {
         SupportsStyles = true,
         SupportsMergedCells = true,
@@ -37,26 +38,55 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
     public byte[] Render(IEnumerable<SheetLayout> contexts) {
         ArgumentNullException.ThrowIfNull(contexts);
 
-        SheetLayout[] contextArray = [.. contexts];
-
-        using XLWorkbook workbook = new();
-
-        SheetLayout? firstContext = contextArray.FirstOrDefault();
-        if (firstContext?.DefaultFont.HasValue == true) {
-            SetDefaultFont(workbook, firstContext.DefaultFont.Value);
-        }
-
-        foreach (SheetLayout context in contextArray) {
-            ArgumentNullException.ThrowIfNull(context);
-
-            IXLWorksheet worksheet = workbook.Worksheets.Add(context.SheetName);
-            ConfigureWorksheet(worksheet, context);
-            OnSheetCreated(worksheet, context);
-        }
-
+        using XLWorkbook workbook = CreateWorkbook(contexts);
         using MemoryStream stream = new();
         workbook.SaveAs(stream);
         return stream.ToArray();
+    }
+
+    /// <summary>
+    /// Renders the specified sheet layouts and writes the workbook directly to the specified stream.
+    /// </summary>
+    /// <param name="layouts">The collection of sheet layouts to render.</param>
+    /// <param name="stream">The writable stream that receives the workbook. The stream is not closed.</param>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="layouts"/> or <paramref name="stream"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="ArgumentException"><paramref name="stream"/> is not writable.</exception>
+    public void Render(IEnumerable<SheetLayout> layouts, Stream stream) {
+        ArgumentNullException.ThrowIfNull(layouts);
+        ArgumentNullException.ThrowIfNull(stream);
+        if (!stream.CanWrite) {
+            throw new ArgumentException("Stream must be writable.", nameof(stream));
+        }
+
+        using XLWorkbook workbook = CreateWorkbook(layouts);
+        workbook.SaveAs(stream);
+    }
+
+    private XLWorkbook CreateWorkbook(IEnumerable<SheetLayout> contexts) {
+        SheetLayout[] contextArray = [.. contexts];
+
+        XLWorkbook workbook = new();
+        try {
+            SheetLayout? firstContext = contextArray.FirstOrDefault();
+            if (firstContext?.DefaultFont.HasValue == true) {
+                SetDefaultFont(workbook, firstContext.DefaultFont.Value);
+            }
+
+            foreach (SheetLayout context in contextArray) {
+                ArgumentNullException.ThrowIfNull(context);
+
+                IXLWorksheet worksheet = workbook.Worksheets.Add(context.SheetName);
+                ConfigureWorksheet(worksheet, context);
+                OnSheetCreated(worksheet, context);
+            }
+
+            return workbook;
+        } catch {
+            workbook.Dispose();
+            throw;
+        }
     }
 
     /// <summary>
@@ -92,11 +122,8 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
         foreach (Cell cell in cells) {
             int firstRow = cell.Point.Y + 1;
             int firstColumn = cell.Point.X + 1;
-            int lastRow = firstRow + cell.Size.Height - 1;
-            int lastColumn = firstColumn + cell.Size.Width - 1;
 
             IXLCell xlCell = worksheet.Cell(firstRow, firstColumn);
-            IXLRange range = worksheet.Range(firstRow, firstColumn, lastRow, lastColumn);
 
             string? formula = cell.GetFormula();
             if (!string.IsNullOrWhiteSpace(formula)) {
@@ -105,14 +132,26 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
                 SetCellValue(xlCell, cell.GetValue());
             }
 
-            if (cell.Size.Width > 1 || cell.Size.Height > 1) {
-                range.Merge();
+            // 單一儲存格直接操作 cell，避免每格都建立並追蹤一個 IXLRange
+            if (cell.Size.Width == 1 && cell.Size.Height == 1) {
+                SetCellStyle(xlCell.Style, cell.GetCellStyle());
+
+                if (cell.GetDataValidation() is DataValidation cellValidation) {
+                    SetDataValidation(xlCell.CreateDataValidation(), cellValidation);
+                }
+
+                continue;
             }
+
+            int lastRow = firstRow + cell.Size.Height - 1;
+            int lastColumn = firstColumn + cell.Size.Width - 1;
+            IXLRange range = worksheet.Range(firstRow, firstColumn, lastRow, lastColumn);
+            range.Merge();
 
             SetCellStyle(range.Style, cell.GetCellStyle());
 
-            if (cell.GetDataValidation() is DataValidation dataValidation) {
-                SetDataValidation(range, dataValidation);
+            if (cell.GetDataValidation() is DataValidation rangeValidation) {
+                SetDataValidation(range.CreateDataValidation(), rangeValidation);
             }
         }
     }
@@ -123,7 +162,9 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
         xlStyle.Alignment.SetWrapText(style.WrapText);
         xlStyle.Protection.SetLocked(style.IsLocked);
 
-        if (style.HasBorder) {
+        if (style.BorderStyle != BorderLineStyle.None) {
+            xlStyle.Border.SetOutsideBorder(ToBorderStyle(style.BorderStyle));
+        } else if (style.HasBorder) {
             xlStyle.Border.SetOutsideBorder(XLBorderStyleValues.Thin);
         }
 
@@ -228,7 +269,11 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
             return;
         }
 
-        if (worksheet.RangeUsed() is IXLRange usedRange) {
+        if (context.AutoFilterRange is CellRange range) {
+            worksheet
+                .Range(range.Row + 1, range.Column + 1, range.LastRow + 1, range.LastColumn + 1)
+                .SetAutoFilter();
+        } else if (worksheet.RangeUsed() is IXLRange usedRange) {
             usedRange.SetAutoFilter();
         }
     }
@@ -241,13 +286,11 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
         worksheet.Protect(context.Password, XLProtectionAlgorithm.Algorithm.SHA512);
     }
 
-    private static void SetDataValidation(IXLRange range, DataValidation validation) {
-        IXLDataValidation xlValidation = range.CreateDataValidation();
+    private static void SetDataValidation(IXLDataValidation xlValidation, DataValidation validation) {
 
         switch (validation.ValidationType) {
             case DataValidationType.List:
-                string listString = string.Join(",", validation.ListItems ?? []);
-                xlValidation.List($"\"{listString}\"", validation.IsDropdownShown);
+                xlValidation.List(CreateListFormula(validation.ListItems), validation.IsDropdownShown);
                 break;
             case DataValidationType.Integer:
                 SetWholeNumberValidation(xlValidation, validation);
@@ -293,6 +336,23 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
         if (!string.IsNullOrWhiteSpace(validation.PromptMessage)) {
             xlValidation.InputMessage = validation.PromptMessage;
         }
+    }
+
+    private static string CreateListFormula(IEnumerable<string>? listItems) {
+        // Excel 清單來源以逗號分隔項目且無法跳脫逗號；雙引號需重複一次才能放進字串常值
+        string listString = string.Join(",", (listItems ?? []).Select(item => item?.Replace("\"", "\"\"")));
+        string formula = $"\"{listString}\"";
+
+        if (formula.Length > MaxListFormulaLength) {
+            throw new ArgumentOutOfRangeException(
+                nameof(listItems),
+                $"The data validation list source is {formula.Length} characters including the surrounding quotes, "
+                + $"which exceeds the Excel limit of {MaxListFormulaLength} characters. "
+                + "Reduce the number or length of list items."
+            );
+        }
+
+        return formula;
     }
 
     private static void SetWholeNumberValidation(IXLDataValidation xlValidation, DataValidation validation) {
@@ -525,6 +585,18 @@ public class ExcelRenderer : ISpreadsheetRendererWithCapabilities {
             VerticalAlignment.Middle => XLAlignmentVerticalValues.Center,
             VerticalAlignment.Bottom => XLAlignmentVerticalValues.Bottom,
             _ => XLAlignmentVerticalValues.Top
+        };
+    }
+
+    private static XLBorderStyleValues ToBorderStyle(BorderLineStyle borderStyle) {
+        return borderStyle switch {
+            BorderLineStyle.Thin => XLBorderStyleValues.Thin,
+            BorderLineStyle.Medium => XLBorderStyleValues.Medium,
+            BorderLineStyle.Thick => XLBorderStyleValues.Thick,
+            BorderLineStyle.Dashed => XLBorderStyleValues.Dashed,
+            BorderLineStyle.Dotted => XLBorderStyleValues.Dotted,
+            BorderLineStyle.Double => XLBorderStyleValues.Double,
+            _ => XLBorderStyleValues.None
         };
     }
 

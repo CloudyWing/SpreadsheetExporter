@@ -50,6 +50,11 @@ public class DataValidation {
     /// <value>
     /// The list items.
     /// </value>
+    /// <remarks>
+    /// Excel stores the items as a comma-separated string literal: an item containing a comma is split into
+    /// multiple items because Excel provides no way to escape commas, while double quotes are escaped automatically.
+    /// The ClosedXML renderer rejects lists whose source, including the surrounding quotes, exceeds 255 characters.
+    /// </remarks>
     public IEnumerable<string>? ListItems { get; set; }
 
     /// <summary>

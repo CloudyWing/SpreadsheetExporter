@@ -88,6 +88,12 @@ internal static class JsonStyleParser {
             patch.HasBorder = hasBorderElement.GetBooleanValue(context.Property(nameof(CellStyle.HasBorder)));
         }
 
+        if (element.TryGetPropertyIgnoreCase(nameof(CellStyle.BorderStyle), out JsonElement borderStyleElement)) {
+            patch.BorderStyle = ParseEnum<BorderLineStyle>(
+                borderStyleElement, context.Property(nameof(CellStyle.BorderStyle))
+            );
+        }
+
         if (element.TryGetPropertyIgnoreCase(nameof(CellStyle.WrapText), out JsonElement wrapTextElement)) {
             patch.WrapText = wrapTextElement.GetBooleanValue(context.Property(nameof(CellStyle.WrapText)));
         }
@@ -262,6 +268,8 @@ internal static class JsonStyleParser {
 
         public bool? HasBorder { get; set; }
 
+        public BorderLineStyle? BorderStyle { get; set; }
+
         public bool? WrapText { get; set; }
 
         public Color? BackgroundColor { get; set; }
@@ -289,6 +297,10 @@ internal static class JsonStyleParser {
 
             if (HasBorder.HasValue) {
                 style = style with { HasBorder = HasBorder.Value };
+            }
+
+            if (BorderStyle.HasValue) {
+                style = style with { BorderStyle = BorderStyle.Value };
             }
 
             if (WrapText.HasValue) {

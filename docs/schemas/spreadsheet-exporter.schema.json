@@ -575,6 +575,9 @@
         "HasBorder": {
           "$ref": "#/$defs/booleanLike"
         },
+        "BorderStyle": {
+          "$ref": "#/$defs/enumLike"
+        },
         "WrapText": {
           "$ref": "#/$defs/booleanLike"
         },

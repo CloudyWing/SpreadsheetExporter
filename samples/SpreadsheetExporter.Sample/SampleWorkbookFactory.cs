@@ -296,7 +296,7 @@ public static class SampleWorkbookFactory {
                 .Add(
                     "Margin",
                     configureGenerators: static cfg => cfg.UseFormula(
-                        ctx => $"E{ctx.RowIndex + 3}*0.35"
+                        ctx => $"D{ctx.RowIndex + 1}*0.35"
                     ),
                     fieldStyleGenerator: _ => currencyStyle
                 )

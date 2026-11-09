@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CloudyWing.SpreadsheetExporter;
 
@@ -8,19 +9,25 @@ internal static class RendererCapabilityValidator {
         CellFont? defaultFont,
         RendererCapabilities capabilities
     ) {
+        List<SheetLayout> layouts = sheets
+            .Select(sheet => new SheetLayout(sheet, defaultFont))
+            .ToList();
+
+        return GetDiagnostics(layouts, defaultFont, capabilities);
+    }
+
+    internal static IReadOnlyList<LayoutDiagnostic> GetDiagnostics(
+        IReadOnlyList<SheetLayout> layouts,
+        CellFont? defaultFont,
+        RendererCapabilities capabilities
+    ) {
         List<LayoutDiagnostic> diagnostics = [];
         HashSet<string> reportedCapabilities = [];
 
-        AppendDocumentDiagnostics(diagnostics, reportedCapabilities, sheets, defaultFont, capabilities);
+        AppendDocumentDiagnostics(diagnostics, reportedCapabilities, layouts.Count, defaultFont, capabilities);
 
-        for (int sheetIndex = 0; sheetIndex < sheets.Count; sheetIndex++) {
-            AppendSheetDiagnostics(
-                diagnostics,
-                reportedCapabilities,
-                new SheetLayout(sheets[sheetIndex], defaultFont),
-                sheetIndex,
-                capabilities
-            );
+        for (int sheetIndex = 0; sheetIndex < layouts.Count; sheetIndex++) {
+            AppendSheetDiagnostics(diagnostics, reportedCapabilities, layouts[sheetIndex], sheetIndex, capabilities);
         }
 
         return diagnostics.AsReadOnly();
@@ -29,11 +36,11 @@ internal static class RendererCapabilityValidator {
     private static void AppendDocumentDiagnostics(
         List<LayoutDiagnostic> diagnostics,
         HashSet<string> reportedCapabilities,
-        IReadOnlyList<SheetDefinition> sheets,
+        int sheetCount,
         CellFont? defaultFont,
         RendererCapabilities capabilities
     ) {
-        if (sheets.Count > 1) {
+        if (sheetCount > 1) {
             AddUnsupportedDiagnostic(
                 diagnostics,
                 reportedCapabilities,

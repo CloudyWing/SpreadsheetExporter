@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using CloudyWing.SpreadsheetExporter.Exceptions;
 using CloudyWing.SpreadsheetExporter.Templates;
 using CloudyWing.SpreadsheetExporter.Templates.Json;
@@ -16,6 +19,8 @@ namespace CloudyWing.SpreadsheetExporter;
 /// Represents a spreadsheet document that manages sheet definitions and coordinates rendering.
 /// </summary>
 public sealed class SpreadsheetDocument {
+    private const int FileStreamBufferSize = 81920;
+    private static readonly Lazy<Dictionary<string, PaperSize>> KnownPaperSizes = new(CreateKnownPaperSizes);
     private readonly ISpreadsheetRenderer renderer;
     private readonly List<SheetDefinition> sheets = [];
 
@@ -96,7 +101,10 @@ public sealed class SpreadsheetDocument {
     /// <summary>
     /// Creates a new sheet definition and adds it to this document.
     /// </summary>
-    /// <param name="sheetName">The sheet name. If <see langword="null"/> or whitespace, a default name is generated.</param>
+    /// <param name="sheetName">
+    /// The sheet name. If <see langword="null"/> or whitespace, a default name is generated.
+    /// If another sheet already uses the name (compared case-insensitively), a numeric suffix such as <c>(1)</c> is appended.
+    /// </param>
     /// <param name="defaultRowHeight">The default row height for the sheet.</param>
     /// <returns>The created sheet definition.</returns>
     public SheetDefinition CreateSheet(string? sheetName = null, double? defaultRowHeight = null) {
@@ -132,7 +140,7 @@ public sealed class SpreadsheetDocument {
     /// <param name="index">The zero-based index.</param>
     /// <param name="sheet">The sheet definition if found; otherwise, <see langword="null"/>.</param>
     /// <returns><see langword="true"/> if the index is valid; otherwise, <see langword="false"/>.</returns>
-    public bool TryGetSheet(int index, out SheetDefinition? sheet) {
+    public bool TryGetSheet(int index, [NotNullWhen(true)] out SheetDefinition? sheet) {
         if (index >= 0 && index < sheets.Count) {
             sheet = sheets[index];
             return true;
@@ -145,6 +153,10 @@ public sealed class SpreadsheetDocument {
     /// Gets layout diagnostics for the current document without rendering it.
     /// </summary>
     /// <returns>The layout diagnostics.</returns>
+    /// <remarks>
+    /// Diagnostics include invalid or overlapping cell ranges, value and formula conflicts, invalid dimensions,
+    /// sheet names that violate the Excel naming rules, and case-insensitive duplicate sheet names.
+    /// </remarks>
     public IReadOnlyList<LayoutDiagnostic> GetLayoutDiagnostics() {
         return SheetLayoutValidator.GetDiagnostics(sheets);
     }
@@ -178,13 +190,54 @@ public sealed class SpreadsheetDocument {
     /// <returns>The rendered spreadsheet bytes.</returns>
     /// <exception cref="SheetDefinitionNotFoundException">No sheets have been created.</exception>
     public byte[] Export() {
+        return renderer.Render(CreateLayouts());
+    }
+
+    /// <summary>
+    /// Exports this document as a byte array, optionally validating it before rendering.
+    /// </summary>
+    /// <param name="options">The export options.</param>
+    /// <returns>The rendered spreadsheet bytes.</returns>
+    /// <remarks>
+    /// When validation is enabled, each template layout is computed once and shared by validation and rendering.
+    /// Layout and renderer capability diagnostics are combined into a single <see cref="SpreadsheetLayoutException"/>.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="options"/> is <see langword="null"/>.</exception>
+    /// <exception cref="SheetDefinitionNotFoundException">No sheets have been created.</exception>
+    /// <exception cref="SpreadsheetLayoutException">Validation is enabled and diagnostics are found.</exception>
+    public byte[] Export(ExportOptions options) {
+        ArgumentNullException.ThrowIfNull(options);
+
+        if (!options.ValidateLayout && !options.ValidateCapabilities) {
+            return Export();
+        }
+
         if (sheets.Count == 0) {
             throw new SheetDefinitionNotFoundException();
         }
 
-        IEnumerable<SheetLayout> layouts = sheets.Select(
-            s => new SheetLayout(s, DefaultFont)
-        );
+        List<IReadOnlyList<TemplateLayout>> templateLayouts = sheets
+            .Select(SheetLayout.GetTemplateLayouts)
+            .ToList();
+        List<SheetLayout> layouts = sheets
+            .Select((sheet, index) => new SheetLayout(sheet, DefaultFont, templateLayouts[index]))
+            .ToList();
+        List<LayoutDiagnostic> diagnostics = [];
+
+        if (options.ValidateLayout) {
+            diagnostics.AddRange(SheetLayoutValidator.GetDiagnostics(sheets, templateLayouts));
+        }
+
+        if (options.ValidateCapabilities && renderer is ISpreadsheetRendererWithCapabilities capableRenderer) {
+            diagnostics.AddRange(
+                RendererCapabilityValidator.GetDiagnostics(layouts, DefaultFont, capableRenderer.Capabilities)
+            );
+        }
+
+        if (diagnostics.Count > 0) {
+            throw new SpreadsheetLayoutException(diagnostics);
+        }
+
         return renderer.Render(layouts);
     }
 
@@ -195,12 +248,129 @@ public sealed class SpreadsheetDocument {
     /// <param name="fileMode">The file creation mode.</param>
     public void ExportFile(string path, SpreadsheetFileMode fileMode = SpreadsheetFileMode.Create) {
         byte[] bytes = Export();
-        FileMode mode = fileMode == SpreadsheetFileMode.Create
+
+        using FileStream stream = new(path, ToFileMode(fileMode), FileAccess.Write);
+        stream.Write(bytes, 0, bytes.Length);
+    }
+
+    /// <summary>
+    /// Exports this document to the specified stream using the associated renderer.
+    /// </summary>
+    /// <param name="stream">The writable stream that receives the rendered spreadsheet. The stream is not closed.</param>
+    /// <remarks>
+    /// Renderers that implement <see cref="ISpreadsheetStreamRenderer"/> write directly to <paramref name="stream"/>;
+    /// if rendering fails, the stream may already contain partial output. Other renderers produce a byte array that is
+    /// then written to <paramref name="stream"/>.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException"><paramref name="stream"/> is not writable.</exception>
+    /// <exception cref="SheetDefinitionNotFoundException">No sheets have been created.</exception>
+    public void Export(Stream stream) {
+        ValidateWritableStream(stream);
+        IEnumerable<SheetLayout> layouts = CreateLayouts();
+
+        if (renderer is ISpreadsheetStreamRenderer streamRenderer) {
+            streamRenderer.Render(layouts, stream);
+            return;
+        }
+
+        byte[] bytes = renderer.Render(layouts);
+        stream.Write(bytes, 0, bytes.Length);
+    }
+
+    /// <summary>
+    /// Exports this document and asynchronously writes the result to the specified stream.
+    /// </summary>
+    /// <param name="stream">The writable stream that receives the rendered spreadsheet. The stream is not closed.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>A task that represents the asynchronous export operation.</returns>
+    /// <remarks>
+    /// Rendering runs synchronously on the calling thread into an in-memory buffer, so <paramref name="stream"/> receives
+    /// no partial output when rendering fails. Only writing the buffer to <paramref name="stream"/> is asynchronous.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException"><paramref name="stream"/> is not writable.</exception>
+    /// <exception cref="SheetDefinitionNotFoundException">No sheets have been created.</exception>
+    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> is canceled.</exception>
+    public async Task ExportAsync(Stream stream, CancellationToken cancellationToken = default) {
+        ValidateWritableStream(stream);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        using MemoryStream buffer = RenderToBuffer();
+        await buffer.CopyToAsync(stream, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Exports this document and asynchronously writes the result to a file at the specified path.
+    /// </summary>
+    /// <param name="path">The output file path.</param>
+    /// <param name="fileMode">The file creation mode.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>A task that represents the asynchronous export operation.</returns>
+    /// <remarks>
+    /// The document is rendered before the file is opened, so the file is not created or overwritten when rendering fails.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException"><paramref name="path"/> is <see langword="null"/>.</exception>
+    /// <exception cref="SheetDefinitionNotFoundException">No sheets have been created.</exception>
+    /// <exception cref="IOException">
+    /// <paramref name="fileMode"/> is <see cref="SpreadsheetFileMode.CreateNew"/> and the file already exists.
+    /// </exception>
+    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> is canceled.</exception>
+    public async Task ExportFileAsync(
+        string path,
+        SpreadsheetFileMode fileMode = SpreadsheetFileMode.Create,
+        CancellationToken cancellationToken = default
+    ) {
+        ArgumentNullException.ThrowIfNull(path);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        using MemoryStream buffer = RenderToBuffer();
+        FileStream fileStream = new(
+            path, ToFileMode(fileMode), FileAccess.Write, FileShare.Read, FileStreamBufferSize, useAsync: true
+        );
+        await using (fileStream.ConfigureAwait(false)) {
+            await buffer.CopyToAsync(fileStream, cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    private static void ValidateWritableStream(Stream stream) {
+        ArgumentNullException.ThrowIfNull(stream);
+        if (!stream.CanWrite) {
+            throw new ArgumentException("Stream must be writable.", nameof(stream));
+        }
+    }
+
+    private IEnumerable<SheetLayout> CreateLayouts() {
+        if (sheets.Count == 0) {
+            throw new SheetDefinitionNotFoundException();
+        }
+
+        return sheets.Select(s => new SheetLayout(s, DefaultFont));
+    }
+
+    private MemoryStream RenderToBuffer() {
+        IEnumerable<SheetLayout> layouts = CreateLayouts();
+
+        if (renderer is ISpreadsheetStreamRenderer streamRenderer) {
+            MemoryStream buffer = new();
+            try {
+                streamRenderer.Render(layouts, buffer);
+            } catch {
+                buffer.Dispose();
+                throw;
+            }
+
+            buffer.Position = 0;
+            return buffer;
+        }
+
+        return new MemoryStream(renderer.Render(layouts), writable: false);
+    }
+
+    private static FileMode ToFileMode(SpreadsheetFileMode fileMode) {
+        return fileMode == SpreadsheetFileMode.Create
             ? FileMode.Create
             : FileMode.CreateNew;
-
-        using FileStream stream = new(path, mode, FileAccess.Write);
-        stream.Write(bytes, 0, bytes.Length);
     }
 
     /// <summary>
@@ -296,7 +466,8 @@ public sealed class SpreadsheetDocument {
     }
 
     private bool IsSheetNameExists(string sheetName) {
-        return sheets.Select(x => x.SheetName).Contains(sheetName);
+        // Excel 的工作表名稱不分大小寫
+        return sheets.Any(x => string.Equals(x.SheetName, sheetName, StringComparison.OrdinalIgnoreCase));
     }
 
     private static void PopulateSheet(
@@ -515,13 +686,11 @@ public sealed class SpreadsheetDocument {
                 return ParsePaperSizeFromValue(numericStringValue);
             }
 
-            PaperSize namedPaperSize = GetKnownPaperSizes()
-                .FirstOrDefault(pair => string.Equals(pair.Key, raw, StringComparison.OrdinalIgnoreCase))
-                .Value;
-
-            return namedPaperSize ?? throw JsonParseExceptionFactory.InvalidValue(
-                context, $"contains unknown paper size '{raw}'."
-            );
+            return raw is not null && KnownPaperSizes.Value.TryGetValue(raw, out PaperSize? namedPaperSize)
+                ? namedPaperSize
+                : throw JsonParseExceptionFactory.InvalidValue(
+                    context, $"contains unknown paper size '{raw}'."
+                );
         }
 
         if (element.ValueKind == JsonValueKind.Number && element.TryGetInt32(out int numericValue)) {
@@ -532,13 +701,12 @@ public sealed class SpreadsheetDocument {
     }
 
     private static PaperSize ParsePaperSizeFromValue(int value) {
-        return GetKnownPaperSizes()
-            .Select(pair => pair.Value)
+        return KnownPaperSizes.Value.Values
             .FirstOrDefault(paperSize => paperSize.Value == value)
             ?? new PaperSize(value);
     }
 
-    private static Dictionary<string, PaperSize> GetKnownPaperSizes() {
+    private static Dictionary<string, PaperSize> CreateKnownPaperSizes() {
         return typeof(PaperSize)
             .GetProperties(BindingFlags.Public | BindingFlags.Static)
             .Where(property => property.PropertyType == typeof(PaperSize))

@@ -52,6 +52,16 @@ internal class SpreadsheetDocumentTests {
     }
 
     [Test]
+    public void CreateSheet_WhenNameDiffersOnlyByCase_ShouldGenerateUniqueName() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+
+        sut.CreateSheet("Sales");
+        SheetDefinition secondSheet = sut.CreateSheet("SALES");
+
+        Assert.That(secondSheet.SheetName, Is.EqualTo("SALES(1)"));
+    }
+
+    [Test]
     public void GetSheet_WhenIndexIsOutOfRange_ShouldThrowArgumentOutOfRangeException() {
         SpreadsheetDocument sut = new(new FakeRenderer());
         sut.CreateSheet("Sheet1");
@@ -76,6 +86,16 @@ internal class SpreadsheetDocumentTests {
             Assert.That(result, Is.True);
             Assert.That(actual, Is.SameAs(expected));
         });
+    }
+
+    [Test]
+    public void TryGetSheet_WhenReturnsTrue_ShouldExposeNonNullSheet() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        sut.CreateSheet("Sheet1");
+
+        string? sheetName = sut.TryGetSheet(0, out SheetDefinition? sheet) ? sheet.SheetName : null;
+
+        Assert.That(sheetName, Is.EqualTo("Sheet1"));
     }
 
     [Test]
@@ -281,6 +301,70 @@ internal class SpreadsheetDocumentTests {
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception!.Diagnostics, Has.Count.EqualTo(1));
             Assert.That(exception.Diagnostics[0].Code, Is.EqualTo(LayoutDiagnosticCodes.InvalidCellRange));
+        }
+    }
+
+    [TestCase("")]
+    [TestCase("   ")]
+    [TestCase("1234567890123456789012345678901X")]
+    [TestCase("Q1[Sales]")]
+    [TestCase("A:B")]
+    [TestCase("A*B")]
+    [TestCase("A?B")]
+    [TestCase("A/B")]
+    [TestCase("A\\B")]
+    [TestCase("'Quoted")]
+    [TestCase("Quoted'")]
+    public void GetLayoutDiagnostics_WithInvalidSheetName_ShouldReturnInvalidSheetNameDiagnostic(string sheetName) {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        sut.CreateSheet("Valid").SetSheetName(sheetName);
+
+        IReadOnlyList<LayoutDiagnostic> diagnostics = sut.GetLayoutDiagnostics();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(diagnostics, Has.Count.EqualTo(1));
+            Assert.That(diagnostics[0].Code, Is.EqualTo(LayoutDiagnosticCodes.InvalidSheetName));
+            Assert.That(diagnostics[0].Source!.Path, Is.EqualTo("Sheets[0].SheetName"));
+        }
+    }
+
+    [TestCase("Sales")]
+    [TestCase("1234567890123456789012345678901")]
+    [TestCase("It's fine")]
+    public void GetLayoutDiagnostics_WithValidSheetName_ShouldReturnEmpty(string sheetName) {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        sut.CreateSheet(sheetName);
+
+        Assert.That(sut.GetLayoutDiagnostics(), Is.Empty);
+    }
+
+    [Test]
+    public void GetLayoutDiagnostics_WithSheetRenamedToCaseInsensitiveDuplicate_ShouldReturnDuplicateSheetNameDiagnostic() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        sut.CreateSheet("Sales");
+        sut.CreateSheet("Orders").SetSheetName("sales");
+
+        IReadOnlyList<LayoutDiagnostic> diagnostics = sut.GetLayoutDiagnostics();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(diagnostics, Has.Count.EqualTo(1));
+            Assert.That(diagnostics[0].Code, Is.EqualTo(LayoutDiagnosticCodes.DuplicateSheetName));
+            Assert.That(diagnostics[0].Source!.SheetIndex, Is.EqualTo(1));
+            Assert.That(diagnostics[0].Message, Does.Contain("index 0"));
+        }
+    }
+
+    [Test]
+    public void GetLayoutDiagnostics_WithInvalidAutoFilterRange_ShouldReturnInvalidCellRangeDiagnostic() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+        sut.CreateSheet("Filter").SetAutoFilterRange(new CellRange(0, -1, 2, 2));
+
+        IReadOnlyList<LayoutDiagnostic> diagnostics = sut.GetLayoutDiagnostics();
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(diagnostics, Has.Count.EqualTo(1));
+            Assert.That(diagnostics[0].Code, Is.EqualTo(LayoutDiagnosticCodes.InvalidCellRange));
+            Assert.That(diagnostics[0].Source!.Path, Is.EqualTo("Sheets[0].AutoFilterRange"));
         }
     }
 
@@ -1063,6 +1147,317 @@ internal class SpreadsheetDocumentTests {
         } finally {
             if (File.Exists(path)) {
                 File.Delete(path);
+            }
+        }
+    }
+
+    [Test]
+    public void ExportStream_RendererSupportsStream_ShouldRenderDirectlyToStream() {
+        FakeStreamRenderer renderer = new();
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(renderer);
+        using MemoryStream stream = new();
+
+        sut.Export(stream);
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(stream.ToArray(), Is.EqualTo(FakeStreamRenderer.StreamBytes));
+            Assert.That(renderer.ByteArrayRenderCount, Is.Zero);
+            Assert.That(renderer.RenderedLayouts.Single().SheetName, Is.EqualTo("Sheet1"));
+        }
+    }
+
+    [Test]
+    public void ExportStream_RendererDoesNotSupportStream_ShouldWriteRenderedBytes() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeRenderer());
+        using MemoryStream stream = new();
+
+        sut.Export(stream);
+
+        Assert.That(stream.ToArray(), Is.EqualTo(ExportedBytes));
+    }
+
+    [Test]
+    public void ExportStream_StreamIsNull_ShouldThrowArgumentNullException() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeRenderer());
+
+        Assert.That(() => sut.Export((Stream)null!), Throws.ArgumentNullException);
+    }
+
+    [Test]
+    public void ExportStream_StreamIsReadOnly_ShouldThrowArgumentException() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeRenderer());
+        using MemoryStream stream = new([], writable: false);
+
+        Assert.That(() => sut.Export(stream), Throws.ArgumentException);
+    }
+
+    [Test]
+    public void ExportStream_WhenNoSheetsExist_ShouldThrowSheetDefinitionNotFoundException() {
+        SpreadsheetDocument sut = new(new FakeStreamRenderer());
+        using MemoryStream stream = new();
+
+        Assert.That(() => sut.Export(stream), Throws.TypeOf<SheetDefinitionNotFoundException>());
+    }
+
+    [Test]
+    public async Task ExportAsync_RendererSupportsStream_ShouldWriteRenderedStreamAsync() {
+        FakeStreamRenderer renderer = new();
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(renderer);
+        using MemoryStream stream = new();
+
+        await sut.ExportAsync(stream);
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(stream.ToArray(), Is.EqualTo(FakeStreamRenderer.StreamBytes));
+            Assert.That(renderer.ByteArrayRenderCount, Is.Zero);
+        }
+    }
+
+    [Test]
+    public async Task ExportAsync_RendererDoesNotSupportStream_ShouldWriteRenderedBytesAsync() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeRenderer());
+        using MemoryStream stream = new();
+
+        await sut.ExportAsync(stream);
+
+        Assert.That(stream.ToArray(), Is.EqualTo(ExportedBytes));
+    }
+
+    [Test]
+    public void ExportAsync_TokenIsCanceled_ShouldThrowOperationCanceledExceptionWithoutRendering() {
+        FakeStreamRenderer renderer = new();
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(renderer);
+        using MemoryStream stream = new();
+        using CancellationTokenSource cancellation = new();
+        cancellation.Cancel();
+
+        Assert.ThrowsAsync<OperationCanceledException>(async () => await sut.ExportAsync(stream, cancellation.Token));
+        Assert.That(renderer.RenderedLayouts, Is.Empty);
+    }
+
+    [Test]
+    public void ExportAsync_RenderFails_ShouldNotWritePartialOutput() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeStreamRenderer { ShouldFailAfterWrite = true });
+        using MemoryStream stream = new();
+
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.ExportAsync(stream));
+        Assert.That(stream.Length, Is.Zero);
+    }
+
+    [Test]
+    public async Task ExportFileAsync_ShouldWriteExportedBytesAsync() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeStreamRenderer());
+        string path = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{Guid.NewGuid():N}.bin");
+
+        try {
+            await sut.ExportFileAsync(path);
+
+            Assert.That(await File.ReadAllBytesAsync(path), Is.EqualTo(FakeStreamRenderer.StreamBytes));
+        } finally {
+            if (File.Exists(path)) {
+                File.Delete(path);
+            }
+        }
+    }
+
+    [Test]
+    public async Task ExportFileAsync_WhenCreateNewAndFileExists_ShouldThrowIOExceptionAndKeepFileAsync() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeStreamRenderer());
+        string path = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{Guid.NewGuid():N}.bin");
+
+        try {
+            await File.WriteAllBytesAsync(path, [0x01]);
+
+            Assert.ThrowsAsync<IOException>(async () => await sut.ExportFileAsync(path, SpreadsheetFileMode.CreateNew));
+            Assert.That(await File.ReadAllBytesAsync(path), Is.EqualTo(new byte[] { 0x01 }));
+        } finally {
+            if (File.Exists(path)) {
+                File.Delete(path);
+            }
+        }
+    }
+
+    [Test]
+    public void ExportFileAsync_RenderFails_ShouldNotCreateFile() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeStreamRenderer { ShouldFailAfterWrite = true });
+        string path = Path.Combine(TestContext.CurrentContext.WorkDirectory, $"{Guid.NewGuid():N}.bin");
+
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.ExportFileAsync(path));
+        Assert.That(File.Exists(path), Is.False);
+    }
+
+    [Test]
+    public void ExportWithOptions_DefaultOptions_ShouldExportWithoutValidation() {
+        FakeRenderer renderer = new();
+        SpreadsheetDocument sut = new(renderer);
+        sut.CreateSheet("Diagnostics").AddTemplate(CreateInvalidRangeTemplate());
+
+        byte[] result = sut.Export(ExportOptions.Default);
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(result, Is.EqualTo(ExportedBytes));
+            Assert.That(renderer.RenderedLayouts, Has.Count.EqualTo(1));
+        }
+    }
+
+    [Test]
+    public void ExportWithOptions_ValidateLayoutWithDiagnostics_ShouldThrowWithoutRendering() {
+        FakeRenderer renderer = new();
+        SpreadsheetDocument sut = new(renderer);
+        sut.CreateSheet("Diagnostics").AddTemplate(CreateInvalidRangeTemplate());
+
+        SpreadsheetLayoutException? exception = Assert.Throws<SpreadsheetLayoutException>(
+            () => sut.Export(new ExportOptions { ValidateLayout = true })
+        );
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(exception!.Diagnostics.Select(x => x.Code), Is.EqualTo(new[] { LayoutDiagnosticCodes.InvalidCellRange }));
+            Assert.That(renderer.RenderedLayouts, Is.Empty);
+        }
+    }
+
+    [Test]
+    public void ExportWithOptions_ValidateCapabilitiesWithUnsupportedFeatures_ShouldThrow() {
+        SpreadsheetDocument sut = CreateDocumentUsingAllCapabilities(new CapabilityRenderer(new RendererCapabilities()));
+
+        SpreadsheetLayoutException? exception = Assert.Throws<SpreadsheetLayoutException>(
+            () => sut.Export(new ExportOptions { ValidateCapabilities = true })
+        );
+
+        Assert.That(
+            exception!.Diagnostics.Select(x => x.Code),
+            Is.All.EqualTo(LayoutDiagnosticCodes.UnsupportedRendererCapability)
+        );
+    }
+
+    [Test]
+    public void ExportWithOptions_ValidateLayoutOnly_ShouldIgnoreCapabilityDiagnostics() {
+        SpreadsheetDocument sut = CreateDocumentUsingAllCapabilities(new CapabilityRenderer(new RendererCapabilities()));
+
+        byte[] result = sut.Export(new ExportOptions { ValidateLayout = true });
+
+        Assert.That(result, Is.EqualTo(ExportedBytes));
+    }
+
+    [Test]
+    public void ExportWithOptions_ValidateAll_ShouldComputeEachTemplateLayoutOnce() {
+        FakeRenderer renderer = new();
+        SpreadsheetDocument sut = new(renderer);
+        CountingSheetTemplate first = new();
+        CountingSheetTemplate second = new();
+        sut.CreateSheet("Counting").AddTemplates(first, second);
+
+        sut.Export(new ExportOptions { ValidateLayout = true, ValidateCapabilities = true });
+
+        using (Assert.EnterMultipleScope()) {
+            Assert.That(first.GetLayoutCount, Is.EqualTo(1));
+            Assert.That(second.GetLayoutCount, Is.EqualTo(1));
+            Assert.That(renderer.RenderedLayouts.Single().Cells, Has.Count.EqualTo(2));
+        }
+    }
+
+    [Test]
+    public void ExportWithOptions_OptionsIsNull_ShouldThrowArgumentNullException() {
+        SpreadsheetDocument sut = CreateDocumentWithEmptySheet(new FakeRenderer());
+
+        Assert.That(() => sut.Export((ExportOptions)null!), Throws.ArgumentNullException);
+    }
+
+    [Test]
+    public void ExportWithOptions_WhenNoSheetsExist_ShouldThrowSheetDefinitionNotFoundException() {
+        SpreadsheetDocument sut = new(new FakeRenderer());
+
+        Assert.That(
+            () => sut.Export(new ExportOptions { ValidateLayout = true }),
+            Throws.TypeOf<SheetDefinitionNotFoundException>()
+        );
+    }
+
+    private static StubSheetTemplate CreateInvalidRangeTemplate() {
+        return new StubSheetTemplate(new TemplateLayout(
+            [
+                new Cell {
+                    Point = new Point(0, 0),
+                    Size = new Size(0, 1),
+                    ValueGenerator = (_, _) => "A"
+                }
+            ],
+            1,
+            new Dictionary<int, double?>()
+        ));
+    }
+
+    private sealed class CountingSheetTemplate : ISheetTemplate {
+        public int GetLayoutCount { get; private set; }
+
+        public int ColumnSpan => 1;
+
+        public int RowSpan => 1;
+
+        public TemplateLayout GetLayout() {
+            GetLayoutCount++;
+            return new TemplateLayout(
+                [new Cell { Point = new Point(0, 0), ValueGenerator = (_, _) => GetLayoutCount }],
+                1,
+                new Dictionary<int, double?>()
+            );
+        }
+    }
+
+    [TestCase("\"Medium\"", BorderLineStyle.Medium)]
+    [TestCase("\"double\"", BorderLineStyle.Double)]
+    [TestCase("3", BorderLineStyle.Thick)]
+    public void FromJson_WithBorderStyle_ShouldPopulateCellStyle(string borderStyleJson, BorderLineStyle expected) {
+        SpreadsheetManager.SetRenderer(() => new FakeRenderer());
+        string json = $$"""
+            [
+              {
+                "Templates": [
+                  {
+                    "Type": "Grid",
+                    "Rows": [ { "Cells": [ { "Value": "A", "Style": { "BorderStyle": {{borderStyleJson}} } } ] } ]
+                  }
+                ]
+              }
+            ]
+            """;
+
+        SpreadsheetDocument document = SpreadsheetDocument.FromJson(json);
+        Cell cell = document.GetSheet(0).Templates[0].GetLayout().Cells[0];
+
+        Assert.That(cell.GetCellStyle().BorderStyle, Is.EqualTo(expected));
+    }
+
+    private static SpreadsheetDocument CreateDocumentWithEmptySheet(ISpreadsheetRenderer renderer) {
+        SpreadsheetDocument document = new(renderer);
+        document.CreateSheet("Sheet1").AddTemplate(new StubSheetTemplate(new TemplateLayout([], 0, new Dictionary<int, double?>())));
+        return document;
+    }
+
+    private sealed class FakeStreamRenderer : ISpreadsheetStreamRenderer {
+        public static readonly byte[] StreamBytes = [0x53, 0x54, 0x52];
+
+        public string ContentType => FakeRenderer.ExpectedContentType;
+
+        public string FileNameExtension => FakeRenderer.ExpectedFileNameExtension;
+
+        public bool ShouldFailAfterWrite { get; init; }
+
+        public int ByteArrayRenderCount { get; private set; }
+
+        public IReadOnlyList<SheetLayout> RenderedLayouts { get; private set; } = [];
+
+        public byte[] Render(IEnumerable<SheetLayout> layouts) {
+            ByteArrayRenderCount++;
+            RenderedLayouts = layouts.ToList();
+            return ExportedBytes;
+        }
+
+        public void Render(IEnumerable<SheetLayout> layouts, Stream stream) {
+            RenderedLayouts = layouts.ToList();
+            stream.Write(StreamBytes, 0, StreamBytes.Length);
+            if (ShouldFailAfterWrite) {
+                throw new InvalidOperationException("Render failed.");
             }
         }
     }

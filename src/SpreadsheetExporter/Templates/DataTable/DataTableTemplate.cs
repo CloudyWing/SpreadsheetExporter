@@ -12,14 +12,27 @@ namespace CloudyWing.SpreadsheetExporter.Templates.DataTable;
 /// <seealso cref="ISheetTemplate" />
 /// <param name="dataTable">The data table.</param>
 /// <exception cref="ArgumentNullException">dataTable</exception>
-public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate {
+public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate, ITableTemplate {
     /// <summary>
     /// Gets or sets the data table.
     /// </summary>
     /// <value>
     /// The data table.
     /// </value>
-    public System.Data.DataTable DataTable { get; set; } = dataTable ?? throw new ArgumentNullException(nameof(dataTable));
+    /// <remarks>
+    /// When the new data table does not contain every column referenced by <see cref="Columns"/>,
+    /// <see cref="Columns"/> is rebuilt in place from the new data table's columns and previous column settings are discarded.
+    /// Otherwise <see cref="Columns"/> is kept unchanged.
+    /// </remarks>
+    public System.Data.DataTable DataTable {
+        get;
+        set {
+            field = value;
+            if (value is not null && !ContainsAllColumns(value)) {
+                RebuildColumns(value);
+            }
+        }
+    } = dataTable ?? throw new ArgumentNullException(nameof(dataTable));
 
     /// <summary>
     /// Gets the columns.
@@ -31,16 +44,28 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate
 
     private static DataTableColumnCollection InitializeColumns(System.Data.DataTable dataTable) {
         DataTableColumnCollection columns = [];
+        AddDefaultColumns(columns, dataTable);
+
+        return columns;
+    }
+
+    private static void AddDefaultColumns(DataTableColumnCollection columns, System.Data.DataTable dataTable) {
         foreach (DataColumn column in dataTable.Columns) {
             columns.Add(new DataTableColumn {
                 ColumnName = column.ColumnName,
                 HeaderText = column.ColumnName
             });
         }
-
-        return columns;
     }
 
+    private bool ContainsAllColumns(System.Data.DataTable dataTable) {
+        return Columns.All(column => column.ColumnName is null || dataTable.Columns.Contains(column.ColumnName));
+    }
+
+    private void RebuildColumns(System.Data.DataTable dataTable) {
+        Columns.Clear();
+        AddDefaultColumns(Columns, dataTable);
+    }
 
     /// <summary>
     /// Gets or sets the height of the header.
@@ -86,20 +111,25 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate
         }
     }
 
-    private IEnumerable<Cell> GetRecordCells() {
+    private IEnumerable<Cell> GetRecordCells(IReadOnlyList<DataColumn> dataColumns) {
         int rowIndex = 1;
         foreach (DataRow row in DataTable.Rows) {
             for (int colIndex = 0; colIndex < Columns.Count; colIndex++) {
                 DataTableColumn column = Columns[colIndex];
-                object? value = row[column.ColumnName!];
+                DataColumn dataColumn = dataColumns[colIndex];
+                int dataRowIndex = rowIndex - 1;
+                object? value = row[dataColumn];
 
                 if (value == DBNull.Value) {
                     value = null;
                 }
 
                 Cell cell = new() {
-                    CellStyleGenerator = (cellIndex, rowIdx) => column.FieldStyleGenerator?.Invoke(value)
-                        ?? SpreadsheetManager.DefaultCellStyles.FieldStyle,
+                    CellStyleGenerator = (cellIndex, rowIdx) => column.FieldStyleContextGenerator is not null
+                        ? column.FieldStyleContextGenerator(
+                            new DataRowContext(cellIndex, rowIdx, dataRowIndex, row, dataColumn.ColumnName, value)
+                        )
+                        : column.FieldStyleGenerator?.Invoke(value) ?? SpreadsheetManager.DefaultCellStyles.FieldStyle,
                     Point = new Point(colIndex, rowIndex),
                     Size = new Size(1, 1)
                 };
@@ -124,8 +154,9 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate
     /// <inheritdoc/>
     public TemplateLayout GetLayout() {
         ValidateColumns();
+        IReadOnlyList<DataColumn> dataColumns = ResolveDataColumns();
 
-        return new TemplateLayout(GetCells(), RowSpan, GetRowHeights());
+        return new TemplateLayout(GetCells(dataColumns), RowSpan, GetRowHeights());
     }
 
     private void ValidateColumns() {
@@ -139,8 +170,31 @@ public class DataTableTemplate(System.Data.DataTable dataTable) : ISheetTemplate
         }
     }
 
-    private IEnumerable<Cell> GetCells() {
-        return GetHeaderCells().Union(GetRecordCells());
+    private List<DataColumn> ResolveDataColumns() {
+        List<DataColumn> dataColumns = [];
+
+        // 沒有資料列時不會讀取欄位值，維持不驗證欄位名稱
+        if (DataTable.Rows.Count == 0) {
+            return dataColumns;
+        }
+
+        foreach (DataTableColumn column in Columns) {
+            DataColumn? dataColumn = column.ColumnName is null ? null : DataTable.Columns[column.ColumnName];
+            if (dataColumn is null) {
+                throw new ArgumentException(
+                    $"DataTable '{DataTable.TableName}' does not contain column '{column.ColumnName}'. "
+                    + $"Available columns: {string.Join(", ", DataTable.Columns.Cast<DataColumn>().Select(x => x.ColumnName))}"
+                );
+            }
+
+            dataColumns.Add(dataColumn);
+        }
+
+        return dataColumns;
+    }
+
+    private IEnumerable<Cell> GetCells(IReadOnlyList<DataColumn> dataColumns) {
+        return GetHeaderCells().Concat(GetRecordCells(dataColumns));
     }
 
     private Dictionary<int, double?> GetRowHeights() {

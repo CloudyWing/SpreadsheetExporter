@@ -51,5 +51,25 @@ namespace CloudyWing.SpreadsheetExporter.Tests {
                 Assert.That(emptyStyle.IsLocked, Is.EqualTo(false));
             });
         }
+
+        [Test]
+        public void BorderStyle_Default_ShouldBeNoneAndKeepEmptyEquality() {
+            CellStyle style = new();
+
+            Assert.Multiple(() => {
+                Assert.That(style.BorderStyle, Is.EqualTo(BorderLineStyle.None));
+                Assert.That(style, Is.EqualTo(CellStyle.Empty));
+            });
+        }
+
+        [Test]
+        public void BorderStyle_WithExpression_ShouldParticipateInEquality() {
+            CellStyle style = CellStyle.Empty with { BorderStyle = BorderLineStyle.Medium };
+
+            Assert.Multiple(() => {
+                Assert.That(style.BorderStyle, Is.EqualTo(BorderLineStyle.Medium));
+                Assert.That(style, Is.Not.EqualTo(CellStyle.Empty));
+            });
+        }
     }
 }

@@ -55,6 +55,15 @@ public class DataTableColumn {
     public Func<object?, CellStyle>? FieldStyleGenerator { get; set; }
 
     /// <summary>
+    /// Gets or sets the field style generator that receives the data row context.
+    /// </summary>
+    /// <value>
+    /// The field style generator. When set, it takes precedence over <see cref="FieldStyleGenerator"/>,
+    /// so styles can depend on other columns of the same row.
+    /// </value>
+    public Func<DataRowContext, CellStyle>? FieldStyleContextGenerator { get; set; }
+
+    /// <summary>
     /// Gets or sets the field data validation generator.
     /// </summary>
     /// <value>

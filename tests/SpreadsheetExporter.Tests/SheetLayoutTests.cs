@@ -1,5 +1,8 @@
 using System.Drawing;
 using CloudyWing.SpreadsheetExporter.Templates;
+using CloudyWing.SpreadsheetExporter.Templates.DataTable;
+using CloudyWing.SpreadsheetExporter.Templates.Grid;
+using CloudyWing.SpreadsheetExporter.Templates.RecordSet;
 
 namespace CloudyWing.SpreadsheetExporter.Tests;
 
@@ -63,6 +66,105 @@ internal class SheetLayoutTests {
             Assert.That(sut.FreezePanes, Is.Null);
             Assert.That(sut.IsAutoFilterEnabled, Is.False);
         });
+    }
+
+    [Test]
+    public void Constructor_AutoFilterRangeIsSet_ShouldUseConfiguredRange() {
+        SheetDefinition sheet = new SpreadsheetDocument(new NullRenderer()).CreateSheet("Sheet1");
+        sheet.AddTemplate(CreateTitleGrid()).AddTemplate(CreateRecordSet());
+        sheet.SetAutoFilterRange(new CellRange(1, 2, 1, 3));
+
+        SheetLayout sut = new(sheet);
+
+        Assert.Multiple(() => {
+            Assert.That(sut.IsAutoFilterEnabled, Is.True);
+            Assert.That(sut.AutoFilterRange, Is.EqualTo(new CellRange(1, 2, 1, 3)));
+        });
+    }
+
+    [Test]
+    public void Constructor_TitleGridAboveRecordSet_ShouldDefaultAutoFilterRangeToRecordSet() {
+        SheetDefinition sheet = new SpreadsheetDocument(new NullRenderer()).CreateSheet("Sheet1");
+        sheet.AddTemplate(CreateTitleGrid()).AddTemplate(CreateRecordSet()).AddTemplate(CreateTitleGrid());
+
+        SheetLayout sut = new(sheet);
+
+        Assert.That(sut.AutoFilterRange, Is.EqualTo(new CellRange(0, 1, 2, 3)));
+    }
+
+    [Test]
+    public void Constructor_TitleGridAboveDataTable_ShouldDefaultAutoFilterRangeToDataTable() {
+        System.Data.DataTable dataTable = new();
+        dataTable.Columns.Add("Id", typeof(int));
+        dataTable.Rows.Add(1);
+        SheetDefinition sheet = new SpreadsheetDocument(new NullRenderer()).CreateSheet("Sheet1");
+        sheet.AddTemplate(CreateTitleGrid()).AddTemplate(new DataTableTemplate(dataTable));
+
+        SheetLayout sut = new(sheet);
+
+        Assert.That(sut.AutoFilterRange, Is.EqualTo(new CellRange(0, 1, 1, 2)));
+    }
+
+    [Test]
+    public void Constructor_SingleRecordSet_ShouldLeaveAutoFilterRangeToRenderer() {
+        SheetDefinition sheet = new SpreadsheetDocument(new NullRenderer()).CreateSheet("Sheet1");
+        sheet.AddTemplate(CreateRecordSet());
+
+        SheetLayout sut = new(sheet);
+
+        Assert.That(sut.AutoFilterRange, Is.Null);
+    }
+
+    [Test]
+    public void Constructor_MultipleTemplatesWithoutTable_ShouldLeaveAutoFilterRangeToRenderer() {
+        SheetDefinition sheet = new SpreadsheetDocument(new NullRenderer()).CreateSheet("Sheet1");
+        sheet.AddTemplate(CreateTitleGrid()).AddTemplate(CreateTitleGrid());
+
+        SheetLayout sut = new(sheet);
+
+        Assert.That(sut.AutoFilterRange, Is.Null);
+    }
+
+    [Test]
+    public void Constructor_RecordSetColumnsHaveWidth_ShouldMergeWidthsWithSheetWidthsTakingPrecedence() {
+        RecordSetTemplate<(int Id, string Name, int Age)> template = new([(1, "A", 20)]);
+        template.Columns
+            .Add("Id", x => x.Id, 8)
+            .Add("Name", x => x.Name, 30)
+            .Add("Age", x => x.Age);
+        SheetDefinition sheet = new SpreadsheetDocument(new NullRenderer()).CreateSheet("Sheet1");
+        sheet.SetColumnWidth(1, 40).SetColumnWidth(5, 10);
+        sheet.AddTemplate(template);
+
+        SheetLayout sut = new(sheet);
+
+        Assert.That(
+            sut.ColumnWidths,
+            Is.EquivalentTo(new Dictionary<int, double> { [0] = 8, [1] = 40, [5] = 10 })
+        );
+    }
+
+    [Test]
+    public void Constructor_NoTemplateWidths_ShouldExposeSheetWidths() {
+        SheetDefinition sheet = new SpreadsheetDocument(new NullRenderer()).CreateSheet("Sheet1");
+        sheet.SetColumnWidth(0, 15);
+        sheet.AddTemplate(CreateRecordSet());
+
+        SheetLayout sut = new(sheet);
+
+        Assert.That(sut.ColumnWidths, Is.EquivalentTo(new Dictionary<int, double> { [0] = 15 }));
+    }
+
+    private static GridTemplate CreateTitleGrid() {
+        return new GridTemplate().CreateCell("Title", columnSpan: 2);
+    }
+
+    private static RecordSetTemplate<(int Id, string Name)> CreateRecordSet() {
+        RecordSetTemplate<(int Id, string Name)> template = new([(1, "A"), (2, "B")]);
+        template.Columns
+            .Add("Id", x => x.Id)
+            .Add("Name", x => x.Name);
+        return template;
     }
 
     private sealed class StubSheetTemplate(TemplateLayout layout) : ISheetTemplate {

@@ -70,7 +70,7 @@ SheetDefinition sheet = document.CreateSheet("銷售報表", defaultRowHeight: 2
 SheetDefinition sheet = document.CreateSheet();
 ```
 
-若傳入重複名稱，會自動加上序號後綴（例如 `銷售報表(1)`）。
+若傳入重複名稱，會自動加上序號後綴（例如 `銷售報表(1)`）。名稱比對不分大小寫，與 Excel 規則一致，因此 `Sales` 與 `SALES` 也視為重複。
 
 ### 存取工作表
 
@@ -82,8 +82,9 @@ SheetDefinition last = document.LastSheet;
 SheetDefinition first = document.GetSheet(0);
 
 // 安全取得
-if (document.TryGetSheet(0, out SheetDefinition sheet)) {
-    // ...
+if (document.TryGetSheet(0, out SheetDefinition? sheet)) {
+    // 回傳 true 時 sheet 不為 null
+    Console.WriteLine(sheet.SheetName);
 }
 ```
 
@@ -118,8 +119,38 @@ try {
 - 儲存格 range 是否重疊。
 - 同一儲存格是否同時定義 value 與 formula。
 - 欄寬與列高是否使用有效值。
+- 工作表名稱是否符合 Excel 規則（`SE-LAYOUT-005`）：不可空白、最多 31 個字元、不可包含 `[ ] : * ? / \`，也不可以單引號開頭或結尾。
+- 工作表名稱是否重複（`SE-LAYOUT-006`），比對時不分大小寫。
 
-`Export()` 不會自動呼叫 `ValidateLayout()`，因此既有匯出流程維持原本行為。需要 render 前驗證時，由呼叫端明確呼叫診斷 API。
+診斷代碼定義於 `LayoutDiagnosticCodes`：
+
+| 代碼 | 常數 | 說明 |
+| --- | --- | --- |
+| `SE-LAYOUT-001` | `InvalidCellRange` | 儲存格 range 座標或大小無效 |
+| `SE-LAYOUT-002` | `OverlappingCellRange` | 儲存格 range 重疊 |
+| `SE-LAYOUT-003` | `ValueAndFormulaConflict` | 同時定義 value 與 formula |
+| `SE-LAYOUT-004` | `InvalidDimension` | 欄寬或列高無效 |
+| `SE-LAYOUT-005` | `InvalidSheetName` | 工作表名稱不符合 Excel 規則 |
+| `SE-LAYOUT-006` | `DuplicateSheetName` | 工作表名稱重複（不分大小寫） |
+| `SE-RENDERER-001` | `UnsupportedRendererCapability` | renderer 不支援文件使用的功能，由 `GetRendererCapabilityDiagnostics()` 回報 |
+
+`CreateSheet` 只會在建立時避開重複名稱；透過 `SheetName` 或 `SetSheetName` 改名時不會檢查，以便依任意順序調換名稱，請在匯出前以診斷 API 確認。
+
+`Export()` 不會自動呼叫 `ValidateLayout()`，因此既有匯出流程維持原本行為。需要 render 前驗證時，由呼叫端明確呼叫診斷 API，或改用 `Export(ExportOptions)`：
+
+```csharp
+byte[] bytes = document.Export(new ExportOptions {
+    ValidateLayout = true,
+    ValidateCapabilities = true
+});
+```
+
+| 選項 | 預設值 | 說明 |
+| --- | --- | --- |
+| `ValidateLayout` | `false` | render 前檢查 `GetLayoutDiagnostics()` 的診斷 |
+| `ValidateCapabilities` | `false` | render 前檢查 `GetRendererCapabilityDiagnostics()` 的診斷 |
+
+發現診斷時拋出 `SpreadsheetLayoutException`，`Diagnostics` 會同時包含版面與 renderer 能力的診斷，且不會呼叫 renderer。啟用驗證時每個 template 的 `GetLayout()` 只計算一次，驗證與 render 共用同一份結果。`ExportOptions.Default` 不做任何驗證，與 `Export()` 相同。`Export(Stream)` 與非同步匯出不提供此選項，需要時請先呼叫 `ValidateLayout()`。
 
 ## 匯出
 
@@ -158,6 +189,65 @@ document.ExportFile(
 
 - `Create` - 建立新檔案，若存在則覆寫（預設）
 - `CreateNew` - 建立新檔案，若存在則拋出例外
+
+### 匯出至 Stream
+
+`Export(Stream)` 將結果寫入呼叫端提供的可寫入 stream，方法不會關閉 stream：
+
+```csharp
+using FileStream stream = File.Create($"report{document.FileNameExtension}");
+document.Export(stream);
+```
+
+Renderer 實作 `ISpreadsheetStreamRenderer` 時（例如 `ExcelRenderer`）會直接寫入 stream，不另外建立 `byte[]`；若 render 中途失敗，stream 可能已寫入部分內容。只實作 `ISpreadsheetRenderer` 的 renderer 會先取得 `byte[]` 再寫入 stream。
+
+`stream` 為 `null` 時拋出 `ArgumentNullException`，stream 不可寫入時拋出 `ArgumentException`，尚未建立任何工作表時拋出 `SheetDefinitionNotFoundException`。非同步匯出的 `ExportAsync` 同樣適用。
+
+### 非同步匯出
+
+`ExportAsync` 與 `ExportFileAsync` 先在呼叫端執行緒於記憶體中完成 render，再以非同步方式寫入目標，因此 render 失敗時不會寫入部分內容，也不會建立或覆寫檔案：
+
+```csharp
+public async Task DownloadAsync(HttpResponse response, CancellationToken cancellationToken) {
+    SpreadsheetDocument document = BuildDocument();
+
+    response.ContentType = document.ContentType;
+    await document.ExportAsync(response.Body, cancellationToken);
+}
+
+await document.ExportFileAsync(
+    $"report{document.FileNameExtension}",
+    SpreadsheetFileMode.CreateNew,
+    cancellationToken
+);
+```
+
+`CancellationToken` 會在開始 render 前與寫入時檢查；render 本身為同步運算，不會中途取消。
+
+### 自訂 stream renderer
+
+自訂 renderer 可額外實作 `ISpreadsheetStreamRenderer`，讓 `Export(Stream)` 與非同步匯出直接寫入 stream：
+
+```csharp
+public sealed class CsvRenderer : ISpreadsheetStreamRenderer {
+    public string ContentType => "text/csv";
+
+    public string FileNameExtension => ".csv";
+
+    public byte[] Render(IEnumerable<SheetLayout> layouts) {
+        using MemoryStream stream = new();
+        Render(layouts, stream);
+        return stream.ToArray();
+    }
+
+    public void Render(IEnumerable<SheetLayout> layouts, Stream stream) {
+        using StreamWriter writer = new(stream, leaveOpen: true);
+        foreach (Cell cell in layouts.First().Cells) {
+            writer.WriteLine(Convert.ToString(cell.GetValue(), CultureInfo.InvariantCulture));
+        }
+    }
+}
+```
 
 ## 從 JSON 建立文件
 
@@ -371,6 +461,8 @@ JSON Schema 可參考 [`spreadsheet-exporter.schema.json`](../schemas/spreadshee
 
 未設定 `ValidationType` 時，使用 `DataValidation` 的預設驗證類型 `List`。
 
+清單驗證的項目會以逗號串接成 Excel 字串常值。項目中的雙引號會自動跳脫；Excel 無法跳脫逗號，含逗號的項目會被拆成多個選項。ClosedXML renderer 的清單來源（含前後雙引號）上限為 255 個字元，超過時拋出 `ArgumentOutOfRangeException`。
+
 ### Style 與 Font 支援欄位
 
 `Styles` 可在文件與工作表層級宣告 named styles。文件層級 styles 透過 `SpreadsheetDocument.FromJson(json, styles)` 或 `document.UseStyles(styles)` 提供；工作表層級 styles 則在 JSON 的 `Styles` 欄位宣告。
@@ -413,6 +505,7 @@ template 使用 `StyleName`、`HeaderStyleName` 或 `FieldStyleName` 引用時�
 | `HorizontalAlignment` | `string` / `number` | 水平對齊 |
 | `VerticalAlignment` | `string` / `number` | 垂直對齊 |
 | `HasBorder` | `boolean` | 是否套用框線 |
+| `BorderStyle` | `string` / `number` | 外框線樣式，對應 `BorderLineStyle`（例如 `"Medium"`、`"Double"`） |
 | `WrapText` | `boolean` | 是否自動換行 |
 | `BackgroundColor` | `string` / `object` | 背景色 |
 | `DataFormat` | `string` / `null` | Excel 格式字串 |
@@ -537,6 +630,8 @@ template 使用 `StyleName`、`HeaderStyleName` 或 `FieldStyleName` 引用時�
 
 - 需要以程式碼動態計算的 generator 邏輯。
 - 自訂 template 型別，除非先自行註冊對應的 JSON parser。
+- 指定自動篩選範圍（`SheetDefinition.AutoFilterRange`）。`IsAutoFilterEnabled` 為 `true` 時，範圍依 [SheetDefinition](sheet-definition.md) 的自動篩選判定順序決定。
+- `RecordSet` 欄位的 `Width`。欄寬請改用工作表層級的 `ColumnWidths`。
 
 ### JSON 錯誤診斷
 
@@ -594,6 +689,8 @@ SpreadsheetDocument document = SpreadsheetDocument.FromJson(json);
 ```
 
 若需要完全重設註冊內容，可先呼叫 `JsonTemplateRegistry.Clear()`，再視需要呼叫 `JsonTemplateRegistry.RegisterBuiltins()` 與自訂 parser 註冊。
+
+`JsonTemplateRegistry` 的成員皆為 thread-safe。與 `Clear()` 並行執行的 `FromJson(...)`，可能看到清除前或清除後的註冊內容。
 
 ## 自訂 renderer 行為
 
