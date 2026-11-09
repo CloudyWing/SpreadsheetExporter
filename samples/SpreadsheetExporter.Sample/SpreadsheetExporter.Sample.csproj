@@ -12,6 +12,6 @@
     <ProjectReference Include="..\..\src\SpreadsheetExporter.Renderer.ClosedXML\SpreadsheetExporter.Renderer.ClosedXML.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="10.0.2" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.14" />
   </ItemGroup>
 </Project>
