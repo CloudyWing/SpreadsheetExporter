@@ -8,6 +8,6 @@
     <NoWarn>$(NoWarn);RS0027</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CloudyWing.Enumeration" Version="0.2.0" />
+    <PackageReference Include="CloudyWing.Enumeration" Version="0.3.0" />
   </ItemGroup>
 </Project>
